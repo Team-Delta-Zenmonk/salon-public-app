@@ -1,1 +1,1 @@
-# salon-management-client-app
+# salon-management-public-app
