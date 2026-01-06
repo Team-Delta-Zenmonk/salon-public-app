@@ -1,21 +1,19 @@
 import { useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
 import { GoogleResponse } from "../../../auth/get-google-response";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginButton() {
   const [loading, setLoading] = useState(false);
   const { getSignInWithPopup } = GoogleResponse();
+  const navigate = useNavigate();
 
   const logInWithGoogle = async () => {
     setLoading(true);
     try {
       const googleResponse = await getSignInWithPopup();
-
       console.log("googleResponse:", googleResponse);
-      localStorage.setItem("token", googleResponse.token);
-      localStorage.setItem("email", googleResponse.email ?? "");
-
-      alert(`Logged in as ${googleResponse.email}`);
+      navigate("/discovery", { replace: true });
     } catch (err) {
       console.error(err);
       alert("Login failed");

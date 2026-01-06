@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { salonImages } from "./login-image.constant";
 
 const SalonLoginCarousel = () => {
