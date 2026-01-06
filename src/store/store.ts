@@ -3,12 +3,14 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import type { Persistor } from "redux-persist";
 import { persistReducer, persistStore } from "redux-persist";
 import createWebStorage from "redux-persist/es/storage/createWebStorage";
-
+import categoryReducer from "../features/category/category.slice";
+import salonReducer from "../features/salon/salon.slice";
 
 const storage = createWebStorage("local");
 
 const rootReducer = combineSlices({
-
+  category: categoryReducer,
+  salon: salonReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -6,6 +6,6 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 export const navigation = [
   { label: "Discover", to: "/discovery", icon: HomeOutlinedIcon },
   { label: "Bookings", to: "/bookings", icon: BookOnlineOutlinedIcon },
-  { label: "Saved", to: "/saved", icon: FavoriteBorderOutlinedIcon },
+  { label: "Favourite", to: "/favourites", icon: FavoriteBorderOutlinedIcon },
   { label: "Profile", to: "/profile", icon: PersonOutlineOutlinedIcon },
 ];
