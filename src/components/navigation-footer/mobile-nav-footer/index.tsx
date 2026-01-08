@@ -1,6 +1,6 @@
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { navigation } from "../../../layout/navigation";
+import { navigation } from "../../../layouts/navigation";
 
 export default function MobileNavFooter() {
   const location = useLocation();

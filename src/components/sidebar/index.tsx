@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
-import { navigation } from "../../layout/navigation";
+import { navigation } from "../../layouts/navigation";
 import LogoutButton from "../logout";
 
 interface SidebarProps {

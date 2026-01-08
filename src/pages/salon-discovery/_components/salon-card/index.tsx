@@ -1,38 +1,25 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { useState } from "react";
 import { formatAddress, formatCategories, getSalonLogo, salonType } from "../utils/salon.formatter";
 
 interface SalonCardProps {
   salon: any;
   variant: "grid" | "list";
-  onToggleFav?: (uuid: string, next: boolean) => void;
 }
 
-export default function SalonCard({ salon, variant, onToggleFav }: SalonCardProps) {
-  const [fav, setFav] = useState(false);
-
+export default function SalonCard({ salon, variant }: SalonCardProps) {
   const categoriesText = formatCategories(salon?.categories);
   const addressText = formatAddress(salon?.address);
   const imageUrl = getSalonLogo(salon?.logo);
 
-  const toggleFav = () => {
-    if (!salon?.uuid) return;
-
-    setFav((prev) => {
-      const next = !prev;
-      onToggleFav?.(salon.uuid, next);
-      return next;
-    });
-  };
-
   const HeartButton = (
-    <Tooltip title={fav ? "Remove from favourites" : "Add to favourites"}>
-      <IconButton onClick={toggleFav}>
-        {fav ? <FavoriteIcon sx={{ color: "#ef4444" }} /> : <FavoriteBorderIcon sx={{ color: "#ef4444" }} />}
-      </IconButton>
+    <Tooltip title="Add to favorites" placement="top">
+      <span>
+        <IconButton>
+          <FavoriteBorderIcon sx={{ color: "#ef4444" }} />
+        </IconButton>
+      </span>
     </Tooltip>
   );
 
