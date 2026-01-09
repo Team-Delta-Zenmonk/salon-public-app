@@ -5,12 +5,14 @@ import { persistReducer, persistStore } from "redux-persist";
 import createWebStorage from "redux-persist/es/storage/createWebStorage";
 import categoryReducer from "../features/category/category.slice";
 import salonReducer from "../features/salon/salon.slice";
+import cartReducer from "../features/salon/cart/cart.slice";
 
 const storage = createWebStorage("local");
 
 const rootReducer = combineSlices({
   category: categoryReducer,
   salon: salonReducer,
+  cart: cartReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

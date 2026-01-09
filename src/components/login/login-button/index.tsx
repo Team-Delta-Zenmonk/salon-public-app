@@ -13,7 +13,7 @@ export default function LoginButton() {
     try {
       const googleResponse = await getSignInWithPopup();
       console.log("googleResponse:", googleResponse);
-      navigate("/discovery", { replace: true });
+      navigate("/salons", { replace: true });
     } catch (err) {
       console.error(err);
       alert("Login failed");

@@ -4,7 +4,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 export const navigation = [
-  { label: "Discover", to: "/discovery", icon: HomeOutlinedIcon },
+  { label: "Salons", to: "/salons", icon: HomeOutlinedIcon },
   { label: "Bookings", to: "/bookings", icon: BookOnlineOutlinedIcon },
   { label: "Favourite", to: "/favourites", icon: FavoriteBorderOutlinedIcon },
   { label: "Profile", to: "/profile", icon: PersonOutlineOutlinedIcon },

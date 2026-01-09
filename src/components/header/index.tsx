@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
+import CartIcon from "./_components/cart-button";
 interface HeaderProps {
   onMenuClick: () => void;
 }
@@ -13,14 +13,13 @@ export default function Header({ onMenuClick }: HeaderProps) {
           <IconButton size="small" onClick={onMenuClick}>
             <MenuIcon />
           </IconButton>
-          <Box className="flex items-center gap-2">
-            <Box className="leading-tight">
-              <Box className="font-semibold text-slate-900">Salon App</Box>
-              <Box className="text-sm text-slate-500">Discover &amp; Book</Box>
-            </Box>
+          <Box className="leading-tight">
+            <Box className="font-semibold text-slate-900">Salon App</Box>
+            <Box className="text-sm text-slate-500">Discover &amp; Book</Box>
           </Box>
         </Box>
         <Box className="flex items-center gap-2">
+          <CartIcon count={0} onClick={() => console.log("Cart clicked")} />
           <Box className="w-9 h-9 rounded-full bg-slate-200" />
         </Box>
       </Toolbar>

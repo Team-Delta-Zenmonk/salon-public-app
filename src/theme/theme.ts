@@ -726,8 +726,8 @@ const theme = createTheme({
     MuiAvatar: {
       styleOverrides: {
         root: {
-          width: 60,
-          height: 60,
+          width: 96,
+          height: 96,
         },
       },
     },

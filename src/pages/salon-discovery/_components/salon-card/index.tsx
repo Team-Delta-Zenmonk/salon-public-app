@@ -1,6 +1,7 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import PlaceIcon from "@mui/icons-material/Place";
 import { Box, IconButton, Tooltip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { formatAddress, formatCategories, getSalonLogo, salonType } from "../utils/salon.formatter";
 
 interface SalonCardProps {
@@ -9,14 +10,21 @@ interface SalonCardProps {
 }
 
 export default function SalonCard({ salon, variant }: SalonCardProps) {
+  const navigate = useNavigate();
+
   const categoriesText = formatCategories(salon?.categories);
   const addressText = formatAddress(salon?.address);
   const imageUrl = getSalonLogo(salon?.logo);
 
+  const goToDetail = () => {
+    if (!salon?.uuid) return;
+    navigate(`/salons/${salon.uuid}`);
+  };
+
   const HeartButton = (
-    <Tooltip title="Add to favorites" placement="top">
+    <Tooltip title="Login to save favourites">
       <span>
-        <IconButton>
+        <IconButton disabled onClick={(e) => e.stopPropagation()}>
           <FavoriteBorderIcon sx={{ color: "#ef4444" }} />
         </IconButton>
       </span>
@@ -25,7 +33,10 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
 
   if (variant === "grid") {
     return (
-      <Box className="border border-slate-200 rounded-2xl overflow-hidden hover:shadow-sm transition bg-white">
+      <Box
+        onClick={goToDetail}
+        className="cursor-pointer border border-slate-200 rounded-2xl overflow-hidden hover:shadow-sm transition bg-white"
+      >
         <Box className="w-full aspect-video bg-slate-100">
           {imageUrl ? (
             <img src={imageUrl} alt={salon?.name || "Salon"} className="h-full w-full object-cover" loading="lazy" />
@@ -55,7 +66,10 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
   }
 
   return (
-    <Box className="relative border border-slate-200 rounded-2xl bg-white hover:shadow-sm transition p-4">
+    <Box
+      onClick={goToDetail}
+      className="cursor-pointer relative border border-slate-200 rounded-2xl bg-white hover:shadow-sm transition p-4"
+    >
       <Box className="absolute top-3 right-3">{HeartButton}</Box>
 
       <Box className="flex gap-4">

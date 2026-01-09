@@ -13,11 +13,11 @@ function AllRoutes() {
       <Route path="/" element={<SignUp />} />
       <Route path="/signup" element={<SignUp />} />
       <Route element={<AppLayout />}>
-        <Route path="/discovery" element={<SalonDiscovery />} />
+        <Route path="/salons" element={<SalonDiscovery />} />
+        <Route path="/salons/:salonId" element={<SalonDetail />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/salon/:uuid" element={<SalonDetail />} />
       </Route>
     </Routes>
   );
