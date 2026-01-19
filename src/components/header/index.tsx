@@ -1,11 +1,16 @@
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CartIcon from "./_components/cart-button";
+import { useAppSelector } from "../../store/hook";
+import type { RootState } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export default function Header({ onMenuClick }: HeaderProps) {
+  const cartCount = useAppSelector((state: RootState) => state.cart.items.length);
+  const navigate = useNavigate();
   return (
     <AppBar position="sticky" elevation={0} color="transparent" className="bg-[rgba(255,255,255,0.9)]!">
       <Toolbar sx={{ minHeight: 56, px: { xs: 2, sm: 3 } }}>
@@ -19,7 +24,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           </Box>
         </Box>
         <Box className="flex items-center gap-2">
-          <CartIcon count={0} onClick={() => console.log("Cart clicked")} />
+          <CartIcon count={cartCount} onClick={() => navigate("/cart")} />
           <Box className="w-9 h-9 rounded-full bg-slate-200" />
         </Box>
       </Toolbar>

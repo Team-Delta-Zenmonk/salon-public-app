@@ -3,12 +3,17 @@ import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import { navigation } from "../../layouts/navigation";
 import LogoutButton from "../logout";
+import { useAppSelector } from "../../store/hook";
+import type { RootState } from "../../store/store";
+import LoginButton from "../login/login-button";
 
 interface SidebarProps {
   collapsed: boolean;
 }
 
 export default function Sidebar({ collapsed }: SidebarProps) {
+  const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
+
   return (
     <Box className="h-full p-3 space-y-5 flex flex-col">
       <Box className="p-3 rounded-2xl bg-slate-50 border border-slate-200 shrink-0">
@@ -44,7 +49,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
           );
         })}
       </Box>
-      <LogoutButton collapsed={collapsed} />
+      {isAuthenticated ? <LogoutButton collapsed={collapsed} /> : <LoginButton collapsed={collapsed}/>}
     </Box>
   );
 }

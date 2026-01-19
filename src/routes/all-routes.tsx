@@ -6,6 +6,7 @@ import Profile from "../pages/profile";
 import Favourites from "../pages/favourites";
 import SalonDiscovery from "../pages/salon-discovery";
 import SalonDetail from "../pages/salon-discovery/_components/salon-details";
+import Cart from "../pages/cart";
 
 function AllRoutes() {
   return (
@@ -15,6 +16,7 @@ function AllRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/salons" element={<SalonDiscovery />} />
         <Route path="/salons/:salonId" element={<SalonDetail />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/profile" element={<Profile />} />

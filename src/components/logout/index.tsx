@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { persistor } from "../../store/store";
 import { callSnack } from "../snackbar";
 import { GoogleResponse } from "../../auth/get-google-response";
-
+import { useAppDispatch } from "../../store/hook";
+import { logout as logoutAction } from "../../features/auth/auth.slice";
 interface LogoutButtonProps {
   collapsed?: boolean;
 }
@@ -13,16 +14,18 @@ interface LogoutButtonProps {
 export default function LogoutButton({ collapsed = false }: LogoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { logout } = GoogleResponse();
 
   const handleLogout = async () => {
     setLoading(true);
     try {
-      console.log("Logging out...");
-      persistor.purge();
       await logout();
+      dispatch(logoutAction());
+      await persistor.purge();
       navigate("/", { replace: true });
-    } catch {
+    } catch (err) {
+      console.error("Logout failed", err);
       callSnack("Error during logout", "error");
     } finally {
       setLoading(false);
@@ -35,6 +38,7 @@ export default function LogoutButton({ collapsed = false }: LogoutButtonProps) {
       onClick={handleLogout}
       variant="outlined"
       color="error"
+      disabled={loading}
     >
       {!collapsed && "Logout"}
     </Button>

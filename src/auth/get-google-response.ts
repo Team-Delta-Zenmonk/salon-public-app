@@ -22,9 +22,9 @@ export const GoogleResponse = () => {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
   });
 
-  const onAuthStateChanged = (cb: (user: FirebaseUser | null) => void) => {
-    return _onAuthStateChanged(auth, cb);
-  };
+  provider.setCustomParameters({
+    prompt: "select_account",
+  });
 
   const logout = async () => {
     await signOut(auth);
@@ -32,6 +32,7 @@ export const GoogleResponse = () => {
 
   const getSignInWithPopup = async (): Promise<GoogleUserData> => {
     const res = await signInWithPopup(auth, provider);
+    console.log("res: ", res);
 
     const token = await res.user.getIdToken();
 
@@ -44,5 +45,5 @@ export const GoogleResponse = () => {
     };
   };
 
-  return { getSignInWithPopup, logout, onAuthStateChanged };
+  return { getSignInWithPopup, logout };
 };

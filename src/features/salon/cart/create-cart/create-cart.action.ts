@@ -1,20 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createCartType } from "./create-cart.type";
 import { createCartService, type CreateCartPayload } from "./create-cart.service";
-import { setCart } from "../cart.slice";
+import { createCartType } from "./create-cart.type";
+
 
 export const createCartAction = createAsyncThunk(
-  createCartType, 
+  createCartType,
   async (payload: CreateCartPayload, thunkAPI) => {
     try {
-      const res = await createCartService(payload);
-      thunkAPI.dispatch(setCart(res));
-      return res;
+      return await createCartService(payload);
     } catch (err: any) {
-      const backendMessage = err?.response?.data?.message || err?.response?.data || "Unable to create cart";
-      return thunkAPI.rejectWithValue({
-        message: backendMessage,
-      });
-    } 
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || "Failed to create cart"
+      );
+    }
   }
 );
