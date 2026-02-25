@@ -9,7 +9,6 @@ import SalonStaff from "./_components/salon-staff";
 
 export default function SalonDetailPage() {
   const { salonId } = useParams<{ salonId: string }>();
-  console.log("salonId: ", salonId);
 
   const [salon, setSalon] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -45,7 +44,7 @@ export default function SalonDetailPage() {
       <SalonInfo salon={salon} />
       <SalonGallery photos={salon.photos} logo={salon.logo} />
       <Divider />
-      <SalonServices services={salon.services || []} />
+      <SalonServices services={salon.services || []} salon={salon} />
       <Divider />
       <SalonStaff staff={salon.staff || []} />
     </Box>

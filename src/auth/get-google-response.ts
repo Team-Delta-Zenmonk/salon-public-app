@@ -32,8 +32,6 @@ export const GoogleResponse = () => {
 
   const getSignInWithPopup = async (): Promise<GoogleUserData> => {
     const res = await signInWithPopup(auth, provider);
-    console.log("res: ", res);
-
     const token = await res.user.getIdToken();
 
     return {

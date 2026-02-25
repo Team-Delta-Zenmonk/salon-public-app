@@ -32,14 +32,10 @@ export const cartSlice = createSlice({
   initialState,
 
   reducers: {
-    /**
-     * Guest-only: add item locally
-     * Stores SERVER-LIKE SNAPSHOT
-     */
+
     addItemLocal(state, action) {
       const { service_id, salon } = action.payload;
 
-      // Switch salon → reset cart
       if (state.salonId && state.salonId !== salon.uuid) {
         state.items = [];
       }
@@ -60,9 +56,6 @@ export const cartSlice = createSlice({
       });
     },
 
-    /**
-     * Clear cart completely (logout / switch salon)
-     */
     clearCart(state) {
       state.cartUuid = null;
       state.salonId = null;
@@ -74,14 +67,9 @@ export const cartSlice = createSlice({
       clearGuestCart();
     },
 
-    /**
-     * Guest-only: remove item locally
-     */
     removeItemLocal(state, action) {
       const serviceId = action.payload;
-
       state.items = state.items.filter((i: any) => i.service_id !== serviceId);
-
       setGuestCart({
         salon: state.salon,
         items: state.items,
@@ -90,9 +78,6 @@ export const cartSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /**
-     * CREATE CART → FULL CART FROM SERVER
-     */
     builder.addCase(createCartAction.fulfilled, (state, { payload }) => {
       state.cartUuid = payload.uuid;
       state.items = payload.cart_items;
@@ -102,19 +87,10 @@ export const cartSlice = createSlice({
       state.loaded = true;
     });
 
-    /**
-     * ADD ITEM (AUTH) → FULL CART
-     */
     builder.addCase(addCartItemAction.fulfilled, (state, { payload }) => {
-      state.items = payload.cart_items;
-      state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
-      state.isGuest = false;
+      state.items = [...state.items, payload];
     });
 
-    /**
-     * SYNC GUEST CART AFTER LOGIN
-     */
     builder.addCase(syncGuestCartAction.fulfilled, (state, { payload }) => {
       state.loaded = true;
       if (!payload) return;
@@ -128,9 +104,7 @@ export const cartSlice = createSlice({
       clearGuestCart();
     });
 
-    /**
-     * GET CART (APP BOOT / REFRESH)
-     */
+
     builder.addCase(getCartAction.fulfilled, (state, { payload }) => {
       state.loaded = true;
       if (!payload) return;
@@ -142,17 +116,10 @@ export const cartSlice = createSlice({
       state.isGuest = false;
     });
 
-    /**
-     * REMOVE ITEM (AUTH) → FULL CART
-     */
-    builder.addCase(removeCartItemAction.fulfilled, (state, { payload }) => {
-      state.items = payload.cart_items;
-      state.salon = payload.salon;
+    builder.addCase(removeCartItemAction.fulfilled, (state, { meta }) => {
+      state.items = state.items.filter((i: any) => i.uuid !== meta.arg);
     });
 
-    /**
-     * DELETE CART
-     */
     builder.addCase(deleteCartAction.fulfilled, (state) => {
       state.cartUuid = null;
       state.items = [];

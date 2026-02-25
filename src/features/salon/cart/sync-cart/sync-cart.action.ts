@@ -11,7 +11,7 @@ export const syncGuestCartAction = createAsyncThunk(
       if (!guestCart || !guestCart.items?.length) return null;
 
       const payload = {
-        salon_id: guestCart.salonId,
+        salon_id: guestCart.salon?.uuid,
         user_id: userId,
         items: guestCart.items.map((item: any) => ({
           service_id: item.service_id,

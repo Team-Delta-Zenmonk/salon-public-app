@@ -3,9 +3,10 @@ import ServiceCard from "./_components/service-card";
 
 interface SalonServicesProps {
   services: any[];
+  salon: any;
 }
 
-export default function SalonServices({ services }: SalonServicesProps) {
+export default function SalonServices({ services, salon }: SalonServicesProps) {
   const rootServices = services.filter((s) => s.parent_id === null);
 
   const subServicesMap = services.reduce<Record<number, any[]>>((acc, s) => {
@@ -22,7 +23,7 @@ export default function SalonServices({ services }: SalonServicesProps) {
 
       <Box className="space-y-3">
         {rootServices.map((service) => (
-          <ServiceCard key={service.uuid} service={service} subServices={subServicesMap[service.id] || []} />
+          <ServiceCard key={service.uuid} service={service} subServices={subServicesMap[service.id] || []} salon={salon}/>
         ))}
       </Box>
     </Box>

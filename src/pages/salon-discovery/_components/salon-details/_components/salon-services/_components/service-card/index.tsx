@@ -12,8 +12,9 @@ import { deleteCartAction } from "../../../../../../../../features/salon/cart/de
 import { callSnack } from "../../../../../../../../components/snackbar";
 import SwitchCartDialog from "./_components/switch-cart-dialog";
 import { getGenderChipConfig } from "./_components/utils/gender-chip-config";
+import { getCartAction } from "../../../../../../../../features/salon/cart/get-cart/get-cart.action";
 
-export default function ServiceCard({ service, subServices }: { service: any; subServices: any[] }) {
+export default function ServiceCard({ service, subServices, salon }: { service: any; subServices: any[]; salon: any }) {
   const [open, setOpen] = useState(false);
   const [switchDialog, setSwitchDialog] = useState(false);
   const [pendingItem, setPendingItem] = useState<any>(null);
@@ -23,9 +24,11 @@ export default function ServiceCard({ service, subServices }: { service: any; su
   const dispatch = useAppDispatch();
   const { isAuthenticated, customer } = useAppSelector((s: RootState) => s.auth);
   const cart = useAppSelector((s: RootState) => s.cart);
+  console.log("cart items:", cart.items);
 
-  const isAdded = (serviceId: string) => cart.items.some((i: any) => i.service_id === serviceId);
-  const currentCartItemsCount = cart.items.length;
+  const isAdded = (serviceId: string) =>
+    cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
+  const currentCartItemsCount = (cart.items ?? []).length;
 
   const formatPrice = (s: any) => (s.price_type === "from" ? `From ₹${s.price}` : `₹${s.price}`);
 
@@ -45,17 +48,11 @@ export default function ServiceCard({ service, subServices }: { service: any; su
       }
       dispatch(clearCart());
 
-      await dispatch(
-        createCartAction({
-          salon_id: salonId,
-          user_id: customer!.uuid,
-          items: [payload],
-        })
-      ).unwrap();
+      await dispatch(createCartAction({salon_id: salonId, user_id: customer!.uuid, items: [payload]})).unwrap();
 
       callSnack("New cart created for this salon", "success");
     } catch (error: any) {
-      callSnack(error || "Failed to switch cart", "error");
+      callSnack(error?.message || error?.response?.data?.message || "Failed to switch cart", "error");
     }
 
     setSwitchDialog(false);
@@ -101,11 +98,11 @@ export default function ServiceCard({ service, subServices }: { service: any; su
           },
 
           salon: {
-            uuid: salonId,
-            name: service.salon_name,
-            logo: service.salon_logo,
-            address: service.salon_address,
-            type: service.salon_type,
+            uuid: salon.uuid,
+            name: salon.name,
+            logo: salon.logo,
+            address: salon.address,
+            type: salon.type,
           },
         })
       );
@@ -122,25 +119,15 @@ export default function ServiceCard({ service, subServices }: { service: any; su
 
     try {
       if (cart.cartUuid) {
-        await dispatch(
-          addCartItemAction({
-            cart_id: cart.cartUuid,
-            ...payload,
-          })
-        ).unwrap();
+        await dispatch(addCartItemAction({cart_id: cart.cartUuid, ...payload})).unwrap();
+        await dispatch(getCartAction(customer.uuid));
         callSnack("Added to cart", "success");
       } else {
-        await dispatch(
-          createCartAction({
-            salon_id: salonId,
-            user_id: customer.uuid,
-            items: [payload],
-          })
-        ).unwrap();
+        await dispatch(createCartAction({salon_id: salonId, user_id: customer.uuid, items: [payload]})).unwrap();
         callSnack("Cart created and item added", "success");
       }
     } catch (error: any) {
-      callSnack(error || "Failed to add item", "error");
+      callSnack(error?.message || error?.response?.data?.message || "Failed to add item", "error");
     }
   };
 
