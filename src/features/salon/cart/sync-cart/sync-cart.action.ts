@@ -17,6 +17,7 @@ export const syncGuestCartAction = createAsyncThunk(
           service_id: item.service_id,
           base_price: item.base_price,
           duration: item.duration,
+          staff_id: item.staff_uuid ?? undefined,
         })),
       };
 

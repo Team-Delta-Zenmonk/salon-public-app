@@ -6,8 +6,10 @@ import { getCartAction } from "./get-cart/get-cart.action";
 import { createCartAction } from "./create-cart/create-cart.action";
 import { removeCartItemAction } from "./remove-item/remove-item.action";
 import { deleteCartAction } from "./delete-cart/delete-cart.action";
+import { updateCartItemAction } from "./update-item/update-item.action";
 
 const guestCart = getGuestCart();
+const sortItems = (items: any[]) => [...items].sort((a: any, b: any) => a.id - b.id);
 
 interface CartState {
   cartUuid: string | null;
@@ -32,7 +34,6 @@ export const cartSlice = createSlice({
   initialState,
 
   reducers: {
-
     addItemLocal(state, action) {
       const { service_id, salon } = action.payload;
 
@@ -56,15 +57,17 @@ export const cartSlice = createSlice({
       });
     },
 
-    clearCart(state) {
-      state.cartUuid = null;
-      state.salonId = null;
-      state.salon = null;
-      state.items = [];
-      state.isGuest = false;
-      state.loaded = false;
+    updateItemLocalStaff(state, action) {
+      const { service_id, staff, staff_uuid, price, duration } = action.payload;
+      const item = state.items.find((i: any) => i.service_id === service_id);
+      if (!item) return;
 
-      clearGuestCart();
+      item.staff_uuid = staff_uuid;
+      item.staff = staff;
+      item.final_price = price ? parseFloat(String(price)) : item.base_price;
+      item.duration = duration ?? item.duration;
+
+      setGuestCart({ salon: state.salon, items: state.items });
     },
 
     removeItemLocal(state, action) {
@@ -75,12 +78,23 @@ export const cartSlice = createSlice({
         items: state.items,
       });
     },
+
+    clearCart(state) {
+      state.cartUuid = null;
+      state.salonId = null;
+      state.salon = null;
+      state.items = [];
+      state.isGuest = false;
+      state.loaded = false;
+
+      clearGuestCart();
+    },
   },
 
   extraReducers: (builder) => {
     builder.addCase(createCartAction.fulfilled, (state, { payload }) => {
       state.cartUuid = payload.uuid;
-      state.items = payload.cart_items;
+      state.items = sortItems(payload.cart_items ?? []);
       state.salonId = payload.salon.uuid;
       state.salon = payload.salon;
       state.isGuest = false;
@@ -89,6 +103,37 @@ export const cartSlice = createSlice({
 
     builder.addCase(addCartItemAction.fulfilled, (state, { payload }) => {
       state.items = [...state.items, payload];
+    });
+
+    builder.addCase(getCartAction.fulfilled, (state, { payload }) => {
+      state.loaded = true;
+      if (!payload) return;
+
+      state.cartUuid = payload.uuid;
+      state.items = sortItems(payload.cart_items ?? []);
+      state.salonId = payload.salon.uuid;
+      state.salon = payload.salon;
+      state.isGuest = false;
+    });
+
+    builder.addCase(removeCartItemAction.fulfilled, (state, { meta }) => {
+      state.items = state.items.filter((i: any) => i.uuid !== meta.arg);
+    });
+
+    builder.addCase(updateCartItemAction.fulfilled, (state, { payload }) => {
+      state.cartUuid = payload.uuid;
+      state.items = sortItems(payload.cart_items ?? []);
+      state.salonId = payload.salon.uuid;
+      state.salon = payload.salon;
+    });
+
+    builder.addCase(deleteCartAction.fulfilled, (state) => {
+      state.cartUuid = null;
+      state.items = [];
+      state.salonId = null;
+      state.salon = null;
+      state.isGuest = false;
+      state.loaded = true;
     });
 
     builder.addCase(syncGuestCartAction.fulfilled, (state, { payload }) => {
@@ -103,34 +148,9 @@ export const cartSlice = createSlice({
 
       clearGuestCart();
     });
-
-
-    builder.addCase(getCartAction.fulfilled, (state, { payload }) => {
-      state.loaded = true;
-      if (!payload) return;
-
-      state.cartUuid = payload.uuid;
-      state.items = payload.cart_items;
-      state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
-      state.isGuest = false;
-    });
-
-    builder.addCase(removeCartItemAction.fulfilled, (state, { meta }) => {
-      state.items = state.items.filter((i: any) => i.uuid !== meta.arg);
-    });
-
-    builder.addCase(deleteCartAction.fulfilled, (state) => {
-      state.cartUuid = null;
-      state.items = [];
-      state.salonId = null;
-      state.salon = null;
-      state.isGuest = false;
-      state.loaded = true;
-    });
   },
 });
 
-export const { addItemLocal, clearCart, removeItemLocal } = cartSlice.actions;
+export const { addItemLocal, clearCart, removeItemLocal, updateItemLocalStaff } = cartSlice.actions;
 
 export default cartSlice.reducer;

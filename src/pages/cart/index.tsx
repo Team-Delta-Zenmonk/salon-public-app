@@ -54,10 +54,8 @@ export default function Cart() {
 
   return (
     <Box className="bg-slate-50 min-h-full p-4 sm:p-8">
-
-      {/* SALON HERO BANNER */}
       {salon && (
-        <Box className="relative rounded-2xl overflow-hidden mb-6 bg-slate-900 min-h-[140px]">
+        <Box className="relative rounded-2xl overflow-hidden mb-6 bg-slate-900 min-h-35">
           {salon.logo && (
             <Box
               component="img"
@@ -70,7 +68,7 @@ export default function Cart() {
             <Avatar
               src={salon.logo}
               variant="rounded"
-              className="w-14 h-14 sm:w-18 sm:h-18 rounded-[10px] border-2 border-white/20 flex-shrink-0"
+              className="w-14 h-14 sm:w-18 sm:h-18 rounded-[10px] border-2 border-white/20 shrink-0"
             />
 
             <Box className="flex-1 min-w-0">
@@ -96,15 +94,9 @@ export default function Cart() {
         </Box>
       )}
 
-      {/* TWO COLUMN GRID */}
       <Box className="grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px] gap-6 items-start">
-
-        {/* LEFT: CART ITEMS */}
         <Box>
-          <Typography
-            variant="caption"
-            className="font-bold text-slate-400 block mb-3 ml-0.5 tracking-widest"
-          >
+          <Typography variant="caption" className="font-bold text-slate-400 block mb-3 ml-0.5 tracking-widest">
             {items.length} SERVICE{items.length > 1 ? "S" : ""}
           </Typography>
 
@@ -115,7 +107,6 @@ export default function Cart() {
           </Box>
         </Box>
 
-        {/* RIGHT: ORDER SUMMARY */}
         <Box className="bg-white border border-slate-200 rounded-2xl overflow-hidden lg:sticky lg:top-4">
           <Box className="px-6 py-5 border-b border-slate-100">
             <Typography className="font-bold text-[15px]">Order Summary</Typography>
@@ -125,26 +116,32 @@ export default function Cart() {
             <Box className="flex justify-between items-center mb-3">
               <Box className="flex items-center gap-1.5">
                 <AccessTimeIcon className="text-[15px] text-slate-400" />
-                <Typography variant="body2" color="text.secondary">Duration</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Duration
+                </Typography>
               </Box>
-              <Typography variant="body2" className="font-semibold">{durationText}</Typography>
+              <Typography variant="body2" className="font-semibold">
+                {durationText}
+              </Typography>
             </Box>
 
             <Box className="flex justify-between items-center mb-3">
               <Box className="flex items-center gap-1.5">
                 <CalendarMonthIcon className="text-[15px] text-slate-400" />
-                <Typography variant="body2" color="text.secondary">Services</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Services
+                </Typography>
               </Box>
-              <Typography variant="body2" className="font-semibold">{items.length}</Typography>
+              <Typography variant="body2" className="font-semibold">
+                {items.length}
+              </Typography>
             </Box>
 
             <Divider className="my-4" />
 
             <Box className="flex justify-between items-center mb-4">
               <Typography className="font-bold">Total</Typography>
-              <Typography className="font-extrabold text-[22px] text-slate-900">
-                ₹{totalPrice}
-              </Typography>
+              <Typography className="font-extrabold text-[22px] text-slate-900">₹{totalPrice}</Typography>
             </Box>
 
             <Button
@@ -157,11 +154,7 @@ export default function Cart() {
               Proceed to Book
             </Button>
 
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              className="block text-center mt-3"
-            >
+            <Typography variant="caption" color="text.secondary" className="block text-center mt-3">
               Select staff & time you want to book
             </Typography>
           </Box>

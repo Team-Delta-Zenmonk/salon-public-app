@@ -24,7 +24,6 @@ export default function ServiceCard({ service, subServices, salon }: { service: 
   const dispatch = useAppDispatch();
   const { isAuthenticated, customer } = useAppSelector((s: RootState) => s.auth);
   const cart = useAppSelector((s: RootState) => s.cart);
-  console.log("cart items:", cart.items);
 
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
@@ -48,7 +47,7 @@ export default function ServiceCard({ service, subServices, salon }: { service: 
       }
       dispatch(clearCart());
 
-      await dispatch(createCartAction({salon_id: salonId, user_id: customer!.uuid, items: [payload]})).unwrap();
+      await dispatch(createCartAction({ salon_id: salonId, user_id: customer!.uuid, items: [payload] })).unwrap();
 
       callSnack("New cart created for this salon", "success");
     } catch (error: any) {
@@ -104,7 +103,7 @@ export default function ServiceCard({ service, subServices, salon }: { service: 
             address: salon.address,
             type: salon.type,
           },
-        })
+        }),
       );
 
       callSnack("Added to cart", "success");
@@ -119,11 +118,11 @@ export default function ServiceCard({ service, subServices, salon }: { service: 
 
     try {
       if (cart.cartUuid) {
-        await dispatch(addCartItemAction({cart_id: cart.cartUuid, ...payload})).unwrap();
+        await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
         await dispatch(getCartAction(customer.uuid));
         callSnack("Added to cart", "success");
       } else {
-        await dispatch(createCartAction({salon_id: salonId, user_id: customer.uuid, items: [payload]})).unwrap();
+        await dispatch(createCartAction({ salon_id: salonId, user_id: customer.uuid, items: [payload] })).unwrap();
         callSnack("Cart created and item added", "success");
       }
     } catch (error: any) {
