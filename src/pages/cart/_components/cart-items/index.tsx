@@ -8,7 +8,7 @@ import { removeItemLocal, updateItemLocalStaff } from "../../../../features/salo
 import { removeCartItemAction } from "../../../../features/salon/cart/remove-item/remove-item.action";
 import { updateCartItemAction } from "../../../../features/salon/cart/update-item/update-item.action";
 import ConfirmRemoveItemDialog from "../remove-item-dialog";
-import { getServiceStaffAction } from "../../../../features/salon/staff/get-service-staff/get-service-staff.action";
+import { getServiceStaffsAction } from "../../../../features/salon/staff/get-service-staffs/get-service-staffs.action";
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
 
 interface CartItemProps {
@@ -39,7 +39,7 @@ export default function CartItem({ item }: CartItemProps) {
     const fetchStaff = async () => {
       setStaffLoading(true);
       try {
-        const data = await dispatch(getServiceStaffAction({ serviceUuid: service.uuid, salonId })).unwrap();
+        const data = await dispatch(getServiceStaffsAction({ serviceUuid: service.uuid, salonId })).unwrap();
         setStaffList(data);
       } catch {
         setStaffList([]);
