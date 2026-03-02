@@ -39,11 +39,11 @@ export default function SalonStaff({ staff }: SalonStaffProps) {
   return (
     <>
       <Box>
-        <Typography className={`text-[18px] sm:text-[22px] font-bold mb-4 sm:mb-6 tracking-[-0.02em]  text-slate-900`}>
+        <Typography className="text-[18px] sm:text-[22px] font-bold mb-6 tracking-[-0.02em] text-slate-900">
           Meet Our Experts
         </Typography>
 
-        <Box className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8`}>
+        <Box className="flex flex-wrap gap-10 lg:gap-24 xl:gap-24 md:gap-24">
           {staff.map((member) => {
             const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim();
             const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
@@ -52,46 +52,64 @@ export default function SalonStaff({ staff }: SalonStaffProps) {
             return (
               <Box
                 key={member.uuid}
+                className="group relative cursor-pointer select-none"
                 onClick={() => onStaffClick(member)}
-                className={`group flex flex-col items-center text-center cursor-pointer select-none`}
+                style={{ width: "fit-content" }}
               >
                 <Box
-                  className={`relative p-0.75 rounded-full bg-slate-200 transition-[background] duration-300 group-hover:bg-[linear-gradient(135deg,#0f172a,#475569)]`}
+                  className="relative rounded-full p-0.5 transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, #94a3b8, #cbd5e1, #64748b, #e2e8f0)",
+                    zIndex: 1,
+                  }}
                 >
-                  <Box className="p-0.75 rounded-full bg-white">
-                    <Avatar
-                      className={`w-16 h-16 sm:w-20 sm:h-20 text-[22px] sm:text-[28px] bg-slate-100 text-slate-900 transition-transform duration-300 group-hover:scale-105`}
-                      src={photo}
-                      alt={fullName}
-                    >
-                      {initials || "—"}
-                    </Avatar>
-                  </Box>
+                  <Box className="rounded-full p-0.5 bg-white">
+                    <Box className="relative rounded-full overflow-hidden w-16 h-16 sm:w-20 sm:h-20">
+                      <Avatar
+                        className="w-full h-full text-[22px] sm:text-[28px] bg-slate-100 text-slate-700 transition-transform duration-500 group-hover:scale-110"
+                        src={photo}
+                        alt={fullName}
+                        style={{ width: "100%", height: "100%" }}
+                      >
+                        {initials || "—"}
+                      </Avatar>
 
-                  <Box
-                    className={`absolute inset-0 rounded-full bg-black/25 opacity-0 transition-opacity duration-300 flex items-center justify-center group-hover:opacity-100`}
-                  >
-                    <Typography
-                      className={`text-white text-[8px] sm:text-[9px] font-black tracking-[0.15em] uppercase`}
-                    >
-                      View
-                    </Typography>
+                      <Box
+                        className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
+                          opacity: 1,
+                        }}
+                      >
+                        <Typography
+                          className="text-white font-semibold truncate w-full text-center px-1 pb-1"
+                          style={{ fontSize: "9px", letterSpacing: "0.04em" }}
+                        >
+                          {fullName || "Unnamed"}
+                        </Typography>
+                      </Box>
+
+                      <Box
+                        className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                        style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(1px)" }}
+                      >
+                        <Typography
+                          className="text-white font-black uppercase tracking-widest"
+                          style={{ fontSize: "7px", letterSpacing: "0.18em" }}
+                        >
+                          View
+                        </Typography>
+                        <Typography
+                          className="text-white font-black uppercase tracking-widest"
+                          style={{ fontSize: "7px", letterSpacing: "0.18em" }}
+                        >
+                          Profile
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
-
-                <Typography
-                  className={`mt-1.5 sm:mt-2 text-[13px] sm:text-[14px] font-semibold text-slate-900 max-w-22.5 sm:max-w-27.5 overflow-hidden text-ellipsis whitespace-nowrap`}
-                >
-                  {fullName || "Unnamed"}
-                </Typography>
-
-                {member.title && (
-                  <Typography
-                    className={`text-[11px] sm:text-[12px]text-slate-400 mt-0.5 max-w-22.5 sm:max-w-27.5 overflow-hidden text-ellipsis whitespace-nowrap`}
-                  >
-                    {member.title}
-                  </Typography>
-                )}
               </Box>
             );
           })}

@@ -2,6 +2,7 @@ import { Avatar, Box, Typography, Skeleton, Dialog, DialogContent } from "@mui/m
 import CloseIcon from "@mui/icons-material/Close";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import { getTodayKey, WEEKDAY_KEYS, WEEKDAY_SHORT } from "../../../../../../../../common/date.constants";
 
 interface StaffModalProps {
   open: boolean;
@@ -10,19 +11,7 @@ interface StaffModalProps {
   loading: boolean;
 }
 
-const DAYS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-
-const DAY_SHORT: Record<string, string> = {
-  sunday: "Sun",
-  monday: "Mon",
-  tuesday: "Tue",
-  wednesday: "Wed",
-  thursday: "Thu",
-  friday: "Fri",
-  saturday: "Sat",
-};
-
-const today = DAYS[new Date().getDay()];
+const today = getTodayKey();
 
 const formatTime = (time?: string) => {
   if (!time) return "";
@@ -50,62 +39,48 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
       maxWidth="sm"
       slotProps={{
         paper: { className: "rounded-3xl overflow-hidden" },
-        backdrop: { sx: { backdropFilter: "blur(6px)", backgroundColor: "rgba(0,0,0,0.3)" } },
+        backdrop: {
+          sx: {
+            backdropFilter: "blur(6px)",
+            backgroundColor: "rgba(0,0,0,0.3)",
+          },
+        },
       }}
     >
       <DialogContent className="p-0">
-        <Box className=" relative shrink-0 px-3 sm:px-4 pt-3.5 sm:pt-4 pb-2.5 sm:pb-3 overflow-hidden bg-[linear-gradient(160deg,#0f172a_0%,#1e3a5f_55%,#0f172a_100%)] ">
-          <Box className="absolute -top-12.5 -right-12.5 w-45 h-45 rounded-full bg-white/5" />
-          <Box className="absolute -bottom-7.5 -left-7.5 w-35 h-35 rounded-full bg-white/5" />
-          <Box className="absolute top-[30%] left-[40%] w-25 h-25 rounded-full bg-sky-300/10" />
-
+        <Box className="relative shrink-0 px-4 pt-4 pb-3 overflow-hidden bg-[linear-gradient(160deg,#0f172a_0%,#1e3a5f_55%,#0f172a_100%)]">
           <Box
             onClick={onClose}
-            className="absolute top-3.5 right-3.5 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 flex items-center justify-center cursor-pointer z-10 hover:bg-white/25 transition-colors duration-200"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 flex items-center justify-center cursor-pointer hover:bg-white/25 transition"
           >
-            <CloseIcon className="text-white text-[16px] sm:text-[18px]" />
+            <CloseIcon className="text-white text-[18px]" />
           </Box>
 
-          <Box className="relative z-1 flex flex-col items-center text-center">
-            <Box className="relative mb-2 sm:mb-2.5">
-              <Box className="p-0.75 rounded-full bg-[linear-gradient(135deg,rgba(255,255,255,0.5)_0%,rgba(255,255,255,0.1)_100%)]">
-                <Avatar
-                  src={photo}
-                  className="w-17 h-17 sm:w-20 sm:h-20 text-[22px] sm:text-[26px] bg-slate-800 text-white border-[3px] border-white/20"
-                >
-                  {initials || "?"}
-                </Avatar>
-              </Box>
+          <Box className="flex flex-col items-center text-center">
+            <Avatar src={photo} className="w-20 h-20 text-[26px] bg-slate-800 text-white border-[3px] border-white/20">
+              {initials || "?"}
+            </Avatar>
 
-              {todayHours && (
-                <Box className="absolute bottom-1 right-1 w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 rounded-full bg-emerald-500  border-[2.5px] border-slate-900 " />
-              )}
-            </Box>
+            <Typography className="text-white font-extrabold text-[18px] mt-3">{fullName || "Staff Member"}</Typography>
 
-            <Typography className="text-white font-extrabold text-[16px] sm:text-[18px] leading-tight">
-              {fullName || "Staff Member"}
-            </Typography>
-
-            {staff?.title && (
-              <Typography className="text-white/45 text-[12px] sm:text-[14px] mt-1">{staff.title}</Typography>
-            )}
+            {staff?.title && <Typography className="text-white/60 text-sm mt-1">{staff.title}</Typography>}
 
             <Box
-              className={`mt-1.5 sm:mt-2nline-flex items-center gap-1.5 px-2 py-1.5 rounded-[10px] border
-                 ${todayHours ? "bg-emerald-500/15 border-emerald-500/40" : "bg-white/5 border-white/10"}`}
+              className={`mt-3 px-3 py-1.5 rounded-lg border text-xs font-semibold
+                ${
+                  todayHours
+                    ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-200"
+                    : "bg-white/10 border-white/20 text-white/50"
+                }`}
             >
-              <Typography
-                className={`text-[11px] sm:text-[12px] font-bold ${todayHours ? "text-emerald-200" : "text-white/40"}`}
-              >
-                {todayHours
-                  ? `Available · ${formatTime(todayHours.start_time)} – ${formatTime(todayHours.end_time)}`
-                  : "Not available today"}
-              </Typography>
+              {todayHours
+                ? `Available Today · ${formatTime(todayHours.start_time)} – ${formatTime(todayHours.end_time)}`
+                : "Not available today"}
             </Box>
           </Box>
         </Box>
 
-        <Box className="px-6 sm:px-8 py-8 space-y-8">
+        <Box className="px-8 py-8 space-y-8">
           {loading ? (
             <>
               <Skeleton height={60} />
@@ -144,21 +119,19 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
                 </Typography>
 
                 <Box className="bg-slate-50 rounded-2xl overflow-hidden">
-                  {DAYS.map((day) => {
+                  {WEEKDAY_KEYS.map((day) => {
                     const hours = activeHours[day];
                     const isToday = day === today;
 
                     return (
                       <Box
                         key={day}
-                        className={`
-                          flex justify-between items-center
-                          px-5 py-3
-                          ${isToday ? "bg-slate-900 text-white" : ""}
-                        `}
+                        className={`flex justify-between items-center px-5 py-3 ${
+                          isToday ? "bg-slate-900 text-white" : ""
+                        }`}
                       >
                         <Typography className="font-medium">
-                          {DAY_SHORT[day]}
+                          {WEEKDAY_SHORT[day]}
                           {isToday && <span className="ml-2 text-xs opacity-60">today</span>}
                         </Typography>
 
