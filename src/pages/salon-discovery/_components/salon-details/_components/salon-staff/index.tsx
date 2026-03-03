@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography, Chip } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { getStaffAction } from "../../../../../../features/salon/staff/get-staff/get-staff.action";
@@ -15,9 +15,11 @@ export default function SalonStaff({ staff }: SalonStaffProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [activeStaffUuid, setActiveStaffUuid] = useState<string | null>(null);
 
   const onStaffClick = async (member: any) => {
     if (!salonId) return;
+    setActiveStaffUuid(member.uuid);
     setModalOpen(true);
     setLoading(true);
     setSelectedStaff(null);
@@ -39,75 +41,47 @@ export default function SalonStaff({ staff }: SalonStaffProps) {
   return (
     <>
       <Box>
-        <Typography className="text-[18px] sm:text-[22px] font-bold mb-6 tracking-[-0.02em] text-slate-900">
+        <Typography className="text-[18px] sm:text-[22px] font-bold mb-2 tracking-[-0.02em] text-(--app-text)">
           Meet Our Experts
         </Typography>
+        <Typography className="text-sm text-(--app-muted) mb-5">Choose your preferred specialist before booking.</Typography>
 
-        <Box className="flex flex-wrap gap-10 lg:gap-24 xl:gap-24 md:gap-24">
+        <Box className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 overflow-x-auto md:overflow-visible pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {staff.map((member) => {
             const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim();
             const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
             const photo = member.photos?.secure_url ?? member.photos?.url ?? "";
+            const specialization = member.title || member.role || "Beauty Specialist";
+            const isActive = activeStaffUuid === member.uuid;
 
             return (
               <Box
                 key={member.uuid}
-                className="group relative cursor-pointer select-none"
+                className={`min-w-52 md:min-w-0 rounded-2xl border transition-all duration-250 cursor-pointer ${
+                  isActive
+                    ? "bg-(--app-primary-soft) border-(--app-ring) shadow-[0_14px_30px_rgba(15,23,42,0.18)]"
+                    : "bg-(--app-surface-alt) border-(--app-border) hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(15,23,42,0.12)]"
+                }`}
                 onClick={() => onStaffClick(member)}
-                style={{ width: "fit-content" }}
               >
-                <Box
-                  className="relative rounded-full p-0.5 transition-all duration-300"
-                  style={{
-                    background: "linear-gradient(135deg, #94a3b8, #cbd5e1, #64748b, #e2e8f0)",
-                    zIndex: 1,
-                  }}
-                >
-                  <Box className="rounded-full p-0.5 bg-white">
-                    <Box className="relative rounded-full overflow-hidden w-16 h-16 sm:w-20 sm:h-20">
-                      <Avatar
-                        className="w-full h-full text-[22px] sm:text-[28px] bg-slate-100 text-slate-700 transition-transform duration-500 group-hover:scale-110"
-                        src={photo}
-                        alt={fullName}
-                        style={{ width: "100%", height: "100%" }}
-                      >
-                        {initials || "—"}
-                      </Avatar>
+                <Box className="p-3 sm:p-4 flex items-center gap-3">
+                  <Box className="relative shrink-0">
+                    <Avatar
+                      src={photo}
+                      alt={fullName}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 ${
+                        isActive ? "ring-3 ring-(--app-ring) ring-offset-2 ring-offset-(--app-primary-soft)" : "ring-2 ring-(--app-border)"
+                      }`}
+                    >
+                      {initials || "—"}
+                    </Avatar>
+                    <Box className="absolute -right-0.5 -bottom-0.5 w-3 h-3 rounded-full border border-(--app-surface) bg-emerald-500" />
+                  </Box>
 
-                      <Box
-                        className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
-                          opacity: 1,
-                        }}
-                      >
-                        <Typography
-                          className="text-white font-semibold truncate w-full text-center px-1 pb-1"
-                          style={{ fontSize: "9px", letterSpacing: "0.04em" }}
-                        >
-                          {fullName || "Unnamed"}
-                        </Typography>
-                      </Box>
-
-                      <Box
-                        className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                        style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(1px)" }}
-                      >
-                        <Typography
-                          className="text-white font-black uppercase tracking-widest"
-                          style={{ fontSize: "7px", letterSpacing: "0.18em" }}
-                        >
-                          View
-                        </Typography>
-                        <Typography
-                          className="text-white font-black uppercase tracking-widest"
-                          style={{ fontSize: "7px", letterSpacing: "0.18em" }}
-                        >
-                          Profile
-                        </Typography>
-                      </Box>
-                    </Box>
+                  <Box className="min-w-0">
+                    <Typography className="font-semibold text-(--app-text) text-sm truncate">{fullName || "Unnamed"}</Typography>
+                    <Typography className="text-xs text-(--app-muted) truncate mt-0.5">{specialization}</Typography>
+                    <Chip size="small" label={isActive ? "Selected" : "Available"} className="mt-2" />
                   </Box>
                 </Box>
               </Box>

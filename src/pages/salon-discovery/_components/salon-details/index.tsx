@@ -32,21 +32,26 @@ export default function SalonDetailPage() {
   }, [salonId]);
 
   if (loading) {
-    return <Box className="p-6">Loading salon details…</Box>;
+    return <Box className="p-6 text-(--app-muted)">Loading salon details…</Box>;
   }
 
   if (!salon) {
-    return <Box className="p-6">Salon not found</Box>;
+    return <Box className="p-6 text-(--app-muted)">Salon not found</Box>;
   }
 
   return (
-    <Box className="flex flex-col gap-6 p-4 sm:p-6 overscroll-y-auto ">
-      <SalonInfo salon={salon} />
-      <SalonGallery photos={salon.photos} logo={salon.logo} />
-      <Divider />
-      <SalonServices services={salon.services || []} salon={salon} />
-      <Divider />
-      <SalonStaff staff={salon.staff || []} />
+    <Box className="overscroll-y-auto px-3 sm:px-4 md:px-5 lg:px-5 pt-4 sm:pt-4 pb-3 sm:pb-4">
+      <Box className="w-full xl:max-w-400 2xl:max-w-420 xl:mx-auto flex flex-col gap-4 sm:gap-7 lg:gap-8">
+        <SalonInfo salon={salon} />
+        <SalonGallery photos={salon.photos} logo={salon.logo} />
+        <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface) p-3 sm:p-5 lg:p-6 shadow-[0_14px_36px_rgba(15,23,42,0.08)]">
+          <SalonServices services={salon.services || []} salon={salon} />
+        </Box>
+        <Divider className="border-(--app-border)" />
+        <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface) p-3 sm:p-5 lg:p-6 shadow-[0_14px_36px_rgba(15,23,42,0.08)]">
+          <SalonStaff staff={salon.staff || []} />
+        </Box>
+      </Box>
     </Box>
   );
 }

@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Chip, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import ImageLightbox from "../../../../../../components/image-lightbox";
 
 interface SalonGalleryProps {
@@ -9,62 +10,137 @@ interface SalonGalleryProps {
 }
 
 export default function SalonGallery({ photos, logo }: SalonGalleryProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const images = photos?.length ? photos.map((p) => ({ src: p.secure_url || p.url })) : logo ? [{ src: logo }] : [];
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const previewImages = images.slice(0, 4);
-  const hasMore = images.length > 4;
+  const leadImage = images[0];
+  const sideImages = images.slice(1, 3);
+  const hasMore = images.length > 3;
 
   const handleImageClick = (idx: number) => {
     setIndex(idx);
     setOpen(true);
   };
 
+  if (!images.length) {
+    return (
+      <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface-alt) p-8 text-center">
+        <Typography className="text-(--app-muted)">No photos available</Typography>
+      </Box>
+    );
+  }
+
   return (
     <>
-      <Box className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-        {previewImages.map((img, idx) => {
-          const isLastImage = idx === previewImages.length - 1 && hasMore;
-
-          return (
-            <Box
-              key={idx}
-              className="relative group aspect-square md:aspect-square rounded-2xl overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-              onClick={() => handleImageClick(idx)}
-            >
-              <img
-                src={img.src}
-                alt={`Salon photo ${idx + 1}`}
-                className={`h-full w-full object-cover transition-all ${
-                  isLastImage ? "group-hover:brightness-50" : "group-hover:brightness-90"
-                }`}
-                loading={idx < 2 ? "eager" : "lazy"}
-              />
-
-              {isLastImage && (
-                <Box className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex flex-col items-center justify-center p-4">
-                  <Box className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-2xl flex items-center justify-center mb-3 shadow-xl group-hover:scale-110 transition-all">
-                    <VisibilityIcon className="text-slate-800 text-xl md:text-2xl" />
-                  </Box>
-                  <Typography variant="h5" className="text-white!" fontWeight="fontWeightMedium">
-                    +{images.length - 4}
-                  </Typography>
-                  <Typography variant="body2" className="text-white!" fontWeight="fontWeightMedium">
-                    See all images
-                  </Typography>
-                </Box>
-              )}
+      <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface) p-3 sm:p-4 shadow-[0_16px_38px_rgba(15,23,42,0.1)]">
+        {isMobile ? (
+          <Box className="space-y-3.5">
+            <Box className="flex items-center justify-between px-1">
+              <Typography className="text-(--app-text) font-semibold text-sm">Gallery Preview</Typography>
+              <Chip size="small" label={`${images.length} photos`} className="text-xs" />
             </Box>
-          );
-        })}
 
-        {!images.length && (
-          <Box className="col-span-full md:col-span-4 h-64 bg-linear-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center shadow-md">
-            <Typography variant="h6" className="text-slate-400">
-              No photos available
-            </Typography>
+            <Box
+              onClick={() => handleImageClick(0)}
+              className="group relative h-82.5 rounded-2xl overflow-hidden cursor-pointer"
+            >
+              <Box
+                component="img"
+                src={leadImage.src}
+                alt="Salon hero"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <Box className="absolute inset-0 bg-linear-to-t from-black/58 via-transparent to-transparent" />
+              <Box className="absolute left-4 bottom-4">
+                <Typography className="text-white font-semibold text-xl">Salon Gallery</Typography>
+                <Typography className="text-white/80 text-xs mt-1">Tap to open full gallery</Typography>
+              </Box>
+            </Box>
+
+            <Box className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {images.slice(1, 8).map((img, idx) => {
+                const imageIndex = idx + 1;
+                const remaining = images.length - (imageIndex + 1);
+                const isLastVisible = idx === Math.min(images.length - 2, 6);
+                const showMoreOverlay = isLastVisible && remaining > 0;
+
+                return (
+                  <Box
+                    key={imageIndex}
+                    onClick={() => handleImageClick(imageIndex)}
+                    className="group relative min-w-44 w-44 h-31 rounded-xl overflow-hidden cursor-pointer snap-start border border-(--app-border)"
+                  >
+                    <Box
+                      component="img"
+                      src={img.src}
+                      alt={`Salon photo ${imageIndex + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+
+                    {showMoreOverlay && (
+                      <Box className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
+                        <VisibilityIcon className="text-white text-lg mb-1" />
+                        <Typography className="text-white font-bold text-base">+{remaining}</Typography>
+                      </Box>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        ) : (
+          <Box className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-3 sm:gap-4">
+            <Box
+              onClick={() => handleImageClick(0)}
+              className="group relative h-70 sm:h-90 lg:h-125 xl:h-135 rounded-2xl overflow-hidden cursor-pointer"
+            >
+              <Box
+                component="img"
+                src={leadImage.src}
+                alt="Salon hero"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <Box className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
+              <Box className="absolute left-4 bottom-4">
+                <Typography className="text-white font-semibold text-sm sm:text-base">Salon Gallery</Typography>
+              </Box>
+            </Box>
+
+            <Box className="grid grid-cols-1 grid-rows-2 gap-3 sm:gap-4 h-70 sm:h-90 lg:h-125 xl:h-135">
+              {sideImages.map((img, idx) => {
+                const imageIndex = idx + 1;
+                const isLastTile = idx === sideImages.length - 1 && hasMore;
+                return (
+                  <Box
+                    key={imageIndex}
+                    onClick={() => handleImageClick(imageIndex)}
+                    className={`group relative rounded-2xl overflow-hidden cursor-pointer ${
+                      sideImages.length === 1 ? "row-span-2" : ""
+                    }`}
+                  >
+                    <Box
+                      component="img"
+                      src={img.src}
+                      alt={`Salon photo ${imageIndex + 1}`}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {isLastTile && (
+                      <Box className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center">
+                        <Box className="w-11 h-11 rounded-xl bg-white/90 flex items-center justify-center mb-2">
+                          <VisibilityIcon className="text-(--app-hero-from)" />
+                        </Box>
+                        <Typography className="text-white font-bold text-lg">+{images.length - 3}</Typography>
+                        <Typography className="text-white text-xs sm:text-sm font-semibold">See all photos</Typography>
+                      </Box>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
           </Box>
         )}
       </Box>

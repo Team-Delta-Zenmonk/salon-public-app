@@ -20,9 +20,9 @@ export default function AppLayout() {
   };
 
   return (
-    <Box className="h-screen bg-gray-50 flex">
+    <Box className="h-screen bg-(--app-bg) flex">
       <Box className={`${sidebarWidthClass} shrink-0 hidden md:block transition-all duration-200 ease-in-out`}>
-        <Box className="h-screen sticky top-0 border-r border-slate-200 bg-white">
+        <Box className="h-screen sticky top-0 border-r border-(--app-border) bg-(--app-surface)">
           <Sidebar collapsed={sidebarCollapsed} />
         </Box>
       </Box>
@@ -36,12 +36,12 @@ export default function AppLayout() {
       </Box>
 
       <Drawer anchor="left" open={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} className="md:hidden">
-        <Box className="w-72">
+        <Box className="w-72 bg-(--app-surface)">
           <Sidebar collapsed={false} />
         </Box>
       </Drawer>
 
-      <Box className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white md:hidden">
+      <Box className="fixed bottom-0 left-0 right-0 z-50 border-t border-(--app-border) bg-(--app-surface) md:hidden">
         <MobileNavFooter />
       </Box>
     </Box>

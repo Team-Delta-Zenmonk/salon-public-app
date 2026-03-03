@@ -62,8 +62,8 @@ export default function SalonDiscovery() {
 
   return (
     <Box className="flex flex-col h-full min-h-0">
-      <Box className="flex-none space-y-5 p-4">
-        <Box className="flex flex-col md:flex-row md:items-center gap-4 bg-white px-4 sm:px-6 py-4 border border-slate-200 rounded-2xl">
+      <Box className="flex-none space-y-4 p-3 sm:p-4">
+        <Box className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4 bg-(--app-surface) px-3 sm:px-5 py-3 sm:py-4 border border-(--app-border) rounded-2xl shadow-[0_12px_30px_rgba(15,23,42,0.06)]">
           <Box className="flex-1 p-2">
             <DiscoveryFilters
               categoryOptions={categoryOptions.length ? categoryOptions : [{ label: "All", value: "" }]}
@@ -77,7 +77,7 @@ export default function SalonDiscovery() {
         </Box>
       </Box>
 
-      <Box className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 pb-4">
+      <Box className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 lg:px-6 pb-4 sm:pb-6">
         {viewMode === "list" && <SalonListView />}
         {viewMode === "grid" && <SalonGridView />}
         {viewMode === "map" && <MapView />}

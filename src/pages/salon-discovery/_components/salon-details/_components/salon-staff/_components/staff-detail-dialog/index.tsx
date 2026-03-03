@@ -3,6 +3,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import { getTodayKey, WEEKDAY_KEYS, WEEKDAY_SHORT } from "../../../../../../../../common/date.constants";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface StaffModalProps {
   open: boolean;
@@ -23,6 +25,8 @@ const formatTime = (time?: string) => {
 };
 
 export default function StaffModal({ open, onClose, staff, loading }: StaffModalProps) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const fullName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();
 
   const photo = staff?.photos?.secure_url ?? staff?.photos?.url;
@@ -36,19 +40,18 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
       open={open}
       onClose={onClose}
       fullWidth
+      fullScreen={fullScreen}
       maxWidth="sm"
       slotProps={{
-        paper: { className: "rounded-3xl overflow-hidden" },
-        backdrop: {
-          sx: {
-            backdropFilter: "blur(6px)",
-            backgroundColor: "rgba(0,0,0,0.3)",
-          },
-        },
+        paper: { className: "rounded-3xl overflow-hidden border border-(--app-border) bg-(--app-surface)" },
+        backdrop: { className: "backdrop-blur-sm bg-black/35" },
       }}
     >
       <DialogContent className="p-0">
-        <Box className="relative shrink-0 px-4 pt-4 pb-3 overflow-hidden bg-[linear-gradient(160deg,#0f172a_0%,#1e3a5f_55%,#0f172a_100%)]">
+        <Box className="relative shrink-0 px-4 pt-4 pb-3 overflow-hidden bg-[linear-gradient(150deg,var(--app-hero-from)_0%,var(--app-hero-to)_100%)]">
+          <Box className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_25%_20%,#fff_0%,transparent_45%)]" />
+          <Box className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_80%_70%,#fff_0%,transparent_40%)]" />
+
           <Box
             onClick={onClose}
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 flex items-center justify-center cursor-pointer hover:bg-white/25 transition"
@@ -57,7 +60,10 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
           </Box>
 
           <Box className="flex flex-col items-center text-center">
-            <Avatar src={photo} className="w-20 h-20 text-[26px] bg-slate-800 text-white border-[3px] border-white/20">
+            <Avatar
+              src={photo}
+              className="w-20 h-20 text-[26px] bg-black/20 text-white border-[3px] border-white/30 ring-2 ring-white/20"
+            >
               {initials || "?"}
             </Avatar>
 
@@ -80,7 +86,7 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
           </Box>
         </Box>
 
-        <Box className="px-8 py-8 space-y-8">
+        <Box className="px-5 sm:px-8 py-6 sm:py-8 space-y-7 sm:space-y-8">
           {loading ? (
             <>
               <Skeleton height={60} />
@@ -91,20 +97,20 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
             <>
               {(staff?.phone_number || staff?.email) && (
                 <Box>
-                  <Typography className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">
+                  <Typography className="text-sm font-semibold text-(--app-muted) uppercase tracking-wide mb-4">
                     Contact
                   </Typography>
 
                   <Box className="space-y-3">
                     {staff?.phone_number && (
-                      <Box className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl">
+                      <Box className="flex items-center gap-4 bg-(--app-surface-alt) p-4 rounded-2xl border border-(--app-border)">
                         <PhoneIcon fontSize="small" />
                         <Typography>{staff.phone_number}</Typography>
                       </Box>
                     )}
 
                     {staff?.email && (
-                      <Box className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl">
+                      <Box className="flex items-center gap-4 bg-(--app-surface-alt) p-4 rounded-2xl border border-(--app-border)">
                         <EmailIcon fontSize="small" />
                         <Typography className="truncate">{staff.email}</Typography>
                       </Box>
@@ -114,11 +120,11 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
               )}
 
               <Box>
-                <Typography className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">
+                <Typography className="text-sm font-semibold text-(--app-muted) uppercase tracking-wide mb-4">
                   Weekly Schedule
                 </Typography>
 
-                <Box className="bg-slate-50 rounded-2xl overflow-hidden">
+                <Box className="bg-(--app-surface-alt) rounded-2xl overflow-hidden border border-(--app-border)">
                   {WEEKDAY_KEYS.map((day) => {
                     const hours = activeHours[day];
                     const isToday = day === today;
@@ -126,13 +132,17 @@ export default function StaffModal({ open, onClose, staff, loading }: StaffModal
                     return (
                       <Box
                         key={day}
-                        className={`flex justify-between items-center px-5 py-3 ${
-                          isToday ? "bg-slate-900 text-white" : ""
+                        className={`flex justify-between items-center px-4 sm:px-5 py-3 ${
+                          isToday ? "bg-(--app-primary) text-white" : ""
                         }`}
                       >
                         <Typography className="font-medium">
                           {WEEKDAY_SHORT[day]}
-                          {isToday && <span className="ml-2 text-xs opacity-60">today</span>}
+                          {isToday && (
+                            <Box component="span" className="ml-2 text-xs opacity-60">
+                              today
+                            </Box>
+                          )}
                         </Typography>
 
                         <Typography className="font-medium">

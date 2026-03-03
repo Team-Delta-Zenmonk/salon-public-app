@@ -51,19 +51,19 @@ export default function BookingDateSelector({ days, selectedDate, onSelectDate, 
                   relative flex flex-col items-center justify-center gap-0.5
                   rounded-xl border-[1.5px] transition-all duration-150
                   animate-[dateIn_0.3s_ease_both]
-                  ${hasSlots ? "cursor-pointer" : "cursor-default opacity-40"}
+                  ${hasSlots ? "cursor-pointer" : "cursor-default"}
                   ${
                     isSelected
-                      ? "bg-slate-900 border-slate-900 shadow-[0_4px_12px_rgba(15,23,42,0.2)]"
+                      ? "bg-(--app-primary) border-(--app-primary) shadow-[0_4px_12px_rgba(15,23,42,0.2)]"
                       : hasSlots
-                        ? "bg-white border-slate-200 hover:border-slate-400 hover:bg-slate-50"
-                        : "bg-slate-50 border-slate-100"
+                        ? "bg-(--app-surface) border-(--app-border) hover:border-(--app-muted) hover:bg-(--app-surface-alt)"
+                        : "bg-(--app-bg) border-(--app-border)"
                   }
                 `}
               >
                 <Typography
                   className={`text-[9.5px] font-semibold uppercase tracking-[0.5px] ${
-                    isSelected ? "text-white/55" : "text-slate-400"
+                    isSelected ? "text-(--app-primary-contrast) opacity-70" : "text-(--app-muted)"
                   }`}
                 >
                   {isToday ? "Today" : WEEKDAY_SHORT[Object.keys(WEEKDAY_SHORT)[date.getDay()]]}
@@ -71,14 +71,14 @@ export default function BookingDateSelector({ days, selectedDate, onSelectDate, 
 
                 <Typography
                   className={`text-[22px] font-extrabold leading-tight ${
-                    isSelected ? "text-white" : hasSlots ? "text-slate-900" : "text-slate-300"
+                    isSelected ? "text-(--app-primary-contrast)" : hasSlots ? "text-(--app-text)" : "text-(--app-muted)"
                   }`}
                 >
                   {date.getDate()}
                 </Typography>
 
                 <Typography
-                  className={`text-[9px] tracking-[0.3px] ${isSelected ? "text-white/45" : "text-slate-400"}`}
+                  className={`text-[9px] tracking-[0.3px] ${isSelected ? "text-(--app-primary-contrast) opacity-60" : "text-(--app-muted)"}`}
                 >
                   {MONTH_SHORT[date.getMonth()]}
                 </Typography>

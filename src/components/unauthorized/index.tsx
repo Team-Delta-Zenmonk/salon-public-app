@@ -9,8 +9,8 @@ export default function Unauthorized() {
     <Box className="min-h-screen bg-white flex items-center justify-center p-4">
       <Box className="max-w-lg w-full text-center rounded-xl border border-[#e5e5e5] p-6">
         <Box className="flex justify-center mb-6">
-          <Box className="w-24 h-24 bg-(--primary-900)! rounded-full flex items-center justify-center">
-            <ContentCutIcon className="text-white!" />
+          <Box className="w-24 h-24 bg-(--primary-900) rounded-full flex items-center justify-center">
+            <ContentCutIcon className="text-white" />
           </Box>
         </Box>
 

@@ -29,7 +29,7 @@ const Select = <T extends FieldValues>({
             <InputLabel
               id={name}
               data-test-id={`label-${identifier}`}
-              classes={{ root: clsx(styles.label, { [styles.disabledLabel]: disabled }), shrink: styles.shrunkLabel }}
+              classes={{ root: clsx(styles.label, { [styles.disabledLabel]: disabled }) }}
             >
               {placeholder}
             </InputLabel>
@@ -43,7 +43,7 @@ const Select = <T extends FieldValues>({
               labelId={name}
               error={!!error?.type}
               onBlur={onBlur}
-              MenuProps={{ sx: { maxHeight: "40vh" }, PaperProps: { className: styles.menuPaper }}}
+              MenuProps={{ PaperProps: { className: styles.menuPaper } }}
               inputProps={{
                 className: styles.input,
                 "data-test-id": `input-select-${identifier}`,
@@ -61,7 +61,7 @@ const Select = <T extends FieldValues>({
                 options?.map((option) => {
                   return (
                     <MenuItem
-                      sx={{ minHeight: "auto" }}
+                      className={styles.menuItemRoot}
                       value={option.value}
                       key={option.label}
                       data-test-id={`li-${identifier}-${option.label}`}

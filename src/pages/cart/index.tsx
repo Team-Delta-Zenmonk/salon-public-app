@@ -23,10 +23,10 @@ export default function Cart() {
 
   if (!loaded) {
     return (
-      <Box className="p-6 max-w-6xl mx-auto space-y-3">
-        <Skeleton variant="rounded" height={160} className="rounded-2xl" />
+      <Box className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-5">
+        <Skeleton variant="rounded" height={176} className="rounded-3xl" />
         {[1, 2].map((i) => (
-          <Skeleton key={i} variant="rounded" height={80} className="rounded-2xl" />
+          <Skeleton key={i} variant="rounded" height={96} className="rounded-2xl" />
         ))}
       </Box>
     );
@@ -34,13 +34,13 @@ export default function Cart() {
 
   if (!items.length) {
     return (
-      <Box className="flex flex-col items-center justify-center p-16 text-center gap-4">
-        <Box className="w-18 h-18 rounded-2xl bg-slate-100 flex items-center justify-center">
-          <StorefrontIcon className="text-[32px] text-slate-400" />
+      <Box className="flex flex-col items-center justify-center p-10 sm:p-16 text-center gap-4">
+        <Box className="w-18 h-18 rounded-2xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
+          <StorefrontIcon className="text-[32px] text-(--app-muted)" />
         </Box>
         <Box>
-          <Typography className="font-bold text-lg">Your cart is empty</Typography>
-          <Typography variant="body2" color="text.secondary" className="mt-1">
+          <Typography className="font-bold text-lg text-(--app-text)">Your cart is empty</Typography>
+          <Typography variant="body2" color="text.secondary" className="mt-1 text-(--app-muted)">
             Browse salons and add services to get started
           </Typography>
         </Box>
@@ -56,111 +56,120 @@ export default function Cart() {
 
   return (
     <>
-      <Box className="bg-slate-50 min-h-full p-4 sm:p-8">
-        {salon && (
-          <Box className="relative rounded-2xl overflow-hidden mb-6 bg-slate-900 min-h-35">
-            {salon.logo && (
-              <Box
-                component="img"
-                src={salon.logo}
-                className="absolute inset-0 w-full h-full object-cover opacity-15 blur-xl scale-110"
-              />
-            )}
+      <Box className="bg-(--app-bg) min-h-full p-2.5 sm:p-6 lg:p-8">
+        <Box className="w-full max-w-345 mx-auto">
+          {salon && (
+            <Box className="relative rounded-3xl overflow-hidden mb-6 sm:mb-7 bg-linear-to-r from-(--app-hero-from) via-(--app-primary) to-(--app-hero-to) min-h-36 sm:min-h-40 border border-(--app-border)">
+              {salon.logo && (
+                <Box
+                  component="img"
+                  src={salon.logo}
+                  className="absolute inset-0 w-full h-full object-cover opacity-20 blur-xl scale-110"
+                />
+              )}
 
-            <Box className="relative p-6 sm:p-8 flex items-center gap-6">
+              <Box className="absolute inset-0 bg-linear-to-r from-(--app-hero-from) via-(--app-primary) to-(--app-hero-to) opacity-30" />
+
+            <Box className="relative p-3.5 sm:p-7 lg:p-8 flex items-center gap-3 sm:gap-6">
               <Avatar
                 src={salon.logo}
                 variant="rounded"
-                className="w-14 h-14 sm:w-18 sm:h-18 rounded-[10px] border-2 border-white/20 shrink-0"
+                className="w-12 h-12 sm:w-18 sm:h-18 rounded-xl border border-(--app-border) bg-(--app-surface) shrink-0"
               />
 
-              <Box className="flex-1 min-w-0">
-                <Box className="flex items-center gap-2 mb-1 flex-wrap">
-                  <Typography className="font-extrabold text-lg sm:text-2xl md:text-[26px] text-white leading-none">
-                    {salon.name}
-                  </Typography>
-                  <Box className="px-3 py-1 bg-white/15 rounded-full border border-white/20">
-                    <Typography className="text-white text-[11px] font-semibold tracking-wide">
-                      {(salon.type ?? "salon").toUpperCase()}
+                <Box className="flex-1 min-w-0">
+                  <Box className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <Typography className="font-extrabold text-[1.65rem] sm:text-[30px] text-(--app-primary-contrast) leading-none">
+                      {salon.name}
+                    </Typography>
+                    <Box className="px-3 py-1 bg-(--app-surface) rounded-full border border-(--app-border)">
+                      <Typography className="text-(--app-text) text-[11px] font-semibold tracking-wide">
+                        {(salon.type ?? "salon").toUpperCase()}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box className="flex items-start gap-1 max-w-full">
+                    <PlaceIcon className="text-[13px] text-(--app-primary-contrast)" />
+                    <Typography
+                      variant="caption"
+                      className="text-(--app-primary-contrast) text-[0.73rem] sm:text-sm leading-snug sm:leading-normal break-words"
+                    >
+                      {salon.address}
                     </Typography>
                   </Box>
                 </Box>
-
-                <Box className="flex items-center gap-1">
-                  <PlaceIcon className="text-[13px] text-white/50" />
-                  <Typography variant="caption" className="text-white/60 text-xs line-clamp-1">
-                    {salon.address}
-                  </Typography>
-                </Box>
               </Box>
             </Box>
-          </Box>
-        )}
+          )}
 
-        <Box className="grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px] gap-6 items-start">
-          <Box>
-            <Typography variant="caption" className="font-bold text-slate-400 block mb-3 ml-0.5 tracking-widest">
-              {items.length} SERVICE{items.length > 1 ? "S" : ""}
-            </Typography>
+          <Typography variant="caption" className="font-bold text-(--app-muted) block mb-3 sm:mb-4 ml-0.5 tracking-[0.16em]">
+            {items.length} SERVICE{items.length > 1 ? "S" : ""}
+          </Typography>
 
-            <Box className="space-y-2">
-              {items.map((item: any) => (
-                <CartItem key={item.uuid ?? item.service_id} item={item} />
-              ))}
-            </Box>
-          </Box>
-
-          <Box className="bg-white border border-slate-200 rounded-2xl overflow-hidden lg:sticky lg:top-4">
-            <Box className="px-6 py-5 border-b border-slate-100">
-              <Typography className="font-bold text-[15px]">Order Summary</Typography>
+          <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px] gap-4 sm:gap-6 lg:gap-8 items-start content-start">
+            <Box className="self-start">
+              <Box className="space-y-3 sm:space-y-4">
+                {items.map((item: any) => (
+                  <CartItem key={item.uuid ?? item.service_id} item={item} />
+                ))}
+              </Box>
             </Box>
 
-            <Box className="px-6 py-5">
-              <Box className="flex justify-between items-center mb-3">
-                <Box className="flex items-center gap-1.5">
-                  <AccessTimeIcon className="text-[15px] text-slate-400" />
-                  <Typography variant="body2" color="text.secondary">
-                    Duration
+            <Box className="bg-(--app-surface) border border-(--app-border) rounded-3xl overflow-hidden self-start lg:sticky lg:top-6 shadow-[0_1px_6px_var(--app-primary-soft)]">
+              <Box className="px-4 sm:px-6 py-4 sm:py-5 border-b border-(--app-border) bg-(--app-surface-alt)">
+                <Typography className="font-bold text-[0.98rem] sm:text-base text-(--app-text)">Order Summary</Typography>
+              </Box>
+
+              <Box className="px-4 sm:px-6 py-4 sm:py-6">
+                <Box className="flex justify-between items-center mb-3.5">
+                  <Box className="flex items-center gap-1.5">
+                    <AccessTimeIcon className="text-[15px] text-(--app-muted)" />
+                    <Typography variant="body2" className="text-(--app-muted)">
+                      Duration
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" className="font-semibold text-(--app-text)">
+                    {durationText}
                   </Typography>
                 </Box>
-                <Typography variant="body2" className="font-semibold">
-                  {durationText}
+
+                <Box className="flex justify-between items-center mb-4">
+                  <Box className="flex items-center gap-1.5">
+                    <CalendarMonthIcon className="text-[15px] text-(--app-muted)" />
+                    <Typography variant="body2" className="text-(--app-muted)">
+                      Services
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" className="font-semibold text-(--app-text)">
+                    {items.length}
+                  </Typography>
+                </Box>
+
+                <Divider className="my-4 border-(--app-border)" />
+
+                <Box className="flex justify-between items-center mb-4">
+                  <Typography className="font-bold text-(--app-text)">Total</Typography>
+                  <Typography className="font-extrabold text-[1.38rem] sm:text-[24px] leading-none text-(--app-text)">
+                    ₹{totalPrice}
+                  </Typography>
+                </Box>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disableElevation
+                  onClick={() => setBookingOpen(true)}
+                  className="rounded-xl font-bold py-3 text-sm tracking-wide transition-all duration-300 hover:brightness-110 hover:shadow-[0_10px_22px_var(--app-primary-soft)]"
+                >
+                  Proceed to Book
+                </Button>
+
+                <Typography variant="caption" className="block text-center mt-3 text-(--app-muted)">
+                  Select staff & time you want to book
                 </Typography>
               </Box>
-
-              <Box className="flex justify-between items-center mb-3">
-                <Box className="flex items-center gap-1.5">
-                  <CalendarMonthIcon className="text-[15px] text-slate-400" />
-                  <Typography variant="body2" color="text.secondary">
-                    Services
-                  </Typography>
-                </Box>
-                <Typography variant="body2" className="font-semibold">
-                  {items.length}
-                </Typography>
-              </Box>
-
-              <Divider className="my-4" />
-
-              <Box className="flex justify-between items-center mb-4">
-                <Typography className="font-bold">Total</Typography>
-                <Typography className="font-extrabold text-[22px] text-slate-900">₹{totalPrice}</Typography>
-              </Box>
-
-              <Button
-                fullWidth
-                variant="contained"
-                size="large"
-                disableElevation
-                onClick={() => setBookingOpen(true)}
-                className="rounded-xl font-bold py-3 bg-slate-900 hover:bg-slate-800 text-sm tracking-wide"
-              >
-                Proceed to Book
-              </Button>
-
-              <Typography variant="caption" color="text.secondary" className="block text-center mt-3">
-                Select staff & time you want to book
-              </Typography>
             </Box>
           </Box>
         </Box>

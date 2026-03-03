@@ -131,78 +131,123 @@ export default function ServiceCard({ service, subServices, salon }: { service: 
   };
 
   const parentGender = getGenderChipConfig(service.gender);
+  const parentAdded = isAdded(service.uuid);
 
   return (
-    <Box className="border border-slate-200 rounded-xl bg-white">
-      <Box className="flex items-center justify-between p-4 gap-4">
-        <Box className="flex items-start gap-3 flex-1">
+    <Box
+      className={`border rounded-2xl overflow-hidden transition-all duration-250 ${
+        parentAdded
+          ? "border-(--app-primary) bg-linear-to-b from-(--app-primary-soft) to-(--app-surface) shadow-[0_14px_28px_rgba(15,23,42,0.14)]"
+          : "border-(--app-border) bg-(--app-surface) shadow-[0_10px_24px_rgba(15,23,42,0.06)] hover:shadow-[0_16px_34px_rgba(15,23,42,0.12)]"
+      }`}
+    >
+      <Box className="flex flex-wrap sm:flex-nowrap items-start justify-between p-3.5 sm:p-5 gap-2.5 sm:gap-4">
+        <Box className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0 w-full sm:w-auto">
           {service.logo ? (
-            <img src={service.logo} alt={service.name} className="w-12 h-12 rounded-lg object-cover" />
+            <Box component="img" src={service.logo} alt={service.name} className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover" />
           ) : (
-            <Avatar sx={{ width: 48, height: 48 }}>{service.name?.[0]}</Avatar>
+            <Avatar className="w-11 h-11 sm:w-12 sm:h-12 bg-(--app-surface-alt) text-(--app-text)">{service.name?.[0]}</Avatar>
           )}
 
-          <Box className="flex-1">
-            <Box className="font-medium">{service.name}</Box>
-            <Box className="text-sm text-slate-500">{service.description}</Box>
+          <Box className="flex-1 min-w-0">
+            <Box className="font-semibold text-(--app-text) text-[1.05rem] sm:text-base truncate">{service.name}</Box>
+            <Box className="text-[0.8rem] sm:text-sm text-(--app-muted) line-clamp-2 mt-0.5">{service.description}</Box>
 
-            <Box className="flex flex-wrap gap-2 mt-2">
-              <Chip size="small" label={formatPrice(service)} />
-              {service.duration && <Chip size="small" variant="outlined" label={`${service.duration} min`} />}
-              {parentGender && <Chip size="small" label={parentGender.label} sx={parentGender.sx} />}
+            <Box className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5 sm:mt-3">
+              <Chip
+                size="small"
+                label={formatPrice(service)}
+                className="font-bold bg-(--app-primary-soft) text-(--app-text) border border-(--app-border) max-w-28 sm:max-w-none"
+              />
+              {service.duration && (
+                <Chip
+                  size="small"
+                  variant="outlined"
+                  label={`${service.duration} min`}
+                  className="bg-(--app-surface-alt) text-(--app-muted) border-(--app-border) max-w-22 sm:max-w-none"
+                />
+              )}
+              {parentGender && <Chip size="small" label={parentGender.label} className={parentGender.className} />}
             </Box>
           </Box>
         </Box>
 
-        {!hasSubServices && (
-          <Button
-            size="small"
-            variant={isAdded(service.uuid) ? "contained" : "outlined"}
-            disabled={isAdded(service.uuid)}
-            onClick={() => onBook(service)}
-          >
-            {isAdded(service.uuid) ? "Added" : "Book"}
-          </Button>
-        )}
+        <Box className="shrink-0 text-right ml-auto">
+          <Box className="font-extrabold text-(--app-text) text-[1.7rem] sm:text-xl leading-none">
+            {formatPrice(service).replace("From ", "")}
+          </Box>
+          {!hasSubServices && (
+            <Button
+              size="small"
+              className="mt-2.5 sm:mt-3 min-w-[5.3rem] px-2.5"
+              variant={parentAdded ? "contained" : "outlined"}
+              disabled={parentAdded}
+              onClick={() => onBook(service)}
+            >
+              {parentAdded ? "Added" : "Book"}
+            </Button>
+          )}
+        </Box>
 
         {hasSubServices && (
-          <IconButton onClick={() => setOpen((v) => !v)}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
+          <IconButton
+            onClick={() => setOpen((v) => !v)}
+            className="border border-(--app-border) bg-(--app-surface-alt) hover:bg-(--app-bg) ml-1 mt-0.5 w-10 h-10"
+          >
+            {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
         )}
       </Box>
 
       {hasSubServices && (
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box className="border-t border-slate-200 bg-slate-50 px-4 py-2">
+          <Box className="border-t border-(--app-border) bg-(--app-surface-alt) px-3 sm:px-4 py-3 sm:py-4 space-y-2.5">
             {subServices.map((sub) => {
               const subGender = getGenderChipConfig(sub.gender);
+              const subAdded = isAdded(sub.uuid);
               return (
-                <Box key={sub.uuid} className="flex items-center justify-between gap-4 py-3">
+                <Box
+                  key={sub.uuid}
+                  className={`flex items-center justify-between gap-3 sm:gap-4 py-3 px-2.5 sm:px-3 rounded-xl transition-all duration-200 ${
+                    subAdded
+                      ? "bg-(--app-primary-soft) border border-(--app-primary)"
+                      : "bg-(--app-surface) border border-(--app-border) hover:border-(--app-muted)"
+                  }`}
+                >
                   <Box className="flex items-start gap-3 flex-1 min-w-0">
                     {sub.logo ? (
-                      <img src={sub.logo} alt={sub.name} className="w-10 h-10 rounded-md object-cover shrink-0" />
+                      <Box
+                        component="img"
+                        src={sub.logo}
+                        alt={sub.name}
+                        className="w-10 h-10 rounded-lg object-cover shrink-0"
+                      />
                     ) : (
-                      <Avatar sx={{ width: 40, height: 40, bgcolor: "#e2e8f0", fontSize: 14 }}>{sub.name?.[0]}</Avatar>
+                      <Avatar className="w-10 h-10 bg-(--app-surface) text-(--app-text) text-sm">
+                        {sub.name?.[0]}
+                      </Avatar>
                     )}
 
                     <Box className="min-w-0">
-                      <Box className="font-medium text-sm truncate">{sub.name}</Box>
-                      <Box className="text-xs text-slate-500 line-clamp-2">{sub.description}</Box>
+                      <Box className="font-medium text-sm truncate text-(--app-text)">{sub.name}</Box>
+                      <Box className="text-xs text-(--app-muted) line-clamp-2">{sub.description}</Box>
                       <Box className="flex flex-wrap gap-2 mt-1">
-                        {subGender && <Chip size="small" label={subGender.label} sx={subGender.sx} />}
+                        {subGender && <Chip size="small" label={subGender.label} className={subGender.className} />}
                       </Box>
                     </Box>
                   </Box>
 
-                  <Box className="text-right shrink-0">
-                    <Box className="font-medium text-sm">{formatPrice(sub)}</Box>
-                    {sub.duration && <Box className="text-xs text-slate-500">{sub.duration} min</Box>}
+                  <Box className="text-right shrink-0 min-w-22 sm:min-w-26">
+                    <Box className="font-semibold text-sm text-(--app-text)">{formatPrice(sub)}</Box>
+                    {sub.duration && <Box className="text-xs text-(--app-muted)">{sub.duration} min</Box>}
                     <Button
+                      className="mt-2"
                       size="small"
-                      variant={isAdded(sub.uuid) ? "contained" : "outlined"}
-                      disabled={isAdded(sub.uuid)}
+                      variant={subAdded ? "contained" : "outlined"}
+                      disabled={subAdded}
                       onClick={() => onBook(sub)}
                     >
-                      {isAdded(sub.uuid) ? "Added" : "Book"}
+                      {subAdded ? "Added" : "Book"}
                     </Button>
                   </Box>
                 </Box>

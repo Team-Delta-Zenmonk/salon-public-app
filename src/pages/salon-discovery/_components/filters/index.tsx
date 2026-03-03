@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import SearchBar from "../../../../components/searchbar";
 import Select from "../../../../components/form/select";
@@ -26,7 +26,7 @@ export default function DiscoveryFilters({
   locationStatus = "idle",
   hasLocation = false,
 }: DiscoveryFiltersProps) {
-  const { control, watch, setValue } = useForm<FiltersForm>({
+  const { control, watch } = useForm<FiltersForm>({
     defaultValues: { category: "" },
   });
 
@@ -37,44 +37,60 @@ export default function DiscoveryFilters({
   }, [category, onCategoryChange]);
 
   return (
-    <Box className="flex flex-col md:flex-row md:items-center gap-4 w-full">
-      <Box className="flex-1">
-        <SearchBar placeholder="Search salons by name" onSearch={onSearch} />
-      </Box>
-      <Box className="w-full md:w-65">
-        <Select
-          name="category"
-          placeholder="All Categories"
-          identifier="salon-category"
-          options={categoryOptions}
-          control={control}
-        />
-      </Box>
-      <Box className="flex flex-col items-end gap-1 min-w-30">
+    <Grid container spacing={2} className="w-full items-center">
+      <Grid size={{ xs: 12, md: 5 }}>
+        <Box className="w-full">
+          <SearchBar placeholder="Search salons by name" onSearch={onSearch} />
+        </Box>
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 4 }}>
+        <Box className="w-full flex justify-center">
+          <Box className="w-full max-w-90 md:max-w-[320px]">
+            <Select
+              name="category"
+              placeholder="All Categories"
+              identifier="salon-category"
+              options={categoryOptions}
+              control={control}
+            />
+          </Box>
+        </Box>
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 3 }}>
+        <Box className="flex flex-row md:flex-col items-center md:items-end justify-between gap-2 min-w-30">
         {locationStatus === "loading" && (
-          <Box className="flex items-center gap-1.5 px-2 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-700">
+          <Box className="flex items-center gap-1.5 px-2.5 py-1.5 bg-(--app-primary-soft) border border-(--app-border) rounded-xl text-xs text-(--app-text)">
             <CircularProgress size={14} />
-            <span>Locating...</span>
+            <Typography component="span" className="text-xs">
+              Locating...
+            </Typography>
           </Box>
         )}
 
         {locationStatus === "success" && hasLocation && (
-          <Box className="flex items-center gap-1 px-2 py-1.5 bg-green-50 border border-green-200 rounded-lg text-xs text-green-700">
+          <Box className="flex items-center gap-1 px-2.5 py-1.5 bg-(--app-primary-soft) border border-(--app-border) rounded-xl text-xs text-(--app-text)">
             <LocationOnOutlinedIcon fontSize="inherit" />
-            <span>Nearby</span>
+            <Typography component="span" className="text-xs font-semibold">
+              Nearby
+            </Typography>
           </Box>
         )}
 
         {locationStatus === "error" && (
-          <Box className="text-xs text-slate-500 text-right leading-tight">
-            Enable location
-            <br />
-            <span className="text-slate-400">for nearby</span>
-          </Box>
+          <Typography className="text-xs text-(--app-muted) text-right leading-tight">
+            Enable location for nearby
+          </Typography>
         )}
 
-        {locationStatus === "idle" && <Box className="text-xs text-slate-400 text-right">Loading...</Box>}
-      </Box>
-    </Box>
+        {locationStatus === "idle" && (
+          <Typography className="text-xs text-(--app-muted) text-right">
+            Loading...
+          </Typography>
+        )}
+        </Box>
+      </Grid>
+    </Grid>
   );
 }

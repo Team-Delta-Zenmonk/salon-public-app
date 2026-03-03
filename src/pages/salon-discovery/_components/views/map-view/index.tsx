@@ -1,7 +1,8 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button, Link } from "@mui/material";
 import L from "leaflet";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -49,11 +50,11 @@ export function MapView() {
   }, [salons]);
 
   const validSalons = salons.filter(
-    (salon: any) => Number.isFinite(Number(salon.latitude)) && Number.isFinite(Number(salon.longitude))
+    (salon: any) => Number.isFinite(Number(salon.latitude)) && Number.isFinite(Number(salon.longitude)),
   );
 
   return (
-    <Box className="relative min-h-0 h-[90%] w-[90%] rounded-2xl overflow-auto border border-slate-200 bg-white shadow-sm">
+    <Box className="relative min-h-[70vh] sm:min-h-[75vh] h-[88vh] w-full rounded-2xl overflow-hidden border border-(--app-border) bg-(--app-surface) shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
       <MapContainer zoom={12} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
@@ -71,11 +72,16 @@ export function MapView() {
             <Marker key={salon.uuid} position={[lat, lng]}>
               <Popup>
                 <Box className="w-64 p-4 max-w-sm">
-                  <Box className="w-full h-24 rounded-xl overflow-hidden bg-slate-100 mb-3 shadow-sm border">
+                  <Box className="w-full h-24 rounded-xl overflow-hidden bg-(--app-surface-alt) mb-3 shadow-sm border border-(--app-border)">
                     {salon.logo ? (
-                      <img src={salon.logo} alt={salon.name || "Salon"} className="h-full w-full object-cover" />
+                      <Box
+                        component="img"
+                        src={salon.logo}
+                        alt={salon.name || "Salon"}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
-                      <Box className="h-full w-full bg-linear-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                      <Box className="h-full w-full bg-linear-to-br from-(--app-surface-alt) to-(--app-bg) flex items-center justify-center">
                         <Typography variant="caption" color="text.secondary" className="text-xs">
                           No photo
                         </Typography>
@@ -83,36 +89,30 @@ export function MapView() {
                     )}
                   </Box>
 
-                  <Typography variant="subtitle1" fontWeight="bold" className="mb-2 text-slate-900 text-sm">
+                  <Typography variant="subtitle1" fontWeight="bold" className="mb-2 text-(--app-text) text-sm">
                     {salon.name || "Unnamed Salon"}
                   </Typography>
 
                   <Typography
                     variant="caption"
-                    className="block px-2.5 py-1.5 bg-blue-50  rounded-full mb-3 w-fit text-xs font-medium"
+                    className="block px-2.5 py-1.5 bg-(--app-primary-soft) rounded-full mb-3 w-fit text-xs font-medium text-(--app-text)"
                   >
                     {salon.type ? String(salon.type).toUpperCase() : "UNISEX"}
                   </Typography>
-                  <Typography variant="body2" className="text-slate-600 mb-4 text-xs leading-4 line-clamp-3">
+                  <Typography variant="body2" className="text-(--app-muted) mb-4 text-xs leading-4 line-clamp-3">
                     {salon.address || "Address not available"}
                   </Typography>
                   {salon.map_link && (
-                    <a
-                      href={salon.map_link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 w-full text-sm font-semibold text-slate-900! hover:text-white! hover:bg-slate-900 px-4 py-2.5 rounded-lg transition-all duration-200 shadow-sm border border-slate-200"
-                    >
-                      <span>Open Directions</span>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </a>
+                    <Link href={salon.map_link} target="_blank" rel="noreferrer" underline="none" className="block">
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        className="rounded-xl font-semibold"
+                        endIcon={<ArrowForwardIcon />}
+                      >
+                        Open Directions
+                      </Button>
+                    </Link>
                   )}
                 </Box>
               </Popup>
@@ -122,7 +122,7 @@ export function MapView() {
       </MapContainer>
 
       {validSalons.length === 0 && (
-        <Box className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 backdrop-blur-sm gap-3 p-8 text-center z-10">
+        <Box className="absolute inset-0 flex flex-col items-center justify-center bg-(--app-surface)/95 backdrop-blur-sm gap-3 p-8 text-center z-10">
           <LocationOnOutlinedIcon fontSize="large" color="disabled" />
           <Typography color="text.secondary" className="font-medium text-lg">
             No salons found nearby

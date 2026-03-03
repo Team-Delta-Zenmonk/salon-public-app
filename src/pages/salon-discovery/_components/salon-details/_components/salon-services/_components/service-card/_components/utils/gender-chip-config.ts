@@ -1,9 +1,6 @@
-import type { Theme } from "@emotion/react";
-import type { SxProps } from "@mui/material";
-
 export type GenderChipConfig = {
   label: string;
-  sx: SxProps<Theme>;
+  className: string;
 };
 
 export const getGenderChipConfig = (gender?: string): GenderChipConfig | null => {
@@ -13,19 +10,19 @@ export const getGenderChipConfig = (gender?: string): GenderChipConfig | null =>
     case "male":
       return {
         label: "Men",
-        sx: { bgcolor: "#e0f2fe", color: "#0369a1" },
+        className: "bg-(--app-surface-alt) text-(--app-text) border border-(--app-border) font-semibold",
       };
 
     case "female":
       return {
         label: "Women",
-        sx: { bgcolor: "#fce7f3", color: "#9d174d" },
+        className: "bg-(--app-primary-soft) text-(--app-text) border border-(--app-border) font-semibold",
       };
 
     default:
       return {
         label: "Unisex",
-        sx: { bgcolor: "#ecfeff", color: "#155e75" },
+        className: "bg-(--app-chip-tone) text-(--app-text) border border-(--app-border) font-semibold",
       };
   }
 };

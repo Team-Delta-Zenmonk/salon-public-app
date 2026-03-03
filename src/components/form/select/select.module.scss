@@ -1,26 +1,26 @@
 .input {
-  padding: 14px 12px;
   height: 100%;
 }
 
 .selectRoot {
-  height: 40px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--app-surface);
 }
 
 .selectInput {
-  height: 100%;
-  padding: 10px 26px 10px 14px;
+  color: var(--app-text);
 }
 
 .label {
-  top: -6px;
-  width: calc(100% - 36px);
+  color: var(--app-muted);
+  opacity: 0.68;
 }
 
 .selectIcon {
   right: 8px;
   position: absolute;
-  color: var(--secondary-600);
+  color: var(--app-muted);
 }
 
 .error {
@@ -28,7 +28,8 @@
 }
 
 .disabledLabel {
-  color: var(--secondary-400);
+  color: var(--app-muted);
+  opacity: 0.5;
 }
 
 .menuItem{
@@ -38,5 +39,10 @@
 }
 
 .menuPaper{
+  max-height: 40vh;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.20), 0 9px 10px 0 rgba(0, 0, 0, 0.14), 0 5px 14px 0 rgba(0, 0, 0, 0.12);
+}
+
+.menuItemRoot{
+  min-height: auto !important;
 }

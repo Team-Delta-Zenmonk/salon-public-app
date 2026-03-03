@@ -37,7 +37,7 @@ const SearchBar = ({ onSearch, placeholder }: SearchBarProps) => {
   return (
     <TextField
       size="medium"
-      sx={{ maxWidth: "700px !important", width: "100%" }}
+      className="w-full max-w-175 [&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-[14px]"
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleOnChange}
@@ -45,7 +45,7 @@ const SearchBar = ({ onSearch, placeholder }: SearchBarProps) => {
         input: {
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: "var(--secondary-700)" }} />
+              <SearchIcon className="text-(--app-muted)" />
             </InputAdornment>
           ),
           ...(searchQuery && {
@@ -53,7 +53,7 @@ const SearchBar = ({ onSearch, placeholder }: SearchBarProps) => {
               <InputAdornment position="end">
                 <Tooltip title="Clear">
                   <IconButton onClick={handleClearSearch}>
-                    <CloseIcon sx={{ color: "var(--secondary-700)" }} />
+                    <CloseIcon className="text-(--app-muted)" />
                   </IconButton>
                 </Tooltip>
               </InputAdornment>

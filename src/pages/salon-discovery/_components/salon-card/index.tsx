@@ -23,11 +23,11 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
 
   const HeartButton = (
     <Tooltip title="Login to save favourites">
-      <span>
+      <Box component="span">
         <IconButton disabled onClick={(e) => e.stopPropagation()}>
-          <FavoriteBorderIcon sx={{ color: "#ef4444" }} />
+          <FavoriteBorderIcon className="text-rose-500" />
         </IconButton>
-      </span>
+      </Box>
     </Tooltip>
   );
 
@@ -35,28 +35,34 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
     return (
       <Box
         onClick={goToDetail}
-        className="cursor-pointer border border-slate-200 rounded-2xl overflow-hidden hover:shadow-sm transition bg-white"
+        className="group cursor-pointer border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-300 bg-(--app-surface) hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.12)]"
       >
-        <Box className="w-full aspect-video bg-slate-100">
+        <Box className="w-full aspect-video bg-(--app-surface-alt) overflow-hidden">
           {imageUrl ? (
-            <img src={imageUrl} alt={salon?.name || "Salon"} className="h-full w-full object-cover" loading="lazy" />
+            <Box
+              component="img"
+              src={imageUrl}
+              alt={salon?.name || "Salon"}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
           ) : (
-            <Box className="h-full w-full bg-linear-to-br from-slate-100 to-slate-200" />
+            <Box className="h-full w-full bg-linear-to-br from-(--app-surface-alt) to-(--app-bg)" />
           )}
         </Box>
 
-        <Box className="p-5">
+        <Box className="p-4 sm:p-5">
           <Box className="flex items-start justify-between gap-3">
             <Box className="min-w-0">
-              <Box className="font-semibold text-slate-900 truncate text-[15px]">{salon?.name || "—"}</Box>
-              <Box className="text-xs text-slate-600 mt-1">{salonType(salon?.type)}</Box>
+              <Box className="font-semibold text-(--app-text) truncate text-[15px]">{salon?.name || "—"}</Box>
+              <Box className="text-xs text-(--app-muted) mt-1">{salonType(salon?.type)}</Box>
             </Box>
             {HeartButton}
           </Box>
 
-          <Box className="text-xs text-slate-500 mt-3 truncate">{categoriesText}</Box>
+          <Box className="text-xs text-(--app-muted) mt-3 truncate">{categoriesText}</Box>
 
-          <Box className="flex items-center gap-1 text-xs text-slate-500 mt-3">
+          <Box className="flex items-center gap-1 text-xs text-(--app-muted) mt-3">
             <PlaceIcon fontSize="inherit" />
             <Box className="truncate">{addressText}</Box>
           </Box>
@@ -68,26 +74,32 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
   return (
     <Box
       onClick={goToDetail}
-      className="cursor-pointer relative border border-slate-200 rounded-2xl bg-white hover:shadow-sm transition p-4"
+      className="group cursor-pointer relative border border-(--app-border) rounded-2xl bg-(--app-surface) hover:shadow-[0_14px_30px_rgba(15,23,42,0.1)] transition-all duration-300 p-3 sm:p-4"
     >
       <Box className="absolute top-3 right-3">{HeartButton}</Box>
 
-      <Box className="flex gap-4">
-        <Box className="w-28 h-24 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+      <Box className="flex flex-col sm:flex-row gap-4">
+        <Box className="w-full sm:w-28 h-38 sm:h-24 rounded-xl overflow-hidden shrink-0 bg-(--app-surface-alt)">
           {imageUrl ? (
-            <img src={imageUrl} alt={salon?.name || "Salon"} className="h-full w-full object-cover" loading="lazy" />
+            <Box
+              component="img"
+              src={imageUrl}
+              alt={salon?.name || "Salon"}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
           ) : (
-            <Box className="h-full w-full bg-linear-to-br from-slate-100 to-slate-200" />
+            <Box className="h-full w-full bg-linear-to-br from-(--app-surface-alt) to-(--app-bg)" />
           )}
         </Box>
 
-        <Box className="flex-1 min-w-0 pr-10">
-          <Box className="font-semibold text-slate-900 truncate">{salon?.name || "—"}</Box>
-          <Box className="text-xs text-slate-600 mt-1">{salonType(salon?.type)}</Box>
+        <Box className="flex-1 min-w-0 pr-10 sm:pr-10">
+          <Box className="font-semibold text-(--app-text) truncate">{salon?.name || "—"}</Box>
+          <Box className="text-xs text-(--app-muted) mt-1">{salonType(salon?.type)}</Box>
 
-          <Box className="text-xs text-slate-500 mt-2 truncate">{categoriesText}</Box>
+          <Box className="text-xs text-(--app-muted) mt-2 truncate">{categoriesText}</Box>
 
-          <Box className="flex items-center gap-1 text-xs text-slate-500 mt-2">
+          <Box className="flex items-center gap-1 text-xs text-(--app-muted) mt-2">
             <PlaceIcon fontSize="inherit" />
             <Box className="truncate">{addressText}</Box>
           </Box>

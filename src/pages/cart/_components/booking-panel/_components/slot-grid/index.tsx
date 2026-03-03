@@ -22,14 +22,14 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
   if (!selectedDate) {
     return (
       <Box className="px-5 py-8 text-center">
-        <Typography className="text-[13px] text-slate-400">Select a date to see available slots</Typography>
+        <Typography className="text-[13px] text-(--app-muted)">Select a date to see available slots</Typography>
       </Box>
     );
   }
 
   if (loading) {
     return (
-      <Box className="px-5 grid grid-cols-3 gap-3">
+      <Box className="px-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
         {Array.from({ length: 9 }).map((_, i) => (
           <Skeleton
             key={i}
@@ -46,7 +46,7 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
   if (!slots.length) {
     return (
       <Box className="px-5 py-8 text-center">
-        <Typography className="text-[13px] text-slate-400">No slots available for this date</Typography>
+        <Typography className="text-[13px] text-(--app-muted)">No slots available for this date</Typography>
       </Box>
     );
   }
@@ -63,16 +63,16 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
             <Box className="flex items-center gap-2 mb-3">
               <Typography className="text-xs">{icon}</Typography>
 
-              <Typography className="text-[10px] font-bold text-slate-400 tracking-[1.5px] uppercase">
+              <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase">
                 {label}
               </Typography>
 
-              <Box className="flex-1 h-px bg-slate-100" />
+              <Box className="flex-1 h-px bg-(--app-border)" />
 
-              <Typography className="text-[10px] text-slate-300">{group.length} slots</Typography>
+              <Typography className="text-[10px] text-(--app-muted)">{group.length} slots</Typography>
             </Box>
 
-            <Box className="grid grid-cols-3 gap-3">
+            <Box className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {group.map((slot, idx) => {
                 const isSelected = selectedSlot?.start === slot.start;
 
@@ -87,13 +87,15 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
                       active:scale-[0.97] animate-[slotIn_0.25s_ease_both]
                       ${
                         isSelected
-                          ? "bg-slate-900 border-slate-900 shadow-[0_2px_8px_rgba(15,23,42,0.15)]"
-                          : "bg-slate-50 border-slate-100 hover:bg-slate-100 hover:border-slate-200"
+                          ? "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)]"
+                          : "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted)"
                       }
                     `}
                   >
                     <Typography
-                      className={`text-[12.5px] ${isSelected ? "font-bold text-white" : "font-medium text-gray-700"}`}
+                      className={`text-[12.5px] ${
+                        isSelected ? "font-bold text-(--app-primary-contrast)" : "font-medium text-(--app-text)"
+                      }`}
                     >
                       {formatTime(slot.start)}
                     </Typography>

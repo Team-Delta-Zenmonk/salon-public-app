@@ -127,24 +127,23 @@ export default function CartItem({ item }: CartItemProps) {
 
   return (
     <>
-      <Box className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-150 hover:border-slate-300 hover:shadow-sm">
-        <Box className="flex items-center gap-4 sm:gap-6 p-4 sm:p-5">
+      <Box className="bg-(--app-surface) border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-200">
+        <Box className="flex items-center gap-3 sm:gap-6 p-4 sm:p-5">
           <Avatar
             src={image}
             variant="rounded"
-            className="rounded-xl shrink-0"
-            sx={{ width: { xs: 56, sm: 72 }, height: { xs: 56, sm: 72 }, borderRadius: 2 }}
+            className="rounded-xl shrink-0 w-14 h-14 sm:w-18 sm:h-18 border border-(--app-border) bg-(--app-surface-alt)"
           />
 
           <Box className="flex-1 min-w-0">
-            <Typography className="font-bold text-sm sm:text-base text-slate-900 truncate">{name}</Typography>
+            <Typography className="font-bold text-sm sm:text-base text-(--app-text) truncate">{name}</Typography>
             <Box className="flex items-center gap-1.5 mt-1">
-              <AccessTimeIcon className="text-slate-400" sx={{ fontSize: 13 }} />
-              <Typography variant="caption" className="text-slate-400 text-xs sm:text-[13px]">
+              <AccessTimeIcon className="text-(--app-muted) text-[13px]" />
+              <Typography variant="caption" className="text-(--app-muted) text-xs sm:text-[13px]">
                 {duration} min
                 {gender && (
                   <>
-                    <Box component="span" className="mx-1.5 text-slate-300">
+                    <Box component="span" className="mx-1.5 text-(--app-border)">
                       •
                     </Box>
                     <Box component="span" className="capitalize">
@@ -155,38 +154,43 @@ export default function CartItem({ item }: CartItemProps) {
               </Typography>
             </Box>
             {selectedStaffId && currentStaffInfo && (
-              <Box className="flex items-center gap-1.5 mt-1.5">
-                <Avatar src={currentStaffInfo.photo} sx={{ width: 18, height: 18, fontSize: 10 }}>
+              <Box className="flex items-center gap-1.5 mt-1.5 px-2 py-1 rounded-lg bg-(--app-surface-alt) border border-(--app-border) w-fit max-w-full">
+                <Avatar src={currentStaffInfo.photo} className="w-5 h-5 text-[10px] border border-(--app-border)">
                   {currentStaffInfo.name?.[0]}
                 </Avatar>
-                <Typography variant="caption" className="text-slate-500 text-[11px]">
+                <Typography
+                  variant="caption"
+                  className="text-(--app-text) text-[11px] font-medium truncate max-w-38 sm:max-w-48"
+                >
                   {currentStaffInfo.name}
                 </Typography>
-                <Box className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <Box className="w-1.5 h-1.5 rounded-full bg-(--app-primary)" />
               </Box>
             )}
           </Box>
 
           <Box className="flex items-center gap-3 shrink-0">
-            <Typography className="font-extrabold text-base sm:text-lg text-slate-900 leading-none">
+            <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) leading-none">
               ₹{price}
             </Typography>
             <IconButton
               onClick={() => setConfirmOpen(true)}
-              className="text-slate-300 border border-slate-100 rounded-xl transition-all duration-150 hover:text-red-500 hover:bg-red-50 hover:border-red-200"
-              sx={{ width: { xs: 32, sm: 36 }, height: { xs: 32, sm: 36 } }}
+              className="text-(--app-muted) border border-(--app-border) rounded-xl transition-all duration-150 hover:text-(--app-primary) hover:bg-(--app-primary-soft) hover:border-(--app-primary) w-8 h-8 sm:w-9 sm:h-9"
             >
-              <DeleteOutlineIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+              <DeleteOutlineIcon className="text-base sm:text-lg" />
             </IconButton>
           </Box>
         </Box>
-        <Box className="border-t border-slate-100 px-4 sm:px-5 py-3">
+        <Box className="border-t border-(--app-border) px-4 sm:px-5 py-3">
           <Box className="flex items-center justify-between mb-2">
-            <Typography variant="caption" className="text-slate-400 font-semibold tracking-wide uppercase text-[10px]">
+            <Typography
+              variant="caption"
+              className="text-(--app-muted) font-semibold tracking-wide uppercase text-[10px]"
+            >
               Select Staff
             </Typography>
             {selectedStaffId && (
-              <Typography variant="caption" className="text-emerald-500 font-semibold text-[10px]">
+              <Typography variant="caption" className="text-(--app-primary) font-semibold text-[10px]">
                 ✓ Assigned
               </Typography>
             )}
@@ -202,11 +206,11 @@ export default function CartItem({ item }: CartItemProps) {
               ))}
             </Box>
           ) : staffList.length === 0 ? (
-            <Typography variant="caption" className="text-slate-400 block">
+            <Typography variant="caption" className="text-(--app-muted) block">
               No staff assigned to this service
             </Typography>
           ) : (
-            <Box className="flex gap-4 flex-wrap">
+            <Box className="flex gap-2.5 sm:gap-3 flex-wrap">
               {staffList.map((entry: any) => {
                 const staff = entry.staff;
                 const isSelected = selectedStaffId === staff?.uuid;
@@ -218,36 +222,36 @@ export default function CartItem({ item }: CartItemProps) {
                   <Box
                     key={entry.uuid}
                     onClick={() => onStaffClick(entry)}
-                    className={`flex flex-col items-center gap-1 cursor-pointer group transition-opacity duration-150 ${
-                      updating ? "opacity-50 pointer-events-none" : ""
-                    }`}
+                    className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-2.5 py-2 min-w-20 sm:min-w-22 border ${
+                      isSelected
+                        ? "bg-(--app-primary-soft) border-(--app-primary)"
+                        : "bg-(--app-surface) border-(--app-border) hover:bg-(--app-surface-alt) hover:border-(--app-muted)"
+                    } ${updating ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <Box className="relative">
                       <Avatar
                         src={photo}
-                        sx={{
-                          width: 44,
-                          height: 44,
-                          border: isSelected ? "2.5px solid #0f172a" : "2.5px solid transparent",
-                          outline: isSelected ? "none" : "2px solid #e2e8f0",
-                          transition: "all 0.15s",
-                        }}
-                        className="group-hover:outline-slate-300"
+                        className={
+                          isSelected
+                            ? "w-11 h-11 transition-all duration-150 border-[2.5px] border-(--app-primary) bg-(--app-surface) shadow-[0_8px_20px_var(--app-primary-soft)]"
+                            : "w-11 h-11 transition-all duration-150 border-2 border-(--app-border) bg-(--app-surface-alt)"
+                        }
                       >
                         {staffName?.[0]}
                       </Avatar>
                       {isSelected && (
-                        <Box className="absolute -bottom-1 -right-1 w-4 h-4 bg-slate-900 rounded-full flex items-center justify-center">
-                          <CheckIcon sx={{ fontSize: 10, color: "#fff" }} />
+                        <Box className="absolute -bottom-1 -right-1 w-4 h-4 bg-(--app-primary) border border-(--app-surface) rounded-full flex items-center justify-center">
+                          <CheckIcon className="text-[10px] text-(--app-primary-contrast)" />
                         </Box>
                       )}
                     </Box>
 
                     <Typography
                       variant="caption"
-                      className={`text-[11px] text-center max-w-13 truncate leading-tight ${
-                        isSelected ? "text-slate-900 font-bold" : "text-slate-500"
+                      className={`text-[11px] text-center w-full leading-tight truncate ${
+                        isSelected ? "text-(--app-text) font-bold" : "text-(--app-text) font-medium"
                       }`}
+                      title={staffName || "Staff"}
                     >
                       {staffName || "Staff"}
                     </Typography>
@@ -255,7 +259,7 @@ export default function CartItem({ item }: CartItemProps) {
                     {staffPrice && (
                       <Typography
                         variant="caption"
-                        className={`text-[10px] ${isSelected ? "text-slate-700 font-semibold" : "text-slate-400"}`}
+                        className={`text-[10px] ${isSelected ? "text-(--app-text) font-semibold" : "text-(--app-muted) font-medium"}`}
                       >
                         ₹{Math.round(parseFloat(String(staffPrice)))}
                       </Typography>

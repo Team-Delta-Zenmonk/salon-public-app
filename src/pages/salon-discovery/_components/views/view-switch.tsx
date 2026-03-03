@@ -9,10 +9,18 @@ interface Props {
 
 export default function DiscoveryViewSwitch({ value, onChange }: Props) {
   return (
-    <Stack direction="row" spacing={1} className="justify-end">
+    <Stack
+      direction="row"
+      spacing={1}
+      className="justify-end rounded-xl bg-(--app-surface-alt) p-1 border border-(--app-border)"
+    >
       {VIEW_MODES.map(({ label, value: v, Icon }) => (
         <Tooltip key={v} title={label}>
-          <IconButton color={value === v ? "primary" : "default"} onClick={() => onChange(v)}>
+          <IconButton
+            color={value === v ? "primary" : "default"}
+            onClick={() => onChange(v)}
+            className={value === v ? "bg-(--app-surface) shadow-sm" : ""}
+          >
             <Icon />
           </IconButton>
         </Tooltip>

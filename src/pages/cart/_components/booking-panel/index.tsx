@@ -26,7 +26,7 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<any | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [confirming, setConfirming] = useState(false);  
+  const [confirming, setConfirming] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
 
   const totalPrice = items.reduce((sum: number, i: any) => sum + (i.final_price ?? i.base_price ?? 0), 0);
@@ -65,7 +65,15 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
     if (!cartId || !selectedDate || !selectedSlot) return;
     setConfirming(true);
     try {
-      await dispatch(createBookingAction({ cartId, date: selectedDate, slot: selectedSlot })).unwrap();
+      const normalizedSlot = {
+        ...selectedSlot,
+        services: selectedSlot.services.map((s: any) => ({
+          service_id: s.service_id,
+          staff_id: s.staff_id ?? s.staff_options?.[0],
+        })),
+      };
+
+      await dispatch(createBookingAction({ cartId, date: selectedDate, slot: normalizedSlot })).unwrap();
       setConfirmOpen(false);
       onClose();
       onSuccess();
@@ -85,25 +93,24 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
         slotProps={{
           paper: {
             className:
-              "flex flex-col bg-white overflow-hidden rounded-t-[20px] sm:rounded-[20px] sm:mb-3 sm:max-w-[520px] sm:mx-auto max-h-[92dvh] sm:max-h-[88vh]",
-            style: { boxShadow: "0 -4px 40px rgba(0,0,0,0.12), 0 0 0 1px #e2e8f0" },
+              "flex flex-col bg-(--app-surface) overflow-hidden rounded-t-[20px] sm:rounded-[20px] sm:mb-3 sm:max-w-[560px] sm:mx-auto max-h-[94dvh] sm:max-h-[88vh] border border-(--app-border)",
           },
           transition: { timeout: 320 },
         }}
         className="[&_.MuiBackdrop-root]:backdrop-blur-sm [&_.MuiBackdrop-root]:bg-black/55"
       >
-        <Box className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
+        <Box className="flex items-center justify-between px-4 sm:px-5 pt-5 pb-4 border-b border-(--app-border) shrink-0">
           <Box>
-            <Typography className="font-extrabold text-base text-slate-900 leading-tight">Select a Time</Typography>
-            <Typography className="text-xs text-slate-400 mt-0.5">Choose your preferred date & slot</Typography>
+            <Typography className="font-extrabold text-base text-(--app-text) leading-tight">Select a Time</Typography>
+            <Typography className="text-xs text-(--app-muted) mt-0.5">Choose your preferred date & slot</Typography>
           </Box>
 
           <IconButton
             onClick={onClose}
             size="small"
-            className="bg-slate-50 border border-slate-100 hover:bg-slate-100 rounded-[10px]"
+            className="bg-(--app-surface-alt) border border-(--app-border) hover:bg-(--app-bg) rounded-[10px]"
           >
-            <CloseIcon className="text-slate-500 text-base" />
+            <CloseIcon className="text-(--app-muted) text-base" />
           </IconButton>
         </Box>
 
@@ -114,8 +121,8 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
             </Box>
           ) : (
             <>
-              <Box className="pt-5 pb-4 border-b border-slate-50">
-                <Typography className="text-[10px] font-bold text-slate-400 tracking-[1.5px] uppercase mb-3 px-5 block">
+              <Box className="pt-5 pb-4 border-b border-(--app-border)">
+                <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
                   Select Date
                 </Typography>
                 <BookingDateSelector
@@ -130,7 +137,7 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
               </Box>
 
               <Box className="pt-5">
-                <Typography className="text-[10px] font-bold text-slate-400 tracking-[1.5px] uppercase mb-3 px-5 block">
+                <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
                   Available Times
                 </Typography>
                 <SlotGrid
@@ -145,32 +152,38 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
           )}
         </Box>
 
-        <Box className="px-5 py-5 border-t border-slate-100 shrink-0 bg-white">
+        <Box className="px-4 sm:px-5 py-5 border-t border-(--app-border) shrink-0 bg-(--app-surface)">
           <Box className="flex items-center justify-between mb-3">
             <Box className="flex items-center gap-2">
-              <AccessTimeIcon className="text-slate-400 text-sm" />
-              <Typography className="text-[13px] text-slate-500">{durationText}</Typography>
-              <Box className="w-1 h-1 rounded-full bg-slate-300" />
-              <Typography className="text-[13px] text-slate-500">
+              <AccessTimeIcon className="text-(--app-muted) text-sm" />
+              <Typography className="text-[13px] text-(--app-muted)">{durationText}</Typography>
+              <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
+              <Typography className="text-[13px] text-(--app-muted)">
                 {items.length} service{items.length > 1 ? "s" : ""}
               </Typography>
             </Box>
-            <Typography className="font-extrabold text-xl text-slate-900 leading-none">₹{totalPrice}</Typography>
+            <Typography className="font-extrabold text-xl text-(--app-text) leading-none">₹{totalPrice}</Typography>
           </Box>
 
           <Box
             onClick={selectedSlot ? () => setConfirmOpen(true) : undefined}
             className={`flex items-center justify-center gap-2 py-3.5 rounded-xl transition-colors duration-200 ${
-              selectedSlot ? "bg-slate-900 hover:bg-slate-800 cursor-pointer" : "bg-slate-200 cursor-default"
+              selectedSlot
+                ? "bg-(--app-primary) hover:brightness-95 cursor-pointer"
+                : "bg-(--app-surface-alt) cursor-default"
             }`}
           >
-            <Typography className={`text-sm font-bold tracking-wide ${selectedSlot ? "text-white" : "text-slate-400"}`}>
+            <Typography
+              className={`text-sm font-bold tracking-wide ${
+                selectedSlot ? "text-(--app-primary-contrast)" : "text-(--app-muted)"
+              }`}
+            >
               {selectedSlot ? "Book Appointment" : "Select a time slot"}
             </Typography>
-            {selectedSlot && <ArrowForwardIcon className="text-white text-base" />}
+            {selectedSlot && <ArrowForwardIcon className="text-(--app-primary-contrast) text-base" />}
           </Box>
 
-          <Typography className="text-[11px] text-slate-400 text-center mt-2.5 block">
+          <Typography className="text-[11px] text-(--app-muted) text-center mt-2.5 block">
             You'll review details before confirming
           </Typography>
         </Box>

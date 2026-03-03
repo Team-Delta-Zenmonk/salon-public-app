@@ -1,14 +1,47 @@
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from "@mui/material";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createAppTheme, defaultThemeId, themeOptions, type AppThemeId } from "./theme";
 
-import theme from "./theme";
+interface ThemeContextValue {
+  themeId: AppThemeId;
+  setThemeId: (themeId: AppThemeId) => void;
+}
+
+const AppThemeContext = createContext<ThemeContextValue>({
+  themeId: defaultThemeId,
+  setThemeId: () => undefined,
+});
+
+const STORAGE_KEY = "salon-user-app-theme";
+
+export const useAppThemeMode = () => useContext(AppThemeContext);
 
 export default function ThemeProviderWrapper({ children }: Readonly<{ children: React.ReactNode }>) {
+  const [themeId, setThemeId] = useState<AppThemeId>(() => {
+    if (typeof window === "undefined") return defaultThemeId;
+    const cached = localStorage.getItem(STORAGE_KEY) as AppThemeId | null;
+    return themeOptions.some((option) => option.id === cached) ? cached! : defaultThemeId;
+  });
+
+  const theme = useMemo(() => createAppTheme(themeId), [themeId]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, themeId);
+    document.documentElement.setAttribute("data-theme", themeId);
+    document.documentElement.style.setProperty(
+      "--app-primary-contrast",
+      theme.palette.getContrastText(theme.palette.primary.main),
+    );
+  }, [themeId, theme]);
+
   return (
-      <StyledEngineProvider>
+    <StyledEngineProvider>
+      <AppThemeContext.Provider value={{ themeId, setThemeId }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           {children}
         </ThemeProvider>
-      </StyledEngineProvider>
+      </AppThemeContext.Provider>
+    </StyledEngineProvider>
   );
 }
