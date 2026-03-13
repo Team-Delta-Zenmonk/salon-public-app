@@ -4,25 +4,43 @@ import SalonLoginCarousel from "../../components/login/login-carousel";
 
 export default function SignUp() {
   return (
-    <Box className="min-h-screen grid place-items-center px-4 py-8 ">
-      <Box className="w-full max-w-280 overflow-hidden rounded-3xl border border-slate-200/60 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.15)] bg-white">
-        <Box className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] md:min-h-160">
-          <Box className="flex flex-col justify-center gap-8 p-8 md:p-12 lg:p-16 bg-white">
-            <Box className="space-y-6">
-              <Box className="inline-block px-3 py-1.5 text-sm font-semibold bg-blue-50 text-(--primary-900) border border-blue-200 rounded-lg">
-                Salon Portal
+    <Box className="relative min-h-screen overflow-hidden bg-(--app-bg) px-4 py-8 sm:px-6 lg:px-10">
+      <Box className="pointer-events-none absolute inset-0 opacity-70">
+        <Box className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-(--app-primary-soft) blur-3xl" />
+        <Box className="absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-(--app-primary-soft) blur-3xl" />
+      </Box>
+
+      <Box className="relative mx-auto grid min-h-[calc(100vh-4rem)] w-full max-w-280 place-items-center">
+        <Box className="w-full overflow-hidden rounded-3xl border border-(--app-border) bg-(--app-surface) shadow-[0_24px_80px_-28px_var(--app-primary-soft)]">
+          <Box className="grid grid-cols-1 md:grid-cols-[1fr_1.1fr] md:min-h-160">
+            <Box className="flex flex-col justify-center gap-8 p-8 md:p-12 lg:p-16">
+              <Box className="space-y-6">
+                <Box className="inline-flex items-center gap-2 rounded-full border border-(--app-border) bg-(--app-surface-alt) px-3 py-1.5 text-sm font-semibold text-(--app-text)">
+                  <Box className="h-2 w-2 rounded-full bg-(--app-primary)" />
+                  Salon Portal
+                </Box>
+                <Box className="text-4xl font-semibold leading-tight text-(--app-text) md:text-5xl">
+                  Sign in to continue booking
+                </Box>
+                <Box className="text-lg leading-relaxed text-(--app-muted)">
+                  Discover nearby salons, compare services, and secure your preferred time slot in minutes.
+                </Box>
               </Box>
-              <Box className="text-4xl md:text-5xl font-semibold text-slate-900 leading-tight">
-                Sign up to get started
+              <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface-alt) p-4">
+                <Box className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-(--app-muted)">
+                  Quick Access
+                </Box>
+                <Box className="text-sm text-(--app-muted)">
+                  Use Google sign-in to continue from your cart and finish booking instantly.
+                </Box>
               </Box>
-              <Box className="text-lg text-slate-600 leading-relaxed">
-                Discover nearby salons and book your beauty services instantly.
-              </Box>
+
+              <LoginButton />
             </Box>
-            <LoginButton />
-          </Box>
-          <Box className="hidden md:flex items-center justify-center p-8">
-            <SalonLoginCarousel />
+
+            <Box className="hidden items-center justify-center border-l border-(--app-border) bg-(--app-surface-alt) p-6 md:flex lg:p-8">
+              <SalonLoginCarousel />
+            </Box>
           </Box>
         </Box>
       </Box>

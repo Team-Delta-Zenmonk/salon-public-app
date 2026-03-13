@@ -11,7 +11,7 @@ import Cart from "../pages/cart";
 function AllRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<SignUp />} />
+      <Route path="/" element={<SalonDiscovery />} />
       <Route path="/signup" element={<SignUp />} />
       <Route element={<AppLayout />}>
         <Route path="/salons" element={<SalonDiscovery />} />

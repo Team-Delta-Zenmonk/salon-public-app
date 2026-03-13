@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GoogleResponse } from "../../../auth/get-google-response";
 import { useAppDispatch } from "../../../store/hook";
 import { loginCustomerAction } from "../../../features/auth/login/login.action";
@@ -9,17 +9,35 @@ interface LoginButtonProps {
   collapsed?: boolean;
 }
 
+interface AuthRedirectState {
+  redirectTo?: string;
+  resumeBooking?: boolean;
+}
+
 export default function LoginButton({ collapsed = false }: LoginButtonProps) {
   const [loading, setLoading] = useState(false);
   const { getSignInWithPopup } = GoogleResponse();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const routeState = (location.state ?? null) as AuthRedirectState | null;
 
   const logInWithGoogle = async () => {
     setLoading(true);
     try {
       const googleResponse = await getSignInWithPopup();
-      const res = await dispatch(loginCustomerAction({ token: googleResponse?.token })).unwrap();
+      await dispatch(loginCustomerAction({ token: googleResponse?.token })).unwrap();
+
+      if (routeState?.redirectTo) {
+        navigate(routeState.redirectTo, {
+          replace: true,
+          state: {
+            resumeBooking: !!routeState.resumeBooking,
+          } satisfies AuthRedirectState,
+        });
+        return;
+      }
+
       navigate("/salons", { replace: true });
     } catch (err) {
       callSnack("Failed to sign in with Google. Please try again.", "error");

@@ -8,18 +8,50 @@ import { useAppSelector, useAppDispatch } from "../../store/hook";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
 import CartItem from "./_components/cart-items";
 import BookingPanel from "./_components/booking-panel";
+import { useLocation, useNavigate } from "react-router-dom";
+import { callSnack } from "../../components/snackbar";
+
+interface CartRouteState {
+  redirectTo?: string;
+  resumeBooking?: boolean;
+}
 
 export default function Cart() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { items, salon, loaded } = useAppSelector((s) => s.cart);
   const { isAuthenticated, customer } = useAppSelector((s) => s.auth);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const routeState = (location.state ?? null) as CartRouteState | null;
 
   useEffect(() => {
     if (isAuthenticated && customer?.uuid) {
       dispatch(getCartAction(customer.uuid));
     }
-  }, []);
+  }, [dispatch, isAuthenticated, customer?.uuid]);
+
+  useEffect(() => {
+    if (!routeState?.resumeBooking || !isAuthenticated || !loaded || items.length === 0) return;
+
+    setBookingOpen(true);
+    navigate(location.pathname, { replace: true, state: null });
+  }, [routeState?.resumeBooking, isAuthenticated, loaded, items.length, navigate, location.pathname]);
+
+  const onProceedToBook = () => {
+    if (isAuthenticated) {
+      setBookingOpen(true);
+      return;
+    }
+
+    callSnack("Please sign in to continue booking.", "info");
+    navigate("/signup", {
+      state: {
+        redirectTo: "/cart",
+        resumeBooking: true,
+      } satisfies CartRouteState,
+    });
+  };
 
   if (!loaded) {
     return (
@@ -160,7 +192,7 @@ export default function Cart() {
                   variant="contained"
                   size="large"
                   disableElevation
-                  onClick={() => setBookingOpen(true)}
+                  onClick={onProceedToBook}
                   className="rounded-xl font-bold py-3 text-sm tracking-wide transition-all duration-300 hover:brightness-110 hover:shadow-[0_10px_22px_var(--app-primary-soft)]"
                 >
                   Proceed to Book
