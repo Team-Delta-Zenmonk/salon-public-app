@@ -1,13 +1,13 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./app";
 import { BrowserRouter } from "react-router-dom";
+import App from "./app";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/store";
 import ThemeProviderWrapper from "./theme/theme-provider";
 import SnackbarProviderWrapper from "./components/snackbar/_components/snackbar-provider";
-import { Provider } from "react-redux";
-import { persistor, store } from "./store/store";
-import { PersistGate } from "redux-persist/integration/react";
+import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

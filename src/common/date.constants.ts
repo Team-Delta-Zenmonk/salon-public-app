@@ -27,6 +27,21 @@ export const MONTH_SHORT = [
   "Dec",
 ] as const;
 
+export const MONTH_FULL = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
 export const getTodayKey = (): string => {
   const index = new Date().getDay();
   return WEEKDAY_KEYS[index];

@@ -5,10 +5,13 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useState } from "react";
 import SlotGrid from "./_components/slot-grid";
 import BookingConfirmDialog from "./_components/booking-confirm-dialog";
+import PaymentSheetDialog from "./_components/payment-sheet-dialog";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { getSlotsAction } from "../../../../features/salon/bookings/get-slots/get-slots.action";
 import { createBookingAction } from "../../../../features/salon/bookings/create-booking/create-booking.action";
+import { createPaymentAction } from "../../../../features/payments/create-payment/create-payment.action";
 import BookingDateSelector from "./_components/booking-date-selector";
+import { callSnack } from "../../../../components/snackbar";
 
 interface BookingPanelProps {
   open: boolean;
@@ -28,6 +31,9 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [createdBooking, setCreatedBooking] = useState<any | null>(null);
 
   const totalPrice = items.reduce((sum: number, i: any) => sum + (i.final_price ?? i.base_price ?? 0), 0);
   const totalDuration = items.reduce((sum: number, i: any) => sum + (i.duration ?? 0), 0);
@@ -73,11 +79,27 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
         })),
       };
 
-      await dispatch(createBookingAction({ cartId, date: selectedDate, slot: normalizedSlot })).unwrap();
+      const booking = await dispatch(createBookingAction({ cartId, date: selectedDate, slot: normalizedSlot })).unwrap();
+
+      // Step 2: Create Payment Intent
+      const paymentData = await dispatch(createPaymentAction(booking.uuid)).unwrap();
+
+      setClientSecret(paymentData.clientSecret);
+      setCreatedBooking(booking);
       setConfirmOpen(false);
-      onClose();
-      onSuccess();
-    } catch {
+      setPaymentOpen(true);
+
+      // We don't call onClose() yet, we wait for payment success
+    } catch (err: any) {
+      console.error("Booking failed:", err);
+      const errorMessage = typeof err === 'string' ? err : err?.message || "Failed to create booking";
+
+      if (errorMessage.toLowerCase().includes("staff is not available") ||
+        errorMessage.toLowerCase().includes("slot not available")) {
+        callSnack(errorMessage, "error");
+      } else {
+        callSnack(errorMessage, "error");
+      }
       setConfirmOpen(false);
     } finally {
       setConfirming(false);
@@ -167,16 +189,14 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
 
           <Box
             onClick={selectedSlot ? () => setConfirmOpen(true) : undefined}
-            className={`flex items-center justify-center gap-2 py-3.5 rounded-xl transition-colors duration-200 ${
-              selectedSlot
-                ? "bg-(--app-primary) hover:brightness-95 cursor-pointer"
-                : "bg-(--app-surface-alt) cursor-default"
-            }`}
+            className={`flex items-center justify-center gap-2 py-3.5 rounded-xl transition-colors duration-200 ${selectedSlot
+              ? "bg-(--app-primary) hover:brightness-95 cursor-pointer"
+              : "bg-(--app-surface-alt) cursor-default"
+              }`}
           >
             <Typography
-              className={`text-sm font-bold tracking-wide ${
-                selectedSlot ? "text-(--app-primary-contrast)" : "text-(--app-muted)"
-              }`}
+              className={`text-sm font-bold tracking-wide ${selectedSlot ? "text-(--app-primary-contrast)" : "text-(--app-muted)"
+                }`}
             >
               {selectedSlot ? "Book Appointment" : "Select a time slot"}
             </Typography>
@@ -199,6 +219,15 @@ export default function BookingPanel({ open, onClose, onSuccess }: BookingPanelP
         totalDuration={totalDuration}
         confirming={confirming}
       />
+
+      {clientSecret && createdBooking && (
+        <PaymentSheetDialog
+          open={paymentOpen}
+          onClose={() => setPaymentOpen(false)}
+          clientSecret={clientSecret}
+          booking={createdBooking}
+        />
+      )}
     </>
   );
 }
