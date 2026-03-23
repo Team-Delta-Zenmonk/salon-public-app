@@ -1,10 +1,11 @@
-import { Dialog, DialogContent, Box, Typography, Button, CircularProgress } from "@mui/material";
+import { Dialog, DialogContent, Box, Typography, Button, CircularProgress, useTheme, IconButton } from "@mui/material";
 import { PaymentElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 import { callSnack } from "../../../../../../components/snackbar";
 import { stripePromise } from "../../../../../../common/stripe-client";
+import ShieldMoonIcon from "@mui/icons-material/ShieldMoon";
 
 interface PaymentSheetDialogProps {
   open: boolean;
@@ -42,19 +43,19 @@ function PaymentForm({ onClose, clientSecret, booking }: Omit<PaymentSheetDialog
     if (error) {
       callSnack(error.message || "Payment failed", "error");
       setProcessing(false);
-    } 
+    }
     else if (paymentIntent?.status === "succeeded") {
       callSnack("Payment successful!", "success");
 
       onClose();
       navigate("/bookings/success", { state: { booking } });
-    } 
+    }
     else if (paymentIntent?.status === "processing") {
       callSnack("Payment is processing...", "info");
 
       onClose();
       navigate("/bookings/success", { state: { booking } });
-    } 
+    }
     else {
       setProcessing(false);
     }
@@ -62,7 +63,7 @@ function PaymentForm({ onClose, clientSecret, booking }: Omit<PaymentSheetDialog
 
   return (
     <form onSubmit={handleSubmit} className="p-6">
-      <PaymentElement options={{ layout: "tabs" }} />
+      <PaymentElement options={{ layout: "tabs", paymentMethodOrder: ["upi", "card"] }} />
 
       <Box className="mt-8 flex flex-col gap-3">
         <Button
@@ -71,14 +72,18 @@ function PaymentForm({ onClose, clientSecret, booking }: Omit<PaymentSheetDialog
           variant="contained"
           size="large"
           disabled={!stripe || processing}
-          className="rounded-xl font-bold py-3.5 shadow-lg shadow-primary/20 bg-(--app-primary) text-(--app-primary-contrast)"
+          className="rounded-2xl font-black py-4 shadow-xl shadow-primary/20 bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110 active:scale-[0.98] transition-all text-base uppercase tracking-wider"
         >
           {processing ? <CircularProgress size={24} color="inherit" /> : `Pay ₹${booking?.total_price || 0}`}
         </Button>
 
-        <Typography className="text-[11px] text-(--app-muted) text-center mt-2 flex items-center justify-center gap-1">
-          Protected by SSL encryption and Stripe secure payments
-        </Typography>
+        <Box className="mt-4 p-4 rounded-2xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center gap-3">
+          <ShieldMoonIcon className="text-(--app-primary) text-xl" />
+          <Box>
+            <Typography className="text-[11px] font-bold text-(--app-text) uppercase tracking-tighter">Secure Checkout</Typography>
+            <Typography className="text-[10px] text-(--app-muted)">SSL Encryption & Stripe Protected</Typography>
+          </Box>
+        </Box>
       </Box>
     </form>
   );
@@ -86,6 +91,8 @@ function PaymentForm({ onClose, clientSecret, booking }: Omit<PaymentSheetDialog
 
 export default function PaymentSheetDialog({ open, onClose, clientSecret, booking }: PaymentSheetDialogProps) {
   const [processing, setProcessing] = useState(false);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   return (
     <Dialog
@@ -95,26 +102,31 @@ export default function PaymentSheetDialog({ open, onClose, clientSecret, bookin
       fullWidth
       slotProps={{
         paper: {
-          className: "bg-(--app-surface) rounded-[24px] border border-(--app-border) overflow-hidden",
+          className: "bg-(--app-surface) rounded-[32px] border border-(--app-border) overflow-hidden shadow-2xl shadow-black/50 backdrop-blur-xl",
+          style: {
+            backgroundImage: 'none',
+          }
         },
         backdrop: {
-          className: "backdrop-blur-sm bg-black/40",
+          className: "backdrop-blur-md bg-black/60",
         },
       }}
     >
       <DialogContent className="p-0">
-        <Box className="flex items-center justify-between px-6 py-5 border-b border-(--app-border)">
-          <Box>
-            <Typography className="font-extrabold text-lg text-(--app-text) leading-tight">Secure Payment</Typography>
-            <Typography className="text-xs text-(--app-muted) mt-0.5">Complete your booking payment</Typography>
-          </Box>
-
-          <Button
+        <Box className="relative flex flex-col items-center justify-center px-6 py-10 border-b border-(--app-border) bg-linear-to-b from-(--app-primary-soft) to-transparent">
+          <IconButton
             onClick={processing ? undefined : onClose}
-            className="min-w-0 p-2 rounded-xl bg-(--app-surface-alt) text-(--app-muted)"
+            className="absolute top-4 right-4 p-2 rounded-2xl bg-(--app-surface-alt)/50 text-(--app-muted) hover:bg-(--app-surface-alt) hover:text-(--app-text) transition-all"
           >
             <CloseIcon fontSize="small" />
-          </Button>
+          </IconButton>
+
+          <Box className="w-16 h-16 rounded-3xl bg-(--app-primary) flex items-center justify-center shadow-lg shadow-primary/30 mb-4 animate-pulse">
+            <ShieldMoonIcon className="text-(--app-primary-contrast) text-3xl" />
+          </Box>
+
+          <Typography className="font-black text-2xl text-(--app-text) tracking-tight text-center">Secure Payment</Typography>
+          <Typography className="text-sm text-(--app-muted) mt-1 text-center font-medium">Complete your premium salon booking</Typography>
         </Box>
 
         <Elements
@@ -122,16 +134,48 @@ export default function PaymentSheetDialog({ open, onClose, clientSecret, bookin
           options={{
             clientSecret,
             appearance: {
-              theme: "night",
+              theme: isDark ? "night" : "flat",
               variables: {
-                colorPrimary: "#C291F0",
-                colorBackground: "#1e1b4b",
-                colorText: "#f8fafc",
-                colorDanger: "#f87171",
-                fontFamily: "Inter, system-ui, sans-serif",
-                spacingUnit: "4px",
-                borderRadius: "12px",
+                colorPrimary: theme.palette.primary.main,
+                colorBackground: theme.palette.background.paper,
+                colorText: theme.palette.text.primary,
+                colorDanger: theme.palette.error.main,
+                colorWarning: theme.palette.warning.main,
+                fontFamily: theme.typography.fontFamily,
+                spacingUnit: "5px",
+                borderRadius: "16px",
+                fontSizeBase: "14px",
               },
+              rules: {
+                '.Input': {
+                  backgroundColor: isDark ? theme.palette.background.default : '#ffffff',
+                  border: `1px solid ${theme.palette.divider}`,
+                  transition: 'all 0.2s ease',
+                  padding: '12px 14px',
+                },
+                '.Input:focus': {
+                  borderColor: theme.palette.primary.main,
+                  boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
+                },
+                '.Label': {
+                  fontWeight: '600',
+                  marginBottom: '6px',
+                  color: theme.palette.text.secondary,
+                },
+                '.Tab': {
+                  border: `1px solid ${theme.palette.divider}`,
+                  backgroundColor: isDark ? theme.palette.background.default : '#f8fafc',
+                  padding: '12px 16px',
+                },
+                '.Tab--selected': {
+                  borderColor: theme.palette.primary.main,
+                  backgroundColor: isDark ? (theme as any).palette.primary.light || theme.palette.primary.main + '15' : theme.palette.primary.light,
+                  boxShadow: `0 4px 12px ${theme.palette.primary.main}20`,
+                },
+                '.TabLabel': {
+                  fontWeight: '700',
+                }
+              }
             },
           }}
         >
