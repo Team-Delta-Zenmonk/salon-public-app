@@ -9,17 +9,18 @@ export const callSnack = async (msg: string, variant: VariantType, maxWidth?: nu
     variant: variant || "info",
     hideIconVariant: true,
     style: getSnackBarStyles(variant),
-    autoHideDuration: 4000,
+    autoHideDuration: 5000,
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
 
     action: (key) =>
       React.createElement(
         IconButton,
-        { onClick: () => closeSnackbar(key), className: "p-10", "data-testid": `btn-snackbar-close-${key}` } as any,
+        { onClick: () => closeSnackbar(key), className: "p-1.5", "data-testid": `btn-snackbar-close-${key}` } as any,
         React.createElement(CloseIcon, {
           fontSize: "small",
           sx: { color: "var(--secondary-600)" },
           "data-testid": "icon-snackbar-close",
-        } as any)
+        } as any),
       ),
   });
 };

@@ -7,6 +7,7 @@ export default function AuthSync() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, customer } = useAppSelector((s) => s.auth);
   const { loaded } = useAppSelector((s) => s.cart);
+  const { paymentJustCompleted } = useAppSelector((s) => s.booking);
 
   const prevAuthRef = useRef<boolean>(false);
 
@@ -15,6 +16,7 @@ export default function AuthSync() {
     prevAuthRef.current = isAuthenticated;
 
     if (!isAuthenticated || !customer?.uuid) return;
+    if (paymentJustCompleted) return;
 
     if (justLoggedIn) {
       dispatch(getCartAction(customer.uuid)).then((res: any) => {
@@ -32,7 +34,7 @@ export default function AuthSync() {
         }
       });
     }
-  }, [isAuthenticated, customer?.uuid, loaded]);
+  }, [isAuthenticated, customer?.uuid, loaded, paymentJustCompleted]);
 
   return null;
 }

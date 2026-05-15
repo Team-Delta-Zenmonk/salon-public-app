@@ -85,7 +85,7 @@ export const cartSlice = createSlice({
       state.salon = null;
       state.items = [];
       state.isGuest = false;
-      state.loaded = false;
+      state.loaded = true;
 
       clearGuestCart();
     },

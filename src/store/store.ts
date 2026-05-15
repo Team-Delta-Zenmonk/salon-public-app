@@ -7,6 +7,8 @@ import categoryReducer from "../features/category/category.slice";
 import salonReducer from "../features/salon/salon.slice";
 import authReducer from "../features/auth/auth.slice";
 import cartReducer from "../features/salon/cart/cart.slice";
+import bookingReducer from "../features/salon/bookings/booking.slice";
+import customerBookingReducer from "../features/customer-booking/customer-booking.slice";
 
 const storage = createWebStorage("local");
 
@@ -14,7 +16,9 @@ const rootReducer = combineSlices({
   auth: authReducer,
   category: categoryReducer,
   salon: salonReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  booking: bookingReducer,
+  customerBooking: customerBookingReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

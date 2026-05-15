@@ -1,0 +1,34 @@
+.tabs {
+  & :global(.MuiTabs-indicator) {
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background-color: var(--app-primary);
+  }
+  & :global(.MuiTab-root) {
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: none;
+    color: var(--app-muted);
+  }
+  & :global(.Mui-selected) {
+    color: var(--app-primary) !important;
+  }
+}
+
+.scrollableList {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--app-border);
+    border-radius: 10px;
+    &:hover {
+      background: var(--app-muted);
+    }
+  }
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-border) transparent;
+}

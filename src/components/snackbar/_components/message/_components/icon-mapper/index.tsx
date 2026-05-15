@@ -11,13 +11,13 @@ interface IconMapperProps {
 export const IconMapper = ({ variant }: IconMapperProps) => {
   switch (variant) {
     case "success":
-      return <CheckCircleOutlinedIcon className="text-(--success-700)" />;
+      return <CheckCircleOutlinedIcon className="text-green-600" />;
     case "error":
-      return <RemoveCircleOutlineIcon className="text-(--error-600)" />;
+      return <RemoveCircleOutlineIcon className="text-red-600" />;
     case "warning":
-      return <ReportGmailerrorredOutlinedIcon className="text-(--warning-700)" />;
+      return <ReportGmailerrorredOutlinedIcon className="text-amber-600" />;
     case "info":
-      return <InfoOutlinedIcon className="text-(--info-700)" />;
+      return <InfoOutlinedIcon className="text-blue-600" />;
     default:
       return null;
   }

@@ -1,17 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createBookingService } from "./create-booking.service";
 import { createBookingType } from "./create-booking.type";
-
-interface SlotService {
-  service_id: number;
-  staff_id: number;
-}
-
-interface Slot {
-  start: string;
-  end: string;
-  services: SlotService[];
-}
+import type { Slot } from "../../../../common/booking.types";
 
 interface CreateBookingParams {
   cartId: string;

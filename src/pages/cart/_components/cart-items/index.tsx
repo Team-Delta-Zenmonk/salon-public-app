@@ -128,18 +128,20 @@ export default function CartItem({ item }: CartItemProps) {
   return (
     <>
       <Box className="bg-(--app-surface) border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-200">
-        <Box className="flex items-center gap-3 sm:gap-6 p-4 sm:p-5">
+        <Box className="flex items-center gap-3 sm:gap-4 lg:gap-6 p-4 sm:p-5">
           <Avatar
             src={image}
             variant="rounded"
-            className="rounded-xl shrink-0 w-14 h-14 sm:w-18 sm:h-18 border border-(--app-border) bg-(--app-surface-alt)"
+            className="rounded-xl shrink-0 w-14 h-14 sm:w-16 lg:w-18 sm:h-16 lg:h-18 border border-(--app-border) bg-(--app-surface-alt)"
           />
 
           <Box className="flex-1 min-w-0">
-            <Typography className="font-bold text-sm sm:text-base text-(--app-text) truncate">{name}</Typography>
-            <Box className="flex items-center gap-1.5 mt-1">
-              <AccessTimeIcon className="text-(--app-muted) text-[13px]" />
-              <Typography variant="caption" className="text-(--app-muted) text-xs sm:text-[13px]">
+            <Typography className="font-bold text-sm sm:text-base text-(--app-text) truncate" title={name}>
+              {name}
+            </Typography>
+            <Box className="flex items-center gap-1.5 mt-1 overflow-hidden">
+              <AccessTimeIcon className="text-(--app-muted) text-[13px] shrink-0" />
+              <Typography variant="caption" className="text-(--app-muted) text-xs sm:text-[13px] truncate">
                 {duration} min
                 {gender && (
                   <>
@@ -154,22 +156,25 @@ export default function CartItem({ item }: CartItemProps) {
               </Typography>
             </Box>
             {selectedStaffId && currentStaffInfo && (
-              <Box className="flex items-center gap-1.5 mt-1.5 px-2 py-1 rounded-lg bg-(--app-surface-alt) border border-(--app-border) w-fit max-w-full">
-                <Avatar src={currentStaffInfo.photo} className="w-5 h-5 text-[10px] border border-(--app-border)">
+              <Box className="flex items-center gap-1.5 mt-1.5 px-2 py-1 rounded-lg bg-(--app-surface-alt) border border-(--app-border) w-fit max-w-full overflow-hidden">
+                <Avatar
+                  src={currentStaffInfo.photo}
+                  className="w-5 h-5 text-[10px] border border-(--app-border) shrink-0"
+                >
                   {currentStaffInfo.name?.[0]}
                 </Avatar>
                 <Typography
                   variant="caption"
-                  className="text-(--app-text) text-[11px] font-medium truncate max-w-38 sm:max-w-48"
+                  className="text-(--app-text) text-[11px] font-medium truncate max-w-28 sm:max-w-44 lg:max-w-56"
                 >
                   {currentStaffInfo.name}
                 </Typography>
-                <Box className="w-1.5 h-1.5 rounded-full bg-(--app-primary)" />
+                <Box className="w-1.5 h-1.5 rounded-full bg-(--app-primary) shrink-0" />
               </Box>
             )}
           </Box>
 
-          <Box className="flex items-center gap-3 shrink-0">
+          <Box className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) leading-none">
               ₹{price}
             </Typography>

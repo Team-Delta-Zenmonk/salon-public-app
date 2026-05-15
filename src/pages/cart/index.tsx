@@ -1,13 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Box, Typography, Avatar, Button, Skeleton, Divider } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlaceIcon from "@mui/icons-material/Place";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useAppSelector, useAppDispatch } from "../../store/hook";
+import { formatDuration } from "../../common/date.utils";
+import { calculateTotals } from "../../common/cart.utils";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
+import { getActiveBookingAction } from "../../features/salon/bookings/get-active-booking/get-active-booking.action";
+import { setBookingPhase, clearPaymentCompleted } from "../../features/salon/bookings/booking.slice";
+import { BookingPhase } from "../../common/booking.enums";
 import CartItem from "./_components/cart-items";
 import BookingPanel from "./_components/booking-panel";
+import ActiveBookingBanner from "./_components/active-booking-banner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { callSnack } from "../../components/snackbar";
 
@@ -22,25 +28,44 @@ export default function Cart() {
   const location = useLocation();
   const { items, salon, loaded } = useAppSelector((s) => s.cart);
   const { isAuthenticated, customer } = useAppSelector((s) => s.auth);
-  const [bookingOpen, setBookingOpen] = useState(false);
+  const { bookingPhase, activeBooking, paymentJustCompleted } = useAppSelector((s) => s.booking);
   const routeState = (location.state ?? null) as CartRouteState | null;
 
+  const didPaymentJustComplete = useRef(paymentJustCompleted);
+
   useEffect(() => {
+    if (didPaymentJustComplete.current) return;
     if (isAuthenticated && customer?.uuid) {
       dispatch(getCartAction(customer.uuid));
     }
   }, [dispatch, isAuthenticated, customer?.uuid]);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+
+    if (didPaymentJustComplete.current) {
+      dispatch(clearPaymentCompleted());
+      return;
+    }
+
+    dispatch(getActiveBookingAction(salon?.uuid));
+  }, [dispatch, isAuthenticated, salon?.uuid]);
+
+  useEffect(() => {
     if (!routeState?.resumeBooking || !isAuthenticated || !loaded || items.length === 0) return;
 
-    setBookingOpen(true);
+    dispatch(setBookingPhase(BookingPhase.SLOT_SELECTION));
     navigate(location.pathname, { replace: true, state: null });
-  }, [routeState?.resumeBooking, isAuthenticated, loaded, items.length, navigate, location.pathname]);
+  }, [routeState?.resumeBooking, isAuthenticated, loaded, items.length, navigate, location.pathname, dispatch]);
+
+  const bookingPanelOpen =
+    bookingPhase === BookingPhase.SLOT_SELECTION ||
+    bookingPhase === BookingPhase.CONFIRMING ||
+    bookingPhase === BookingPhase.BOOKING_CONFLICT;
 
   const onProceedToBook = () => {
     if (isAuthenticated) {
-      setBookingOpen(true);
+      dispatch(setBookingPhase(BookingPhase.SLOT_SELECTION));
       return;
     }
 
@@ -80,11 +105,9 @@ export default function Cart() {
     );
   }
 
-  const totalPrice = items.reduce((sum: number, i: any) => sum + (i.final_price ?? i.base_price ?? 0), 0);
-  const totalDuration = items.reduce((sum: number, i: any) => sum + (i.duration ?? 0), 0);
-  const hours = Math.floor(totalDuration / 60);
-  const mins = totalDuration % 60;
-  const durationText = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+  const { totalPrice, totalDuration } = calculateTotals(items);
+
+  const durationText = formatDuration(totalDuration);
 
   return (
     <>
@@ -102,12 +125,12 @@ export default function Cart() {
 
               <Box className="absolute inset-0 bg-linear-to-r from-(--app-hero-from) via-(--app-primary) to-(--app-hero-to) opacity-30" />
 
-            <Box className="relative p-3.5 sm:p-7 lg:p-8 flex items-center gap-3 sm:gap-6">
-              <Avatar
-                src={salon.logo}
-                variant="rounded"
-                className="w-12 h-12 sm:w-18 sm:h-18 rounded-xl border border-(--app-border) bg-(--app-surface) shrink-0"
-              />
+              <Box className="relative p-3.5 sm:p-7 lg:p-8 flex items-center gap-3 sm:gap-6">
+                <Avatar
+                  src={salon.logo}
+                  variant="rounded"
+                  className="w-12 h-12 sm:w-18 sm:h-18 rounded-xl border border-(--app-border) bg-(--app-surface) shrink-0"
+                />
 
                 <Box className="flex-1 min-w-0">
                   <Box className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -135,11 +158,16 @@ export default function Cart() {
             </Box>
           )}
 
-          <Typography variant="caption" className="font-bold text-(--app-muted) block mb-3 sm:mb-4 ml-0.5 tracking-[0.16em]">
+          {activeBooking && <ActiveBookingBanner />}
+
+          <Typography
+            variant="caption"
+            className="font-bold text-(--app-muted) block mb-3 sm:mb-4 ml-0.5 tracking-[0.16em]"
+          >
             {items.length} SERVICE{items.length > 1 ? "S" : ""}
           </Typography>
 
-          <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px] gap-4 sm:gap-6 lg:gap-8 items-start content-start">
+          <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_380px] gap-4 sm:gap-6 lg:gap-8 items-start content-start">
             <Box className="self-start">
               <Box className="space-y-3 sm:space-y-4">
                 {items.map((item: any) => (
@@ -150,7 +178,9 @@ export default function Cart() {
 
             <Box className="bg-(--app-surface) border border-(--app-border) rounded-3xl overflow-hidden self-start lg:sticky lg:top-6 shadow-[0_1px_6px_var(--app-primary-soft)]">
               <Box className="px-4 sm:px-6 py-4 sm:py-5 border-b border-(--app-border) bg-(--app-surface-alt)">
-                <Typography className="font-bold text-[0.98rem] sm:text-base text-(--app-text)">Order Summary</Typography>
+                <Typography className="font-bold text-[0.98rem] sm:text-base text-(--app-text)">
+                  Order Summary
+                </Typography>
               </Box>
 
               <Box className="px-4 sm:px-6 py-4 sm:py-6">
@@ -207,13 +237,7 @@ export default function Cart() {
         </Box>
       </Box>
 
-      <BookingPanel
-        open={bookingOpen}
-        onClose={() => setBookingOpen(false)}
-        onSuccess={() => {
-          // TODO: show success toast or navigate to bookings page
-        }}
-      />
+      <BookingPanel open={bookingPanelOpen} onClose={() => dispatch(setBookingPhase(BookingPhase.IDLE))} />
     </>
   );
 }

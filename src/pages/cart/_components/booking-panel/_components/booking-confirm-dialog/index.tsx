@@ -3,6 +3,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { MONTH_SHORT, WEEKDAY_FULL } from "../../../../../../common/date.constants";
+import { formatTimeUTC, formatDuration } from "../../../../../../common/date.utils";
 
 interface BookingConfirmDialogProps {
   open: boolean;
@@ -15,15 +16,6 @@ interface BookingConfirmDialogProps {
   confirming: boolean;
 }
 
-const formatTime = (iso: string) => {
-  const d = new Date(iso);
-  const h = d.getUTCHours();
-  const m = d.getUTCMinutes();
-  const ampm = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
-};
-
 export default function BookingConfirmDialog({
   open,
   onClose,
@@ -34,9 +26,7 @@ export default function BookingConfirmDialog({
   totalDuration,
   confirming,
 }: BookingConfirmDialogProps) {
-  const hours = Math.floor(totalDuration / 60);
-  const mins = totalDuration % 60;
-  const durationText = hours > 0 ? `${hours}h ${mins > 0 ? `${mins}m` : ""}` : `${mins} min`;
+  const durationText = formatDuration(totalDuration);
 
   const dateObj = date ? new Date(date) : null;
 
@@ -94,7 +84,7 @@ export default function BookingConfirmDialog({
                 Time
               </Typography>
               <Typography className="text-sm font-bold text-(--app-text)">
-                {slot ? `${formatTime(slot.start)} – ${formatTime(slot.end)}` : "—"}
+                {slot ? `${formatTimeUTC(slot.start)} – ${formatTimeUTC(slot.end)}` : "—"}
               </Typography>
               <Typography className="text-[11px] text-(--app-muted) mt-0.5">{durationText} total</Typography>
             </Box>

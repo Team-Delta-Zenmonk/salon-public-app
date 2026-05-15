@@ -1,5 +1,8 @@
 import { Box, Typography, Skeleton } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
 import { SLOT_GROUPS } from "../../../../../../common/slot.constants";
+import { useAppSelector } from "../../../../../../store/hook";
+import { formatTimeUTC } from "../../../../../../common/date.utils";
 
 interface SlotGridProps {
   slots: any[];
@@ -9,16 +12,20 @@ interface SlotGridProps {
   selectedDate: string | null;
 }
 
-const formatTime = (isoString: string) => {
-  const d = new Date(isoString);
-  const h = d.getUTCHours();
-  const m = d.getUTCMinutes();
-  const ampm = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${String(m).padStart(2, "0")} ${ampm}`;
+const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any): boolean => {
+  if (!activeBooking?.booking_start_time || !activeBooking?.booking_end_time) return false;
+
+  const sStart = new Date(slotStart).getTime();
+  const sEnd = new Date(slotEnd).getTime();
+  const bStart = new Date(activeBooking.booking_start_time).getTime();
+  const bEnd = new Date(activeBooking.booking_end_time).getTime();
+
+  return sStart < bEnd && sEnd > bStart;
 };
 
 export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, selectedDate }: SlotGridProps) {
+  const { activeBooking } = useAppSelector((s) => s.booking);
+
   if (!selectedDate) {
     return (
       <Box className="px-5 py-8 text-center">
@@ -75,30 +82,42 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
             <Box className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {group.map((slot, idx) => {
                 const isSelected = selectedSlot?.start === slot.start;
+                const locked = isSlotLocked(slot.start, slot.end, activeBooking);
 
                 return (
                   <Box
                     key={slot.start}
-                    onClick={() => onSelectSlot(slot)}
+                    onClick={locked ? undefined : () => onSelectSlot(slot)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
                     className={`
                       py-3 px-1 rounded-[10px] text-center border-[1.5px]
-                      cursor-pointer transition-all duration-150
-                      active:scale-[0.97] animate-[slotIn_0.25s_ease_both]
+                      transition-all duration-150
+                      animate-[slotIn_0.25s_ease_both]
                       ${
-                        isSelected
-                          ? "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)]"
-                          : "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted)"
+                        locked
+                          ? "bg-(--app-surface-alt) border-(--app-border) opacity-45 cursor-not-allowed"
+                          : isSelected
+                            ? "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)] cursor-pointer active:scale-[0.97]"
+                            : "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted) cursor-pointer active:scale-[0.97]"
                       }
                     `}
                   >
-                    <Typography
-                      className={`text-[12.5px] ${
-                        isSelected ? "font-bold text-(--app-primary-contrast)" : "font-medium text-(--app-text)"
-                      }`}
-                    >
-                      {formatTime(slot.start)}
-                    </Typography>
+                    {locked ? (
+                      <Box className="flex items-center justify-center gap-1.5">
+                        <LockIcon sx={{ fontSize: 12, color: "var(--app-muted)" }} />
+                        <Typography className="text-[12px] font-medium text-(--app-muted) line-through">
+                          {formatTimeUTC(slot.start)}
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Typography
+                        className={`text-[12.5px] ${
+                          isSelected ? "font-bold text-(--app-primary-contrast)" : "font-medium text-(--app-text)"
+                        }`}
+                      >
+                        {formatTimeUTC(slot.start)}
+                      </Typography>
+                    )}
                   </Box>
                 );
               })}
