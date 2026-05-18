@@ -6,10 +6,10 @@ import { MapView } from "./_components/views/map-view";
 import DiscoveryFilters from "./_components/filters";
 import DiscoveryViewSwitch from "./_components/views/view-switch";
 import type { ViewMode } from "./constants/view-mode.type";
-import { listCategoriesAction } from "../../features/category/list-categories/list-categories.action";
 import { listSalonsAction } from "../../features/salon/list-salons/list-salons.action";
-import { CATEGORY_PAGE_LIMIT, SALON_PAGE_LIMIT } from "./constants/pagination.constants";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { SALON_PAGE_LIMIT } from "./constants/pagination.constants";
+import { useAppDispatch } from "../../store/hook";
+import { presetCategories } from "./constants/preset-categories";
 
 export default function SalonDiscovery() {
   const dispatch = useAppDispatch();
@@ -19,9 +19,7 @@ export default function SalonDiscovery() {
   const [category, setCategory] = useState("");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationStatus, setLocationStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const categories = useAppSelector((state) => state.category?.data || []);
-
-  const categoryOptions = useMemo(() => categories.map((c: any) => ({ label: c.name, value: c.name })), [categories]);
+  const categoryOptions = useMemo(() => presetCategories.map((c: any) => ({ label: c.name, value: c.name })), []);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -34,7 +32,7 @@ export default function SalonDiscovery() {
         () => {
           setLocationStatus("error");
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 5 * 60 * 1000 } // Cache 5min
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 5 * 60 * 1000 }, // Cache 5min
       );
     }
   }, []);
@@ -47,12 +45,11 @@ export default function SalonDiscovery() {
         search,
         category: category || undefined,
         ...(userLocation && { latitude: userLocation.lat, longitude: userLocation.lng }),
-      })
+      }),
     );
   };
 
   useEffect(() => {
-    dispatch(listCategoriesAction({ page: 1, limit: CATEGORY_PAGE_LIMIT }));
     fetchSalons();
   }, [dispatch]);
 
