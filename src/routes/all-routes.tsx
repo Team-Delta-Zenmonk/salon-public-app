@@ -6,7 +6,7 @@ import BookingSuccess from "../pages/bookings/success";
 import Profile from "../pages/profile";
 import Favourites from "../pages/favourites";
 import SalonDiscovery from "../pages/salon-discovery";
-import SalonDetail from "../pages/salon-discovery/_components/salon-details";
+import SalonDetail from "../pages/salon-details";
 import Cart from "../pages/cart";
 import Checkout from "../pages/checkout";
 import ProtectedRoute from "./protected-route";

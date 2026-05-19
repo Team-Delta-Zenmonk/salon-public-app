@@ -1,6 +1,8 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import PlaceIcon from "@mui/icons-material/Place";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { formatAddress, formatCategories, getSalonLogo, salonType } from "../utils/salon.formatter";
 
@@ -23,9 +25,9 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
 
   const HeartButton = (
     <Tooltip title="Login to save favourites">
-      <Box component="span">
-        <IconButton disabled onClick={(e) => e.stopPropagation()}>
-          <FavoriteBorderIcon className="text-rose-500" />
+      <Box className="absolute top-2 right-2 z-10 bg-white/80 backdrop-blur-xs rounded-full shadow-xs">
+        <IconButton disabled onClick={(e) => e.stopPropagation()} size="small" className="p-0.5">
+          <FavoriteBorderIcon fontSize="small" className="text-rose-500" />
         </IconButton>
       </Box>
     </Tooltip>
@@ -35,15 +37,22 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
     return (
       <Box
         onClick={goToDetail}
-        className="group cursor-pointer border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-300 bg-(--app-surface) hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.12)]"
+        className="group cursor-pointer border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-300 bg-(--app-surface) hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(15,23,42,0.08)] flex flex-col justify-between"
       >
-        <Box className="w-full aspect-video bg-(--app-surface-alt) overflow-hidden">
+        <Box className="w-full aspect-[16/9] bg-(--app-surface-alt) overflow-hidden relative">
+          {HeartButton}
+          
+          <Box className="absolute top-2 left-2 z-10 px-2 py-0.5 bg-black/60 backdrop-blur-xs rounded-full flex items-center gap-0.5 text-white text-[10px] sm:text-xs font-bold border border-white/10 shadow-sm">
+            <StarRoundedIcon className="text-amber-400 text-[14px]" />
+            <Typography component="span">{Number(salon?.rating ?? 4.8).toFixed(1)}</Typography>
+          </Box>
+
           {imageUrl ? (
             <Box
               component="img"
               src={imageUrl}
               alt={salon?.name || "Salon"}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover"
               loading="lazy"
             />
           ) : (
@@ -51,20 +60,22 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
           )}
         </Box>
 
-        <Box className="p-4 sm:p-5">
-          <Box className="flex items-start justify-between gap-3">
-            <Box className="min-w-0">
-              <Box className="font-semibold text-(--app-text) truncate text-[15px]">{salon?.name || "—"}</Box>
-              <Box className="text-xs text-(--app-muted) mt-1">{salonType(salon?.type)}</Box>
-            </Box>
-            {HeartButton}
+        <Box className="p-3 sm:p-4">
+          <Box className="min-w-0">
+            <Box className="font-bold text-(--app-text) truncate text-sm sm:text-base leading-tight">{salon?.name || "—"}</Box>
+            <Box className="text-[11px] sm:text-xs text-(--app-muted) mt-0.5 font-medium">{salonType(salon?.type)}</Box>
           </Box>
 
-          <Box className="text-xs text-(--app-muted) mt-3 truncate">{categoriesText}</Box>
-
-          <Box className="flex items-center gap-1 text-xs text-(--app-muted) mt-3">
-            <PlaceIcon fontSize="inherit" />
+          <Box className="flex items-center gap-1 text-[11px] sm:text-xs text-(--app-muted) mt-2">
+            <PlaceIcon className="text-[14px] text-(--app-primary) shrink-0" />
             <Box className="truncate">{addressText}</Box>
+          </Box>
+
+          <Box className="mt-3 pt-2.5 border-t border-(--app-border)/40 flex items-center justify-between gap-2">
+            <Box className="text-[10px] sm:text-xs text-(--app-muted) truncate flex-1">{categoriesText}</Box>
+            <Box className="text-[10px] sm:text-xs font-bold text-(--app-primary) flex items-center shrink-0">
+              Book <ArrowForwardIcon className="text-[10px] sm:text-[12px] ml-0.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -74,18 +85,17 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
   return (
     <Box
       onClick={goToDetail}
-      className="group cursor-pointer relative border border-(--app-border) rounded-2xl bg-(--app-surface) hover:shadow-[0_14px_30px_rgba(15,23,42,0.1)] transition-all duration-300 p-3 sm:p-4"
+      className="group cursor-pointer relative border border-(--app-border) rounded-2xl bg-(--app-surface) hover:shadow-[0_12px_24px_rgba(15,23,42,0.06)] hover:-translate-y-0.5 transition-all duration-300 p-3 sm:p-4"
     >
-      <Box className="absolute top-3 right-3">{HeartButton}</Box>
-
-      <Box className="flex flex-col sm:flex-row gap-4">
-        <Box className="w-full sm:w-28 h-38 sm:h-24 rounded-xl overflow-hidden shrink-0 bg-(--app-surface-alt)">
+      <Box className="flex flex-row gap-3.5">
+        <Box className="w-24 h-24 sm:w-40 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-(--app-surface-alt) relative">
+          {HeartButton}
           {imageUrl ? (
             <Box
               component="img"
               src={imageUrl}
               alt={salon?.name || "Salon"}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover"
               loading="lazy"
             />
           ) : (
@@ -93,15 +103,28 @@ export default function SalonCard({ salon, variant }: SalonCardProps) {
           )}
         </Box>
 
-        <Box className="flex-1 min-w-0 pr-10 sm:pr-10">
-          <Box className="font-semibold text-(--app-text) truncate">{salon?.name || "—"}</Box>
-          <Box className="text-xs text-(--app-muted) mt-1">{salonType(salon?.type)}</Box>
+        <Box className="flex-1 min-w-0 flex flex-col justify-between">
+          <Box className="min-w-0">
+            <Box className="flex items-start justify-between gap-2">
+              <Box className="font-bold text-(--app-text) truncate text-sm sm:text-lg leading-tight pr-2">{salon?.name || "—"}</Box>
+              <Box className="flex items-center gap-1 text-xs font-bold text-(--app-text) shrink-0 bg-(--app-primary-soft) px-2 py-0.5 rounded-full">
+                <StarRoundedIcon className="text-amber-500 text-[14px]" />
+                <Typography component="span">{Number(salon?.rating ?? 4.8).toFixed(1)}</Typography>
+              </Box>
+            </Box>
+            <Box className="text-[11px] sm:text-xs text-(--app-muted) mt-0.5 font-medium">{salonType(salon?.type)}</Box>
+            <Box className="text-[11px] sm:text-xs text-(--app-muted) mt-1.5 truncate">{categoriesText}</Box>
+          </Box>
 
-          <Box className="text-xs text-(--app-muted) mt-2 truncate">{categoriesText}</Box>
-
-          <Box className="flex items-center gap-1 text-xs text-(--app-muted) mt-2">
-            <PlaceIcon fontSize="inherit" />
-            <Box className="truncate">{addressText}</Box>
+          <Box className="mt-2 flex items-center justify-between border-t border-(--app-border)/40 pt-2.5 sm:pt-0 sm:border-t-0">
+            <Box className="flex items-center gap-1 text-[11px] sm:text-xs text-(--app-muted) min-w-0">
+              <PlaceIcon className="text-[14px] text-(--app-primary) shrink-0" />
+              <Box className="truncate">{addressText}</Box>
+            </Box>
+            
+            <Box className="text-[11px] sm:text-xs font-bold text-(--app-primary) flex items-center shrink-0 ml-2">
+              Book Now <ArrowForwardIcon className="text-[11px] sm:text-[13px] ml-0.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Box>
           </Box>
         </Box>
       </Box>

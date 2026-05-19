@@ -3,18 +3,41 @@
 }
 
 .selectRoot {
-  height: 48px;
   border-radius: 14px;
   background: var(--app-surface);
+  
+  :global(.MuiSelect-select) {
+    height: 40px !important;
+    min-height: 40px !important;
+    line-height: 40px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    @media (min-width: 640px) {
+      height: 48px !important;
+      min-height: 48px !important;
+      line-height: 48px !important;
+    }
+  }
 }
 
 .selectInput {
-  color: var(--app-text);
+  color: var(--app-text) !important;
+  -webkit-text-fill-color: var(--app-text) !important;
 }
 
 .label {
-  color: var(--app-muted);
-  opacity: 0.68;
+  color: var(--app-muted) !important;
+  opacity: 0.55 !important;
+
+  &:global(.MuiInputLabel-shrink) {
+    opacity: 0.85 !important;
+  }
+
+  &:global(.Mui-focused) {
+    color: var(--app-primary) !important;
+    opacity: 1 !important;
+  }
 }
 
 .selectIcon {
@@ -45,4 +68,11 @@
 
 .menuItemRoot{
   min-height: auto !important;
+}
+
+.selectActive {
+  :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: var(--app-primary) !important;
+    border-width: 1.5px !important;
+  }
 }

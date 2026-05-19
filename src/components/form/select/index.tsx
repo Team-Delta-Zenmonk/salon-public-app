@@ -49,7 +49,7 @@ const Select = <T extends FieldValues>({
                 "data-test-id": `input-select-${identifier}`,
               }}
               classes={{
-                root: styles.selectRoot,
+                root: clsx(styles.selectRoot, value && value !== "" && styles.selectActive),
                 select: styles.selectInput,
               }}
               SelectDisplayProps={{

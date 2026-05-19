@@ -1,0 +1,84 @@
+.input {
+  height: 100%;
+}
+
+.autocompleteRoot {
+  border-radius: 14px;
+  background: var(--app-surface);
+
+  :global(.MuiOutlinedInput-root) {
+    height: 40px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    @media (min-width: 640px) {
+      height: 48px !important;
+    }
+  }
+
+  :global(.MuiInputBase-input) {
+    color: var(--app-text) !important;
+    -webkit-text-fill-color: var(--app-text) !important;
+    height: 100% !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+.label {
+  color: var(--app-muted) !important;
+  opacity: 0.55 !important;
+
+  &:global(.MuiInputLabel-shrink) {
+    opacity: 0.85 !important;
+  }
+
+  &:global(.Mui-focused) {
+    color: var(--app-primary) !important;
+    opacity: 1 !important;
+  }
+}
+
+.disabledLabel {
+  color: var(--app-muted);
+  opacity: 0.5;
+}
+
+.paper {
+  border-radius: 12px;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  max-height: 40vh;
+  box-shadow:
+    0 5px 5px 0 rgba(0, 0, 0, 0.2),
+    0 9px 10px 0 rgba(0, 0, 0, 0.14),
+    0 5px 14px 0 rgba(0, 0, 0, 0.12);
+}
+
+.option {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--app-text) !important;
+  padding: 8px 16px !important;
+  min-height: auto !important;
+
+  &[aria-selected="true"] {
+    background-color: var(--app-primary-soft) !important;
+    color: var(--app-primary) !important;
+  }
+
+  &[data-focus="true"] {
+    background-color: var(--app-surface-alt) !important;
+  }
+
+  &:hover {
+    background-color: var(--app-surface-alt) !important;
+  }
+}
+
+.autocompleteActive {
+  :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: var(--app-primary) !important;
+    border-width: 1.5px !important;
+  }
+}

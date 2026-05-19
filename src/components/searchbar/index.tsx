@@ -1,16 +1,23 @@
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
   placeholder?: string;
+  initialValue?: string;
 }
 
-const SearchBar = ({ onSearch, placeholder }: SearchBarProps) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
+const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
+  const [searchQuery, setSearchQuery] = React.useState(initialValue || "");
+
+  useEffect(() => {
+    if (initialValue !== undefined) {
+      setSearchQuery(initialValue);
+    }
+  }, [initialValue]);
 
   const debouncedSearch = useDebouncedCallback((query: string) => {
     onSearch(query);
@@ -37,12 +44,18 @@ const SearchBar = ({ onSearch, placeholder }: SearchBarProps) => {
   return (
     <TextField
       size="medium"
-      className="w-full max-w-175 [&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-[14px]"
+      className="w-full max-w-175 [&_.MuiInputBase-root]:h-10 sm:[&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-xl sm:[&_.MuiInputBase-root]:rounded-[14px] [&_.MuiOutlinedInput-notchedOutline]:border-(--app-muted)/35 [&_.MuiInputBase-root:hover_.MuiOutlinedInput-notchedOutline]:border-(--app-primary) [&_.MuiInputBase-root.Mui-focused_.MuiOutlinedInput-notchedOutline]:border-(--app-primary)"
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleOnChange}
+      inputProps={{
+        className: "text-xs sm:text-sm",
+      }}
       slotProps={{
         input: {
+          style: {
+            WebkitTextFillColor: "var(--app-text)",
+          },
           startAdornment: (
             <InputAdornment position="start">
               <SearchIcon className="text-(--app-muted)" />

@@ -18,15 +18,15 @@ export default function SalonServices({ services, salon }: SalonServicesProps) {
   }, {});
 
   return (
-    <Box className="w-full rounded-2xl border border-(--app-border) bg-(--app-surface) p-3 sm:p-5 lg:p-6">
-      <Box className="flex items-end justify-between gap-2 sm:gap-3 mb-3 sm:mb-5 pb-3 sm:pb-4 border-b border-(--app-border)">
+    <Box className="w-full">
+      <Box className="flex items-end justify-between gap-2 sm:gap-3 mb-4 pb-3 border-b border-(--app-border)">
         <Box>
-          <Box className="text-[1.32rem] sm:text-2xl font-semibold text-(--app-text)">Services</Box>
-          <Box className="text-[0.84rem] sm:text-sm text-(--app-muted) mt-1 leading-snug">
+          <Box className="text-base sm:text-lg font-bold text-(--app-text)">Services</Box>
+          <Box className="text-[0.76rem] sm:text-xs text-(--app-muted) mt-0.5 leading-snug">
             Explore and add premium treatments to your cart
           </Box>
         </Box>
-        <Box className="text-[0.78rem] sm:text-sm text-(--app-muted) text-right leading-tight max-w-24 sm:max-w-none">
+        <Box className="text-[0.72rem] sm:text-xs text-(--app-muted) text-right leading-tight max-w-24 sm:max-w-none font-medium">
           {services.length} services available
         </Box>
       </Box>

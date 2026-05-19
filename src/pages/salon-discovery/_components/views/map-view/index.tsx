@@ -54,8 +54,8 @@ export function MapView() {
   );
 
   return (
-    <Box className="relative min-h-[70vh] sm:min-h-[75vh] h-[88vh] w-full rounded-2xl overflow-hidden border border-(--app-border) bg-(--app-surface) shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
-      <MapContainer zoom={12} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
+    <Box className="relative h-full min-h-[400px] w-full rounded-2xl overflow-hidden border border-(--app-border) bg-(--app-surface) shadow-[0_12px_30px_rgba(15,23,42,0.08)]">
+      <MapContainer zoom={12} scrollWheelZoom style={{ height: "100%", width: "100%", zIndex: 0 }}>
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -125,10 +125,10 @@ export function MapView() {
         <Box className="absolute inset-0 flex flex-col items-center justify-center bg-(--app-surface)/95 backdrop-blur-sm gap-3 p-8 text-center z-10">
           <LocationOnOutlinedIcon fontSize="large" color="disabled" />
           <Typography color="text.secondary" className="font-medium text-lg">
-            No salons found nearby
+            No salons found
           </Typography>
           <Typography variant="body2" color="text.secondary" className="max-w-sm">
-            Try adjusting your search filters or change your location
+            Try adjusting your search filters to find what you're looking for.
           </Typography>
         </Box>
       )}

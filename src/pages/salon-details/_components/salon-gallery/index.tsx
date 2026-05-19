@@ -2,7 +2,7 @@ import { Box, Typography, Chip, useMediaQuery } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import ImageLightbox from "../../../../../../components/image-lightbox";
+import ImageLightbox from "../../../../components/image-lightbox";
 
 interface SalonGalleryProps {
   photos: any[] | null;
@@ -46,7 +46,7 @@ export default function SalonGallery({ photos, logo }: SalonGalleryProps) {
 
             <Box
               onClick={() => handleImageClick(0)}
-              className="group relative h-82.5 rounded-2xl overflow-hidden cursor-pointer"
+              className="group relative h-60 rounded-2xl overflow-hidden cursor-pointer"
             >
               <Box
                 component="img"
@@ -96,7 +96,7 @@ export default function SalonGallery({ photos, logo }: SalonGalleryProps) {
           <Box className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-3 sm:gap-4">
             <Box
               onClick={() => handleImageClick(0)}
-              className="group relative h-70 sm:h-90 lg:h-125 xl:h-135 rounded-2xl overflow-hidden cursor-pointer"
+              className="group relative h-64 sm:h-76 lg:h-95 xl:h-105 rounded-2xl overflow-hidden cursor-pointer"
             >
               <Box
                 component="img"
@@ -110,7 +110,7 @@ export default function SalonGallery({ photos, logo }: SalonGalleryProps) {
               </Box>
             </Box>
 
-            <Box className="grid grid-cols-1 grid-rows-2 gap-3 sm:gap-4 h-70 sm:h-90 lg:h-125 xl:h-135">
+            <Box className="grid grid-cols-1 grid-rows-2 gap-3 sm:gap-4 h-64 sm:h-76 lg:h-95 xl:h-105">
               {sideImages.map((img, idx) => {
                 const imageIndex = idx + 1;
                 const isLastTile = idx === sideImages.length - 1 && hasMore;
