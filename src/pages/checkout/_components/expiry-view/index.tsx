@@ -1,11 +1,11 @@
-import { Box, Paper, Typography, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 interface ExpiryViewProps {
   onReturn: () => void;
 }
 
-export default function ExpiryView({ onReturn }: ExpiryViewProps) {
+export default function ExpiryView({ onReturn }: Readonly<ExpiryViewProps>) {
   return (
     <Box className="p-10 text-center border border-[var(--app-border)] !bg-[var(--app-primary-soft)] rounded-[32px] shadow-sm animate-in fade-in zoom-in-95 duration-500">
       <Box className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-6">

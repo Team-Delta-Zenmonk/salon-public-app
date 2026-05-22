@@ -20,7 +20,7 @@ export default function ConfirmStaffDialog({
   duration,
   onConfirm,
   onCancel,
-}: ConfirmStaffDialogProps) {
+}: Readonly<ConfirmStaffDialogProps>) {
   const isChange = !!currentStaff;
 
   return (
@@ -98,7 +98,7 @@ export default function ConfirmStaffDialog({
                 <Box className="flex-1 bg-(--app-surface-alt) border border-(--app-border) rounded-xl p-3 text-center">
                   <Typography className="text-(--app-muted) block text-[10px] uppercase tracking-wide">Price</Typography>
                   <Typography className="text-(--app-text) text-sm font-extrabold">
-                    ₹{Math.round(parseFloat(String(price)))}
+                    ₹{Math.round(Number.parseFloat(String(price)))}
                   </Typography>
                 </Box>
               )}

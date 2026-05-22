@@ -3,12 +3,12 @@ import type { ViewMode } from "../../constants/view-mode.type";
 import { VIEW_MODES } from "./view-modes";
 import clsx from "clsx";
 
-interface Props {
+interface DiscoveryViewSwitchProps {
   value: ViewMode;
   onChange: (next: ViewMode) => void;
 }
 
-export default function DiscoveryViewSwitch({ value, onChange }: Props) {
+export default function DiscoveryViewSwitch({ value, onChange }: Readonly<DiscoveryViewSwitchProps>) {
   return (
     <Stack
       direction="row"

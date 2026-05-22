@@ -6,7 +6,7 @@ import { formatTimeUTC } from "../../../../../../common/date.utils";
 
 interface SlotGridProps {
   slots: any[];
-  selectedSlot: any | null;
+  selectedSlot: any;
   onSelectSlot: (slot: any) => void;
   loading: boolean;
   selectedDate: string | null;
@@ -23,7 +23,25 @@ const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any): b
   return sStart < bEnd && sEnd > bStart;
 };
 
-export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, selectedDate }: SlotGridProps) {
+const getSlotStateClass = (locked: boolean, isSelected: boolean): string => {
+  if (locked) {
+    return "bg-(--app-surface-alt) border-(--app-border) opacity-45 cursor-not-allowed";
+  }
+
+  if (isSelected) {
+    return "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)] cursor-pointer active:scale-[0.97]";
+  }
+
+  return "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted) cursor-pointer active:scale-[0.97]";
+};
+
+export default function SlotGrid({
+  slots,
+  selectedSlot,
+  onSelectSlot,
+  loading,
+  selectedDate,
+}: Readonly<SlotGridProps>) {
   const { activeBooking } = useAppSelector((s) => s.booking);
 
   if (!selectedDate) {
@@ -34,16 +52,21 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
     );
   }
 
+  const SLOT_SKELETON_ITEMS = Array.from({ length: 9 }, (_, i) => ({
+    id: crypto.randomUUID(),
+    animationDelay: `${i * 0.03}s`,
+  }));
+
   if (loading) {
     return (
       <Box className="px-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {Array.from({ length: 9 }).map((_, i) => (
+        {SLOT_SKELETON_ITEMS.map((item) => (
           <Skeleton
-            key={i}
+            key={item.id}
             variant="rounded"
             height={44}
             className="rounded-[10px]"
-            style={{ animationDelay: `${i * 0.03}s` }}
+            style={{ animationDelay: item.animationDelay }}
           />
         ))}
       </Box>
@@ -83,24 +106,14 @@ export default function SlotGrid({ slots, selectedSlot, onSelectSlot, loading, s
               {group.map((slot, idx) => {
                 const isSelected = selectedSlot?.start === slot.start;
                 const locked = isSlotLocked(slot.start, slot.end, activeBooking);
+                const slotStateClass = getSlotStateClass(locked, isSelected);
 
                 return (
                   <Box
                     key={slot.start}
                     onClick={locked ? undefined : () => onSelectSlot(slot)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
-                    className={`
-                      py-3 px-1 rounded-[10px] text-center border-[1.5px]
-                      transition-all duration-150
-                      animate-[slotIn_0.25s_ease_both]
-                      ${
-                        locked
-                          ? "bg-(--app-surface-alt) border-(--app-border) opacity-45 cursor-not-allowed"
-                          : isSelected
-                            ? "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)] cursor-pointer active:scale-[0.97]"
-                            : "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted) cursor-pointer active:scale-[0.97]"
-                      }
-                    `}
+                    className={`py-3 px-1 rounded-[10px] text-center border-[1.5px] transition-all duration-150 animate-[slotIn_0.25s_ease_both] ${slotStateClass}`}
                   >
                     {locked ? (
                       <Box className="flex items-center justify-center gap-1.5">

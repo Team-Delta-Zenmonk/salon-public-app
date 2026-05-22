@@ -32,7 +32,7 @@ export const customerBookingSlice = createSlice({
       if (currentPage === 1) {
         state.bookings = payload.bookings;
       } else {
-        const newBookings = payload.bookings.filter((nb) => !state.bookings.find((b) => b.uuid === nb.uuid));
+        const newBookings = payload.bookings.filter((nb) => !state.bookings.some((b) => b.uuid === nb.uuid));
         state.bookings = [...state.bookings, ...newBookings];
       }
       state.total = Number(payload.pagination.total);

@@ -9,7 +9,7 @@ import { useTheme } from "@mui/material/styles";
 interface StaffModalProps {
   open: boolean;
   onClose: () => void;
-  staff: any | null;
+  staff: any;
   loading: boolean;
 }
 
@@ -18,13 +18,13 @@ const today = getTodayKey();
 const formatTime = (time?: string) => {
   if (!time) return "";
   const [h, m] = time.split(":");
-  let hour = parseInt(h, 10);
+  let hour = Number.parseInt(h, 10);
   const ampm = hour >= 12 ? "PM" : "AM";
   hour = hour % 12 || 12;
   return `${hour}:${m} ${ampm}`;
 };
 
-export default function StaffModal({ open, onClose, staff, loading }: StaffModalProps) {
+export default function StaffModal({ open, onClose, staff, loading }: Readonly<StaffModalProps>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const fullName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();

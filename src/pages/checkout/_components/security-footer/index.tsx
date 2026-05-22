@@ -1,5 +1,4 @@
-import { Box, Divider, Stack, Typography } from "@mui/material";
-import ShieldMoonIcon from "@mui/icons-material/ShieldMoon";
+import { Box, Divider } from "@mui/material";
 
 export default function SecurityFooter() {
   return (

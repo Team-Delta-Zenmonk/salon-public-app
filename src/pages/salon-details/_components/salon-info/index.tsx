@@ -7,7 +7,7 @@ interface SalonInfoProps {
   salon: any;
 }
 
-export default function SalonInfo({ salon }: SalonInfoProps) {
+export default function SalonInfo({ salon }: Readonly<SalonInfoProps>) {
   const ratingText = String(salon?.rating ?? "4.8");
   const serviceCount = salon?.services?.length ?? 0;
   const staffCount = salon?.staff?.length ?? 0;

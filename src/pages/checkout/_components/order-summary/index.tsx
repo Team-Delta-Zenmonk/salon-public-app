@@ -10,7 +10,7 @@ interface OrderSummaryProps {
   dateStr: string;
 }
 
-export default function OrderSummary({ salon, booking, dateStr }: OrderSummaryProps) {
+export default function OrderSummary({ salon, booking, dateStr }: Readonly<OrderSummaryProps>) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -51,7 +51,7 @@ export default function OrderSummary({ salon, booking, dateStr }: OrderSummaryPr
       <Box className="p-4">
         <Stack spacing={1.5}>
           {booking.booking_services?.map((item: any, idx: number) => (
-            <Box key={idx} className="flex justify-between items-center">
+            <Box key={item?.id} className="flex justify-between items-center">
               <Box>
                 <Typography className="font-bold text-[var(--app-text)] text-[12px]">{item.service?.name}</Typography>
                 <Typography className="text-[10px] text-[var(--app-muted)]">{item.duration_minutes} mins</Typography>

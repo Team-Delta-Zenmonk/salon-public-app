@@ -95,7 +95,7 @@ export default function ActiveBookingConflictCard() {
           )}
 
           <Box
-            onClick={!isBusy ? handleCancel : undefined}
+            onClick={isBusy ? undefined : handleCancel}
             className={`py-3.5 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors ${
               isBusy ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-bg)"
             }`}

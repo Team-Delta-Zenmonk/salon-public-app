@@ -9,7 +9,7 @@ interface SalonStaffProps {
   staff: any[];
 }
 
-export default function SalonStaff({ staff }: SalonStaffProps) {
+export default function SalonStaff({ staff }: Readonly<SalonStaffProps>) {
   const dispatch = useAppDispatch();
   const { salonId } = useParams<{ salonId: string }>();
   const [modalOpen, setModalOpen] = useState(false);

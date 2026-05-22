@@ -11,7 +11,7 @@ interface SidebarProps {
   collapsed: boolean;
 }
 
-export default function Sidebar({ collapsed }: SidebarProps) {
+export default function Sidebar({ collapsed }: Readonly<SidebarProps>) {
   const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
 
   return (

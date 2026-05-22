@@ -11,7 +11,7 @@ interface LogoutButtonProps {
   collapsed?: boolean;
 }
 
-export default function LogoutButton({ collapsed = false }: LogoutButtonProps) {
+export default function LogoutButton({ collapsed = false }: Readonly<LogoutButtonProps>) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

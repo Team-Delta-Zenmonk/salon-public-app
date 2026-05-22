@@ -15,7 +15,122 @@ interface CartItemProps {
   item: any;
 }
 
-export default function CartItem({ item }: CartItemProps) {
+interface StaffSelectorProps {
+  staffLoading: boolean;
+  staffList: any[];
+  selectedStaffId: string | null;
+  updating: boolean;
+  onStaffClick: (entry: any) => void;
+}
+
+const getStaffInfo = (staffEntry?: any, staff?: any) => {
+  if (staffEntry) {
+    return {
+      name: `${staffEntry.staff.first_name} ${staffEntry.staff.last_name ?? ""}`.trim(),
+      photo: staffEntry.staff.photos?.secure_url ?? staffEntry.staff.photos?.url,
+    };
+  }
+
+  if (staff) {
+    return {
+      name: `${staff.first_name} ${staff.last_name ?? ""}`.trim(),
+      photo: staff.photos?.secure_url ?? staff.photos?.url,
+    };
+  }
+
+  return null;
+};
+
+function StaffSelector({
+  staffLoading,
+  staffList,
+  selectedStaffId,
+  updating,
+  onStaffClick,
+}: Readonly<StaffSelectorProps>) {
+  if (staffLoading) {
+    return (
+      <Box className="flex gap-3">
+        {[1, 2, 3].map((i) => (
+          <Box key={i} className="flex flex-col items-center gap-1">
+            <Skeleton variant="circular" width={44} height={44} />
+            <Skeleton variant="text" width={40} height={12} />
+          </Box>
+        ))}
+      </Box>
+    );
+  }
+
+  if (staffList.length === 0) {
+    return (
+      <Typography variant="caption" className="text-(--app-muted) block">
+        No staff assigned to this service
+      </Typography>
+    );
+  }
+
+  return (
+    <Box className="flex gap-2.5 sm:gap-3 flex-wrap">
+      {staffList.map((entry: any) => {
+        const staff = entry.staff;
+        const isSelected = selectedStaffId === staff?.uuid;
+        const staffName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();
+        const photo = staff?.photos?.secure_url ?? staff?.photos?.url;
+        const staffPrice = entry.price;
+
+        const cardClass = isSelected
+          ? "bg-(--app-primary-soft) border-(--app-primary)"
+          : "bg-(--app-surface) border-(--app-border) hover:bg-(--app-surface-alt) hover:border-(--app-muted)";
+
+        const avatarClass = isSelected
+          ? "w-11 h-11 transition-all duration-150 border-[2.5px] border-(--app-primary) bg-(--app-surface) shadow-[0_8px_20px_var(--app-primary-soft)]"
+          : "w-11 h-11 transition-all duration-150 border-2 border-(--app-border) bg-(--app-surface-alt)";
+
+        const staffNameClass = isSelected ? "text-(--app-text) font-bold" : "text-(--app-text) font-medium";
+
+        const staffPriceClass = isSelected ? "text-(--app-text) font-semibold" : "text-(--app-muted) font-medium";
+
+        return (
+          <Box
+            key={entry.uuid}
+            onClick={() => onStaffClick(entry)}
+            className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-2.5 py-2 min-w-20 sm:min-w-22 border ${cardClass} ${
+              updating ? "opacity-50 pointer-events-none" : ""
+            }`}
+          >
+            <Box className="relative">
+              <Avatar src={photo} className={avatarClass}>
+                {staffName?.[0]}
+              </Avatar>
+
+              {isSelected && (
+                <Box className="absolute -bottom-1 -right-1 w-4 h-4 bg-(--app-primary) border border-(--app-surface) rounded-full flex items-center justify-center">
+                  <CheckIcon className="text-[10px] text-(--app-primary-contrast)" />
+                </Box>
+              )}
+            </Box>
+
+            <Typography
+              variant="caption"
+              className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass}`}
+              title={staffName || "Staff"}
+            >
+              {staffName || "Staff"}
+            </Typography>
+
+            {staffPrice && (
+              <Typography variant="caption" className={`text-[10px] ${staffPriceClass}`}>
+                ₹{Math.round(Number.parseFloat(String(staffPrice)))}
+              </Typography>
+            )}
+          </Box>
+        );
+      })}
+    </Box>
+  );
+}
+
+export default function CartItem({ item }: Readonly<CartItemProps>) {
   const dispatch = useAppDispatch();
   const { isGuest, salonId } = useAppSelector((s) => s.cart);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -105,25 +220,8 @@ export default function CartItem({ item }: CartItemProps) {
   };
 
   const currentStaffEntry = selectedStaffId ? staffList.find((e) => e.staff?.uuid === selectedStaffId) : null;
-
-  const currentStaffInfo = currentStaffEntry
-    ? {
-        name: `${currentStaffEntry.staff.first_name} ${currentStaffEntry.staff.last_name ?? ""}`.trim(),
-        photo: currentStaffEntry.staff.photos?.secure_url ?? currentStaffEntry.staff.photos?.url,
-      }
-    : item.staff
-      ? {
-          name: `${item.staff.first_name} ${item.staff.last_name ?? ""}`.trim(),
-          photo: item.staff.photos?.secure_url ?? item.staff.photos?.url,
-        }
-      : null;
-
-  const newStaffInfo = pendingStaffEntry
-    ? {
-        name: `${pendingStaffEntry.staff.first_name} ${pendingStaffEntry.staff.last_name ?? ""}`.trim(),
-        photo: pendingStaffEntry.staff.photos?.secure_url ?? pendingStaffEntry.staff.photos?.url,
-      }
-    : null;
+  const currentStaffInfo = getStaffInfo(currentStaffEntry, item.staff);
+  const newStaffInfo = getStaffInfo(pendingStaffEntry);
 
   return (
     <>
@@ -186,6 +284,7 @@ export default function CartItem({ item }: CartItemProps) {
             </IconButton>
           </Box>
         </Box>
+
         <Box className="border-t border-(--app-border) px-4 sm:px-5 py-3">
           <Box className="flex items-center justify-between mb-2">
             <Typography
@@ -201,79 +300,13 @@ export default function CartItem({ item }: CartItemProps) {
             )}
           </Box>
 
-          {staffLoading ? (
-            <Box className="flex gap-3">
-              {[1, 2, 3].map((i) => (
-                <Box key={i} className="flex flex-col items-center gap-1">
-                  <Skeleton variant="circular" width={44} height={44} />
-                  <Skeleton variant="text" width={40} height={12} />
-                </Box>
-              ))}
-            </Box>
-          ) : staffList.length === 0 ? (
-            <Typography variant="caption" className="text-(--app-muted) block">
-              No staff assigned to this service
-            </Typography>
-          ) : (
-            <Box className="flex gap-2.5 sm:gap-3 flex-wrap">
-              {staffList.map((entry: any) => {
-                const staff = entry.staff;
-                const isSelected = selectedStaffId === staff?.uuid;
-                const staffName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();
-                const photo = staff?.photos?.secure_url ?? staff?.photos?.url;
-                const staffPrice = entry.price;
-
-                return (
-                  <Box
-                    key={entry.uuid}
-                    onClick={() => onStaffClick(entry)}
-                    className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-2.5 py-2 min-w-20 sm:min-w-22 border ${
-                      isSelected
-                        ? "bg-(--app-primary-soft) border-(--app-primary)"
-                        : "bg-(--app-surface) border-(--app-border) hover:bg-(--app-surface-alt) hover:border-(--app-muted)"
-                    } ${updating ? "opacity-50 pointer-events-none" : ""}`}
-                  >
-                    <Box className="relative">
-                      <Avatar
-                        src={photo}
-                        className={
-                          isSelected
-                            ? "w-11 h-11 transition-all duration-150 border-[2.5px] border-(--app-primary) bg-(--app-surface) shadow-[0_8px_20px_var(--app-primary-soft)]"
-                            : "w-11 h-11 transition-all duration-150 border-2 border-(--app-border) bg-(--app-surface-alt)"
-                        }
-                      >
-                        {staffName?.[0]}
-                      </Avatar>
-                      {isSelected && (
-                        <Box className="absolute -bottom-1 -right-1 w-4 h-4 bg-(--app-primary) border border-(--app-surface) rounded-full flex items-center justify-center">
-                          <CheckIcon className="text-[10px] text-(--app-primary-contrast)" />
-                        </Box>
-                      )}
-                    </Box>
-
-                    <Typography
-                      variant="caption"
-                      className={`text-[11px] text-center w-full leading-tight truncate ${
-                        isSelected ? "text-(--app-text) font-bold" : "text-(--app-text) font-medium"
-                      }`}
-                      title={staffName || "Staff"}
-                    >
-                      {staffName || "Staff"}
-                    </Typography>
-
-                    {staffPrice && (
-                      <Typography
-                        variant="caption"
-                        className={`text-[10px] ${isSelected ? "text-(--app-text) font-semibold" : "text-(--app-muted) font-medium"}`}
-                      >
-                        ₹{Math.round(parseFloat(String(staffPrice)))}
-                      </Typography>
-                    )}
-                  </Box>
-                );
-              })}
-            </Box>
-          )}
+          <StaffSelector
+            staffLoading={staffLoading}
+            staffList={staffList}
+            selectedStaffId={selectedStaffId}
+            updating={updating}
+            onStaffClick={onStaffClick}
+          />
         </Box>
       </Box>
 

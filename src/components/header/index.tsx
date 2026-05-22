@@ -14,7 +14,7 @@ interface HeaderProps {
   onMenuClick: () => void;
 }
 
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
   const cartCount = useAppSelector((state: RootState) => state.cart.items.length);
   const navigate = useNavigate();
   const { themeId, setThemeId } = useAppThemeMode();
@@ -62,7 +62,11 @@ export default function Header({ onMenuClick }: HeaderProps) {
             {themeOptions.map((option) => {
               const selected = themeId === option.id;
               return (
-                <MenuItem key={option.id} onClick={() => onThemeChange(option.id)} className="flex items-center justify-between gap-4">
+                <MenuItem
+                  key={option.id}
+                  onClick={() => onThemeChange(option.id)}
+                  className="flex items-center justify-between gap-4"
+                >
                   <Box component="span" className="text-sm text-(--app-text)">
                     {option.label}
                   </Box>
@@ -72,9 +76,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             })}
           </Menu>
           <CartIcon count={cartCount} onClick={() => navigate("/cart")} />
-          <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-(--app-primary-soft) text-(--app-text)">
-            U
-          </Avatar>
+          <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-(--app-primary-soft) text-(--app-text)">U</Avatar>
         </Box>
       </Toolbar>
     </AppBar>

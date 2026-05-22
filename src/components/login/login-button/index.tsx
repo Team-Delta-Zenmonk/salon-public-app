@@ -14,7 +14,7 @@ interface AuthRedirectState {
   resumeBooking?: boolean;
 }
 
-export default function LoginButton({ collapsed = false }: LoginButtonProps) {
+export default function LoginButton({ collapsed = false }: Readonly<LoginButtonProps>) {
   const [loading, setLoading] = useState(false);
   const { getSignInWithPopup } = GoogleResponse();
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ export default function LoginButton({ collapsed = false }: LoginButtonProps) {
       }
 
       navigate("/salons", { replace: true });
-    } catch (err) {
+    } catch {
       callSnack("Failed to sign in with Google. Please try again.", "error");
     } finally {
       setLoading(false);

@@ -25,7 +25,7 @@ export default function SwitchCartDialog({
   newSalonName,
   onConfirm,
   onCancel,
-}: SwitchCartDialogProps) {
+}: Readonly<SwitchCartDialogProps>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 

@@ -6,7 +6,7 @@ interface CartIconProps {
   onClick?: () => void;
 }
 
-export default function CartIcon({ count = 0, onClick }: CartIconProps) {
+export default function CartIcon({ count = 0, onClick }: Readonly<CartIconProps>) {
   return (
     <IconButton
       size="small"

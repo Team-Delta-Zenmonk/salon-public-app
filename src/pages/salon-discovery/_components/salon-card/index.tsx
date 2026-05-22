@@ -11,7 +11,7 @@ interface SalonCardProps {
   variant: "grid" | "list";
 }
 
-export default function SalonCard({ salon, variant }: SalonCardProps) {
+export default function SalonCard({ salon, variant }: Readonly<SalonCardProps>) {
   const navigate = useNavigate();
 
   const categoriesText = formatCategories(salon?.categories);

@@ -10,7 +10,7 @@ interface BookingConfirmDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   date: string | null;
-  slot: any | null;
+  slot: any;
   totalPrice: number;
   totalDuration: number;
   confirming: boolean;
@@ -25,7 +25,7 @@ export default function BookingConfirmDialog({
   totalPrice,
   totalDuration,
   confirming,
-}: BookingConfirmDialogProps) {
+}: Readonly<BookingConfirmDialogProps>) {
   const durationText = formatDuration(totalDuration);
 
   const dateObj = date ? new Date(date) : null;
@@ -33,7 +33,7 @@ export default function BookingConfirmDialog({
   return (
     <Dialog
       open={open}
-      onClose={!confirming ? onClose : undefined}
+      onClose={confirming ? undefined : onClose}
       slotProps={{
         paper: {
           className:
@@ -98,7 +98,7 @@ export default function BookingConfirmDialog({
 
         <Box className="px-4 sm:px-6 pb-5 sm:pb-6 flex gap-2.5 sm:gap-3">
           <Box
-            onClick={!confirming ? onClose : undefined}
+            onClick={confirming ? undefined : onClose}
             className={`flex-1 py-3.5 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors duration-150 ${
               confirming ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-surface-alt)"
             }`}
@@ -107,7 +107,7 @@ export default function BookingConfirmDialog({
           </Box>
 
           <Box
-            onClick={!confirming ? onConfirm : undefined}
+            onClick={confirming ? undefined : onConfirm}
             className={`flex-2 py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 ${
               confirming ? "bg-(--app-primary) cursor-default" : "bg-(--app-primary) cursor-pointer hover:brightness-95"
             }`}

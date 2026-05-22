@@ -4,7 +4,6 @@ import SalonListView from "./_components/views/list-view";
 import SalonGridView from "./_components/views/grid-view";
 import { MapView } from "./_components/views/map-view";
 import DiscoveryFilters from "./_components/filters";
-import DiscoveryViewSwitch from "./_components/views/view-switch";
 import type { ViewMode } from "./constants/view-mode.type";
 import type { LocationStatus } from "./constants/location-status.type";
 import { listSalonsAction } from "../../features/salon/list-salons/list-salons.action";
@@ -12,16 +11,13 @@ import { SALON_PAGE_LIMIT } from "./constants/pagination.constants";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { presetCategories } from "./constants/preset-categories";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useSearchParams, useOutletContext } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { TOP_INDIAN_CITIES } from "./constants/cities";
 
 export default function SalonDiscovery() {
   const dispatch = useAppDispatch();
   const { data: salons, total, page } = useAppSelector((state) => state.salon);
   const [searchParams, setSearchParams] = useSearchParams();
-  const context = useOutletContext<{ sidebarCollapsed: boolean }>() || { sidebarCollapsed: false };
-  const sidebarCollapsed = context?.sidebarCollapsed;
-
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
   const city = searchParams.get("city") || "";

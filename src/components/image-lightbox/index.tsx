@@ -11,7 +11,7 @@ interface ImageLightboxProps {
   onClose: () => void;
 }
 
-export default function ImageLightbox({ open, index, images, onClose }: ImageLightboxProps) {
+export default function ImageLightbox({ open, index, images, onClose }: Readonly<ImageLightboxProps>) {
   return (
     <Lightbox
       open={open}

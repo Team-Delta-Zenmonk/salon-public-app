@@ -14,7 +14,7 @@ import SwitchCartDialog from "./_components/switch-cart-dialog";
 import { getGenderChipConfig } from "./_components/utils/gender-chip-config";
 import { getCartAction } from "../../../../../../features/salon/cart/get-cart/get-cart.action";
 
-export default function ServiceCard({ service, subServices, salon }: { service: any; subServices: any[]; salon: any }) {
+export default function ServiceCard({ service, subServices, salon }: Readonly<{ service: any; subServices: any[]; salon: any }>) {
   const [open, setOpen] = useState(false);
   const [switchDialog, setSwitchDialog] = useState(false);
   const [pendingItem, setPendingItem] = useState<any>(null);

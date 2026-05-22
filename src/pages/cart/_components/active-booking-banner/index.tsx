@@ -7,7 +7,6 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { useBookingExpiry } from "../../../../common/hooks/useBookingExpiry";
 import { clearActiveBooking } from "../../../../features/salon/bookings/booking.slice";
-import { useNavigate } from "react-router-dom";
 import { ExpiryUrgency } from "../../../../common/booking.enums";
 import { WEEKDAY_FULL, MONTH_SHORT } from "../../../../common/date.constants";
 import { ConfirmationDialog } from "../../../../components/dialogs";
@@ -15,41 +14,117 @@ import { formatTimeUTC } from "../../../../common/date.utils";
 import { getUrgencyColor } from "../../../../common/booking.utils";
 import { useActiveBookingActions } from "../../../../common/hooks/useActiveBookingActions";
 
+interface BookingActionButtonsProps {
+  isExpired: boolean;
+  isBusy: boolean;
+  isCancelling: boolean;
+  isContinuing: boolean;
+  onCancel: () => void;
+  onContinue: () => void;
+  onStartNew: () => void;
+}
+
+const TOTAL_SECONDS = 600;
+
+const getBookingDateTime = (activeBooking: any) => {
+  const dateObj = activeBooking.booking_date ? new Date(activeBooking.booking_date) : null;
+
+  return {
+    dateStr: dateObj
+      ? `${WEEKDAY_FULL[dateObj.getUTCDay()]}, ${dateObj.getUTCDate()} ${MONTH_SHORT[dateObj.getUTCMonth()]}`
+      : "",
+    timeStr:
+      activeBooking.booking_start_time && activeBooking.booking_end_time
+        ? `${formatTimeUTC(activeBooking.booking_start_time)} – ${formatTimeUTC(activeBooking.booking_end_time)}`
+        : "",
+  };
+};
+
+const getProgress = (isExpired: boolean, secondsLeft: number) =>
+  isExpired ? 0 : Math.min(100, (secondsLeft / TOTAL_SECONDS) * 100);
+
+function BookingActionButtons({
+  isExpired,
+  isBusy,
+  isCancelling,
+  isContinuing,
+  onCancel,
+  onContinue,
+  onStartNew,
+}: Readonly<BookingActionButtonsProps>) {
+  if (isExpired) {
+    return (
+      <Box
+        onClick={onStartNew}
+        className="flex-1 py-3 rounded-xl bg-(--app-primary) text-center cursor-pointer hover:brightness-95 transition-all"
+      >
+        <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">Start New Booking</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <Box
+        onClick={isBusy ? undefined : onCancel}
+        className={`shrink-0 px-5 py-3 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors ${
+          isBusy ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-surface-alt)"
+        }`}
+      >
+        {isCancelling ? (
+          <CircularProgress size={16} className="text-(--app-muted)" />
+        ) : (
+          <Typography className="text-[13px] font-semibold text-(--app-muted)">Cancel Booking</Typography>
+        )}
+      </Box>
+
+      <Box
+        onClick={onContinue}
+        className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
+          isBusy ? "bg-(--app-primary) cursor-default" : "bg-(--app-primary) cursor-pointer hover:brightness-95"
+        }`}
+      >
+        {isContinuing ? (
+          <CircularProgress size={16} className="text-(--app-primary-contrast)" />
+        ) : (
+          <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">Continue Payment</Typography>
+        )}
+      </Box>
+    </>
+  );
+}
+
 export default function ActiveBookingBanner() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { activeBooking } = useAppSelector((state) => state.booking);
   const { handleCancelActiveBooking, handleContinueActiveBooking, isCancelling, isContinuing } =
     useActiveBookingActions();
   const { formattedTime, isExpired, secondsLeft, urgency } = useBookingExpiry(activeBooking?.expires_at);
-
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
-  if (!activeBooking) return null;
+  if (!activeBooking) {
+    return null;
+  }
 
-  const dateObj = activeBooking.booking_date ? new Date(activeBooking.booking_date) : null;
-  const dateStr = dateObj
-    ? `${WEEKDAY_FULL[dateObj.getUTCDay()]}, ${dateObj.getUTCDate()} ${MONTH_SHORT[dateObj.getUTCMonth()]}`
-    : "";
-  const timeStr =
-    activeBooking.booking_start_time && activeBooking.booking_end_time
-      ? `${formatTimeUTC(activeBooking.booking_start_time)} – ${formatTimeUTC(activeBooking.booking_end_time)}`
-      : "";
-
-  const totalSeconds = 600;
-  const progress = isExpired ? 0 : Math.min(100, (secondsLeft / totalSeconds) * 100);
+  const { dateStr, timeStr } = getBookingDateTime(activeBooking);
 
   const isBusy = isCancelling || isContinuing;
-
+  const progress = getProgress(isExpired, secondsLeft);
   const urgencyColor = getUrgencyColor(urgency);
 
   const handleContinue = async () => {
-    if (isBusy || isExpired || !activeBooking) return;
+    if (isBusy || isExpired) {
+      return;
+    }
+
     await handleContinueActiveBooking(activeBooking);
   };
 
   const handleConfirmCancel = async () => {
-    if (isBusy || !activeBooking) return;
+    if (isBusy) {
+      return;
+    }
+
     await handleCancelActiveBooking(activeBooking.uuid);
     setCancelDialogOpen(false);
   };
@@ -70,7 +145,9 @@ export default function ActiveBookingBanner() {
         <Box className="flex items-center gap-2.5 px-4 sm:px-5 pt-4 sm:pt-5 pb-3">
           <Box
             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-            sx={{ backgroundColor: isExpired ? "var(--app-surface-alt)" : "var(--app-primary-soft)" }}
+            sx={{
+              backgroundColor: isExpired ? "var(--app-surface-alt)" : "var(--app-primary-soft)",
+            }}
           >
             {isExpired ? (
               <ErrorOutlineIcon className="text-base" sx={{ color: "var(--app-muted)" }} />
@@ -94,6 +171,7 @@ export default function ActiveBookingBanner() {
               }}
             >
               <AccessTimeIcon className="text-xs" sx={{ color: urgencyColor }} />
+
               <Typography className="text-[11px] font-bold tabular-nums" sx={{ color: urgencyColor }}>
                 {formattedTime}
               </Typography>
@@ -106,9 +184,13 @@ export default function ActiveBookingBanner() {
             <CalendarMonthIcon className="text-xs text-(--app-muted)" />
             <Typography className="text-[12px] text-(--app-muted)">{dateStr}</Typography>
           </Box>
+
           <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
+
           <Typography className="text-[12px] text-(--app-muted)">{timeStr}</Typography>
+
           <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
+
           <Typography className="text-[12px] font-semibold text-(--app-text)">₹{activeBooking.total_price}</Typography>
         </Box>
 
@@ -131,44 +213,15 @@ export default function ActiveBookingBanner() {
         )}
 
         <Box className="px-4 sm:px-5 pb-4 sm:pb-5 flex gap-2.5 max-w-sm">
-          {isExpired ? (
-            <Box
-              onClick={handleStartNew}
-              className="flex-1 py-3 rounded-xl bg-(--app-primary) text-center cursor-pointer hover:brightness-95 transition-all"
-            >
-              <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">Start New Booking</Typography>
-            </Box>
-          ) : (
-            <>
-              <Box
-                onClick={!isBusy ? () => setCancelDialogOpen(true) : undefined}
-                className={`shrink-0 px-5 py-3 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors ${
-                  isBusy ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-surface-alt)"
-                }`}
-              >
-                {isCancelling ? (
-                  <CircularProgress size={16} className="text-(--app-muted)" />
-                ) : (
-                  <Typography className="text-[13px] font-semibold text-(--app-muted)">Cancel Booking</Typography>
-                )}
-              </Box>
-
-              <Box
-                onClick={handleContinue}
-                className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
-                  isBusy ? "bg-(--app-primary) cursor-default" : "bg-(--app-primary) cursor-pointer hover:brightness-95"
-                }`}
-              >
-                {isContinuing ? (
-                  <CircularProgress size={16} className="text-(--app-primary-contrast)" />
-                ) : (
-                  <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">
-                    Continue Payment
-                  </Typography>
-                )}
-              </Box>
-            </>
-          )}
+          <BookingActionButtons
+            isExpired={isExpired}
+            isBusy={isBusy}
+            isCancelling={isCancelling}
+            isContinuing={isContinuing}
+            onCancel={() => setCancelDialogOpen(true)}
+            onContinue={handleContinue}
+            onStartNew={handleStartNew}
+          />
         </Box>
       </Box>
 

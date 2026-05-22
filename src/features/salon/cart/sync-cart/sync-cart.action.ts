@@ -8,7 +8,7 @@ export const syncGuestCartAction = createAsyncThunk(
   async ({ userId }: { userId: string }, thunkAPI) => {
     try {
       const guestCart = getGuestCart();
-      if (!guestCart || !guestCart.items?.length) return null;
+      if (!guestCart?.items?.length) return null;
 
       const payload = {
         salon_id: guestCart.salon?.uuid,

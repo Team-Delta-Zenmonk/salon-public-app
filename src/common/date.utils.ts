@@ -22,5 +22,11 @@ export function formatDateShortUTC(iso: string): string {
 export function formatDuration(totalMinutes: number): string {
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
-  return hours > 0 ? `${hours}h${mins > 0 ? ` ${mins}m` : ""}` : `${mins} min`;
+
+  if (hours === 0) {
+    return `${mins} min`;
+  }
+
+  const minsPart = mins > 0 ? ` ${mins}m` : "";
+  return `${hours}h${minsPart}`;
 }

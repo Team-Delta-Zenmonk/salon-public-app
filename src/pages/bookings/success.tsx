@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo } from "react";
-import { Box, Typography, Button, Container, Card, Avatar, Divider, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Typography, Button, Container, Card, Avatar, Divider } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -16,12 +16,10 @@ export default function BookingSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const hasClearedRef = useRef(false);
 
   const bookingUuid = location.state?.bookingUuid;
-  const booking = location.state?.booking as any;
+  const booking = location.state?.booking;
 
   const { salon: cartSalon } = useAppSelector((s) => s.cart);
   const initialSalonRef = useRef(booking?.salon || cartSalon);
@@ -45,6 +43,16 @@ export default function BookingSuccess() {
     [booking?.booking_date],
   );
 
+  const CONFETTI_ITEMS = Array.from({ length: 20 }, (_, i) => ({
+    id: crypto.randomUUID(),
+    left: `${(i / 20) * 100}%`,
+    animationDelay: `${Math.random() * 5}s`,
+    backgroundColor: ["#10b981", "#fbbf24", "#3b82f6", "#f472b6"][i % 4],
+    width: `${Math.random() * 10 + 5}px`,
+    height: `${Math.random() * 10 + 5}px`,
+    borderRadius: i % 2 === 0 ? "50%" : "2px",
+  }));
+
   const timeStr = useMemo(() => {
     if (booking?.booking_start_time && booking?.booking_end_time) {
       return `${formatTimeUTC(booking.booking_start_time)} - ${formatTimeUTC(booking.booking_end_time)}`;
@@ -57,17 +65,17 @@ export default function BookingSuccess() {
   return (
     <Box className={styles.successPage}>
       <Box className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {[...Array(20)].map((_, i) => (
+        {CONFETTI_ITEMS.map((item) => (
           <div
-            key={i}
+            key={item.id}
             className={styles.confetti}
             style={{
-              left: `${(i / 20) * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              backgroundColor: ["#10b981", "#fbbf24", "#3b82f6", "#f472b6"][i % 4],
-              width: `${Math.random() * 10 + 5}px`,
-              height: `${Math.random() * 10 + 5}px`,
-              borderRadius: i % 2 === 0 ? "50%" : "2px",
+              left: item.left,
+              animationDelay: item.animationDelay,
+              backgroundColor: item.backgroundColor,
+              width: item.width,
+              height: item.height,
+              borderRadius: item.borderRadius,
             }}
           />
         ))}
@@ -86,13 +94,16 @@ export default function BookingSuccess() {
                 <Box
                   className={clsx(
                     styles.animateSuccessPop,
-                    "w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-full bg-(--app-surface) flex items-center justify-center border-[3px] border-[#10b981] relative z-10 shadow-[0_8px_24px_rgba(16,185,129,0.2)]"
+                    "w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-full bg-(--app-surface) flex items-center justify-center border-[3px] border-[#10b981] relative z-10 shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
                   )}
                 >
                   <CheckCircleIcon className="text-[#10b981] text-[32px] sm:text-[38px]" />
                 </Box>
                 <Box
-                  className={clsx("absolute border-2 border-[#10b981] rounded-full -inset-1", styles.animateSuccessRing)}
+                  className={clsx(
+                    "absolute border-2 border-[#10b981] rounded-full -inset-1",
+                    styles.animateSuccessRing,
+                  )}
                 />
                 <Box
                   className={clsx("absolute border border-[#10b981] rounded-full -inset-1", styles.animateSuccessRing)}

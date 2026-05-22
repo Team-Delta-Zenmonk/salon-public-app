@@ -58,7 +58,7 @@ export default function DiscoveryFilters({
   initialCity = "",
   viewMode,
   onViewModeChange,
-}: DiscoveryFiltersProps) {
+}: Readonly<DiscoveryFiltersProps>) {
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
 
   const { control, watch, reset, setValue } = useForm<FiltersForm>({
@@ -245,8 +245,10 @@ export default function DiscoveryFilters({
       <Dialog
         open={isFilterDialogOpen}
         onClose={handleClose}
-        PaperProps={{
-          className: "rounded-[20px] bg-(--app-surface) bg-none",
+        slotProps={{
+          paper: {
+            className: "rounded-[20px] bg-(--app-surface) bg-none",
+          },
         }}
       >
         <DialogTitle className="flex items-center justify-between border-b border-(--app-border)/40 pb-3.5 px-5">

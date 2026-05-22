@@ -67,7 +67,7 @@ const Select = <T extends FieldValues>({
                       data-test-id={`li-${identifier}-${option.label}`}
                     >
                       <Typography variant="paragraphMd" color="secondary" className={styles.menuItem}>
-                        {translate ? option.label : option.label}
+                        {option.label}
                       </Typography>
                     </MenuItem>
                   );

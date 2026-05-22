@@ -1,8 +1,6 @@
 import {
-  onAuthStateChanged as _onAuthStateChanged,
   signInWithPopup,
   signOut,
-  type User as FirebaseUser,
 } from "firebase/auth";
 import { GetFireBaseConfig } from "../config/firebase.config";
 

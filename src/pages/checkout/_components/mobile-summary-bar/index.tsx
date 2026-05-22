@@ -11,7 +11,7 @@ interface MobileSummaryBarProps {
   dateStr: string;
 }
 
-export default function MobileSummaryBar({ salon, booking, dateStr }: MobileSummaryBarProps) {
+export default function MobileSummaryBar({ salon, booking, dateStr }: Readonly<MobileSummaryBarProps>) {
   const [expanded, setExpanded] = useState(false);
 
   return (

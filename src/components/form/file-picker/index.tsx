@@ -68,85 +68,94 @@ const FilePicker = <T extends FieldValues>({
     if (inputRef.current) inputRef.current.value = "";
   };
 
+  const getEndAdornment = (
+    loading: boolean,
+    value: unknown,
+    onChange: (value: string | null) => void,
+    disabled: boolean | undefined,
+  ) => {
+    if (loading) {
+      return <CircularProgress data-test-id={`loading-${identifier}`} className={styles.adornmentLoading} size={20} />;
+    }
+
+    if (value) {
+      return (
+        <IconButton
+          className={styles.adornmentIconButton}
+          data-test-id={`clear-btn-${identifier}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            clearFile(onChange);
+          }}
+          disabled={disabled}
+        >
+          <ClearIcon data-test-id={`clear-btn-icon-${identifier}`} />
+        </IconButton>
+      );
+    }
+
+    return (
+      <IconButton disabled={disabled} data-test-id={`upload-btn-${identifier}`} className={styles.adornmentIconButton}>
+        <UploadFileIcon data-test-id={`upload-btn-icon-${identifier}`} className="text-secondary-500" />
+      </IconButton>
+    );
+  };
+
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <Stack data-test-id={identifier}>
-          <FormControl disabled={disabled || loading} variant="outlined" className={styles.formControl} size="small">
-            <InputLabel
-              sx={{ marginTop: value ? 0 : "6.5px" }}
-              shrink={Boolean(value)}
-              error={Boolean(error)}
-              data-test-id={`label-${identifier}`}
-            >
-              {label}
-            </InputLabel>
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
+        const endAdornment = getEndAdornment(loading, value, onChange, disabled);
 
-            <OutlinedInput
-              error={Boolean(error)}
-              onClick={(e: MouseEvent<HTMLDivElement>) => openFilePicker(e, Boolean(value))}
-              label={label}
-              value={value?.filename ?? ""}
-              className={styles.inputField}
-              data-test-id={`text-input-${identifier}`}
-              inputProps={{
-                className: styles.input,
-              }}
-              slotProps={{
-                root: {
-                  className: !value ? styles.inputRoot : "",
-                },
-              }}
-              readOnly
-              endAdornment={
-                loading ? (
-                  <CircularProgress
-                    data-test-id={`loading-${identifier}`}
-                    className={styles.adornmentLoading}
-                    size={20}
-                  />
-                ) : value ? (
-                  <IconButton
-                    className={styles.adornmentIconButton}
-                    data-test-id={`clear-btn-${identifier}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      clearFile(onChange);
-                    }}
-                    disabled={disabled}
-                  >
-                    <ClearIcon data-test-id={`clear-btn-icon-${identifier}`} />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    disabled={disabled}
-                    data-test-id={`upload-btn-${identifier}`}
-                    className={styles.adornmentIconButton}
-                  >
-                    <UploadFileIcon data-test-id={`upload-btn-icon-${identifier}`} className="text-secondary-500" />
-                  </IconButton>
-                )
-              }
+        return (
+          <Stack data-test-id={identifier}>
+            <FormControl disabled={disabled || loading} variant="outlined" className={styles.formControl} size="small">
+              <InputLabel
+                sx={{ marginTop: value ? 0 : "6.5px" }}
+                shrink={Boolean(value)}
+                error={Boolean(error)}
+                data-test-id={`label-${identifier}`}
+              >
+                {label}
+              </InputLabel>
+
+              <OutlinedInput
+                error={Boolean(error)}
+                onClick={(e: MouseEvent<HTMLDivElement>) => openFilePicker(e, Boolean(value))}
+                label={label}
+                value={value?.filename ?? ""}
+                className={styles.inputField}
+                data-test-id={`text-input-${identifier}`}
+                inputProps={{
+                  className: styles.input,
+                }}
+                slotProps={{
+                  root: {
+                    className: value ? "" : styles.inputRoot,
+                  },
+                }}
+                readOnly
+                endAdornment={endAdornment}
+              />
+              {error && (
+                <FormHelperText data-test-id={`error-${identifier}`} error={Boolean(error)}>
+                  {error.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <input
+              ref={inputRef}
+              data-test-id={`input-${identifier}`}
+              onChange={(e) => handleFileChange(e, onChange)}
+              accept={accept}
+              hidden
+              type="file"
             />
-            {error && (
-              <FormHelperText data-test-id={`error-${identifier}`} error={Boolean(error)}>
-                {error.message}
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <input
-            ref={inputRef}
-            data-test-id={`input-${identifier}`}
-            onChange={(e) => handleFileChange(e, (v) => onChange(v as any))}
-            accept={accept}
-            hidden
-            type="file"
-          />
-        </Stack>
-      )}
+          </Stack>
+        );
+      }}
     />
   );
 };

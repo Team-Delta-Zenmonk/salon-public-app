@@ -25,7 +25,7 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const cleaned = input.trim().replace(/\s{2,}/g, " ");
+    const cleaned = input.trim().replaceAll(/\s{2,}/g, " ");
     setSearchQuery(input);
 
     if (cleaned === "") {
@@ -48,10 +48,10 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleOnChange}
-      inputProps={{
-        className: "text-xs sm:text-sm",
-      }}
       slotProps={{
+        htmlInput: {
+          className: "text-xs sm:text-sm",
+        },
         input: {
           style: {
             WebkitTextFillColor: "var(--app-text)",

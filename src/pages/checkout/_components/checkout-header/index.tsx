@@ -11,7 +11,7 @@ interface CheckoutHeaderProps {
   formattedTime: string;
 }
 
-export default function CheckoutHeader({ onBack, isExpired, urgency, formattedTime }: CheckoutHeaderProps) {
+export default function CheckoutHeader({ onBack, isExpired, urgency, formattedTime }: Readonly<CheckoutHeaderProps>) {
   const isCritical = urgency === ExpiryUrgency.CRITICAL;
 
   return (

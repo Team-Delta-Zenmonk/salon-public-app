@@ -4,7 +4,7 @@ import { CalendarToday, AccessTime, CurrencyRupee } from "@mui/icons-material";
 import { formatDateShortUTC, formatDateUTC, formatTimeUTC } from "../../../../common/date.utils";
 import type { CustomerBooking } from "../../../../common/booking.types";
 import { BookingStatus } from "../../../../common/booking.enums";
-import { getBookingStatusConfig } from "../../../../common/booking.utils";
+import { getBookingStatusConfig, isBookingCancelable, isBookingPast } from "../../../../common/booking.utils";
 import dayjs from "dayjs";
 
 interface BookingCardProps {
@@ -20,7 +20,9 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
   const statusConfig = getBookingStatusConfig(isPending && isExpired ? BookingStatus.EXPIRED : booking.status);
 
   const canPay = isPending && !isExpired;
-  const canCancel = (isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED;
+
+  const isCancelableTime = isBookingCancelable(booking.booking_start_time);
+  const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
 
   return (
     <Box
@@ -72,7 +74,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
             <Typography className="text-[16px] font-black text-(--app-primary)">₹{booking.total_price}</Typography>
           </Box>
 
-          {(canPay || canCancel) && (
+          {(canPay || showCancel) && (
             <Box className="flex items-center gap-3">
               {canPay && (
                 <Button
@@ -85,13 +87,13 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
                   {disabled ? <CircularProgress size={16} color="inherit" /> : "Pay Now"}
                 </Button>
               )}
-              {canCancel && (
+              {showCancel && (
                 <Button
                   fullWidth={!canPay}
                   variant="outlined"
                   color="error"
                   onClick={() => onCancel?.(booking)}
-                  disabled={disabled}
+                  disabled={disabled || !isCancelableTime}
                   className="rounded-[14px] py-2.5 font-bold border-2 text-[12px] flex-1"
                 >
                   Cancel
@@ -174,7 +176,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
             </Typography>
             <Box className="flex flex-wrap gap-2">
               {booking.booking_services?.map((bs, index) => (
-                <Typography key={index} className="text-[12px] font-semibold text-(--app-text) opacity-80">
+                <Typography key={bs.id} className="text-[12px] font-semibold text-(--app-text) opacity-80">
                   {bs.service?.name}
                   {index < (booking.booking_services?.length || 0) - 1 ? " • " : ""}
                 </Typography>
@@ -193,12 +195,12 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
                 {disabled ? <CircularProgress size={16} color="inherit" /> : "Pay Now"}
               </Button>
             )}
-            {canCancel && (
+            {showCancel && (
               <Button
                 variant="outlined"
                 color="error"
                 onClick={() => onCancel?.(booking)}
-                disabled={disabled}
+                disabled={disabled || !isCancelableTime}
                 className="rounded-[14px] px-6 py-2 font-bold border-2 text-[12.5px] h-9 hover:bg-rose-50"
               >
                 Cancel

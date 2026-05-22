@@ -12,7 +12,7 @@ import { calculateTotals } from "../../../../common/cart.utils";
 import { getSlotsAction } from "../../../../features/salon/bookings/get-slots/get-slots.action";
 import { createBookingAction } from "../../../../features/salon/bookings/create-booking/create-booking.action";
 import { createPaymentAction } from "../../../../features/payments/create-payment/create-payment.action";
-import { BookingAction, BookingPhase, AsyncStatus } from "../../../../common/booking.enums";
+import { BookingAction, BookingPhase } from "../../../../common/booking.enums";
 import BookingDateSelector from "./_components/booking-date-selector";
 import { callSnack } from "../../../../components/snackbar";
 import { useNavigate } from "react-router-dom";
@@ -22,22 +22,85 @@ interface BookingPanelProps {
   onClose: () => void;
 }
 
-export default function BookingPanel({ open, onClose }: BookingPanelProps) {
+interface SlotPanelContentProps {
+  isConflict: boolean;
+  slotsError: string | null;
+  slotsData: { date: string; slots: any[] }[];
+  slotsLoading: boolean;
+  selectedDate: string | null;
+  selectedSlot: any;
+  currentDaySlots: any[];
+  onSelectDate: (date: string) => void;
+  onSelectSlot: (slot: any) => void;
+}
+
+function SlotPanelContent({
+  isConflict,
+  slotsError,
+  slotsData,
+  slotsLoading,
+  selectedDate,
+  selectedSlot,
+  currentDaySlots,
+  onSelectDate,
+  onSelectSlot,
+}: Readonly<SlotPanelContentProps>) {
+  if (isConflict) return <ActiveBookingConflictCard />;
+
+  if (slotsError) {
+    return (
+      <Box className="p-8 text-center">
+        <Typography className="text-[13px] text-red-500">{slotsError}</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      <Box className="pt-5 pb-4 border-b border-(--app-border)">
+        <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
+          Select Date
+        </Typography>
+        <BookingDateSelector
+          days={slotsData}
+          selectedDate={selectedDate}
+          onSelectDate={(date) => {
+            onSelectDate(date);
+            onSelectSlot(null);
+          }}
+          loading={slotsLoading}
+        />
+      </Box>
+
+      <Box className="pt-5">
+        <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
+          Available Times
+        </Typography>
+        <SlotGrid
+          slots={currentDaySlots}
+          selectedSlot={selectedSlot}
+          onSelectSlot={onSelectSlot}
+          loading={slotsLoading}
+          selectedDate={selectedDate}
+        />
+      </Box>
+    </>
+  );
+}
+
+export default function BookingPanel({ open, onClose }: Readonly<BookingPanelProps>) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { cartUuid: cartId, items } = useAppSelector((s) => s.cart);
   const { bookingPhase } = useAppSelector((s) => s.booking);
 
   const [slotsData, setSlotsData] = useState<{ date: string; slots: any[] }[]>([]);
-
   const [isCreating, setIsCreating] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
-  const [localError, setLocalError] = useState<string | null>(null);
-
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<any | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<any>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const isConflict = bookingPhase === BookingPhase.BOOKING_CONFLICT;
@@ -65,12 +128,10 @@ export default function BookingPanel({ open, onClose }: BookingPanelProps) {
     };
 
     fetchSlots();
-
     setSelectedSlot(null);
     setConfirmOpen(false);
 
     return () => {
-      // Cleanup on close
       setSlotsData([]);
       setSlotsError(null);
       setSelectedDate(null);
@@ -79,32 +140,25 @@ export default function BookingPanel({ open, onClose }: BookingPanelProps) {
   }, [open, cartId, dispatch]);
 
   const { totalPrice, totalDuration } = calculateTotals(items);
-
   const durationText = formatDuration(totalDuration);
-
   const currentDaySlots = selectedDate ? (slotsData.find((d) => d.date === selectedDate)?.slots ?? []) : [];
 
   const handleConfirmSlot = async () => {
     if (!cartId || !selectedDate || !selectedSlot || isCreating || isPaying) return;
 
     setIsCreating(true);
-    setLocalError(null);
 
     try {
       const mappedSlot = {
         ...selectedSlot,
-        services: (selectedSlot.services || []).map((s: any) => ({
+        services: (selectedSlot.services ?? []).map((s: any) => ({
           service_id: s.service_id ?? s.serviceId ?? s.service?.id ?? s.id,
-          staff_id: s.staff_id ?? s.staffId ?? (s.staff_options && s.staff_options[0]) ?? s.staff?.id,
+          staff_id: s.staff_id ?? s.staffId ?? s.staff_options?.[0] ?? s.staff?.id,
         })),
       };
 
       const createResult = await dispatch(
-        createBookingAction({
-          cartId,
-          date: selectedDate,
-          slot: mappedSlot,
-        }),
+        createBookingAction({ cartId, date: selectedDate, slot: mappedSlot }),
       ).unwrap();
 
       if (createResult.action === BookingAction.ACTIVE_BOOKING_EXISTS) {
@@ -165,43 +219,17 @@ export default function BookingPanel({ open, onClose }: BookingPanelProps) {
         </Box>
 
         <Box className="flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {isConflict ? (
-            <ActiveBookingConflictCard />
-          ) : slotsError ? (
-            <Box className="p-8 text-center">
-              <Typography className="text-[13px] text-red-500">{slotsError}</Typography>
-            </Box>
-          ) : (
-            <>
-              <Box className="pt-5 pb-4 border-b border-(--app-border)">
-                <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
-                  Select Date
-                </Typography>
-                <BookingDateSelector
-                  days={slotsData}
-                  selectedDate={selectedDate}
-                  onSelectDate={(date) => {
-                    setSelectedDate(date);
-                    setSelectedSlot(null);
-                  }}
-                  loading={slotsLoading}
-                />
-              </Box>
-
-              <Box className="pt-5">
-                <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
-                  Available Times
-                </Typography>
-                <SlotGrid
-                  slots={currentDaySlots}
-                  selectedSlot={selectedSlot}
-                  onSelectSlot={setSelectedSlot}
-                  loading={slotsLoading}
-                  selectedDate={selectedDate}
-                />
-              </Box>
-            </>
-          )}
+          <SlotPanelContent
+            isConflict={isConflict}
+            slotsError={slotsError}
+            slotsData={slotsData}
+            slotsLoading={slotsLoading}
+            selectedDate={selectedDate}
+            selectedSlot={selectedSlot}
+            currentDaySlots={currentDaySlots}
+            onSelectDate={setSelectedDate}
+            onSelectSlot={setSelectedSlot}
+          />
         </Box>
 
         {!isConflict && (

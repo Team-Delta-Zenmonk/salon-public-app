@@ -1,14 +1,14 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-interface Props {
+interface ConfirmRemoveItemDialogProps {
   open: boolean;
   serviceName?: string;
   onCancel: () => void;
   onConfirm: () => void;
 }
 
-export default function ConfirmRemoveItemDialog({ open, serviceName, onCancel, onConfirm }: Props) {
+export default function ConfirmRemoveItemDialog({ open, serviceName, onCancel, onConfirm }: Readonly<ConfirmRemoveItemDialogProps>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 

@@ -2,7 +2,7 @@
 
 import { createTheme, responsiveFontSizes, type PaletteMode } from "@mui/material/styles";
 
-type ThemeId =
+export type AppThemeId =
   | "luxuryBw"
   | "elegantLight"
   | "premiumDark"
@@ -18,7 +18,7 @@ type ThemeId =
   | "eclipseHorror";
 
 export interface AppThemeOption {
-  id: ThemeId;
+  id: AppThemeId;
   label: string;
   mode: PaletteMode;
   fontFamily: string;
@@ -149,11 +149,11 @@ const appThemes: AppThemeOption[] = [
 ];
 
 export const themeOptions = appThemes;
-export const defaultThemeId: ThemeId = "luxuryBw";
+export const defaultThemeId: AppThemeId = "luxuryBw";
 
-const getThemeOption = (themeId: ThemeId) => appThemes.find((theme) => theme.id === themeId) ?? appThemes[0];
+const getThemeOption = (themeId: AppThemeId) => appThemes.find((theme) => theme.id === themeId) ?? appThemes[0];
 
-export const createAppTheme = (themeId: ThemeId = defaultThemeId) => {
+export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
   const selected = getThemeOption(themeId);
   const isDark = selected.mode === "dark";
   const breakpoints = createTheme().breakpoints;
@@ -430,5 +430,3 @@ export const createAppTheme = (themeId: ThemeId = defaultThemeId) => {
 
   return responsiveFontSizes(theme);
 };
-
-export type AppThemeId = ThemeId;

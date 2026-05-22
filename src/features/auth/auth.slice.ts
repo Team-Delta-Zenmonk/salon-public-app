@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loginCustomerAction } from "./login/login.action";
 
 const initialState = {
-  customer: null as any | null,
+  customer: null as any,
   isAuthenticated: false,
 };
 

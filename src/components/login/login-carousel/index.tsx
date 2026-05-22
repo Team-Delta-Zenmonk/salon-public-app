@@ -36,15 +36,15 @@ const SalonLoginCarousel = () => {
           Curated Looks
         </Box>
         <Box className="mt-2 flex items-center justify-center gap-2">
-          {salonImages.map((slide, idx) => (
+          {salonImages.map((slide) => (
             <Box
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
+              key={slide.id}
+              onClick={() => setCurrentIndex(salonImages.findIndex((s) => s.id === slide.id))}
               role="button"
               title={slide.title}
-              aria-label={`Go to slide ${idx + 1}`}
+              aria-label={`Go to slide ${salonImages.findIndex((s) => s.id === slide.id) + 1}`}
               className={`h-2 rounded-full border transition-all duration-200 ease-out ${
-                idx === currentIndex
+                slide.id === active.id
                   ? "w-7 border-(--app-primary) bg-(--app-primary)"
                   : "w-2 border-(--app-border) bg-(--app-surface-alt) hover:bg-(--app-primary-soft)"
               }`}

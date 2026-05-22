@@ -9,10 +9,16 @@ interface SalonGalleryProps {
   logo?: string | null;
 }
 
-export default function SalonGallery({ photos, logo }: SalonGalleryProps) {
+export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProps>) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const images = photos?.length ? photos.map((p) => ({ src: p.secure_url || p.url })) : logo ? [{ src: logo }] : [];
+
+  let images: { src: string }[] = [];
+  if (photos?.length) {
+    images = photos.map((p) => ({ src: p.secure_url || p.url }));
+  } else if (logo) {
+    images = [{ src: logo }];
+  }
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);

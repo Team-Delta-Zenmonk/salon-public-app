@@ -9,13 +9,11 @@ import { useActiveBookingActions } from "../../common/hooks/useActiveBookingActi
 import InfiniteScroll from "react-infinite-scroll-component";
 import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
-import { useNavigate } from "react-router-dom";
 import { ConfirmationDialog } from "../../components/dialogs";
 import styles from "./booking.module.scss";
 
 export default function Bookings() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const { bookings, total, page } = useAppSelector((state) => state.customerBooking);
   const { handleCancelActiveBooking, handleContinueActiveBooking, isCancelling, isContinuing } =
@@ -117,6 +115,46 @@ export default function Bookings() {
 
   const isProcessing = isContinuing || isCancelling;
 
+  const renderBookingList = () => {
+    if (isLoading) {
+      return (
+        <Box className="space-y-4">
+          <BookingSkeleton />
+          <BookingSkeleton />
+          <BookingSkeleton />
+        </Box>
+      );
+    }
+
+    if (bookings.length > 0) {
+      return bookings.map((booking, index) => (
+        <Fade in key={booking.uuid} style={{ transitionDelay: `${(index % 10) * 30}ms` }} timeout={400}>
+          <Box>
+            <BookingCard
+              booking={booking}
+              onPayNow={handlePayNow}
+              onCancel={handleOpenCancelDialog}
+              disabled={isProcessing}
+            />
+          </Box>
+        </Fade>
+      ));
+    }
+
+    return (
+      <Box className="py-12 text-center bg-(--app-surface) rounded-2xl border border-(--app-border) border-dashed">
+        <Typography variant="h6" className="text-(--app-muted) mb-1 font-semibold">
+          No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} bookings found
+        </Typography>
+        <Typography variant="body2" className="text-(--app-muted) opacity-80">
+          {tabValue === 0
+            ? "Start booking your first salon experience!"
+            : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} history is empty.`}
+        </Typography>
+      </Box>
+    );
+  };
+
   return (
     <Box className="flex flex-col h-full min-h-0 px-3 sm:px-4 lg:px-8 lg:pr-10 pt-4 sm:pt-6">
       <Box className="w-full shrink-0">
@@ -166,37 +204,7 @@ export default function Bookings() {
               ) : null
             }
           >
-            {isLoading ? (
-              <Box className="space-y-4">
-                <BookingSkeleton />
-                <BookingSkeleton />
-                <BookingSkeleton />
-              </Box>
-            ) : bookings.length > 0 ? (
-              bookings.map((booking, index) => (
-                <Fade in key={booking.uuid} style={{ transitionDelay: `${(index % 10) * 30}ms` }} timeout={400}>
-                  <Box>
-                    <BookingCard
-                      booking={booking}
-                      onPayNow={handlePayNow}
-                      onCancel={handleOpenCancelDialog}
-                      disabled={isProcessing}
-                    />
-                  </Box>
-                </Fade>
-              ))
-            ) : (
-              <Box className="py-12 text-center bg-(--app-surface) rounded-2xl border border-(--app-border) border-dashed">
-                <Typography variant="h6" className="text-(--app-muted) mb-1 font-semibold">
-                  No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} bookings found
-                </Typography>
-                <Typography variant="body2" className="text-(--app-muted) opacity-80">
-                  {tabValue === 0
-                    ? "Start booking your first salon experience!"
-                    : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} history is empty.`}
-                </Typography>
-              </Box>
-            )}
+            {renderBookingList()}
             {!isLoading && bookings.length > 0 && bookings.length < total && <Box className="h-6 w-full" />}
           </InfiniteScroll>
 

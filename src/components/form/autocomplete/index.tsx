@@ -56,17 +56,19 @@ const Autocomplete = <T extends FieldValues>({
                   {...params}
                   label={placeholder}
                   error={!!error?.type}
-                  InputLabelProps={{
-                    ...params.InputLabelProps,
-                    className: clsx(params.InputLabelProps?.className, styles.label, { [styles.disabledLabel]: disabled }),
+                  slotProps={{
+                    inputLabel: {
+                      ...params.InputLabelProps,
+                      className: clsx(params.InputLabelProps?.className, styles.label, {
+                        [styles.disabledLabel]: disabled,
+                      }),
+                    },
                   }}
                   data-test-id={`input-autocomplete-${identifier}`}
                 />
               )}
             />
-            {error && (
-              <FormHelperText data-test-id={`text-error-${identifier}`}>{error?.message}</FormHelperText>
-            )}
+            {error && <FormHelperText data-test-id={`text-error-${identifier}`}>{error?.message}</FormHelperText>}
           </FormControl>
         );
       }}

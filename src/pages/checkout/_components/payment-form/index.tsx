@@ -15,7 +15,29 @@ interface PaymentFormProps {
   isExpired: boolean;
 }
 
-export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
+interface DesktopButtonLabelProps {
+  processing: boolean;
+  isExpired: boolean;
+  totalPrice: number;
+}
+interface MobileButtonLabelProps {
+  processing: boolean;
+  isExpired: boolean;
+}
+
+function DesktopButtonLabel({ processing, isExpired, totalPrice }: Readonly<DesktopButtonLabelProps>) {
+  if (processing) return <CircularProgress size={22} color="inherit" />;
+  if (isExpired) return "Booking Expired";
+  return `Confirm & Pay ₹${totalPrice}`;
+}
+
+function MobileButtonLabel({ processing, isExpired }: Readonly<MobileButtonLabelProps>) {
+  if (processing) return <CircularProgress size={20} color="inherit" />;
+  if (isExpired) return "Expired";
+  return "Pay Now";
+}
+
+export default function PaymentForm({ booking, isExpired }: Readonly<PaymentFormProps>) {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -25,6 +47,8 @@ export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
 
   const [processing, setProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  const totalPrice = booking?.total_price || 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +62,7 @@ export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/bookings/success`,
+          return_url: `${globalThis.location.origin}/bookings/success`,
         },
         redirect: "if_required",
       });
@@ -121,13 +145,7 @@ export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
             disabled:opacity-50
           `}
         >
-          {processing ? (
-            <CircularProgress size={22} color="inherit" />
-          ) : isExpired ? (
-            "Booking Expired"
-          ) : (
-            `Confirm & Pay ₹${booking?.total_price || 0}`
-          )}
+          <DesktopButtonLabel processing={processing} isExpired={isExpired} totalPrice={totalPrice} />
         </Button>
         {!isExpired && !processing && (
           <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center" className="mt-3 opacity-60">
@@ -145,7 +163,7 @@ export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
             Total Amount
           </Typography>
           <Typography className="text-[18px] font-black text-[var(--app-primary)] leading-none mt-1">
-            ₹{booking?.total_price || 0}
+            ₹{totalPrice}
           </Typography>
         </Box>
         <Button
@@ -154,7 +172,7 @@ export default function PaymentForm({ booking, isExpired }: PaymentFormProps) {
           disabled={!stripe || processing || isExpired}
           className="rounded-full font-black px-8 h-11 text-sm normal-case bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary-soft)]"
         >
-          {processing ? <CircularProgress size={20} color="inherit" /> : isExpired ? "Expired" : "Pay Now"}
+          <MobileButtonLabel processing={processing} isExpired={isExpired} />
         </Button>
       </Box>
     </form>

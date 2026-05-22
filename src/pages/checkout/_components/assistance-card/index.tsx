@@ -1,16 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { useTheme } from "@mui/material/styles";
 
 interface AssistanceCardProps {
   phone?: string;
   isDesktop?: boolean;
 }
 
-export default function AssistanceCard({ phone, isDesktop = false }: AssistanceCardProps) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
+export default function AssistanceCard({ phone, isDesktop = false }: Readonly<AssistanceCardProps>) {
   return (
     <Box
       className={`

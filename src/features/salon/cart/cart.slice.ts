@@ -14,7 +14,7 @@ const sortItems = (items: any[]) => [...items].sort((a: any, b: any) => a.id - b
 interface CartState {
   cartUuid: string | null;
   salonId: string | null;
-  salon: any | null;
+  salon: any;
   items: any[];
   isGuest: boolean;
   loaded: boolean;
@@ -64,7 +64,7 @@ export const cartSlice = createSlice({
 
       item.staff_uuid = staff_uuid;
       item.staff = staff;
-      item.final_price = price ? parseFloat(String(price)) : item.base_price;
+      item.final_price = price ? Number.parseFloat(String(price)) : item.base_price;
       item.duration = duration ?? item.duration;
 
       setGuestCart({ salon: state.salon, items: state.items });

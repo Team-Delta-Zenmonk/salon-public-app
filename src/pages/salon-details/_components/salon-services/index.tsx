@@ -6,7 +6,7 @@ interface SalonServicesProps {
   salon: any;
 }
 
-export default function SalonServices({ services, salon }: SalonServicesProps) {
+export default function SalonServices({ services, salon }: Readonly<SalonServicesProps>) {
   const rootServices = services.filter((s) => s.parent_id === null);
 
   const subServicesMap = services.reduce<Record<number, any[]>>((acc, s) => {
