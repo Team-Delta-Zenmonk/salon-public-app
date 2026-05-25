@@ -149,7 +149,7 @@ const appThemes: AppThemeOption[] = [
 ];
 
 export const themeOptions = appThemes;
-export const defaultThemeId: AppThemeId = "luxuryBw";
+export const defaultThemeId: AppThemeId = "softGold";
 
 const getThemeOption = (themeId: AppThemeId) => appThemes.find((theme) => theme.id === themeId) ?? appThemes[0];
 
