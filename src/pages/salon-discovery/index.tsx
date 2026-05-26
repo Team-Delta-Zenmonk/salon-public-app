@@ -14,7 +14,6 @@ import { presetCategories } from "./constants/preset-categories";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "react-router-dom";
 import { TOP_INDIAN_CITIES } from "./constants/cities";
-const FALLBACK_LOCATION = { lat: 28.6139, lng: 77.209 }; // Delhi
 
 export default function SalonDiscovery() {
   const dispatch = useAppDispatch();
@@ -38,7 +37,7 @@ export default function SalonDiscovery() {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState(false);
 
-  const activeLocation = manualLocation || gpsLocation || (locationStatus === "error" ? FALLBACK_LOCATION : null);
+  const activeLocation = manualLocation || gpsLocation || null;
 
   const categoryOptions = useMemo(() => presetCategories.map((c: any) => ({ label: c.name, value: c.name })), []);
 
