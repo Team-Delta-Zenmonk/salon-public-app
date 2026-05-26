@@ -1,4 +1,5 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Fade, Typography } from "@mui/material";
+import { SalonCardSkeleton } from "./_components/salon-skeleton";
 import { useEffect, useMemo, useState } from "react";
 import SalonListView from "./_components/views/list-view";
 import SalonGridView from "./_components/views/grid-view";
@@ -29,6 +30,7 @@ export default function SalonDiscovery() {
     return found ? { lat: found.lat, lng: found.lng } : null;
   }, [city]);
 
+  console.log(salons, "salons from state");
   const [gpsLocation, setGpsLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
 
@@ -81,6 +83,7 @@ export default function SalonDiscovery() {
   };
 
   const fetchSalons = async () => {
+    console.log(activeLocation, "fetching salons with location");
     setIsLoadingInitial(true);
     await dispatch(
       listSalonsAction({
@@ -95,6 +98,7 @@ export default function SalonDiscovery() {
   };
 
   useEffect(() => {
+    if (!activeLocation) return;
     fetchSalons();
   }, [search, category, activeLocation]);
 
@@ -147,6 +151,29 @@ export default function SalonDiscovery() {
       >
         {viewMode === "map" ? (
           <MapView />
+        ) : isLoadingInitial ? (
+          viewMode === "list" ? (
+            <Box className="space-y-3 sm:space-y-4 px-2 sm:px-3 lg:px-4 pb-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <SalonCardSkeleton key={i} variant="list" />
+              ))}
+            </Box>
+          ) : (
+            <Box className="grid gap-2.5 sm:gap-4 lg:gap-5 px-2 sm:px-3 lg:px-4 pb-4 grid-cols-2 min-[1200px]:grid-cols-3">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <SalonCardSkeleton key={i} variant="grid" />
+              ))}
+            </Box>
+          )
+        ) : salons.length === 0 ? (
+          <Box className="py-12 text-center bg-(--app-surface) rounded-2xl border border-(--app-border) border-dashed mx-2 sm:mx-3 lg:mx-4">
+            <Typography variant="h6" className="text-(--app-muted) mb-1 font-semibold">
+              No salons found
+            </Typography>
+            <Typography variant="body2" className="text-(--app-muted) opacity-80">
+              Try adjusting your search or filters to find what you're looking for.
+            </Typography>
+          </Box>
         ) : (
           <InfiniteScroll
             scrollableTarget="scrollable-discovery"
@@ -159,7 +186,7 @@ export default function SalonDiscovery() {
               </Box>
             }
             endMessage={
-              salons.length > 0 && !isLoadingInitial ? (
+              salons.length > 0 ? (
                 <Box className="pb-8 pt-4">
                   <Typography variant="body2" className="text-(--app-muted) text-center font-medium opacity-60">
                     You've reached the end of the list
@@ -168,8 +195,12 @@ export default function SalonDiscovery() {
               ) : null
             }
           >
-            {viewMode === "list" && <SalonListView />}
-            {viewMode === "grid" && <SalonGridView />}
+            <Fade in timeout={400}>
+              <Box>
+                {viewMode === "list" && <SalonListView />}
+                {viewMode === "grid" && <SalonGridView />}
+              </Box>
+            </Fade>
           </InfiniteScroll>
         )}
       </Box>
