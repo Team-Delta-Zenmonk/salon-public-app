@@ -96,7 +96,6 @@ export default function SalonDiscovery() {
   };
 
   useEffect(() => {
-    if (!activeLocation) return;
     fetchSalons();
   }, [search, category, activeLocation]);
 
