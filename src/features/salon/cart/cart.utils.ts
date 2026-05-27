@@ -1,4 +1,5 @@
 const CART_KEY = "guest_cart";
+const PAYMENT_DONE_KEY = "payment_just_completed";
 
 export const getGuestCart = () => {
   const data = localStorage.getItem(CART_KEY);
@@ -14,4 +15,16 @@ export const setGuestCart = (cart: {
 
 export const clearGuestCart = () => {
   localStorage.removeItem(CART_KEY);
+};
+
+export const setPaymentCompleted = () => {
+  localStorage.setItem(PAYMENT_DONE_KEY, "1");
+};
+
+export const getPaymentCompleted = () => {
+  return localStorage.getItem(PAYMENT_DONE_KEY) === "1";
+};
+
+export const clearPaymentCompleted = () => {
+  localStorage.removeItem(PAYMENT_DONE_KEY);
 };

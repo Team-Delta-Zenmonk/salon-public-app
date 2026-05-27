@@ -4,6 +4,7 @@ import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../../store/hook";
 import { markPaymentCompleted } from "../../../../features/salon/bookings/booking.slice";
+import { setPaymentCompleted } from "../../../../features/salon/cart/cart.utils";
 import { callSnack } from "../../../../components/snackbar";
 import { useTheme } from "@mui/material/styles";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -75,6 +76,7 @@ export default function PaymentForm({ booking, isExpired }: Readonly<PaymentForm
 
       if (paymentIntent?.status === "succeeded" || paymentIntent?.status === "processing") {
         callSnack("Payment confirmed! 🎉", "success");
+        setPaymentCompleted();
         dispatch(markPaymentCompleted());
         navigate("/bookings/success", {
           state: { bookingUuid: booking.uuid, booking },

@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hook";
 import { formatDuration } from "../../common/date.utils";
 import { calculateTotals } from "../../common/cart.utils";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
+import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { getActiveBookingAction } from "../../features/salon/bookings/get-active-booking/get-active-booking.action";
 import { setBookingPhase, clearPaymentCompleted } from "../../features/salon/bookings/booking.slice";
 import { BookingPhase } from "../../common/booking.enums";
@@ -31,8 +32,8 @@ export default function Cart() {
   const { bookingPhase, activeBooking, paymentJustCompleted } = useAppSelector((s) => s.booking);
   const routeState = (location.state ?? null) as CartRouteState | null;
 
-  const didPaymentJustComplete = useRef(paymentJustCompleted);
-  const [isFetchingCart, setIsFetchingCart] = useState(isAuthenticated);
+  const [isFetchingCart, setIsFetchingCart] = useState(isAuthenticated && !!customer?.uuid);
+  const didPaymentJustComplete = useRef(paymentJustCompleted || getPaymentCompleted());
 
   useEffect(() => {
     if (didPaymentJustComplete.current) {
