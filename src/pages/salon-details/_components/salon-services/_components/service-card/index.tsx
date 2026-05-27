@@ -1,6 +1,6 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Avatar, Box, Button, Chip, Collapse, IconButton } from "@mui/material";
+import { Avatar, Box, Button, Chip, Collapse, IconButton, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../../../store/hook";
@@ -17,7 +17,9 @@ import { getCartAction } from "../../../../../../features/salon/cart/get-cart/ge
 export default function ServiceCard({ service, subServices, salon }: Readonly<{ service: any; subServices: any[]; salon: any }>) {
   const [open, setOpen] = useState(false);
   const [switchDialog, setSwitchDialog] = useState(false);
+  const [switchingCart, setSwitchingCart] = useState(false);
   const [pendingItem, setPendingItem] = useState<any>(null);
+  const [addingItemIds, setAddingItemIds] = useState<string[]>([]);
 
   const hasSubServices = subServices.length > 0;
   const { salonId } = useParams<{ salonId: string }>();
@@ -34,6 +36,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
   const handleSwitchCart = async () => {
     if (!pendingItem || !salonId) return;
 
+    setSwitchingCart(true);
     const payload = {
       service_id: pendingItem.uuid,
       duration: pendingItem.duration,
@@ -52,10 +55,11 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       callSnack("New cart created for this salon", "success");
     } catch (error: any) {
       callSnack(error?.message || error?.response?.data?.message || "Failed to switch cart", "error");
+    } finally {
+      setSwitchingCart(false);
+      setSwitchDialog(false);
+      setPendingItem(null);
     }
-
-    setSwitchDialog(false);
-    setPendingItem(null);
   };
 
   const onBook = async (item: any) => {
@@ -116,6 +120,8 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       return;
     }
 
+    setAddingItemIds((prev) => [...prev, item.uuid]);
+
     try {
       if (cart.cartUuid) {
         await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
@@ -127,6 +133,8 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       }
     } catch (error: any) {
       callSnack(error?.message || error?.response?.data?.message || "Failed to add item", "error");
+    } finally {
+      setAddingItemIds((prev) => prev.filter((id) => id !== item.uuid));
     }
   };
 
@@ -135,11 +143,10 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
 
   return (
     <Box
-      className={`border rounded-2xl overflow-hidden transition-all duration-250 ${
-        parentAdded
+      className={`border rounded-2xl overflow-hidden transition-all duration-250 ${parentAdded
           ? "border-(--app-primary) bg-linear-to-b from-(--app-primary-soft) to-(--app-surface) shadow-[0_14px_28px_rgba(15,23,42,0.14)]"
           : "border-(--app-border) bg-(--app-surface) shadow-[0_10px_24px_rgba(15,23,42,0.06)] hover:shadow-[0_16px_34px_rgba(15,23,42,0.12)]"
-      }`}
+        }`}
     >
       <Box className="flex flex-wrap sm:flex-nowrap items-start justify-between p-3.5 sm:p-5 gap-2.5 sm:gap-4">
         <Box className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0 w-full sm:w-auto">
@@ -196,12 +203,13 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
               size="small"
               variant={parentAdded ? "outlined" : "contained"}
               color={parentAdded ? "success" : "primary"}
-              className={`mt-1.5 sm:mt-2 !min-w-[4.8rem] sm:!min-w-[6.4rem] !min-h-0 h-7 sm:h-9.5 !px-2.5 !py-0.5 sm:!px-4 sm:!py-1.5 rounded-lg text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 border-0 ${
-                parentAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
-              }`}
+              disabled={addingItemIds.includes(service.uuid)}
+              className={`mt-1.5 sm:mt-2 !min-w-[4.8rem] sm:!min-w-[6.4rem] !min-h-0 h-7 sm:h-9.5 !px-2.5 !py-0.5 sm:!px-4 sm:!py-1.5 rounded-lg text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 border-0 ${parentAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
+                }`}
               onClick={() => !parentAdded && onBook(service)}
             >
-              {parentAdded ? "✓ Added" : "Book"}
+              {addingItemIds.includes(service.uuid) && <CircularProgress size={12} className="text-white mr-1 sm:mr-1.5" />}
+              {parentAdded ? "✓ Added" : addingItemIds.includes(service.uuid) ? "Booking..." : "Book"}
             </Button>
           )}
         </Box>
@@ -225,11 +233,10 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
               return (
                 <Box
                   key={sub.uuid}
-                  className={`flex items-center justify-between gap-3 sm:gap-4 py-3 px-2.5 sm:px-3 rounded-xl transition-all duration-200 ${
-                    subAdded
+                  className={`flex items-center justify-between gap-3 sm:gap-4 py-3 px-2.5 sm:px-3 rounded-xl transition-all duration-200 ${subAdded
                       ? "bg-(--app-primary-soft)/60 border border-(--app-primary)"
                       : "bg-(--app-surface) border border-(--app-border) hover:border-(--app-muted)"
-                  }`}
+                    }`}
                 >
                   <Box className="flex items-start gap-3 flex-1 min-w-0">
                     {sub.logo ? (
@@ -270,12 +277,13 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                     <Button
                       variant={subAdded ? "outlined" : "contained"}
                       color={subAdded ? "success" : "primary"}
-                      className={`mt-1.5 !min-w-[4.4rem] sm:!min-w-[5.8rem] !min-h-0 h-6 sm:h-8.5 !px-2 sm:!px-3.5 !py-0.5 sm:!py-1 rounded-lg text-[8px] sm:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-200 border-0 ${
-                        subAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
-                      }`}
+                      disabled={addingItemIds.includes(sub.uuid)}
+                      className={`mt-1.5 !min-w-[4.4rem] sm:!min-w-[5.8rem] !min-h-0 h-6 sm:h-8.5 !px-2 sm:!px-3.5 !py-0.5 sm:!py-1 rounded-lg text-[8px] sm:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-200 border-0 ${subAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
+                        }`}
                       onClick={() => !subAdded && onBook(sub)}
                     >
-                      {subAdded ? "✓ Added" : "Book"}
+                      {addingItemIds.includes(sub.uuid) && <CircularProgress size={10} className="text-white mr-1" />}
+                      {subAdded ? "✓ Added" : addingItemIds.includes(sub.uuid) ? "Adding..." : "Book"}
                     </Button>
                   </Box>
                 </Box>
@@ -287,6 +295,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
 
       <SwitchCartDialog
         open={switchDialog}
+        loading={switchingCart}
         currentCartItemsCount={currentCartItemsCount}
         newSalonName={service.salon_name || "this salon"}
         onConfirm={handleSwitchCart}

@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, Avatar, Typography, Box, Button } from "@mui/material";
+import { Dialog, DialogContent, Avatar, Typography, Box, Button, CircularProgress } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 
@@ -8,6 +8,7 @@ interface ConfirmStaffDialogProps {
   newStaff: { name: string; photo?: string } | null;
   price?: string | number;
   duration?: number;
+  loading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -18,6 +19,7 @@ export default function ConfirmStaffDialog({
   newStaff,
   price,
   duration,
+  loading,
   onConfirm,
   onCancel,
 }: Readonly<ConfirmStaffDialogProps>) {
@@ -117,6 +119,7 @@ export default function ConfirmStaffDialog({
             fullWidth
             variant="outlined"
             onClick={onCancel}
+            disabled={loading}
             className="rounded-xl font-semibold border-(--app-border) text-(--app-muted) hover:border-(--app-primary) hover:bg-(--app-primary-soft) normal-case"
           >
             Cancel
@@ -126,9 +129,11 @@ export default function ConfirmStaffDialog({
             variant="contained"
             disableElevation
             onClick={onConfirm}
+            disabled={loading}
             className="rounded-xl font-bold normal-case"
           >
-            {isChange ? "Change" : "Assign"}
+            {loading ? <CircularProgress size={16} className="text-white mr-2" /> : null}
+            {loading ? (isChange ? "Changing..." : "Assigning...") : (isChange ? "Change" : "Assign")}
           </Button>
         </Box>
       </DialogContent>

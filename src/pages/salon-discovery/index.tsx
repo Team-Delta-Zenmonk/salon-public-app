@@ -10,6 +10,7 @@ import type { LocationStatus } from "./constants/location-status.type";
 import { listSalonsAction } from "../../features/salon/list-salons/list-salons.action";
 import { SALON_PAGE_LIMIT } from "./constants/pagination.constants";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { resetSalon } from "../../features/salon/salon.slice";
 import { presetCategories } from "./constants/preset-categories";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSearchParams } from "react-router-dom";
@@ -30,7 +31,6 @@ export default function SalonDiscovery() {
     return found ? { lat: found.lat, lng: found.lng } : null;
   }, [city]);
 
-  console.log(salons, "salons from state");
   const [gpsLocation, setGpsLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
 
@@ -80,10 +80,13 @@ export default function SalonDiscovery() {
     );
   };
 
-  const fetchSalons = async () => {
-    console.log(activeLocation, "fetching salons with location");
+  useEffect(() => {
+    let isCurrent = true;
+
+    dispatch(resetSalon());
     setIsLoadingInitial(true);
-    await dispatch(
+
+    const promise = dispatch(
       listSalonsAction({
         page: 1,
         limit: SALON_PAGE_LIMIT,
@@ -92,11 +95,17 @@ export default function SalonDiscovery() {
         ...(activeLocation && { latitude: activeLocation.lat, longitude: activeLocation.lng }),
       }),
     );
-    setIsLoadingInitial(false);
-  };
 
-  useEffect(() => {
-    fetchSalons();
+    promise.finally(() => {
+      if (isCurrent) {
+        setIsLoadingInitial(false);
+      }
+    });
+
+    return () => {
+      isCurrent = false;
+      promise.abort();
+    };
   }, [search, category, activeLocation]);
 
   const fetchMoreData = async () => {

@@ -8,6 +8,7 @@ import {
   Box,
   Divider,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -15,6 +16,7 @@ interface SwitchCartDialogProps {
   open: boolean;
   currentCartItemsCount: number;
   newSalonName: string;
+  loading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -23,6 +25,7 @@ export default function SwitchCartDialog({
   open,
   currentCartItemsCount,
   newSalonName,
+  loading,
   onConfirm,
   onCancel,
 }: Readonly<SwitchCartDialogProps>) {
@@ -59,11 +62,12 @@ export default function SwitchCartDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} variant="outlined">
+        <Button onClick={onCancel} variant="outlined" disabled={loading}>
           Cancel
         </Button>
-        <Button onClick={onConfirm} variant="contained" color="primary" startIcon="➜">
-          Switch & Add Service
+        <Button onClick={onConfirm} variant="contained" color="primary" disabled={loading}>
+          {loading ? <CircularProgress size={16} className="text-white mr-2" /> : <span className="mr-1.5">➜</span>}
+          {loading ? "Switching..." : "Switch & Add Service"}
         </Button>
       </DialogActions>
     </Dialog>

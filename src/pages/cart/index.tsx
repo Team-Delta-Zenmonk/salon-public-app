@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Typography, Avatar, Button, Skeleton, Divider } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -32,11 +32,21 @@ export default function Cart() {
   const routeState = (location.state ?? null) as CartRouteState | null;
 
   const didPaymentJustComplete = useRef(paymentJustCompleted);
+  const [isFetchingCart, setIsFetchingCart] = useState(isAuthenticated);
 
   useEffect(() => {
-    if (didPaymentJustComplete.current) return;
+    if (didPaymentJustComplete.current) {
+      setIsFetchingCart(false);
+      return;
+    }
     if (isAuthenticated && customer?.uuid) {
-      dispatch(getCartAction(customer.uuid));
+      setIsFetchingCart(true);
+      dispatch(getCartAction(customer.uuid))
+        .unwrap()
+        .catch(() => {})
+        .finally(() => setIsFetchingCart(false));
+    } else {
+      setIsFetchingCart(false);
     }
   }, [dispatch, isAuthenticated, customer?.uuid]);
 
@@ -78,7 +88,7 @@ export default function Cart() {
     });
   };
 
-  if (!loaded) {
+  if (isFetchingCart || !loaded) {
     return (
       <Box className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-5">
         <Skeleton variant="rounded" height={176} className="rounded-3xl" />

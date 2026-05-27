@@ -1,14 +1,15 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, Box } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, Box, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 interface ConfirmRemoveItemDialogProps {
   open: boolean;
   serviceName?: string;
+  removing?: boolean;
   onCancel: () => void;
   onConfirm: () => void;
 }
 
-export default function ConfirmRemoveItemDialog({ open, serviceName, onCancel, onConfirm }: Readonly<ConfirmRemoveItemDialogProps>) {
+export default function ConfirmRemoveItemDialog({ open, serviceName, removing, onCancel, onConfirm }: Readonly<ConfirmRemoveItemDialogProps>) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -27,11 +28,12 @@ export default function ConfirmRemoveItemDialog({ open, serviceName, onCancel, o
       </DialogContent>
 
       <DialogActions className="px-6 pb-5">
-        <Button onClick={onCancel} color="inherit">
+        <Button onClick={onCancel} color="inherit" disabled={removing}>
           Cancel
         </Button>
-        <Button onClick={onConfirm} color="error" variant="contained">
-          Remove
+        <Button onClick={onConfirm} color="error" variant="contained" disabled={removing}>
+          {removing ? <CircularProgress size={16} className="text-white mr-2" /> : null}
+          {removing ? "Removing..." : "Remove"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -137,6 +137,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   const [staffList, setStaffList] = useState<any[]>([]);
   const [staffLoading, setStaffLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const [pendingStaffEntry, setPendingStaffEntry] = useState<any>(null);
   const [staffDialogOpen, setStaffDialogOpen] = useState(false);
 
@@ -210,13 +211,21 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     setPendingStaffEntry(null);
   };
 
-  const onConfirmRemove = () => {
+  const onConfirmRemove = async () => {
     if (isGuest) {
       dispatch(removeItemLocal(item.service_id));
+      setConfirmOpen(false);
     } else {
-      dispatch(removeCartItemAction(item.uuid));
+      setRemoving(true);
+      try {
+        await dispatch(removeCartItemAction(item.uuid)).unwrap();
+      } catch (error) {
+        console.error("Failed to remove item:", error);
+      } finally {
+        setRemoving(false);
+        setConfirmOpen(false);
+      }
     }
-    setConfirmOpen(false);
   };
 
   const currentStaffEntry = selectedStaffId ? staffList.find((e) => e.staff?.uuid === selectedStaffId) : null;
@@ -313,6 +322,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
       <ConfirmRemoveItemDialog
         open={confirmOpen}
         serviceName={name}
+        removing={removing}
         onCancel={() => setConfirmOpen(false)}
         onConfirm={onConfirmRemove}
       />
@@ -323,6 +333,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
         newStaff={newStaffInfo}
         price={pendingStaffEntry?.price}
         duration={pendingStaffEntry?.duration}
+        loading={updating}
         onConfirm={onConfirmStaff}
         onCancel={onCancelStaff}
       />
