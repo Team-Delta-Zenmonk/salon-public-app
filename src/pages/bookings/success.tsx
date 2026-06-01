@@ -7,7 +7,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { clearCart } from "../../features/salon/cart/cart.slice";
-import { clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
 import styles from "./success.module.scss";
@@ -31,7 +30,6 @@ export default function BookingSuccess() {
     hasClearedRef.current = true;
     dispatch(clearCart());
     dispatch(clearBookingSession());
-    clearPaymentCompleted();
   }, [dispatch]);
 
   useEffect(() => {

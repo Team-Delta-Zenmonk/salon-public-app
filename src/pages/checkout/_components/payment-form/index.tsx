@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Box, Typography, Button, CircularProgress, Stack } from "@mui/material";
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../../store/hook";
 import { markPaymentCompleted } from "../../../../features/salon/bookings/booking.slice";
 import { setPaymentCompleted } from "../../../../features/salon/cart/cart.utils";
@@ -14,6 +13,7 @@ import LockIcon from "@mui/icons-material/Lock";
 interface PaymentFormProps {
   booking: any;
   isExpired: boolean;
+  onPaymentSuccess: () => void;
 }
 
 interface DesktopButtonLabelProps {
@@ -38,10 +38,9 @@ function MobileButtonLabel({ processing, isExpired }: Readonly<MobileButtonLabel
   return "Pay Now";
 }
 
-export default function PaymentForm({ booking, isExpired }: Readonly<PaymentFormProps>) {
+export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Readonly<PaymentFormProps>) {
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate();
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const dispatch = useAppDispatch();
@@ -78,10 +77,7 @@ export default function PaymentForm({ booking, isExpired }: Readonly<PaymentForm
         callSnack("Payment confirmed! 🎉", "success");
         setPaymentCompleted();
         dispatch(markPaymentCompleted());
-        navigate("/bookings/success", {
-          state: { bookingUuid: booking.uuid, booking },
-          replace: true,
-        });
+        onPaymentSuccess();
       } else {
         setPaymentError("Payment was not completed. Please try again.");
         setProcessing(false);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Box, Typography, Tabs, Tab, Fade } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { getCustomerBookingsAction } from "../../features/customer-booking/get-customer-bookings/get-customer-bookings.action";
@@ -10,7 +10,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
+import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import styles from "./booking.module.scss";
+
+const WEBHOOK_SETTLE_DELAY_MS = 3000;
 
 export default function Bookings() {
   const dispatch = useAppDispatch();
@@ -25,6 +28,8 @@ export default function Bookings() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+
+  const paymentJustDone = useRef(getPaymentCompleted());
 
   const getStatusFromTab = (index: number) => {
     switch (index) {
@@ -45,6 +50,13 @@ export default function Bookings() {
     const fetchInitialData = async () => {
       setIsLoading(true);
       dispatch(resetCustomerBookings());
+
+      if (paymentJustDone.current) {
+        paymentJustDone.current = false;
+        clearPaymentCompleted();
+        await new Promise((resolve) => setTimeout(resolve, WEBHOOK_SETTLE_DELAY_MS));
+      }
+
       try {
         await dispatch(
           getCustomerBookingsAction({

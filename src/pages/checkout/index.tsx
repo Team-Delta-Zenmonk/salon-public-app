@@ -1,6 +1,8 @@
+import { useState, useCallback, useEffect } from "react";
 import { Box, Container, Typography, Paper } from "@mui/material";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { Elements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 import { stripePromise } from "../../common/stripe-client";
 import CheckoutHeader from "./_components/checkout-header";
 import MobileSummaryBar from "./_components/mobile-summary-bar";
@@ -9,23 +11,55 @@ import PaymentForm from "./_components/payment-form";
 import AssistanceCard from "./_components/assistance-card";
 import SecurityFooter from "./_components/security-footer";
 import ExpiryView from "./_components/expiry-view";
+import PaymentProcessing from "./_components/payment-processing";
+import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { useCheckoutData } from "./hooks/useCheckoutData";
 import { useStripeAppearance } from "./hooks/useStripeAppearance";
+
 interface PaymentPanelProps {
   clientSecret: string;
   stripeAppearance: ReturnType<typeof useStripeAppearance>;
   currentBooking: NonNullable<any>;
   isExpired: boolean;
   displaySalon: any;
+  onPaymentSuccess: () => void;
 }
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const { currentBooking, clientSecret, displaySalon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
     useCheckoutData();
 
   const stripeAppearance = useStripeAppearance();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePaymentSuccess = useCallback(() => {
+    setIsProcessing(true);
+  }, []);
+
+  const handleProcessingComplete = useCallback(() => {
+    navigate("/bookings/success", {
+      state: { bookingUuid: currentBooking?.uuid, booking: currentBooking },
+      replace: true,
+    });
+  }, [navigate, currentBooking]);
+
+  useEffect(() => {
+    if (!currentBooking && getPaymentCompleted()) {
+      navigate("/bookings", { replace: true });
+    }
+  }, [currentBooking, navigate]);
 
   if (!currentBooking || !clientSecret) return null;
+
+  if (isProcessing) {
+    return (
+      <PaymentProcessing
+        salonName={displaySalon?.name || "the salon"}
+        onComplete={handleProcessingComplete}
+      />
+    );
+  }
 
   return (
     <Box className="h-[100dvh] w-full bg-[var(--app-bg)] text-[var(--app-text)] flex flex-col relative overflow-y-auto">
@@ -55,6 +89,7 @@ export default function Checkout() {
                 currentBooking={currentBooking}
                 isExpired={isExpired}
                 displaySalon={displaySalon}
+                onPaymentSuccess={handlePaymentSuccess}
               />
             )}
           </Box>
@@ -82,6 +117,7 @@ function PaymentPanel({
   currentBooking,
   isExpired,
   displaySalon,
+  onPaymentSuccess,
 }: Readonly<PaymentPanelProps>) {
   return (
     <Box className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -95,7 +131,7 @@ function PaymentPanel({
         className="p-4 sm:p-8 bg-[var(--app-surface)] border border-[var(--app-border)] rounded-[24px] shadow-sm"
       >
         <Elements stripe={stripePromise} options={{ clientSecret, appearance: stripeAppearance }}>
-          <PaymentForm booking={currentBooking} isExpired={isExpired} />
+          <PaymentForm booking={currentBooking} isExpired={isExpired} onPaymentSuccess={onPaymentSuccess} />
         </Elements>
       </Paper>
 
