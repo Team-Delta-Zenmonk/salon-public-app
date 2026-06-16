@@ -13,6 +13,8 @@ export interface Salon {
   logo: string;
   address: string;
   type: Gender;
+  payment_policy: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  deposit_percentage: number | null;
   photos: SalonPhoto[];
   services: Service[];
   staff: Staff[];

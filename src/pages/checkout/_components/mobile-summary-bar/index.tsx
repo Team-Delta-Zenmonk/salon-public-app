@@ -30,7 +30,10 @@ export default function MobileSummaryBar({ salon, booking, dateStr }: Readonly<M
             <KeyboardArrowDownIcon className="text-[18px] text-[var(--app-muted)]" />
           )}
         </Stack>
-        <Typography className="text-sm font-black">₹{booking?.total_price}</Typography>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography className="text-[10px] font-bold text-[var(--app-muted)] uppercase mt-0.5">To Pay Now</Typography>
+          <Typography className="text-sm font-black text-[var(--app-primary)]">₹{booking?.deposit_amount ?? 0}</Typography>
+        </Stack>
       </Button>
 
       {expanded && (

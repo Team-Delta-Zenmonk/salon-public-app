@@ -27,6 +27,9 @@ export interface ActiveBooking {
   total_price: number;
   total_duration: number;
   status: string;
+  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  deposit_amount?: number;
+  amount_paid_online?: number;
   salon?: BookingSalon;
   booking_services?: BookingService[];
 }
@@ -40,6 +43,9 @@ export interface CurrentBooking {
   booking_date: string;
   expires_at: string;
   status: string;
+  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  deposit_amount?: number;
+  amount_paid_online?: number;
   salon?: BookingSalon;
   booking_services?: BookingService[];
 }
@@ -63,6 +69,9 @@ export interface CustomerBooking {
   booking_date: string;
   expires_at: string | null;
   status: string;
+  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  deposit_amount?: number;
+  amount_paid_online?: number;
   salon: BookingSalon;
   booking_services: BookingService[];
   created_at: string;
@@ -92,4 +101,5 @@ export interface CreateBookingPayload {
   cart_id: string;
   date: string;
   slot: Slot;
+  payment_preference?: "pay_at_venue" | "partial_deposit" | "full_upfront";
 }

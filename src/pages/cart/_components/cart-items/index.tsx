@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { removeItemLocal, updateItemLocalStaff } from "../../../../features/salon/cart/cart.slice";
 import { removeCartItemAction } from "../../../../features/salon/cart/remove-item/remove-item.action";
 import { updateCartItemAction } from "../../../../features/salon/cart/update-item/update-item.action";
+import { deleteCartAction } from "../../../../features/salon/cart/delete-cart/delete-cart.action";
 import ConfirmRemoveItemDialog from "../remove-item-dialog";
 import { getServiceStaffsAction } from "../../../../features/salon/staff/get-service-staffs/get-service-staffs.action";
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
@@ -132,7 +133,7 @@ function StaffSelector({
 
 export default function CartItem({ item }: Readonly<CartItemProps>) {
   const dispatch = useAppDispatch();
-  const { isGuest, salonId } = useAppSelector((s) => s.cart);
+  const { isGuest, salonId, items, cartUuid } = useAppSelector((s) => s.cart);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [staffList, setStaffList] = useState<any[]>([]);
   const [staffLoading, setStaffLoading] = useState(false);
@@ -218,7 +219,11 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     } else {
       setRemoving(true);
       try {
-        await dispatch(removeCartItemAction(item.uuid)).unwrap();
+        if (items.length === 1 && cartUuid) {
+          await dispatch(deleteCartAction(cartUuid)).unwrap();
+        } else {
+          await dispatch(removeCartItemAction(item.uuid)).unwrap();
+        }
       } catch (error) {
         console.error("Failed to remove item:", error);
       } finally {

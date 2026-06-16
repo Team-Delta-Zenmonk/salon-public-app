@@ -26,6 +26,18 @@ export default function SalonInfo({ salon }: Readonly<SalonInfoProps>) {
             {salon.type && <Chip label={salon.type} className="hidden sm:inline-flex bg-white/15 text-white border-white/20 capitalize h-7 sm:h-7.5 text-xs font-semibold" />}
             <Chip label={`${serviceCount} services`} className="hidden sm:inline-flex bg-white/15 text-white border-white/20 h-7 sm:h-7.5 text-xs font-semibold" />
             <Chip label={`${staffCount} experts`} className="bg-white/15 text-white border-white/20 h-7 sm:h-7.5 text-xs font-semibold" />
+            {salon.payment_policy && (
+              <Chip
+                label={
+                  salon.payment_policy === "pay_at_venue"
+                    ? "Pay at venue"
+                    : salon.payment_policy === "partial_deposit"
+                    ? `Requires ${salon.deposit_percentage || 0}% deposit to book`
+                    : "Full payment required to book"
+                }
+                className="bg-white/15 text-white border-white/20 h-7 sm:h-7.5 text-xs font-semibold"
+              />
+            )}
           </Box>
           <Typography className="text-white font-extrabold text-xl sm:text-2xl lg:text-3xl tracking-[-0.02em] leading-tight">
             {salon.name}

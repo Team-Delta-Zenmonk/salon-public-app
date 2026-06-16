@@ -91,7 +91,7 @@ function SlotPanelContent({
 export default function BookingPanel({ open, onClose }: Readonly<BookingPanelProps>) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { cartUuid: cartId, items } = useAppSelector((s) => s.cart);
+  const { cartUuid: cartId, items, salon } = useAppSelector((s) => s.cart);
   const { bookingPhase } = useAppSelector((s) => s.booking);
 
   const [slotsData, setSlotsData] = useState<{ date: string; slots: any[] }[]>([]);
@@ -143,7 +143,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
   const durationText = formatDuration(totalDuration);
   const currentDaySlots = selectedDate ? (slotsData.find((d) => d.date === selectedDate)?.slots ?? []) : [];
 
-  const handleConfirmSlot = async () => {
+  const handleConfirmSlot = async (paymentPreference: "pay_at_venue" | "partial_deposit" | "full_upfront") => {
     if (!cartId || !selectedDate || !selectedSlot || isCreating || isPaying) return;
 
     setIsCreating(true);
@@ -158,7 +158,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       };
 
       const createResult = await dispatch(
-        createBookingAction({ cartId, date: selectedDate, slot: mappedSlot }),
+        createBookingAction({ cartId, date: selectedDate, slot: mappedSlot, payment_preference: paymentPreference }),
       ).unwrap();
 
       if (createResult.action === BookingAction.ACTIVE_BOOKING_EXISTS) {
@@ -166,8 +166,20 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         return;
       }
 
+      const booking = createResult.booking;
+
+      if (booking.payment_policy === "pay_at_venue") {
+        setConfirmOpen(false);
+        onClose();
+        navigate("/bookings/success", {
+          state: { bookingUuid: booking.uuid, booking },
+          replace: true,
+        });
+        return;
+      }
+
       setIsPaying(true);
-      const paymentResult = await dispatch(createPaymentAction(createResult.booking.uuid)).unwrap();
+      const paymentResult = await dispatch(createPaymentAction(booking.uuid)).unwrap();
 
       if (paymentResult.clientSecret) {
         setConfirmOpen(false);
@@ -278,6 +290,8 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         date={selectedDate}
         slot={selectedSlot}
         totalPrice={totalPrice}
+        salonPaymentPolicy={salon?.payment_policy || "pay_at_venue"}
+        salonDepositPercentage={salon?.deposit_percentage}
         totalDuration={totalDuration}
         confirming={isCreating || isPaying}
       />

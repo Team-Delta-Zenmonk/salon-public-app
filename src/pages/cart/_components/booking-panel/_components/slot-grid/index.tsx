@@ -13,9 +13,24 @@ interface SlotGridProps {
 }
 
 const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any): boolean => {
+  const sStart = new Date(slotStart).getTime();
+  
+  const now = new Date();
+  const currentLocalAsUTC = Date.UTC(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds()
+  );
+
+  if (sStart < currentLocalAsUTC) {
+    return true;
+  }
+
   if (!activeBooking?.booking_start_time || !activeBooking?.booking_end_time) return false;
 
-  const sStart = new Date(slotStart).getTime();
   const sEnd = new Date(slotEnd).getTime();
   const bStart = new Date(activeBooking.booking_start_time).getTime();
   const bEnd = new Date(activeBooking.booking_end_time).getTime();

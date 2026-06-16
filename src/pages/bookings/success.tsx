@@ -172,14 +172,25 @@ export default function BookingSuccess() {
               </Box>
             </Box>
 
-            <Box className="p-5 bg-(--app-surface-alt)/40 flex items-center justify-between border-t border-(--app-border)">
-              <Typography className="text-[10px] font-black text-(--app-muted) uppercase tracking-wider">
-                Total Paid
-              </Typography>
-              <Typography className="text-[22px] sm:text-[26px] font-black text-(--app-primary) flex items-center leading-none">
-                <CurrencyRupeeIcon className="text-[18px] -mr-[2px]" />
-                {booking.total_price}
-              </Typography>
+            <Box className="p-5 bg-(--app-surface-alt)/40 flex flex-col gap-2 border-t border-(--app-border)">
+              <Box className="flex items-center justify-between">
+                <Typography className="text-[10px] font-black text-(--app-muted) uppercase tracking-wider">
+                  Amount Paid Online
+                </Typography>
+                <Typography className="text-[18px] sm:text-[22px] font-black text-(--app-primary) flex items-center leading-none">
+                  <CurrencyRupeeIcon className="text-[14px] -mr-[2px]" />
+                  {booking.amount_paid_online ?? booking.deposit_amount ?? 0}
+                </Typography>
+              </Box>
+              <Box className="flex items-center justify-between">
+                <Typography className="text-[10px] font-black text-(--app-muted) uppercase tracking-wider">
+                  To Pay at Venue
+                </Typography>
+                <Typography className="text-[18px] sm:text-[22px] font-black text-(--app-text) flex items-center leading-none">
+                  <CurrencyRupeeIcon className="text-[14px] -mr-[2px]" />
+                  {booking.total_price - (booking.amount_paid_online ?? booking.deposit_amount ?? 0)}
+                </Typography>
+              </Box>
             </Box>
           </Card>
 

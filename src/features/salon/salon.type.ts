@@ -13,6 +13,8 @@ export type Salon = {
   address?: string | null;
   logo?: string | null;
   distance?: number | null;
+  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  deposit_percentage?: number | null;
   categories?: SalonCategory[];
   created_at?: string;
   updated_at?: string;
