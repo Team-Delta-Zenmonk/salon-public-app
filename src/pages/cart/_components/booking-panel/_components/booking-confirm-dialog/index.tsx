@@ -14,6 +14,7 @@ interface BookingConfirmDialogProps {
   slot: any;
   totalPrice: number;
   salonPaymentPolicy: string;
+  salonAllowedPaymentPolicies?: string[];
   salonDepositPercentage?: number | null;
   totalDuration: number;
   confirming: boolean;
@@ -27,6 +28,7 @@ export default function BookingConfirmDialog({
   slot,
   totalPrice,
   salonPaymentPolicy,
+  salonAllowedPaymentPolicies,
   salonDepositPercentage,
   totalDuration,
   confirming,
@@ -34,16 +36,20 @@ export default function BookingConfirmDialog({
   const durationText = formatDuration(totalDuration);
   const dateObj = date ? new Date(date) : null;
 
+  const allowed = salonAllowedPaymentPolicies?.length
+    ? salonAllowedPaymentPolicies
+    : [salonPaymentPolicy || "pay_at_venue"];
+
   const defaultSelection =
-    salonPaymentPolicy === "full_upfront" ? "full_upfront" :
-    salonPaymentPolicy === "partial_deposit" ? "partial_deposit" :
+    allowed.includes("full_upfront") ? "full_upfront" :
+    allowed.includes("partial_deposit") ? "partial_deposit" :
     "pay_at_venue";
 
   const [selectedPayment, setSelectedPayment] = useState<"pay_at_venue" | "partial_deposit" | "full_upfront">(defaultSelection);
 
   useEffect(() => {
     setSelectedPayment(defaultSelection);
-  }, [salonPaymentPolicy, open]);
+  }, [salonPaymentPolicy, salonAllowedPaymentPolicies, open]);
 
   const partialDepositAmount = salonDepositPercentage ? Math.round(totalPrice * (salonDepositPercentage / 100)) : 0;
   
@@ -51,8 +57,9 @@ export default function BookingConfirmDialog({
   if (selectedPayment === "partial_deposit") currentDepositAmount = partialDepositAmount;
   else if (selectedPayment === "full_upfront") currentDepositAmount = totalPrice;
 
-  const isPayAtVenueDisabled = salonPaymentPolicy === "partial_deposit" || salonPaymentPolicy === "full_upfront";
-  const isPartialDepositDisabled = salonPaymentPolicy === "pay_at_venue" || salonPaymentPolicy === "full_upfront";
+  const isPayAtVenueDisabled = !allowed.includes("pay_at_venue");
+  const isPartialDepositDisabled = !allowed.includes("partial_deposit");
+  const isFullUpfrontDisabled = !allowed.includes("full_upfront");
 
   return (
     <Dialog
@@ -173,13 +180,14 @@ export default function BookingConfirmDialog({
 
             {/* Full Upfront */}
             <Box
-              onClick={() => setSelectedPayment("full_upfront")}
+              onClick={() => !isFullUpfrontDisabled && setSelectedPayment("full_upfront")}
               className={`flex items-center gap-3 p-3.5 rounded-xl border-[1.5px] transition-colors ${
                 selectedPayment === "full_upfront" ? "border-(--app-primary) bg-(--app-primary-soft)" : "border-(--app-border) bg-(--app-surface)"
-              } cursor-pointer`}
+              } ${isFullUpfrontDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             >
               <Radio 
                 checked={selectedPayment === "full_upfront"} 
+                disabled={isFullUpfrontDisabled}
                 size="small" 
                 className={`p-0 ${selectedPayment === "full_upfront" ? "text-(--app-primary)" : "text-(--app-muted)"}`}
               />
