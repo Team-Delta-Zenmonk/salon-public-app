@@ -10,19 +10,22 @@ import SalonDetail from "../pages/salon-details";
 import Cart from "../pages/cart";
 import Checkout from "../pages/checkout";
 import ProtectedRoute from "./protected-route";
+import UnProtectedRoute from "./unprotected-route";
 
 function AllRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<SignUp />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route element={<UnProtectedRoute />}>
+        <Route path="/" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Route>
       <Route element={<ProtectedRoute state={{ redirectTo: "/cart", resumeBooking: true }} />}>
         <Route path="/checkout" element={<Checkout />} />
       </Route>
       <Route element={<AppLayout />}>
-        <Route path="/salons" element={<SalonDiscovery />} />
-        <Route path="/salons/:salonId" element={<SalonDetail />} />
-        <Route path="/cart" element={<Cart />} />
+          <Route path="/salons" element={<SalonDiscovery />} />
+          <Route path="/salons/:salonId" element={<SalonDetail />} />
+          <Route path="/cart" element={<Cart />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/bookings/success" element={<BookingSuccess />} />
