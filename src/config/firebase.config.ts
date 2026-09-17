@@ -9,7 +9,6 @@ export type FirebaseConfig = {
 };
 
 export const GetFireBaseConfig = (firebaseConfig: FirebaseConfig) => {
-  // avoid re-init on Vite hot reload
   const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
   const auth = getAuth(firebaseApp);

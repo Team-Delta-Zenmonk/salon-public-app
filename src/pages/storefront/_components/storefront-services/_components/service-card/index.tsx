@@ -33,8 +33,10 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
 
   const formatPrice = (s: any) => (s.price_type === "from" ? `From ₹${s.price}` : `₹${s.price}`);
 
+  const effectiveSalonId = salonId || salon?.uuid;
+
   const handleSwitchCart = async () => {
-    if (!pendingItem || !salonId) return;
+    if (!pendingItem || !effectiveSalonId) return;
 
     setSwitchingCart(true);
     const payload = {
@@ -50,7 +52,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       }
       dispatch(clearCart());
 
-      await dispatch(createCartAction({ salon_id: salonId, user_id: customer!.uuid, items: [payload] })).unwrap();
+      await dispatch(createCartAction({ salon_id: effectiveSalonId, user_id: customer!.uuid, items: [payload] })).unwrap();
 
       callSnack("New cart created for this salon", "success");
     } catch (error: any) {
@@ -70,7 +72,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       base_price: item.price,
     };
 
-    if (!salonId) {
+    if (!effectiveSalonId) {
       callSnack("No salon selected", "error");
       return;
     }
@@ -81,7 +83,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
     }
 
     if (!isAuthenticated) {
-      if (cart.salonId && cart.salonId !== salonId) {
+      if (cart.salonId && cart.salonId !== effectiveSalonId) {
         dispatch(clearCart());
       }
       dispatch(
@@ -114,7 +116,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       return;
     }
 
-    if (cart.salonId && cart.salonId !== salonId && currentCartItemsCount > 0) {
+    if (cart.salonId && cart.salonId !== effectiveSalonId && currentCartItemsCount > 0) {
       setPendingItem(item);
       setSwitchDialog(true);
       return;
@@ -128,7 +130,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
         await dispatch(getCartAction(customer.uuid));
         callSnack("Added to cart", "success");
       } else {
-        await dispatch(createCartAction({ salon_id: salonId, user_id: customer.uuid, items: [payload] })).unwrap();
+        await dispatch(createCartAction({ salon_id: effectiveSalonId, user_id: customer.uuid, items: [payload] })).unwrap();
         callSnack("Cart created and item added", "success");
       }
     } catch (error: any) {

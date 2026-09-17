@@ -1,3 +1,5 @@
+import type { PaymentPolicy } from "./enums/payment-policy.enum";
+
 export interface BookingService {
   id: number;
   service_id: number;
@@ -27,7 +29,7 @@ export interface ActiveBooking {
   total_price: number;
   total_duration: number;
   status: string;
-  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  payment_policy?: PaymentPolicy;
   deposit_amount?: number;
   amount_paid_online?: number;
   salon?: BookingSalon;
@@ -43,7 +45,7 @@ export interface CurrentBooking {
   booking_date: string;
   expires_at: string;
   status: string;
-  payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  payment_policy?: PaymentPolicy;
   deposit_amount?: number;
   amount_paid_online?: number;
   salon?: BookingSalon;

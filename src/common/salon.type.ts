@@ -1,4 +1,10 @@
-export type Gender = "male" | "female" | "unisex";
+import type { Gender } from "./enums/gender.enum";
+import type { PaymentPolicy } from "./enums/payment-policy.enum";
+import type { PriceType } from "./enums/price-type.enum";
+
+export type { Gender } from "./enums/gender.enum";
+export type { PaymentPolicy } from "./enums/payment-policy.enum";
+export type { PriceType } from "./enums/price-type.enum";
 
 export interface SalonPhoto {
   url: string;
@@ -13,7 +19,7 @@ export interface Salon {
   logo: string;
   address: string;
   type: Gender;
-  payment_policy: "pay_at_venue" | "partial_deposit" | "full_upfront";
+  payment_policy: PaymentPolicy;
   deposit_percentage: number | null;
   photos: SalonPhoto[];
   services: Service[];
@@ -28,7 +34,7 @@ export interface Service {
   logo?: string;
   parent_id: number | null;
   gender: Gender;
-  price_type: "from" | "fixed";
+  price_type: PriceType;
   price: number;
   duration: number;
 }

@@ -126,7 +126,6 @@ export default function BookingConfirmDialog({
               CHOOSE PAYMENT PLAN
             </Typography>
 
-            {/* Pay at Venue */}
             <Box
               onClick={() => !isPayAtVenueDisabled && setSelectedPayment("pay_at_venue")}
               className={`flex items-center gap-3 p-3.5 rounded-xl border-[1.5px] transition-colors ${
@@ -152,7 +151,6 @@ export default function BookingConfirmDialog({
               </Box>
             </Box>
 
-            {/* Partial Deposit */}
             <Box
               onClick={() => !isPartialDepositDisabled && setSelectedPayment("partial_deposit")}
               className={`flex items-center gap-3 p-3.5 rounded-xl border-[1.5px] transition-colors ${
@@ -178,7 +176,6 @@ export default function BookingConfirmDialog({
               </Box>
             </Box>
 
-            {/* Full Upfront */}
             <Box
               onClick={() => !isFullUpfrontDisabled && setSelectedPayment("full_upfront")}
               className={`flex items-center gap-3 p-3.5 rounded-xl border-[1.5px] transition-colors ${

@@ -36,7 +36,7 @@ export default function MapPicker({ value, onChange, height = 300, disabled }: R
     onChange?.(newPos);
   };
 
-  const center: LatLngExpression = position ?? [28.6139, 77.209]; // Delhi
+  const center: LatLngExpression = position ?? [28.6139, 77.209];
 
   return (
     <MapContainer

@@ -10,9 +10,9 @@ services:
       - .env
     restart: always
     ports:
-      - ${APP_FORWARD_PORT:-3000}:${PORT:-3000}
+      - ${APP_FORWARD_PORT:-3001}:${PORT:-3001}
     expose:
-      - ${PORT:-3000}
+      - ${PORT:-3001}
     tty: true
     stdin_open: true
     volumes:

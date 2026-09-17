@@ -26,6 +26,8 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
     setThemeMenuAnchor(null);
   };
 
+  const activeSalonName = useAppSelector((state: RootState) => state.cart.salon?.name) || "Glow Salon";
+
   return (
     <AppBar position="sticky" elevation={0} color="transparent" className="bg-transparent">
       <Toolbar className="min-h-14 sm:min-h-16 px-3 sm:px-5">
@@ -33,8 +35,11 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
           <IconButton size="small" onClick={onMenuClick}>
             <MenuIcon />
           </IconButton>
-          <Box className="leading-tight min-w-0">
-            <Box className="font-semibold text-sm sm:text-base text-(--app-text) truncate">Salon App</Box>
+          <Box
+            className="leading-tight min-w-0 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <Box className="font-semibold text-sm sm:text-base text-(--app-text) truncate">{activeSalonName}</Box>
             <Box className="text-xs sm:text-sm text-(--app-muted) truncate">Discover & Book</Box>
           </Box>
         </Box>

@@ -7,22 +7,24 @@ import StaffModal from "./_components/staff-detail-dialog";
 
 interface SalonStaffProps {
   staff: any[];
+  salonId?: string;
 }
 
-export default function SalonStaff({ staff }: Readonly<SalonStaffProps>) {
+export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>) {
   const dispatch = useAppDispatch();
-  const { salonId } = useParams<{ salonId: string }>();
+  const { salonId: paramSalonId } = useParams<{ salonId: string }>();
+  const effectiveSalonId = salonId || paramSalonId;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const onStaffClick = async (member: any) => {
-    if (!salonId) return;
+    if (!effectiveSalonId) return;
     setModalOpen(true);
     setLoading(true);
     setSelectedStaff(null);
     try {
-      const data = await dispatch(getStaffAction({ staffUuid: member.uuid, salonId })).unwrap();
+      const data = await dispatch(getStaffAction({ staffUuid: member.uuid, salonId: effectiveSalonId })).unwrap();
       setSelectedStaff(data);
     } catch {
       setModalOpen(false);
