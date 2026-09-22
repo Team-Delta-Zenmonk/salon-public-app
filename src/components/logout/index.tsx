@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { persistor } from "../../store/store";
 import { callSnack } from "../snackbar";
 import { GoogleResponse } from "../../auth/get-google-response";
@@ -13,7 +13,7 @@ interface LogoutButtonProps {
 
 export default function LogoutButton({ collapsed = false }: Readonly<LogoutButtonProps>) {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const dispatch = useAppDispatch();
   const { logout } = GoogleResponse();
 

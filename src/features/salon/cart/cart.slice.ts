@@ -79,6 +79,13 @@ export const cartSlice = createSlice({
       });
     },
 
+    setCartSalon(state, action) {
+      if (!state.salon && action.payload) {
+        state.salon = action.payload;
+        state.salonId = action.payload.uuid;
+      }
+    },
+
     clearCart(state) {
       state.cartUuid = null;
       state.salonId = null;
@@ -151,6 +158,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItemLocal, clearCart, removeItemLocal, updateItemLocalStaff } = cartSlice.actions;
+export const { addItemLocal, clearCart, removeItemLocal, updateItemLocalStaff, setCartSalon } = cartSlice.actions;
 
 export default cartSlice.reducer;

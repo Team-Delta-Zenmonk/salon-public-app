@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { GoogleResponse } from "../../../auth/get-google-response";
 import { useAppDispatch } from "../../../store/hook";
 import { loginCustomerAction } from "../../../features/auth/login/login.action";
@@ -18,7 +19,7 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
   const [loading, setLoading] = useState(false);
   const { getSignInWithPopup } = GoogleResponse();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const location = useLocation();
   const routeState = (location.state ?? null) as AuthRedirectState | null;
 
@@ -38,7 +39,7 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
         return;
       }
 
-      navigate("/salons", { replace: true });
+      navigate("/", { replace: true });
     } catch {
       callSnack("Failed to sign in with Google. Please try again.", "error");
     } finally {

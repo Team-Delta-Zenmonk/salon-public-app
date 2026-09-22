@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hook";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "./useStorefrontNavigate";
 import { cancelBookingAction } from "../../features/salon/bookings/cancel-booking/cancel-booking.action";
 import { createPaymentAction } from "../../features/payments/create-payment/create-payment.action";
 import { continueExistingBooking, clearBookingSession } from "../../features/salon/bookings/booking.slice";
@@ -9,7 +9,7 @@ import type { ActiveBooking } from "../booking.types";
 
 export function useActiveBookingActions() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
 
   const [isCancelling, setIsCancelling] = useState(false);
   const [isContinuing, setIsContinuing] = useState(false);

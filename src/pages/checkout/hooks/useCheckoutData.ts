@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { useBookingExpiry } from "../../../common/hooks/useBookingExpiry";
 import { MONTH_SHORT, WEEKDAY_FULL } from "../../../common/date.constants";
 import { clearBookingSession } from "../../../features/salon/bookings/booking.slice";
 
 export function useCheckoutData() {
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const dispatch = useAppDispatch();
 
   const { currentBooking, clientSecret } = useAppSelector((s) => s.booking);

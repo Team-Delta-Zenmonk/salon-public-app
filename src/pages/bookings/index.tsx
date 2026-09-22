@@ -168,7 +168,7 @@ export default function Bookings() {
   };
 
   return (
-    <Box className="flex flex-col h-full min-h-0 px-3 sm:px-4 lg:px-8 lg:pr-10 pt-4 sm:pt-6">
+    <Box className="flex flex-col w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-4 sm:pt-6 pb-12">
       <Box className="w-full shrink-0">
         <Typography variant="h4" className="font-extrabold text-(--app-text) mb-4 sm:mb-6">
           My Bookings
@@ -189,15 +189,10 @@ export default function Bookings() {
         </Box>
       </Box>
 
-      <Box className="flex-1 min-h-0 relative">
-        <Box
-          id="scrollable-bookings"
-          className={`h-full overflow-y-auto w-full pt-2 pr-2 sm:pr-4 pl-2 ${styles.scrollableList}`}
-        >
-          <InfiniteScroll
-            scrollableTarget="scrollable-bookings"
-            dataLength={bookings.length}
-            next={fetchMoreData}
+      <Box className="w-full">
+        <InfiniteScroll
+          dataLength={bookings.length}
+          next={fetchMoreData}
             hasMore={total > 0 && bookings.length < total}
             loader={
               <Box className="mt-4 space-y-4">
@@ -233,6 +228,5 @@ export default function Bookings() {
           />
         </Box>
       </Box>
-    </Box>
   );
 }

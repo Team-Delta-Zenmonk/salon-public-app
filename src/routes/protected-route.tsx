@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "../store/hook";
+import { buildStorefrontUrl } from "../common/storefront-slug.utils";
 
 interface ProtectedRouteProps {
   redirectPath?: string;
@@ -11,7 +12,7 @@ const ProtectedRoute = ({ redirectPath = "/signup", state }: ProtectedRouteProps
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to={redirectPath} state={state || { from: location.pathname }} replace />;
+    return <Navigate to={buildStorefrontUrl(redirectPath)} state={state || { from: location.pathname }} replace />;
   }
 
   return <Outlet />;

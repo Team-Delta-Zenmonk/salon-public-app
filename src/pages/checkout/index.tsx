@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Box, Container, Typography, Paper } from "@mui/material";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { Elements } from "@stripe/react-stripe-js";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { stripePromise } from "../../common/stripe-client";
 import CheckoutHeader from "./_components/checkout-header";
 import MobileSummaryBar from "./_components/mobile-summary-bar";
@@ -26,7 +26,7 @@ interface PaymentPanelProps {
 }
 
 export default function Checkout() {
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const { currentBooking, clientSecret, displaySalon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
     useCheckoutData();
 
@@ -62,7 +62,7 @@ export default function Checkout() {
   }
 
   return (
-    <Box className="h-[100dvh] w-full bg-[var(--app-bg)] text-[var(--app-text)] flex flex-col relative overflow-y-auto">
+    <Box className="min-h-screen w-full bg-[var(--app-bg)] text-[var(--app-text)] flex flex-col relative">
       <Box className="fixed top-0 right-0 w-1/2 h-full bg-linear-to-br from-[rgba(var(--app-primary-rgb),0.03)] to-transparent clip-path-angled z-0 hidden lg:block" />
 
       <CheckoutHeader

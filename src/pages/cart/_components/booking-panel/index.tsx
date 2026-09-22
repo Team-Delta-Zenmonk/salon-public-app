@@ -15,7 +15,7 @@ import { createPaymentAction } from "../../../../features/payments/create-paymen
 import { BookingAction, BookingPhase } from "../../../../common/booking.enums";
 import BookingDateSelector from "./_components/booking-date-selector";
 import { callSnack } from "../../../../components/snackbar";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../../../common/hooks/useStorefrontNavigate";
 
 interface BookingPanelProps {
   open: boolean;
@@ -90,7 +90,7 @@ function SlotPanelContent({
 
 export default function BookingPanel({ open, onClose }: Readonly<BookingPanelProps>) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const { cartUuid: cartId, items, salon } = useAppSelector((s) => s.cart);
   const { bookingPhase } = useAppSelector((s) => s.booking);
 

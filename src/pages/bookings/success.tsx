@@ -4,7 +4,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { clearCart } from "../../features/salon/cart/cart.slice";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
@@ -13,7 +14,7 @@ import styles from "./success.module.scss";
 import clsx from "clsx";
 
 export default function BookingSuccess() {
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const hasClearedRef = useRef(false);
@@ -208,10 +209,10 @@ export default function BookingSuccess() {
               fullWidth
               variant="outlined"
               size="large"
-              onClick={() => navigate("/salons", { replace: true })}
+              onClick={() => navigate("/", { replace: true })}
               className="!rounded-2xl !py-3.5 sm:!py-4 !font-extrabold !text-[14px] !normal-case !border-2 !border-(--app-primary) !text-(--app-primary) !bg-(--app-surface) hover:!bg-(--app-surface-alt) hover:!-translate-y-0.5 !transition-all !duration-200"
             >
-              Back to Salons
+              Back to Salon Storefront
             </Button>
           </Box>
         </Box>

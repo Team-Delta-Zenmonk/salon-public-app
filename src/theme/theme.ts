@@ -227,7 +227,9 @@ export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
           body: {
             margin: 0,
             padding: 0,
-            overflow: "hidden",
+            overflowX: "hidden",
+            overflowY: "auto",
+            minHeight: "100%",
             color: selected.textMain,
             backgroundColor: selected.background,
           },

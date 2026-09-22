@@ -3,7 +3,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../../../common/hooks/useStorefrontNavigate";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { calculateTotals } from "../../../../common/cart.utils";
 import { formatDuration } from "../../../../common/date.utils";
@@ -22,7 +22,7 @@ export default function StorefrontBasket({
   variant = "both",
   onProceed,
 }: Readonly<StorefrontBasketProps>) {
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const dispatch = useAppDispatch();
   const cart = useAppSelector((state) => state.cart);
   const { isAuthenticated } = useAppSelector((state) => state.auth);

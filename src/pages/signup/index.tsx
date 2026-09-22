@@ -4,7 +4,7 @@ import SalonLoginCarousel from "../../components/login/login-carousel";
 
 export default function SignUp() {
   return (
-    <Box className="relative min-h-screen overflow-hidden bg-(--app-bg) px-4 py-8 sm:px-6 lg:px-10">
+    <Box className="relative min-h-screen overflow-x-hidden bg-(--app-bg) px-4 py-8 sm:px-6 lg:px-10">
       <Box className="pointer-events-none absolute inset-0 opacity-70">
         <Box className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-(--app-primary-soft) blur-3xl" />
         <Box className="absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-(--app-primary-soft) blur-3xl" />

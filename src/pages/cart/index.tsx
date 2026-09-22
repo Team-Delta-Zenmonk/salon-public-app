@@ -15,7 +15,8 @@ import { BookingPhase } from "../../common/booking.enums";
 import CartItem from "./_components/cart-items";
 import BookingPanel from "./_components/booking-panel";
 import ActiveBookingBanner from "./_components/active-booking-banner";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { callSnack } from "../../components/snackbar";
 
 interface CartRouteState {
@@ -25,7 +26,7 @@ interface CartRouteState {
 
 export default function Cart() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const location = useLocation();
   const { items, salon, loaded } = useAppSelector((s) => s.cart);
   const { isAuthenticated, customer } = useAppSelector((s) => s.auth);
@@ -103,14 +104,23 @@ export default function Cart() {
   if (!items.length) {
     return (
       <Box className="flex flex-col items-center justify-center p-10 sm:p-16 text-center gap-4">
-        <Box className="w-18 h-18 rounded-2xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
+        <Box className="w-18 h-18 rounded-3xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
           <StorefrontIcon className="text-[32px] text-(--app-muted)" />
         </Box>
         <Box>
-          <Typography className="font-bold text-lg text-(--app-text)">Your cart is empty</Typography>
-          <Typography variant="body2" color="text.secondary" className="mt-1 text-(--app-muted)">
-            Browse salons and add services to get started
+          <Typography className="font-editorial text-xl sm:text-2xl font-bold text-(--app-text)">
+            Your basket is currently empty
           </Typography>
+          <Typography variant="body2" className="mt-1 text-xs sm:text-sm text-(--app-muted) max-w-sm mx-auto">
+            Explore our curated menu of hair, skin, and wellness treatments to get started.
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/services")}
+            className="mt-4 rounded-full px-6 py-2.5 font-bold text-xs bg-(--app-primary) text-(--app-primary-contrast) normal-case"
+          >
+            Explore Services Menu
+          </Button>
         </Box>
       </Box>
     );
