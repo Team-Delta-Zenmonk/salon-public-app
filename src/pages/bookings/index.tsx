@@ -11,6 +11,7 @@ import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
+import { downloadInvoiceService } from "../../features/customer-booking/download-invoice/download-invoice.service";
 import styles from "./booking.module.scss";
 
 const WEBHOOK_SETTLE_DELAY_MS = 3000;
@@ -127,6 +128,22 @@ export default function Bookings() {
 
   const isProcessing = isContinuing || isCancelling;
 
+  const [downloadingUuid, setDownloadingUuid] = useState<string | null>(null);
+
+  const handleDownloadInvoice = async (booking: CustomerBooking) => {
+    try {
+      setDownloadingUuid(booking.uuid);
+      const url = await downloadInvoiceService(booking.uuid);
+      if (url) {
+        window.open(url, "_blank");
+      }
+    } catch (err) {
+      console.error("Failed to download invoice:", err);
+    } finally {
+      setDownloadingUuid(null);
+    }
+  };
+
   const renderBookingList = () => {
     if (isLoading) {
       return (
@@ -146,6 +163,8 @@ export default function Bookings() {
               booking={booking}
               onPayNow={handlePayNow}
               onCancel={handleOpenCancelDialog}
+              onDownloadInvoice={handleDownloadInvoice}
+              downloadingUuid={downloadingUuid}
               disabled={isProcessing}
             />
           </Box>
@@ -168,7 +187,7 @@ export default function Bookings() {
   };
 
   return (
-    <Box className="flex flex-col w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-4 sm:pt-6 pb-12">
+    <Box className="flex flex-col w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-4 sm:pt-6">
       <Box className="w-full shrink-0">
         <Typography variant="h4" className="font-extrabold text-(--app-text) mb-4 sm:mb-6">
           My Bookings
@@ -178,6 +197,9 @@ export default function Bookings() {
           <Tabs
             value={tabValue}
             onChange={(_, val) => setTabValue(val)}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             className={styles.tabs}
           >
             <Tab label="All" />
@@ -202,7 +224,7 @@ export default function Bookings() {
             }
             endMessage={
               bookings.length > 0 && !isLoading ? (
-                <Box className="pb-12 pt-6">
+                <Box className="pb-2 pt-4">
                   <Typography variant="body2" className="text-(--app-muted) text-center font-medium opacity-60">
                     You've reached the end of your {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()}{" "}
                     bookings

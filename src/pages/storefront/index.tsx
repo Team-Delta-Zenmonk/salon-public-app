@@ -153,7 +153,7 @@ export default function StorefrontPage() {
         )}
 
         {activeTab === "specialists" && (
-          <Box className="space-y-6 pb-16">
+          <Box className="space-y-6">
             <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
               <StorefrontStaff staff={salon?.staff || []} salonId={salon?.uuid} />
             </Box>

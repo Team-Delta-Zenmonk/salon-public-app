@@ -145,7 +145,7 @@ export default function ServicesPage() {
   }, [rootServices, searchQuery, selectedGender, selectedCategory, subServicesMap]);
 
   return (
-    <Box className="space-y-8 pb-24 lg:pb-12">
+    <Box className="space-y-4">
       {/* Editorial Header Section (Stitch Screen 2 Reference) */}
       <Box className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-(--app-border)">
         <Box className="space-y-1.5">

@@ -11,7 +11,7 @@ export default function SpecialistsPage() {
   const staff = salon?.staff || [];
 
   return (
-    <Box className="space-y-6 pb-20 lg:pb-12">
+    <Box className="space-y-6">
       {/* Header */}
       <Box className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Box>

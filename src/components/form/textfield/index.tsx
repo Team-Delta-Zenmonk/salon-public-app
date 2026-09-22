@@ -7,6 +7,7 @@ import { Controller, type FieldValues } from "react-hook-form";
 import ArrowButtons from "./_components/arrow-buttons";
 import styles from "./textfield.module.scss";
 import { type CustomTextFieldProps } from "./textfield.type";
+import { EllipsisCell } from "../../ellipse-cell";
 
 const TextField = <T extends FieldValues>({
   type,
@@ -64,127 +65,136 @@ const TextField = <T extends FieldValues>({
       name={name}
       control={control}
       rules={rules}
-      render={({ field: { onChange, value, onBlur, ref, ...others }, fieldState: { error } }) => (
-        <MuiTextField
-          fullWidth
-          disabled={disabled}
-          error={Boolean(error) && showError}
-          placeholder={placeholder}
-          helperText={error && showError ? error?.message : ""}
-          autoComplete="off"
-          label={label}
-          type={type}
-          inputRef={ref}
-          onKeyDown={(evt) => type === "number" && handleNumberChange(evt)}
-          onBeforeInput={(e) => {
-            const input = e.target as HTMLInputElement;
-            const { selectionStart, selectionEnd, value } = input;
-            const newValue = value.slice(0, selectionStart!) + (e.data ?? "") + value.slice(selectionEnd!);
-            if (extraSpacesNotAllowed && (!value?.trim() && !newValue.trim()) || value.replaceAll(/\s+/g, " ") === newValue.replaceAll(/\s+/g, " ")) {
-              e.preventDefault();
-              return;
-            }
-            if (pattern && !pattern.test(newValue)) {
-              e.preventDefault();
-            }
-          }}
-          onInput={handleInput}
-          slotProps={{
-            htmlInput: {
-              "data-test-id": `input-${identifier}`,
-              maxLength: maxLength,
-              className: startAdornment ? styles.inputWithStartAdornment : styles.input,
-            },
-            input: {
-              classes: { input: error && showError ? styles.errorPlaceholder : styles.placeholder },
-              className: clsx(styles.textfieldInput, inputPropsClassName),
-              startAdornment: startAdornment ?? null,
-              endAdornment:
-                type === "number" ? (
-                  <ArrowButtons
-                    endAdornmentClassName={endAdornmentClassName}
-                    onChange={onChange}
-                    value={value}
-                    error={error}
-                    identifier={identifier}
-                  />
-                ) : (
-                  endAdornment && (
-                    <InputAdornment
-                      className={
-                        endAdornmentClassName &&
-                        clsx(error && showError ? styles.endAdornmentError : styles[endAdornmentClassName])
-                      }
-                      position="end"
-                    >
-                      <Tooltip
-                        disableInteractive
-                        title={endAdornmentToolTipText}
-                        slotProps={{
-                          popper: {
-                            modifiers: [
-                              {
-                                name: "offset",
-                                options: {
-                                  offset: [0, -14],
-                                },
-                              },
-                            ],
-                          },
-                        }}
-                        data-test-id={`tooltip-end-adornment-${identifier}`}
-                      >
-                        <IconButton
-                          disableTouchRipple
-                          disableFocusRipple
-                          disableRipple
-                          data-test-id={`btn-end-adornment-${identifier}`}
-                          edge={"end"}
-                          onClick={() => onEndAdornmentClick?.(value!)}
-                          disabled={disabled}
-                          className={clsx(
-                            { errorText: error && showError },
-                            { [styles.highlightPrimaryIconButton]: highlightPrimaryIconButton }
-                          )}
-                          classes={{
-                            disabled: styles.disabledIconButton,
-                          }}
-                        >
-                          {endAdornment}
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  )
-                ),
-            },
-            formHelperText: {
-              ...({ "data-test-id": `text-error-${identifier}` } as any),
-            },
-            inputLabel: {
-              ...({ "data-test-id": `label-${identifier}` } as any),
-              classes: {
-                root: styles.label,
-                shrink: styles.shrunkLabel,
-                disabled: styles.disabledLabel,
+      render={({ field: { onChange, value, onBlur, ref, ...others }, fieldState: { error } }) => {
+        const valString = value !== undefined && value !== null ? String(value) : "";
+        const muiTextFieldElement = (
+          <MuiTextField
+            fullWidth
+            disabled={disabled}
+            error={Boolean(error) && showError}
+            placeholder={placeholder}
+            helperText={error && showError ? error?.message : ""}
+            autoComplete="off"
+            label={label}
+            type={type}
+            inputRef={ref}
+            onKeyDown={(evt) => type === "number" && handleNumberChange(evt)}
+            onBeforeInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              const { selectionStart, selectionEnd, value } = input;
+              const newValue = value.slice(0, selectionStart!) + (e.data ?? "") + value.slice(selectionEnd!);
+              if (extraSpacesNotAllowed && (!value?.trim() && !newValue.trim()) || value.replaceAll(/\s+/g, " ") === newValue.replaceAll(/\s+/g, " ")) {
+                e.preventDefault();
+                return;
+              }
+              if (pattern && !pattern.test(newValue)) {
+                e.preventDefault();
+              }
+            }}
+            onInput={handleInput}
+            slotProps={{
+              htmlInput: {
+                "data-test-id": `input-${identifier}`,
+                maxLength: maxLength,
+                className: startAdornment ? styles.inputWithStartAdornment : styles.input,
               },
-            },
-          }}
-          value={value ?? ""}
-          onBlur={handleBlur ?? onBlur}
-          {...others}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            if (handleChange) {
-              return handleChange(e);
-            }
-            if (!pattern || pattern?.test(newValue)) {
-              onChange(processChange ? processChange(newValue) : newValue);
-            }
-          }}
-          className={clsx(styles.textfield, { [styles.textfieldWithEndAdornment]: !!endAdornment })}
-          data-test-id={`textfield-${identifier}`}
-        />
-      )}
+              input: {
+                classes: { input: error && showError ? styles.errorPlaceholder : styles.placeholder },
+                className: clsx(styles.textfieldInput, inputPropsClassName),
+                startAdornment: startAdornment ?? null,
+                endAdornment:
+                  type === "number" ? (
+                    <ArrowButtons
+                      endAdornmentClassName={endAdornmentClassName}
+                      onChange={onChange}
+                      value={value}
+                      error={error}
+                      identifier={identifier}
+                    />
+                  ) : (
+                    endAdornment && (
+                      <InputAdornment
+                        className={
+                          endAdornmentClassName &&
+                          clsx(error && showError ? styles.endAdornmentError : styles[endAdornmentClassName])
+                        }
+                        position="end"
+                      >
+                        <Tooltip
+                          disableInteractive
+                          title={endAdornmentToolTipText}
+                          slotProps={{
+                            popper: {
+                              modifiers: [
+                                {
+                                  name: "offset",
+                                  options: {
+                                    offset: [0, -14],
+                                  },
+                                },
+                              ],
+                            },
+                          }}
+                          data-test-id={`tooltip-end-adornment-${identifier}`}
+                        >
+                          <IconButton
+                            disableTouchRipple
+                            disableFocusRipple
+                            disableRipple
+                            data-test-id={`btn-end-adornment-${identifier}`}
+                            edge={"end"}
+                            onClick={() => onEndAdornmentClick?.(value!)}
+                            disabled={disabled}
+                            className={clsx(
+                              { errorText: error && showError },
+                              { [styles.highlightPrimaryIconButton]: highlightPrimaryIconButton }
+                            )}
+                            classes={{
+                              disabled: styles.disabledIconButton,
+                            }}
+                          >
+                            {endAdornment}
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    )
+                  ),
+              },
+              formHelperText: {
+                ...({ "data-test-id": `text-error-${identifier}` } as any),
+              },
+              inputLabel: {
+                ...({ "data-test-id": `label-${identifier}` } as any),
+                classes: {
+                  root: styles.label,
+                  shrink: styles.shrunkLabel,
+                  disabled: styles.disabledLabel,
+                },
+              },
+            }}
+            value={value ?? ""}
+            onBlur={handleBlur ?? onBlur}
+            {...others}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              if (handleChange) {
+                return handleChange(e);
+              }
+              if (!pattern || pattern?.test(newValue)) {
+                onChange(processChange ? processChange(newValue) : newValue);
+              }
+            }}
+            className={clsx(styles.textfield, { [styles.textfieldWithEndAdornment]: !!endAdornment })}
+            data-test-id={`textfield-${identifier}`}
+          />
+        );
+
+        return (
+          <EllipsisCell value={valString} className="w-full min-w-0 block">
+            {muiTextFieldElement}
+          </EllipsisCell>
+        );
+      }}
     />
   );
 };

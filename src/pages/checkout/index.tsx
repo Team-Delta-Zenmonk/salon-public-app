@@ -76,7 +76,7 @@ export default function Checkout() {
 
       <Container
         maxWidth="lg"
-        className="px-4 relative z-10 mt-6 lg:mt-20 pb-20 lg:pb-10 flex-1 flex flex-col justify-center"
+        className="px-4 relative z-10 mt-6 lg:mt-20 flex-1 flex flex-col justify-center"
       >
         <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <Box className="lg:col-span-7 order-1 w-full">

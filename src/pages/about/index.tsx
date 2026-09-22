@@ -6,7 +6,7 @@ export default function AboutPage() {
   const { salon } = useStorefront();
 
   return (
-    <Box className="space-y-6 pb-20 lg:pb-12">
+    <Box className="space-y-6">
       <Box>
         <Typography className="text-xl sm:text-2xl font-black text-(--app-text) tracking-tight">
           About & Operational Hours

@@ -36,7 +36,7 @@ export default function StorefrontOverview({
   const popularServices = rootServices.slice(0, 4);
 
   return (
-    <Box className="space-y-6 sm:space-y-8 pb-12">
+    <Box className="space-y-6 sm:space-y-8">
       <Box className="relative overflow-hidden rounded-3xl border border-(--app-border) shadow-[0_20px_50px_rgba(15,23,42,0.14)]">
         <Box className="absolute inset-0 bg-linear-to-br from-(--app-hero-from)/90 via-(--app-primary)/85 to-(--app-hero-to)/90" />
         <Box className="absolute inset-0 bg-linear-to-t from-black/50 via-black/15 to-transparent" />

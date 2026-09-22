@@ -116,7 +116,7 @@ export default function StorefrontServices({
   };
 
   return (
-    <Box className="pb-16">
+    <Box>
       <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 mb-6 shadow-[0_10px_26px_rgba(15,23,42,0.05)] space-y-4">
         <Box className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <Box>

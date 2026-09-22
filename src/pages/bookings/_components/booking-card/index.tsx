@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Box, Button, Avatar, CircularProgress } from "@mui/material";
-import { CalendarToday, AccessTime, CurrencyRupee } from "@mui/icons-material";
+import { CalendarToday, AccessTime, CurrencyRupee, Download } from "@mui/icons-material";
 import { formatDateShortUTC, formatDateUTC, formatTimeUTC } from "../../../../common/date.utils";
 import type { CustomerBooking } from "../../../../common/booking.types";
 import { BookingStatus } from "../../../../common/booking.enums";
@@ -11,10 +11,19 @@ interface BookingCardProps {
   booking: CustomerBooking;
   onPayNow: (booking: CustomerBooking) => void;
   onCancel?: (booking: CustomerBooking) => void;
+  onDownloadInvoice?: (booking: CustomerBooking) => void;
+  downloadingUuid?: string | null;
   disabled?: boolean;
 }
 
-export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onCancel, disabled }) => {
+export const BookingCard: React.FC<BookingCardProps> = ({
+  booking,
+  onPayNow,
+  onCancel,
+  onDownloadInvoice,
+  downloadingUuid,
+  disabled,
+}) => {
   const isPending = booking.status === BookingStatus.PENDING;
   const isExpired = booking.expires_at && dayjs(booking.expires_at).isBefore(dayjs());
   const statusConfig = getBookingStatusConfig(isPending && isExpired ? BookingStatus.EXPIRED : booking.status);
@@ -74,7 +83,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
             <Typography className="text-[16px] font-black text-(--app-primary)">₹{booking.total_price}</Typography>
           </Box>
 
-          {(canPay || showCancel) && (
+          {(canPay || showCancel || (onDownloadInvoice && booking.status === BookingStatus.CONFIRMED)) && (
             <Box className="flex items-center gap-3">
               {canPay && (
                 <Button
@@ -85,6 +94,18 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
                   className="rounded-[14px] py-2.5 font-black bg-(--app-primary) text-(--app-primary-contrast) text-[12px] flex-1 shadow-lg shadow-(--app-primary-soft)/30"
                 >
                   {disabled ? <CircularProgress size={16} color="inherit" /> : "Pay Now"}
+                </Button>
+              )}
+              {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
+                <Button
+                  fullWidth={!canPay && !showCancel}
+                  variant="outlined"
+                  onClick={() => onDownloadInvoice(booking)}
+                  disabled={disabled || downloadingUuid === booking.uuid}
+                  startIcon={downloadingUuid === booking.uuid ? <CircularProgress size={14} color="inherit" /> : <Download fontSize="small" />}
+                  className="rounded-[14px] py-2.5 font-bold border text-[12px] flex-1 border-(--app-border) text-(--app-text)"
+                >
+                  Invoice
                 </Button>
               )}
               {showCancel && (
@@ -193,6 +214,17 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, onPayNow, onC
                 className="rounded-[14px] px-6 py-2 font-black bg-(--app-primary) text-(--app-primary-contrast) text-[12.5px] shadow-lg shadow-(--app-primary-soft)/20 h-9"
               >
                 {disabled ? <CircularProgress size={16} color="inherit" /> : "Pay Now"}
+              </Button>
+            )}
+            {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
+              <Button
+                variant="outlined"
+                onClick={() => onDownloadInvoice(booking)}
+                disabled={disabled || downloadingUuid === booking.uuid}
+                startIcon={downloadingUuid === booking.uuid ? <CircularProgress size={14} color="inherit" /> : <Download fontSize="small" />}
+                className="rounded-[14px] px-5 py-2 font-bold text-[12.5px] h-9 border border-(--app-border) text-(--app-text) hover:bg-(--app-surface-alt)"
+              >
+                Invoice
               </Button>
             )}
             {showCancel && (

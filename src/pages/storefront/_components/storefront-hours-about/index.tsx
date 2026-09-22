@@ -62,7 +62,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
   ];
 
   return (
-    <Box className="space-y-6 sm:space-y-8 pb-16">
+    <Box className="space-y-4">
       <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
         <Box className="flex items-center gap-3 mb-5 pb-4 border-b border-(--app-border)">
           <Box className="w-10 h-10 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center">

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppThemeMode } from "../../theme/theme-provider";
 import { themeOptions, type AppThemeId } from "../../theme/theme";
 import { useState } from "react";
+import EllipsisCell from "../ellipse-cell";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -36,10 +37,13 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
             <MenuIcon />
           </IconButton>
           <Box
-            className="leading-tight min-w-0 cursor-pointer"
+            className="leading-tight min-w-0 max-w-[160px] sm:max-w-[220px] cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <Box className="font-semibold text-sm sm:text-base text-(--app-text) truncate">{activeSalonName}</Box>
+            <EllipsisCell
+              value={activeSalonName}
+              className="font-semibold text-sm sm:text-base text-(--app-text) block"
+            />
             <Box className="text-xs sm:text-sm text-(--app-muted) truncate">Discover & Book</Box>
           </Box>
         </Box>
@@ -80,7 +84,9 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
               );
             })}
           </Menu>
-          <CartIcon count={cartCount} onClick={() => navigate("/cart")} />
+          <Box className="hidden md:block">
+            <CartIcon count={cartCount} onClick={() => navigate("/cart")} />
+          </Box>
           <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-(--app-primary-soft) text-(--app-text)">U</Avatar>
         </Box>
       </Toolbar>

@@ -39,8 +39,8 @@ export default function StorefrontFooter() {
   };
 
   return (
-    <Box component="footer" className="border-t border-(--app-border) bg-(--app-surface) mt-auto">
-      <Box className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+    <Box component="footer" className="border-t border-(--app-border) bg-(--app-surface) mt-auto pb-36 md:mb-0">
+      <Box className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
         <Box className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand & Narrative */}
           <Box className="space-y-3">

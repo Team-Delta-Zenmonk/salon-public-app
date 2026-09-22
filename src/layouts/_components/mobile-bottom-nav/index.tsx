@@ -29,7 +29,15 @@ export default function MobileBottomNav() {
       value={getActiveTab()}
       onChange={(_, next) => navigate(next)}
       showLabels
-      className="h-16 bg-(--app-surface)/95 backdrop-blur-md border-t border-(--app-border)"
+      className="h-16 w-full max-w-full bg-(--app-surface)/95 backdrop-blur-md border-t border-(--app-border) px-0 justify-between items-center"
+      sx={{
+        "& .MuiBottomNavigationAction-root": {
+          minWidth: 0,
+          maxWidth: "none",
+          flex: 1,
+          padding: "6px 0",
+        },
+      }}
     >
       <BottomNavigationAction
         label="Home"

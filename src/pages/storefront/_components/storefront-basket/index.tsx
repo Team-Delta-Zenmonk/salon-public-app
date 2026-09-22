@@ -157,7 +157,7 @@ export default function StorefrontBasket({
     if (items.length === 0) return null;
 
     return (
-      <Box className="lg:hidden fixed bottom-4 left-3 right-3 z-40">
+      <Box className="lg:hidden fixed bottom-5 left-3 right-3 z-40">
         <Box className="p-3 rounded-2xl border border-white/20 bg-black/90 backdrop-blur-xl shadow-[0_18px_36px_rgba(0,0,0,0.35)] flex items-center justify-between gap-3 text-white">
           <Box className="min-w-0 pl-1">
             <Box className="flex items-center gap-1.5">

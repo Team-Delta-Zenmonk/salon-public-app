@@ -118,7 +118,7 @@ export default function HomePage() {
   };
 
   return (
-    <Box className="space-y-16 sm:space-y-24 pb-16">
+    <Box className="space-y-16 sm:space-y-24">
       {/* 1. CINEMATIC EDITORIAL HERO (21st.dev Style) */}
       <section className="relative w-full overflow-hidden rounded-[2.5rem] bg-(--app-surface) border border-(--app-border) p-6 sm:p-10 lg:p-14 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.07)]">
         {/* Ambient mesh glows */}

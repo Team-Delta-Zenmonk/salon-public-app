@@ -23,7 +23,7 @@ export default function Profile() {
   };
 
   return (
-    <Box className="max-w-2xl mx-auto space-y-6 pb-20 lg:pb-12">
+    <Box className="max-w-2xl mx-auto space-y-6">
       <Box>
         <Typography className="text-xl sm:text-2xl font-black text-(--app-text) tracking-tight">
           My Account

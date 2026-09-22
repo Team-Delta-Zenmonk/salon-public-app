@@ -31,6 +31,7 @@ import { logout } from "../../../features/auth/auth.slice";
 import { useStorefront } from "../../../providers/storefront-provider";
 import { STOREFRONT_NAV_ITEMS } from "../../navigation";
 import { calculateTotals } from "../../../common/cart.utils";
+import EllipsisCell from "../../../components/ellipse-cell";
 
 export default function StorefrontHeader() {
   const navigate = useStorefrontNavigate();
@@ -72,12 +73,12 @@ export default function StorefrontHeader() {
       elevation={0}
       className="border-b border-(--app-border) bg-(--app-surface)/90 backdrop-blur-md z-30"
     >
-      <Toolbar className="h-16 px-4 sm:px-8 flex items-center justify-between gap-4 max-w-7xl mx-auto w-full">
+      <Toolbar className="h-16 px-2.5 sm:px-8 flex items-center justify-between gap-1.5 sm:gap-4 max-w-7xl mx-auto w-full">
         {/* Salon Brand (Editorial Stitch Style) */}
-        <Box className="flex items-center gap-3 shrink-0">
+        <Box className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
           <IconButton
             size="small"
-            className="md:hidden text-(--app-text) -ml-1.5"
+            className="md:hidden text-(--app-text) -ml-1"
             onClick={() => setMobileDrawerOpen(true)}
             aria-label="Open navigation menu"
           >
@@ -85,7 +86,7 @@ export default function StorefrontHeader() {
           </IconButton>
 
           <Box
-            className="flex items-center gap-3 cursor-pointer min-w-0 group"
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer min-w-0 group"
             onClick={() => navigate("/")}
           >
             <Box className="relative flex items-center justify-center shrink-0">
@@ -94,30 +95,31 @@ export default function StorefrontHeader() {
                   src={salon.logo}
                   alt={salonName}
                   variant="rounded"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-(--app-border) object-cover"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-(--app-border) object-cover"
                 />
               ) : (
                 <Avatar
                   variant="rounded"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-(--app-primary) text-(--app-primary-contrast) font-bold text-sm font-editorial"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-(--app-primary) text-(--app-primary-contrast) font-bold text-xs sm:text-sm font-editorial"
                 >
                   {salonName[0] || "S"}
                 </Avatar>
               )}
               <Box
-                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-(--app-primary) text-(--app-primary-contrast) flex items-center justify-center ring-2 ring-(--app-surface)"
+                className="absolute -bottom-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-(--app-primary) text-(--app-primary-contrast) flex items-center justify-center ring-2 ring-(--app-surface)"
                 title="Verified ZenMonk Venue"
               >
-                <VerifiedOutlinedIcon className="text-[11px]" />
+                <VerifiedOutlinedIcon className="text-[9px] sm:text-[11px]" />
               </Box>
             </Box>
 
-            <Box className="min-w-0">
-              <Typography className="font-editorial text-base sm:text-lg font-bold text-(--app-text) truncate leading-tight tracking-tight group-hover:text-(--app-primary) transition-colors">
-                {salonName}
-              </Typography>
+            <Box className="min-w-0 max-w-[100px] xs:max-w-[130px] sm:max-w-[220px]">
+              <EllipsisCell
+                value={salonName}
+                className="font-editorial text-xs sm:text-lg font-bold text-(--app-text) block leading-tight tracking-tight group-hover:text-(--app-primary) transition-colors"
+              />
               <Box className="flex items-center gap-1.5 mt-0.5">
-                <span className="inline-flex items-center px-1.5 py-0.2 rounded-full bg-(--app-surface-alt) text-(--app-muted) text-[10px] font-semibold uppercase tracking-wider">
+                <span className="inline-flex items-center px-1.5 py-0.2 rounded-full bg-(--app-surface-alt) text-(--app-muted) text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider">
                   {salon?.type || "Boutique"} Atelier
                 </span>
               </Box>
@@ -191,7 +193,7 @@ export default function StorefrontHeader() {
           <button
             onClick={() => navigate("/cart")}
             type="button"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110 transition-all shadow-[0_2px_10px_rgba(15,23,42,0.15)] cursor-pointer"
+            className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110 transition-all shadow-[0_2px_10px_rgba(15,23,42,0.15)] cursor-pointer"
             aria-label="View Cart"
           >
             <ShoppingBagOutlinedIcon className="text-[17px] text-amber-300" />
@@ -289,7 +291,7 @@ export default function StorefrontHeader() {
         open={mobileDrawerOpen}
         onClose={() => setMobileDrawerOpen(false)}
         PaperProps={{
-          className: "w-72 bg-(--app-surface) border-r border-(--app-border) p-4 flex flex-col justify-between",
+          className: "w-60 h-full bg-(--app-surface) border-r border-(--app-border) p-4 flex flex-col justify-between overflow-hidden",
         }}
       >
         <Box>

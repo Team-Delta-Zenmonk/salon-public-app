@@ -11,7 +11,7 @@ export default function AppLayout() {
       <Box className="min-h-screen bg-(--app-bg) flex flex-col">
         <StorefrontHeader />
 
-        <Box component="main" className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 pb-20 md:pb-8">
+        <Box component="main" className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 pb-4 md:pb-8">
           <Outlet />
         </Box>
 
