@@ -168,7 +168,7 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
           type="submit"
           variant="contained"
           disabled={!stripe || processing || isExpired}
-          className="rounded-full font-black px-8 h-11 text-sm normal-case bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary-soft)]"
+          className="rounded-full font-black px-8 h-11 normal-case shadow-lg shadow-[var(--app-primary-soft)]"
         >
           <MobileButtonLabel processing={processing} isExpired={isExpired} />
         </Button>

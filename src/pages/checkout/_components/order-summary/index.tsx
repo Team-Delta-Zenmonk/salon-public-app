@@ -62,24 +62,24 @@ export default function OrderSummary({ salon, booking, dateStr }: Readonly<Order
         </Stack>
       </Box>
 
-      <Box className="p-4 bg-[var(--app-primary)] text-white">
+      <Box className="p-4 bg-[var(--app-surface-alt)] border-t border-[var(--app-border)]">
         <Box className="flex justify-between items-center">
           <Box>
-            <Typography className="text-[10px] font-extrabold text-white/90 uppercase tracking-wider">
+            <Typography className="text-[10px] font-extrabold text-[var(--app-text)] uppercase tracking-wider">
               Service Total
             </Typography>
-            <Typography className="text-[9px] text-white/70 font-semibold">Inc. all taxes</Typography>
+            <Typography className="text-[9px] text-[var(--app-muted)] font-semibold">Inc. all taxes</Typography>
           </Box>
-          <Typography className="text-[1.25rem] font-black text-white">₹{booking.total_price}</Typography>
+          <Typography className="text-[1.25rem] font-black text-[var(--app-primary)]">₹{booking.total_price}</Typography>
         </Box>
-        <Box className="mt-3 pt-3 border-t border-white/20">
+        <Box className="mt-3 pt-3 border-t border-[var(--app-border)]">
           <Box className="flex justify-between items-center mb-1.5">
-             <Typography className="text-[11px] font-semibold text-white/90">To Pay Now</Typography>
-             <Typography className="text-[14px] font-black text-white">₹{booking.deposit_amount ?? 0}</Typography>
+             <Typography className="text-[11px] font-semibold text-[var(--app-muted)]">To Pay Now</Typography>
+             <Typography className="text-[14px] font-black text-[var(--app-text)]">₹{booking.deposit_amount ?? 0}</Typography>
           </Box>
           <Box className="flex justify-between items-center">
-             <Typography className="text-[11px] font-semibold text-white/90">To Pay at Venue</Typography>
-             <Typography className="text-[14px] font-black text-white">₹{booking.total_price - (booking.deposit_amount ?? 0)}</Typography>
+             <Typography className="text-[11px] font-semibold text-[var(--app-muted)]">To Pay at Venue</Typography>
+             <Typography className="text-[14px] font-black text-[var(--app-text)]">₹{booking.total_price - (booking.deposit_amount ?? 0)}</Typography>
           </Box>
         </Box>
       </Box>

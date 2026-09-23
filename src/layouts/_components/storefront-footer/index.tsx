@@ -1,119 +1,98 @@
-import { Box, Typography, Button, Divider } from "@mui/material";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
-import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
+import { Box, Typography } from "@mui/material";
 import { useStorefront } from "../../../providers/storefront-provider";
 
 export default function StorefrontFooter() {
   const { salon } = useStorefront();
 
-  const currentDayIndex = new Date().getDay();
-  const currentDayKey = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ][currentDayIndex];
-
-  const getTodayHours = () => {
-    const raw = salon?.business_hours?.[currentDayKey] ?? salon?.business_hours?.[currentDayKey.slice(0, 3)];
-    if (!raw) return "09:00 AM - 08:00 PM";
-    if (typeof raw === "string") return raw;
-    if (raw.is_closed) return "Closed Today";
-    const start = raw.start_time || raw.open || "09:00 AM";
-    const end = raw.end_time || raw.close || "08:00 PM";
-    return `${start} - ${end}`;
-  };
-
-  const paymentPolicies = salon?.allowed_payment_policies || ["pay_at_venue"];
-  const formatPolicy = (p: string) => {
-    if (p === "pay_at_venue") return "Pay at Venue";
-    if (p === "pay_in_advance") return "Online Payment";
-    if (p === "deposit") return `${salon?.deposit_percentage || 20}% Deposit`;
-    return p.replace(/_/g, " ");
-  };
+  const salonName = salon?.name?.toUpperCase() || "CRIMSON & SHEAR";
 
   return (
-    <Box component="footer" className="border-t border-(--app-border) bg-(--app-surface) mt-auto pb-36 md:mb-0">
-      <Box className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
-        <Box className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          {/* Brand & Narrative */}
-          <Box className="space-y-3">
-            <Box className="flex items-center gap-2">
-              <Typography className="font-extrabold text-base sm:text-lg text-(--app-text)">
-                {salon?.name}
-              </Typography>
-              <VerifiedOutlinedIcon className="text-emerald-500 text-[18px]" />
-            </Box>
-            {salon?.about && (
-              <Typography className="text-xs text-(--app-muted) leading-relaxed line-clamp-3">
-                {salon.about}
-              </Typography>
-            )}
-            <Typography className="text-[11px] text-(--app-muted) capitalize">
-              {salon?.type || "Unisex Salon"} • Certified Salon Partner
-            </Typography>
-          </Box>
+    <footer className="mt-auto bg-[var(--app-surface)] border-t border-[var(--app-border)] pt-16 pb-20 md:pb-12 text-[var(--app-text)]">
+      <div className="px-4 md:px-12 max-w-[1440px] mx-auto">
+        {/* Top Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-[var(--app-border)]">
+          {/* Atelier Brand Intro */}
+          <div className="md:col-span-1 flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg overflow-hidden bg-[var(--app-surface-alt)] p-0.5 shrink-0 border border-[var(--app-border)]">
+                <img
+                  alt="Scissors & Comb Sparkle Brand Icon"
+                  className="w-full h-full object-cover rounded-md"
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1XYBNkbZmqEwkR3adhjz9QTOyWbaMxUk-gfuu_Mge1ZI579t29IMLyeogxRK2lexlZXOkzRqxVeSVLaaGoLBAe9cRHHB9JMnXg9N0hIqs_TGliGBA4Yfpq7vXPs9LsvA_EY0trF4-zxLyEM8Z-R_Ns_Z7QtVvmTVwqR8x54ElH1DUCaGNI5ufS5JuyYytDDZQ8UXnNQpj4jWA1XwMCvOb_CIzGfbxU9apPJ2Yf2dx3sbB9Gj2A2Lt3-8UY"
+                />
+              </div>
+              <span className="font-editorial text-lg text-[var(--app-text)] font-semibold tracking-wide">
+                {salonName}
+              </span>
+            </div>
+            <p className="text-xs text-[var(--app-muted)] leading-relaxed">
+              {salon?.about ||
+                "The epicenter of luxury coiffure and bespoke dermal treatments. Where master craftsmanship meets sensory relaxation."}
+            </p>
+          </div>
 
-          {/* Operating Hours & Payment */}
-          <Box className="space-y-3">
-            <Typography className="font-bold text-xs uppercase tracking-wider text-(--app-text)">
-              Working Hours & Policies
-            </Typography>
-            <Box className="flex items-center gap-2 text-xs text-(--app-muted)">
-              <AccessTimeOutlinedIcon className="text-[16px] text-(--app-primary)" />
-              <span>Today: {getTodayHours()}</span>
-            </Box>
-            <Box className="flex items-center gap-2 text-xs text-(--app-muted)">
-              <CreditCardOutlinedIcon className="text-[16px] text-(--app-primary)" />
-              <span>Accepted: {paymentPolicies.map(formatPolicy).join(", ")}</span>
-            </Box>
-          </Box>
+          {/* Hours of Ceremony */}
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
+              Hours of Ceremony
+            </span>
+            <ul className="text-xs text-[var(--app-muted)] space-y-1.5 list-none p-0 m-0">
+              <li className="flex justify-between">
+                <span>Mon - Thu</span> <span className="text-[var(--app-text)]">10:00 AM – 8:30 PM</span>
+              </li>
+              <li className="flex justify-between">
+                <span>Fri - Sat</span> <span className="text-[var(--app-text)]">9:00 AM – 9:30 PM</span>
+              </li>
+              <li className="flex justify-between">
+                <span>Sunday</span> <span className="text-[var(--app-text)]">11:00 AM – 6:00 PM</span>
+              </li>
+            </ul>
+          </div>
 
-          {/* Address & Navigation */}
-          <Box className="space-y-3">
-            <Typography className="font-bold text-xs uppercase tracking-wider text-(--app-text)">
-              Location & Contact
-            </Typography>
-            {salon?.address && (
-              <Box className="flex items-start gap-2 text-xs text-(--app-muted)">
-                <LocationOnOutlinedIcon className="text-[16px] text-(--app-primary) shrink-0 mt-0.5" />
-                <span>{salon.address}</span>
-              </Box>
-            )}
-            {salon?.map_link && (
-              <Button
-                component="a"
-                href={salon.map_link}
-                target="_blank"
-                rel="noreferrer"
-                size="small"
-                variant="outlined"
-                startIcon={<MapOutlinedIcon className="text-[14px]" />}
-                className="rounded-xl text-xs font-semibold normal-case border-(--app-border) text-(--app-text) hover:bg-(--app-surface-alt)"
-              >
-                Open in Google Maps
-              </Button>
-            )}
-          </Box>
-        </Box>
+          {/* Etiquette Charter */}
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
+              Etiquette Charter
+            </span>
+            <p className="text-xs text-[var(--app-muted)] leading-relaxed">
+              We preserve a tranquil sanctuary. Devices must remain on silent mode. 24-hour advance cancellation requested for private VIP suites.
+            </p>
+          </div>
 
-        <Divider className="border-(--app-border)" />
+          {/* Private Salon Location */}
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
+              Sanctuary Location
+            </span>
+            <p className="text-xs text-[var(--app-muted)] leading-relaxed">
+              {salon?.address || "484 Avenue Montaigne, Flagship Studio"}
+              <br />
+              {salon?.phone ? `Concierge: ${salon.phone}` : "concierge@crimsonandshear.com"}
+            </p>
+          </div>
+        </div>
 
-        <Box className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-(--app-muted)">
-          <Typography className="text-[11px]">
-            © {new Date().getFullYear()} {salon?.name}. All rights reserved.
-          </Typography>
-          <Typography className="text-[11px] text-(--app-muted)">
-            Powered by ZenMonk Platform
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+        {/* Bottom Bar Links & Copyright */}
+        <div className="flex flex-col md:flex-row justify-between items-center w-full py-6 gap-4">
+          <span className="text-xs text-[var(--app-muted)] text-center md:text-left">
+            © {new Date().getFullYear()} {salonName} Haute Coiffure. All rights reserved.
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-[11px]">
+            <a className="text-[var(--app-muted)] hover:text-[var(--app-primary)] tracking-wider uppercase transition-colors" href="#">
+              Editorial Lookbook
+            </a>
+            <a className="text-[var(--app-muted)] hover:text-[var(--app-primary)] tracking-wider uppercase transition-colors" href="#">
+              Master Artists
+            </a>
+            <a className="text-[var(--app-muted)] hover:text-[var(--app-primary)] tracking-wider uppercase transition-colors" href="#">
+              Private Consultations
+            </a>
+            <a className="text-[var(--app-muted)] hover:text-[var(--app-primary)] tracking-wider uppercase transition-colors" href="#">
+              Terms & Etiquette
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }

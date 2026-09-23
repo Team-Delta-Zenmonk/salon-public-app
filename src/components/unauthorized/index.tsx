@@ -34,7 +34,7 @@ export default function Unauthorized() {
           <Button
             variant="contained"
             onClick={handleGoBack}
-            className="px-6 py-2.5 border border-blue-900 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            className="px-6 py-2.5 border border-blue-900 -600 rounded-lg hover:bg-blue-50 transition-colors"
           >
             Go Back
           </Button>

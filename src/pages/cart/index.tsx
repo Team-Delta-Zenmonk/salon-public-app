@@ -132,45 +132,42 @@ export default function Cart() {
 
   return (
     <>
-      <Box className="bg-(--app-bg) min-h-full p-2.5 sm:p-6 lg:p-8">
-        <Box className="w-full max-w-345 mx-auto">
+      <Box className="bg-[var(--app-bg)] min-h-screen text-[var(--app-text)] p-4 sm:p-6 lg:p-10">
+        <Box className="w-full max-w-6xl mx-auto">
           {salon && (
-            <Box className="relative rounded-3xl overflow-hidden mb-6 sm:mb-7 bg-linear-to-r from-(--app-hero-from) via-(--app-primary) to-(--app-hero-to) min-h-36 sm:min-h-40 border border-(--app-border)">
+            <Box className="relative rounded-2xl overflow-hidden mb-8 bg-[var(--app-surface)] border border-[var(--app-primary)]/15 shadow-2xl p-6 sm:p-8">
               {salon.logo && (
                 <Box
                   component="img"
                   src={salon.logo}
-                  className="absolute inset-0 w-full h-full object-cover opacity-20 blur-xl scale-110"
+                  className="absolute inset-0 w-full h-full object-cover opacity-15 blur-xl scale-110"
                 />
               )}
 
-              <Box className="absolute inset-0 bg-linear-to-r from-(--app-hero-from) via-(--app-primary) to-(--app-hero-to) opacity-30" />
+              <Box className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] via-transparent to-[var(--app-bg)] opacity-80" />
 
-              <Box className="relative p-3.5 sm:p-7 lg:p-8 flex items-center gap-3 sm:gap-6">
+              <Box className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6">
                 <Avatar
                   src={salon.logo}
                   variant="rounded"
-                  className="w-12 h-12 sm:w-18 sm:h-18 rounded-xl border border-(--app-border) bg-(--app-surface) shrink-0"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-[var(--app-primary)]/30 bg-[var(--app-bg)] shrink-0"
                 />
 
                 <Box className="flex-1 min-w-0">
-                  <Box className="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <Typography className="font-extrabold text-[1.65rem] sm:text-[30px] text-(--app-primary-contrast) leading-none">
+                  <Box className="flex items-center gap-3 mb-2 flex-wrap">
+                    <Typography className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--app-text)] tracking-tight">
                       {salon.name}
                     </Typography>
-                    <Box className="px-3 py-1 bg-(--app-surface) rounded-full border border-(--app-border)">
-                      <Typography className="text-(--app-text) text-[11px] font-semibold tracking-wide">
-                        {(salon.type ?? "salon").toUpperCase()}
+                    <Box className="px-3 py-1 /10 rounded-full border border-[var(--app-primary)]/30">
+                      <Typography className="text-[var(--app-primary)] text-[10px] font-semibold tracking-widest uppercase">
+                        {(salon.type ?? "SANCTUARY")}
                       </Typography>
                     </Box>
                   </Box>
 
-                  <Box className="flex items-start gap-1 max-w-full">
-                    <PlaceIcon className="text-[13px] text-(--app-primary-contrast)" />
-                    <Typography
-                      variant="caption"
-                      className="text-(--app-primary-contrast) text-[0.73rem] sm:text-sm leading-snug sm:leading-normal break-words"
-                    >
+                  <Box className="flex items-center gap-2 text-xs text-[var(--app-muted)]/70">
+                    <PlaceIcon className="text-sm text-[var(--app-primary)]" />
+                    <Typography variant="body2" className="text-xs text-[var(--app-muted)]/70 truncate">
                       {salon.address}
                     </Typography>
                   </Box>
@@ -181,59 +178,55 @@ export default function Cart() {
 
           {activeBooking && <ActiveBookingBanner />}
 
-          <Typography
-            variant="caption"
-            className="font-bold text-(--app-muted) block mb-3 sm:mb-4 ml-0.5 tracking-[0.16em]"
-          >
-            {items.length} SERVICE{items.length > 1 ? "S" : ""}
-          </Typography>
+          <Box className="flex items-center justify-between mb-6 border-b border-[var(--app-primary)]/10 pb-4">
+            <Typography
+              variant="caption"
+              className="font-mono text-xs font-bold text-[var(--app-primary)] tracking-[0.2em] uppercase"
+            >
+              Selected Ceremonies ({items.length})
+            </Typography>
+          </Box>
 
-          <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_380px] gap-4 sm:gap-6 lg:gap-8 items-start content-start">
-            <Box className="self-start">
-              <Box className="space-y-3 sm:space-y-4">
-                {items.map((item: any) => (
-                  <CartItem key={item.uuid ?? item.service_id} item={item} />
-                ))}
-              </Box>
+          <Box className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 items-start">
+            <Box className="space-y-4">
+              {items.map((item: any) => (
+                <CartItem key={item.uuid ?? item.service_id} item={item} />
+              ))}
             </Box>
 
-            <Box className="bg-(--app-surface) border border-(--app-border) rounded-3xl overflow-hidden self-start lg:sticky lg:top-6 shadow-[0_1px_6px_var(--app-primary-soft)]">
-              <Box className="px-4 sm:px-6 py-4 sm:py-5 border-b border-(--app-border) bg-(--app-surface-alt)">
-                <Typography className="font-bold text-[0.98rem] sm:text-base text-(--app-text)">
-                  Order Summary
+            <Box className="bg-[var(--app-surface)] border border-[var(--app-primary)]/15 rounded-2xl overflow-hidden lg:sticky lg:top-8 shadow-2xl">
+              <Box className="px-6 py-5 border-b border-[var(--app-primary)]/10 bg-[var(--app-surface-alt)]">
+                <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] tracking-wide">
+                  Reservation Summary
                 </Typography>
               </Box>
 
-              <Box className="px-4 sm:px-6 py-4 sm:py-6">
-                <Box className="flex justify-between items-center mb-3.5">
-                  <Box className="flex items-center gap-1.5">
-                    <AccessTimeIcon className="text-[15px] text-(--app-muted)" />
-                    <Typography variant="body2" className="text-(--app-muted)">
-                      Duration
-                    </Typography>
+              <Box className="p-6 space-y-4">
+                <Box className="flex justify-between items-center text-sm">
+                  <Box className="flex items-center gap-2 text-[var(--app-muted)]/70">
+                    <AccessTimeIcon className="text-base text-[var(--app-primary)]" />
+                    <Typography variant="body2">Total Duration</Typography>
                   </Box>
-                  <Typography variant="body2" className="font-semibold text-(--app-text)">
+                  <Typography variant="body2" className="font-semibold text-[var(--app-text)]">
                     {durationText}
                   </Typography>
                 </Box>
 
-                <Box className="flex justify-between items-center mb-4">
-                  <Box className="flex items-center gap-1.5">
-                    <CalendarMonthIcon className="text-[15px] text-(--app-muted)" />
-                    <Typography variant="body2" className="text-(--app-muted)">
-                      Services
-                    </Typography>
+                <Box className="flex justify-between items-center text-sm">
+                  <Box className="flex items-center gap-2 text-[var(--app-muted)]/70">
+                    <CalendarMonthIcon className="text-base text-[var(--app-primary)]" />
+                    <Typography variant="body2">Ceremonies</Typography>
                   </Box>
-                  <Typography variant="body2" className="font-semibold text-(--app-text)">
+                  <Typography variant="body2" className="font-semibold text-[var(--app-text)]">
                     {items.length}
                   </Typography>
                 </Box>
 
-                <Divider className="my-4 border-(--app-border)" />
+                <Divider className="my-4 border-[var(--app-primary)]/10" />
 
-                <Box className="flex justify-between items-center mb-4">
-                  <Typography className="font-bold text-(--app-text)">Total</Typography>
-                  <Typography className="font-extrabold text-[1.38rem] sm:text-[24px] leading-none text-(--app-text)">
+                <Box className="flex justify-between items-baseline mb-6">
+                  <Typography className="font-editorial text-base font-bold text-[var(--app-text)]">Total Investment</Typography>
+                  <Typography className="font-editorial text-3xl font-bold text-[var(--app-primary)]">
                     ₹{totalPrice}
                   </Typography>
                 </Box>
@@ -241,16 +234,15 @@ export default function Cart() {
                 <Button
                   fullWidth
                   variant="contained"
-                  size="large"
                   disableElevation
                   onClick={onProceedToBook}
-                  className="rounded-xl font-bold py-3 text-sm tracking-wide transition-all duration-300 hover:brightness-110 hover:shadow-[0_10px_22px_var(--app-primary-soft)]"
+                  className="rounded-xl font-bold py-3.5 tracking-widest uppercase transition-all duration-300 hover:brightness-110 shadow-lg"
                 >
-                  Proceed to Book
+                  Proceed to Schedule
                 </Button>
 
-                <Typography variant="caption" className="block text-center mt-3 text-(--app-muted)">
-                  Select staff & time you want to book
+                <Typography variant="caption" className="block text-center text-[11px] text-[var(--app-muted)]/50 mt-2">
+                  Select your artisan specialist & preferred timing
                 </Typography>
               </Box>
             </Box>

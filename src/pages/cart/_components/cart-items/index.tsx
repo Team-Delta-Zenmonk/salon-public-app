@@ -80,22 +80,21 @@ function StaffSelector({
         const staffPrice = entry.price;
 
         const cardClass = isSelected
-          ? "bg-(--app-primary-soft) border-(--app-primary)"
-          : "bg-(--app-surface) border-(--app-border) hover:bg-(--app-surface-alt) hover:border-(--app-muted)";
+          ? "bg-[var(--app-primary)]/10 border-[var(--app-primary)]"
+          : "bg-[var(--app-bg)] border-[var(--app-primary)]/15 hover:border-[var(--app-primary)]/50";
 
         const avatarClass = isSelected
-          ? "w-11 h-11 transition-all duration-150 border-[2.5px] border-(--app-primary) bg-(--app-surface) shadow-[0_8px_20px_var(--app-primary-soft)]"
-          : "w-11 h-11 transition-all duration-150 border-2 border-(--app-border) bg-(--app-surface-alt)";
+          ? "w-11 h-11 transition-all duration-150 border-2 border-[var(--app-primary)] bg-[var(--app-surface)]"
+          : "w-11 h-11 transition-all duration-150 border border-[var(--app-primary)]/20 bg-[var(--app-surface)]";
 
-        const staffNameClass = isSelected ? "text-(--app-text) font-bold" : "text-(--app-text) font-medium";
-
-        const staffPriceClass = isSelected ? "text-(--app-text) font-semibold" : "text-(--app-muted) font-medium";
+        const staffNameClass = isSelected ? "text-[var(--app-text)] font-bold" : "text-[var(--app-muted)]/70 font-medium";
+        const staffPriceClass = isSelected ? "text-[var(--app-primary)] font-semibold" : "text-[var(--app-muted)]/50 font-medium";
 
         return (
           <Box
             key={entry.uuid}
             onClick={() => onStaffClick(entry)}
-            className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-2.5 py-2 min-w-20 sm:min-w-22 border ${cardClass} ${
+            className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-3 py-2 min-w-22 border ${cardClass} ${
               updating ? "opacity-50 pointer-events-none" : ""
             }`}
           >
@@ -105,8 +104,8 @@ function StaffSelector({
               </Avatar>
 
               {isSelected && (
-                <Box className="absolute -bottom-1 -right-1 w-4 h-4 bg-(--app-primary) border border-(--app-surface) rounded-full flex items-center justify-center">
-                  <CheckIcon className="text-[10px] text-(--app-primary-contrast)" />
+                <Box className="absolute -bottom-1 -right-1 w-4 h-4 border border-[var(--app-bg)] rounded-full flex items-center justify-center">
+                  <CheckIcon className="text-[10px] text-[var(--app-bg)]" />
                 </Box>
               )}
             </Box>
@@ -114,9 +113,9 @@ function StaffSelector({
             <Typography
               variant="caption"
               className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass}`}
-              title={staffName || "Staff"}
+              title={staffName || "Artisan"}
             >
-              {staffName || "Staff"}
+              {staffName || "Artisan"}
             </Typography>
 
             {staffPrice && (
@@ -143,7 +142,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   const [staffDialogOpen, setStaffDialogOpen] = useState(false);
 
   const service = item.service;
-  const name = service?.name ?? "Service";
+  const name = service?.name ?? "Ceremony";
   const image = service?.logo;
   const duration = item.duration;
   const price = item.final_price ?? item.base_price;
@@ -239,25 +238,25 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
 
   return (
     <>
-      <Box className="bg-(--app-surface) border border-(--app-border) rounded-2xl overflow-hidden transition-all duration-200">
-        <Box className="flex items-center gap-3 sm:gap-4 lg:gap-6 p-4 sm:p-5">
+      <Box className="bg-[var(--app-surface)] border border-[var(--app-primary)]/15 rounded-2xl overflow-hidden transition-all duration-200">
+        <Box className="flex items-center gap-4 sm:gap-6 p-5">
           <Avatar
             src={image}
             variant="rounded"
-            className="rounded-xl shrink-0 w-14 h-14 sm:w-16 lg:w-18 sm:h-16 lg:h-18 border border-(--app-border) bg-(--app-surface-alt)"
+            className="rounded-xl shrink-0 w-16 h-16 sm:w-20 sm:h-20 border border-[var(--app-primary)]/20 bg-[var(--app-bg)]"
           />
 
           <Box className="flex-1 min-w-0">
-            <Typography className="font-bold text-sm sm:text-base text-(--app-text) truncate" title={name}>
+            <Typography className="font-editorial text-lg sm:text-xl font-bold text-[var(--app-text)] truncate" title={name}>
               {name}
             </Typography>
-            <Box className="flex items-center gap-1.5 mt-1 overflow-hidden">
-              <AccessTimeIcon className="text-(--app-muted) text-[13px] shrink-0" />
-              <Typography variant="caption" className="text-(--app-muted) text-xs sm:text-[13px] truncate">
-                {duration} min
+            <Box className="flex items-center gap-2 mt-1">
+              <AccessTimeIcon className="text-[var(--app-primary)] text-sm shrink-0" />
+              <Typography variant="caption" className="text-xs text-[var(--app-muted)]/70 truncate">
+                {duration} MIN
                 {gender && (
                   <>
-                    <Box component="span" className="mx-1.5 text-(--app-border)">
+                    <Box component="span" className="mx-2 text-[var(--app-primary)]/30">
                       •
                     </Box>
                     <Box component="span" className="capitalize">
@@ -268,48 +267,48 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
               </Typography>
             </Box>
             {selectedStaffId && currentStaffInfo && (
-              <Box className="flex items-center gap-1.5 mt-1.5 px-2 py-1 rounded-lg bg-(--app-surface-alt) border border-(--app-border) w-fit max-w-full overflow-hidden">
+              <Box className="flex items-center gap-2 mt-2 px-2.5 py-1 rounded-lg bg-[var(--app-bg)] border border-[var(--app-primary)]/20 w-fit">
                 <Avatar
                   src={currentStaffInfo.photo}
-                  className="w-5 h-5 text-[10px] border border-(--app-border) shrink-0"
+                  className="w-5 h-5 text-[10px] border border-[var(--app-primary)] shrink-0"
                 >
                   {currentStaffInfo.name?.[0]}
                 </Avatar>
                 <Typography
                   variant="caption"
-                  className="text-(--app-text) text-[11px] font-medium truncate max-w-28 sm:max-w-44 lg:max-w-56"
+                  className="text-[var(--app-text)] text-xs font-medium truncate"
                 >
                   {currentStaffInfo.name}
                 </Typography>
-                <Box className="w-1.5 h-1.5 rounded-full bg-(--app-primary) shrink-0" />
+                <Box className="w-1.5 h-1.5 rounded-full shrink-0" />
               </Box>
             )}
           </Box>
 
-          <Box className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) leading-none">
+          <Box className="flex items-center gap-3 shrink-0">
+            <Typography className="font-editorial text-xl font-bold text-[var(--app-primary)] leading-none">
               ₹{price}
             </Typography>
             <IconButton
               onClick={() => setConfirmOpen(true)}
-              className="text-(--app-muted) border border-(--app-border) rounded-xl transition-all duration-150 hover:text-(--app-primary) hover:bg-(--app-primary-soft) hover:border-(--app-primary) w-8 h-8 sm:w-9 sm:h-9"
+              className="/50 border border-[var(--app-primary)]/15 rounded-xl transition-all duration-150 hover: hover:/10 hover:border-[var(--app-primary)] w-9 h-9"
             >
-              <DeleteOutlineIcon className="text-base sm:text-lg" />
+              <DeleteOutlineIcon className="text-lg" />
             </IconButton>
           </Box>
         </Box>
 
-        <Box className="border-t border-(--app-border) px-4 sm:px-5 py-3">
-          <Box className="flex items-center justify-between mb-2">
+        <Box className="border-t border-[var(--app-primary)]/10 px-5 py-4 bg-[var(--app-bg)]">
+          <Box className="flex items-center justify-between mb-3">
             <Typography
               variant="caption"
-              className="text-(--app-muted) font-semibold tracking-wide uppercase text-[10px]"
+              className="text-[var(--app-primary)]/70 font-mono font-semibold tracking-widest uppercase text-[10px]"
             >
-              Select Staff
+              Assign Specialist
             </Typography>
             {selectedStaffId && (
-              <Typography variant="caption" className="text-(--app-primary) font-semibold text-[10px]">
-                ✓ Assigned
+              <Typography variant="caption" className="text-[var(--app-primary)] font-semibold text-[10px]">
+                ✓ Specialist Assigned
               </Typography>
             )}
           </Box>

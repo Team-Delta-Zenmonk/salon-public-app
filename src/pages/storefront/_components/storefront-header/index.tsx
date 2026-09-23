@@ -324,7 +324,7 @@ export default function StorefrontHeader({
                 fullWidth
                 variant="text"
                 onClick={handleLogout}
-                className="rounded-xl text-xs text-red-500 font-bold"
+                className="rounded-xl -500 font-bold"
               >
                 Sign Out
               </Button>

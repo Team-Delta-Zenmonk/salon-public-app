@@ -18,7 +18,7 @@ export default function ExpiryView({ onReturn }: Readonly<ExpiryViewProps>) {
       <Button
         variant="contained"
         onClick={onReturn}
-        className="rounded-[12px] px-10 py-3 bg-[var(--app-primary)] text-white font-black text-sm normal-case shadow-lg shadow-[var(--app-primary-soft)] transition-all active:scale-95"
+        className="rounded-[12px] px-10 py-3 font-black normal-case shadow-lg shadow-[var(--app-primary-soft)] transition-all active:scale-95"
       >
         Return to Cart
       </Button>

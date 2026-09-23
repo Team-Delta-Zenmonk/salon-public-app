@@ -7,20 +7,18 @@ import { StorefrontProvider } from "../providers/storefront-provider";
 
 export default function AppLayout() {
   return (
-    <StorefrontProvider>
-      <Box className="min-h-screen bg-(--app-bg) flex flex-col">
-        <StorefrontHeader />
+    <Box className="min-h-screen bg-(--app-bg) flex flex-col">
+      <StorefrontHeader />
 
-        <Box component="main" className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 pb-4 md:pb-8">
-          <Outlet />
-        </Box>
-
-        <StorefrontFooter />
-
-        <Box className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-          <MobileBottomNav />
-        </Box>
+      <Box component="main" className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 pb-4 md:pb-8">
+        <Outlet />
       </Box>
-    </StorefrontProvider>
+
+      <StorefrontFooter />
+
+      <Box className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+        <MobileBottomNav />
+      </Box>
+    </Box>
   );
 }

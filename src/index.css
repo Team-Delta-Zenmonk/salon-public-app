@@ -1,18 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss" important;
 
 :root {
-  font-family: "Plus Jakarta Sans", "DM Sans", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   box-sizing: border-box;
+  --app-bg: #141318;
+  --app-surface: #141318;
+  --app-surface-alt: #1c1b20;
+  --app-border: rgba(93, 63, 63, 0.4);
+  --app-primary: #ffb3b4;
+  --app-primary-container: #ff2b4e;
+  --app-primary-soft: rgba(255, 43, 78, 0.15);
+  --app-text: #e5e1e8;
+  --app-muted: #e6bcbc;
+  --app-ring: #ffb3b4;
 }
 
-.font-editorial {
-  font-family: "Playfair Display", Georgia, serif;
+@theme {
+  --color-app-bg: var(--app-bg);
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-alt: var(--app-surface-alt);
+  --color-app-border: var(--app-border);
+  --color-app-primary: var(--app-primary);
+  --color-app-primary-soft: var(--app-primary-soft);
+  --color-app-text: var(--app-text);
+  --color-app-muted: var(--app-muted);
+  --color-app-ring: var(--app-ring);
+  --color-app-hero-from: var(--app-hero-from);
+  --color-app-hero-to: var(--app-hero-to);
+}
+
+.bg-app-bg { background-color: var(--app-bg); }
+.bg-app-surface { background-color: var(--app-surface); }
+.bg-app-surface-alt { background-color: var(--app-surface-alt); }
+.border-app-border { border-color: var(--app-border); }
+.text-app-text { color: var(--app-text); }
+.text-app-muted { color: var(--app-muted); }
+.text-app-primary { color: var(--app-primary); }
+.bg-app-primary { background-color: var(--app-primary); }
+
+.crimson-glow {
+  box-shadow: 0 0 24px var(--app-primary-soft);
+}
+
+.panel-rim {
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface);
+}
+
+.crimson-border-hover {
+  transition: border-color 0.3s ease;
+}
+
+.crimson-border-hover:hover {
+  border-color: var(--app-primary);
 }
 
 html,
 body {
   min-height: 100%;
+  background-color: var(--app-bg);
+  color: var(--app-text);
 }
 
 #root {
@@ -38,57 +87,6 @@ body {
   }
 }
 
-@keyframes dateIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes countdownPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
 .safe-area-bottom {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px);
 }
-
-@keyframes floatGentle {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.animate-float-gentle {
-  animation: floatGentle 4s ease-in-out infinite;
-}
-
-@keyframes pulseSubtle {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.88;
-    transform: scale(1.02);
-  }
-}
-
-.animate-pulse-subtle {
-  animation: pulseSubtle 3s ease-in-out infinite;
-}
-
-

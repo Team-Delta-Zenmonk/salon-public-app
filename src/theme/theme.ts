@@ -3,19 +3,11 @@
 import { createTheme, responsiveFontSizes, type PaletteMode } from "@mui/material/styles";
 
 export type AppThemeId =
-  | "luxuryBw"
-  | "elegantLight"
-  | "premiumDark"
-  | "softGold"
-  | "neonPop"
-  | "midnightPurple"
-  | "peachyCoral"
-  | "cyberMint"
-  | "obsidian"
-  | "midnightNeon"
-  | "carbon"
-  | "bloodMoon"
-  | "eclipseHorror";
+  | "crimsonShear"
+  | "obsidianFlame"
+  | "vintageBlush"
+  | "midnightSapphire"
+  | "softRosePearl";
 
 export interface AppThemeOption {
   id: AppThemeId;
@@ -52,104 +44,104 @@ const mediumPalette = {
 
 const appThemes: AppThemeOption[] = [
   {
-    id: "luxuryBw",
-    label: "Luxury B&W",
-    mode: "light",
-    fontFamily: '"DM Sans", "Inter", "sans-serif"',
-    radius: 16,
-    surface: "#ffffff",
-    surfaceAlt: "#f7f7f7",
-    primary: "#111111",
-    primarySoft: "#ececec",
-    textMain: "#121212",
-    textMuted: "#5f5f5f",
-    border: "#dfdfdf",
-    background: "#f3f3f3",
-    heroFrom: "#101010",
-    heroTo: "#404040",
-    ring: "#262626",
-    chipTone: "#f5f5f5",
-  },
-  {
-    id: "softGold",
-    label: "Soft Gold",
-    mode: "light",
-    fontFamily: '"Manrope", "Inter", "sans-serif"',
-    radius: 18,
-    surface: "#fffdfa",
-    surfaceAlt: "#f8f3e9",
-    primary: "#8a6a2f",
-    primarySoft: "#efe3c8",
-    textMain: "#2f2417",
-    textMuted: "#7c6a4f",
-    border: "#e8dbc0",
-    background: "#f7f0e3",
-    heroFrom: "#8a6a2f",
-    heroTo: "#c9ab74",
-    ring: "#a37a34",
-    chipTone: "#f7edd6",
-  },
-  {
-    id: "neonPop",
-    label: "Neon Pop",
-    mode: "light",
-    fontFamily: '"Space Grotesk", "Inter", "sans-serif"',
-    radius: 16,
-    surface: "#ffffff",
-    surfaceAlt: "#f6f8ff",
-    primary: "#ff2e93",
-    primarySoft: "#ffd6ea",
-    textMain: "#17122e",
-    textMuted: "#675d8a",
-    border: "#e4dcff",
-    background: "#f3f1ff",
-    heroFrom: "#ff2e93",
-    heroTo: "#6d4aff",
-    ring: "#8b5cf6",
-    chipTone: "#efe9ff",
-  },
-  {
-    id: "obsidian",
-    label: "Obsidian",
+    id: "crimsonShear",
+    label: "Crimson & Shear (Dark)",
     mode: "dark",
-    fontFamily: '"Sora", "Inter", "sans-serif"',
-    radius: 18,
-    surface: "#0d0b14",
-    surfaceAlt: "#090710",
-    primary: "#b392ff",
-    primarySoft: "#2b1f45",
-    textMain: "#f6f2ff",
-    textMuted: "#b6a8d4",
-    border: "#2a2140",
-    background: "#040308",
-    heroFrom: "#120a22",
-    heroTo: "#4c1d95",
-    ring: "#c4b5fd",
-    chipTone: "#171025",
+    fontFamily: '"Plus Jakarta Sans", "Playfair Display", sans-serif',
+    radius: 8,
+    surface: "#141318",
+    surfaceAlt: "#1c1b20",
+    primary: "#ffb3b4",
+    primarySoft: "rgba(255, 82, 98, 0.15)",
+    textMain: "#e5e1e8",
+    textMuted: "#e6bcbc",
+    border: "#5d3f3f",
+    background: "#141318",
+    heroFrom: "#141318",
+    heroTo: "#201f24",
+    ring: "#ffb3b4",
+    chipTone: "rgba(255, 82, 98, 0.08)",
   },
   {
-    id: "carbon",
-    label: "Carbon",
+    id: "obsidianFlame",
+    label: "Obsidian Flame (Ultra Dark Gold)",
     mode: "dark",
-    fontFamily: '"Manrope", "Inter", "sans-serif"',
-    radius: 16,
-    surface: "#1b1b1d",
-    surfaceAlt: "#141416",
-    primary: "#f59e0b",
-    primarySoft: "#3a2a14",
-    textMain: "#f7f4ef",
-    textMuted: "#b8aea1",
-    border: "#3a3330",
-    background: "#101012",
-    heroFrom: "#1c1b1b",
-    heroTo: "#6b3d16",
-    ring: "#fbbf24",
-    chipTone: "#262221",
+    fontFamily: '"Plus Jakarta Sans", "Playfair Display", sans-serif',
+    radius: 12,
+    surface: "#0c0a0d",
+    surfaceAlt: "#151218",
+    primary: "#f3c677",
+    primarySoft: "rgba(243, 198, 119, 0.15)",
+    textMain: "#f7f5f0",
+    textMuted: "#c4bcae",
+    border: "#3d3224",
+    background: "#09080b",
+    heroFrom: "#09080b",
+    heroTo: "#16131c",
+    ring: "#f3c677",
+    chipTone: "rgba(243, 198, 119, 0.1)",
+  },
+  {
+    id: "vintageBlush",
+    label: "Vintage Blush (Haute Warm Light)",
+    mode: "light",
+    fontFamily: '"Plus Jakarta Sans", "Playfair Display", sans-serif',
+    radius: 10,
+    surface: "#fffaf7",
+    surfaceAlt: "#f9efea",
+    primary: "#b84252",
+    primarySoft: "rgba(184, 66, 82, 0.1)",
+    textMain: "#2d2325",
+    textMuted: "#7a6367",
+    border: "#e8d3cb",
+    background: "#fdf6f2",
+    heroFrom: "#fdf6f2",
+    heroTo: "#f5e8e2",
+    ring: "#b84252",
+    chipTone: "rgba(184, 66, 82, 0.06)",
+  },
+  {
+    id: "midnightSapphire",
+    label: "Midnight Sapphire (Royal Blue)",
+    mode: "dark",
+    fontFamily: '"Plus Jakarta Sans", "Playfair Display", sans-serif',
+    radius: 10,
+    surface: "#0b1329",
+    surfaceAlt: "#131d3b",
+    primary: "#7da8ff",
+    primarySoft: "rgba(125, 168, 255, 0.15)",
+    textMain: "#e8efff",
+    textMuted: "#9eb5e6",
+    border: "#233766",
+    background: "#060c1c",
+    heroFrom: "#060c1c",
+    heroTo: "#101a36",
+    ring: "#7da8ff",
+    chipTone: "rgba(125, 168, 255, 0.08)",
+  },
+  {
+    id: "softRosePearl",
+    label: "Soft Rose Pearl (Luxury Light)",
+    mode: "light",
+    fontFamily: '"Plus Jakarta Sans", "Playfair Display", sans-serif',
+    radius: 12,
+    surface: "#ffffff",
+    surfaceAlt: "#fcf4f6",
+    primary: "#d6536b",
+    primarySoft: "rgba(214, 83, 107, 0.12)",
+    textMain: "#1f1719",
+    textMuted: "#6b595c",
+    border: "#f0d8de",
+    background: "#faf4f6",
+    heroFrom: "#faf4f6",
+    heroTo: "#f5e4e8",
+    ring: "#d6536b",
+    chipTone: "rgba(214, 83, 107, 0.08)",
   },
 ];
 
 export const themeOptions = appThemes;
-export const defaultThemeId: AppThemeId = "softGold";
+export const defaultThemeId: AppThemeId = "crimsonShear";
 
 const getThemeOption = (themeId: AppThemeId) => appThemes.find((theme) => theme.id === themeId) ?? appThemes[0];
 
@@ -295,49 +287,72 @@ export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
         },
         styleOverrides: {
           root: {
-            minHeight: "40px",
-            borderRadius: `${Math.max(10, selected.radius - 4)}px`,
+            minHeight: "42px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            borderRadius: `${Math.max(10, selected.radius - 2)}px`,
             textTransform: "none",
             fontWeight: 700,
-            transition: "all 180ms ease",
+            fontSize: "0.85rem",
+            letterSpacing: "0.02em",
+            transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
           },
           contained: {
-            boxShadow: isDark ? "0 10px 24px rgba(0,0,0,0.45)" : "0 12px 24px rgba(15,23,42,0.16)",
+            backgroundColor: selected.primary,
+            color: isDark ? "#0c0a0d" : "#ffffff",
+            boxShadow: isDark ? "0 8px 20px rgba(0,0,0,0.35)" : "0 8px 20px rgba(0,0,0,0.12)",
+            "&:hover": {
+              backgroundColor: selected.primary,
+              filter: "brightness(1.08)",
+              boxShadow: isDark ? "0 12px 28px rgba(0,0,0,0.45)" : "0 12px 28px rgba(0,0,0,0.18)",
+              transform: "translateY(-1.5px)",
+            },
+            "&:active": {
+              transform: "translateY(0)",
+            },
+          },
+          outlined: {
+            borderColor: selected.border,
+            color: selected.textMain,
+            backgroundColor: "transparent",
+            "&:hover": {
+              borderColor: selected.primary,
+              backgroundColor: selected.primarySoft,
+              color: selected.textMain,
+            },
+          },
+          text: {
+            color: selected.primary,
+            "&:hover": {
+              backgroundColor: selected.primarySoft,
+            },
           },
         },
-        variants: [
-          {
-            props: { variant: "contained" },
-            style: {
-              backgroundColor: selected.primary,
-              color: isDark ? "#0b1220" : "#ffffff",
-              "&:hover": {
-                backgroundColor: selected.primary,
-                filter: "brightness(0.95)",
-                transform: "translateY(-1px)",
-              },
-            },
-          },
-          {
-            props: { variant: "outlined" },
-            style: {
-              borderColor: selected.border,
-              color: selected.textMain,
-              "&:hover": {
-                borderColor: selected.primary,
-                backgroundColor: selected.primarySoft,
-              },
-            },
-          },
-        ],
       },
       MuiChip: {
         styleOverrides: {
           root: {
             borderRadius: "999px",
-            border: `1px solid ${selected.border}`,
             fontWeight: 600,
+            fontSize: "0.75rem",
+            letterSpacing: "0.02em",
+            border: `1px solid ${selected.border}`,
+            backgroundColor: selected.surfaceAlt,
+            color: selected.textMain,
+          },
+          filled: {
             backgroundColor: selected.chipTone,
+            color: selected.textMain,
+            borderColor: selected.border,
+          },
+          outlined: {
+            backgroundColor: "transparent",
+            borderColor: selected.border,
+            color: selected.textMain,
+          },
+          label: {
+            paddingLeft: "10px",
+            paddingRight: "10px",
           },
         },
       },

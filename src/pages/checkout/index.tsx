@@ -63,7 +63,7 @@ export default function Checkout() {
 
   return (
     <Box className="min-h-screen w-full bg-[var(--app-bg)] text-[var(--app-text)] flex flex-col relative">
-      <Box className="fixed top-0 right-0 w-1/2 h-full bg-linear-to-br from-[rgba(var(--app-primary-rgb),0.03)] to-transparent clip-path-angled z-0 hidden lg:block" />
+      <Box className="fixed top-0 right-0 w-1/2 h-full bg-gradient-to-br from-[var(--app-primary)]/5 to-transparent clip-path-angled z-0 hidden lg:block" />
 
       <CheckoutHeader
         onBack={handleResetBooking}
@@ -76,7 +76,7 @@ export default function Checkout() {
 
       <Container
         maxWidth="lg"
-        className="px-4 relative z-10 mt-6 lg:mt-20 flex-1 flex flex-col justify-center"
+        className="px-4 relative z-10 mt-6 lg:mt-20 flex-1 flex flex-col justify-center pb-12"
       >
         <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <Box className="lg:col-span-7 order-1 w-full">
@@ -95,7 +95,9 @@ export default function Checkout() {
           </Box>
 
           <Box className="hidden lg:block lg:col-span-5 w-full animate-in fade-in slide-in-from-right-4 duration-500">
-            <Typography className="text-lg font-black text-[var(--app-text)] mb-5 ml-1">Order Summary</Typography>
+            <Typography className="font-editorial text-xl font-bold text-[var(--app-text)] mb-5 ml-1">
+              Reservation Summary
+            </Typography>
             <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
             <AssistanceCard phone={displaySalon?.phone} isDesktop />
           </Box>
@@ -121,14 +123,14 @@ function PaymentPanel({
 }: Readonly<PaymentPanelProps>) {
   return (
     <Box className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <Typography className="text-sm font-black text-[var(--app-text)] mb-6 ml-1 flex items-center gap-2.5">
-        <PaymentsIcon className="text-[var(--app-primary)] text-[18px]" />
-        Payment Method
+      <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] mb-6 ml-1 flex items-center gap-2.5">
+        <PaymentsIcon className="text-[var(--app-primary)] text-xl" />
+        Payment Sanctuary
       </Typography>
 
       <Paper
         elevation={0}
-        className="p-4 sm:p-8 bg-[var(--app-surface)] border border-[var(--app-border)] rounded-[24px] shadow-sm"
+        className="p-6 sm:p-8 bg-[var(--app-surface)] border border-[var(--app-primary)]/15 rounded-2xl shadow-2xl"
       >
         <Elements stripe={stripePromise} options={{ clientSecret, appearance: stripeAppearance }}>
           <PaymentForm booking={currentBooking} isExpired={isExpired} onPaymentSuccess={onPaymentSuccess} />

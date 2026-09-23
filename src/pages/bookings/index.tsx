@@ -173,48 +173,62 @@ export default function Bookings() {
     }
 
     return (
-      <Box className="py-12 text-center bg-(--app-surface) rounded-2xl border border-(--app-border) border-dashed">
-        <Typography variant="h6" className="text-(--app-muted) mb-1 font-semibold">
-          No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} bookings found
+      <Box className="py-16 text-center bg-[var(--app-surface)] rounded-2xl border border-[var(--app-primary)]/15 border-dashed p-8">
+        <Typography variant="h6" className="font-editorial text-xl font-bold text-[var(--app-text)] mb-2">
+          No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} reservations found
         </Typography>
-        <Typography variant="body2" className="text-(--app-muted) opacity-80">
+        <Typography variant="body2" className="text-xs text-[var(--app-muted)]/70">
           {tabValue === 0
-            ? "Start booking your first salon experience!"
-            : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} history is empty.`}
+            ? "Reserve your first haute salon ceremony!"
+            : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} dossier is empty.`}
         </Typography>
       </Box>
     );
   };
 
   return (
-    <Box className="flex flex-col w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 pt-4 sm:pt-6">
-      <Box className="w-full shrink-0">
-        <Typography variant="h4" className="font-extrabold text-(--app-text) mb-4 sm:mb-6">
-          My Bookings
-        </Typography>
+    <Box className="min-h-screen bg-[var(--app-bg)] text-[var(--app-text)] py-8 sm:py-12">
+      <Box className="flex flex-col w-full max-w-4xl mx-auto px-4 sm:px-6">
+        <Box className="w-full shrink-0 mb-8">
+          <Typography className="font-editorial text-3xl sm:text-4xl font-bold text-[var(--app-text)] mb-2">
+            My Dossier & Ceremonies
+          </Typography>
+          <Typography className="text-xs text-[var(--app-muted)]/70 font-mono tracking-wider uppercase">
+            Curated history of your luxury appointments
+          </Typography>
 
-        <Box className="border-b border-(--app-border) mb-6">
-          <Tabs
-            value={tabValue}
-            onChange={(_, val) => setTabValue(val)}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            className={styles.tabs}
-          >
-            <Tab label="All" />
-            <Tab label="Pending" />
-            <Tab label="Confirmed" />
-            <Tab label="Cancelled" />
-            <Tab label="Expired" />
-          </Tabs>
+          <Box className="border-b border-[var(--app-primary)]/15 mt-6 mb-8">
+            <Tabs
+              value={tabValue}
+              onChange={(_, val) => setTabValue(val)}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              sx={{
+                "& .MuiTabs-indicator": { backgroundColor: "var(--app-primary)", height: 3 },
+                "& .MuiTab-root": {
+                  color: "var(--app-muted)/60",
+                  textTransform: "uppercase",
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.1em",
+                  fontWeight: 600,
+                  "&.Mui-selected": { color: "var(--app-primary)" },
+                },
+              }}
+            >
+              <Tab label="All" />
+              <Tab label="Pending" />
+              <Tab label="Confirmed" />
+              <Tab label="Cancelled" />
+              <Tab label="Expired" />
+            </Tabs>
+          </Box>
         </Box>
-      </Box>
 
-      <Box className="w-full">
-        <InfiniteScroll
-          dataLength={bookings.length}
-          next={fetchMoreData}
+        <Box className="w-full">
+          <InfiniteScroll
+            dataLength={bookings.length}
+            next={fetchMoreData}
             hasMore={total > 0 && bookings.length < total}
             loader={
               <Box className="mt-4 space-y-4">
@@ -224,10 +238,9 @@ export default function Bookings() {
             }
             endMessage={
               bookings.length > 0 && !isLoading ? (
-                <Box className="pb-2 pt-4">
-                  <Typography variant="body2" className="text-(--app-muted) text-center font-medium opacity-60">
-                    You've reached the end of your {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()}{" "}
-                    bookings
+                <Box className="pb-4 pt-6">
+                  <Typography variant="body2" className="text-xs text-[var(--app-muted)]/50 text-center font-mono uppercase tracking-widest">
+                    End of {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} ceremonies
                   </Typography>
                 </Box>
               ) : null
@@ -239,8 +252,8 @@ export default function Bookings() {
 
           <ConfirmationDialog
             open={cancelDialogOpen}
-            title="Cancel Booking?"
-            description="Are you sure you want to cancel this booking? This action cannot be undone."
+            title="Cancel Reservation?"
+            description="Are you sure you want to cancel this ceremony? This action cannot be undone."
             confirmText="Yes, Cancel"
             cancelText="No, Keep It"
             color="error"
@@ -250,5 +263,6 @@ export default function Bookings() {
           />
         </Box>
       </Box>
+    </Box>
   );
 }

@@ -218,7 +218,7 @@ export default function StorefrontServices({
                 variant="outlined"
                 size="small"
                 onClick={resetFilters}
-                className="mt-4 rounded-xl text-xs font-bold"
+                className="mt-4 rounded-xl font-bold"
               >
                 Reset All Filters
               </Button>
