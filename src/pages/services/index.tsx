@@ -127,7 +127,7 @@ export default function ServicesPage() {
   return (
     <Box className="space-y-6 pb-24 text-[var(--app-text)]">
       {/* HERO / ATELIER CONTEXT BAR (Stitch Spec) */}
-      <section className="w-full bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 pt-6 pb-8 px-4 md:px-12 rounded-3xl">
+      <section className="w-full bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 pt-6 pb-8 px-4 md:px-12 rounded-xl">
         <Box className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <Box className="space-y-2">
             <Box className="flex items-center gap-2">
@@ -230,7 +230,7 @@ export default function ServicesPage() {
                           onClick={() => setSelectedCategory(cat.id)}
                           className={catBtnClass}
                         >
-                          <span>{cat.label}</span>
+                          <span className="capitalize">{cat.label}</span>
                           <span className={isSel ? "text-[10px] bg-[var(--app-primary)]/20 text-[var(--app-primary)] px-2 py-0.5 rounded-full font-bold" : "text-[10px] bg-[var(--app-surface-alt)] px-2 py-0.5 rounded-full text-[var(--app-muted)]"}>
                             {cat.count}
                           </span>
@@ -317,7 +317,7 @@ export default function ServicesPage() {
             {/* Services List */}
             <Box className="flex flex-col gap-6 pt-2">
               {filteredServices.length === 0 ? (
-                <Box className="text-center py-16 px-4 rounded-3xl border border-dashed border-[var(--app-border)] bg-[var(--app-bg)]">
+                <Box className="text-center py-16 px-4 rounded-xl border border-dashed border-[var(--app-border)] bg-[var(--app-bg)]">
                   <ContentCutOutlinedIcon className="text-[var(--app-muted)] text-[40px] mb-2" />
                   <Typography className="font-bold text-sm text-[var(--app-text)]">
                     No treatments match your current filters

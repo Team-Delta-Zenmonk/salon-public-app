@@ -11,7 +11,8 @@ import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
-import { downloadInvoiceService } from "../../features/customer-booking/download-invoice/download-invoice.service";
+import { useDownloadInvoice } from "../../features/customer-booking/hooks/use-download-invoice";
+import { callSnack } from "../../components/snackbar";
 import styles from "./booking.module.scss";
 
 const WEBHOOK_SETTLE_DELAY_MS = 3000;
@@ -128,21 +129,7 @@ export default function Bookings() {
 
   const isProcessing = isContinuing || isCancelling;
 
-  const [downloadingUuid, setDownloadingUuid] = useState<string | null>(null);
-
-  const handleDownloadInvoice = async (booking: CustomerBooking) => {
-    try {
-      setDownloadingUuid(booking.uuid);
-      const url = await downloadInvoiceService(booking.uuid);
-      if (url) {
-        window.open(url, "_blank");
-      }
-    } catch (err) {
-      console.error("Failed to download invoice:", err);
-    } finally {
-      setDownloadingUuid(null);
-    }
-  };
+  const { downloadInvoice: handleDownloadInvoice, downloadingUuid } = useDownloadInvoice();
 
   const renderBookingList = () => {
     if (isLoading) {

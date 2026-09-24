@@ -11,7 +11,7 @@ export default function AssistanceCard({ phone, isDesktop = false }: Readonly<As
     <Box
       className={`
         ${isDesktop ? "mt-4 flex" : "mt-4 mb-4 flex lg:hidden"}
-        p-4 rounded-[20px] !bg-[var(--app-primary-soft)]
+        p-4 rounded-2xl !bg-[var(--app-primary-soft)]
         items-center gap-4 animate-in fade-in slide-in-from-bottom-2 duration-400
         border border-[var(--app-border)]
       `}

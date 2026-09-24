@@ -57,7 +57,7 @@ export default function StorefrontBasket({
   };
 
   const renderDesktopCard = () => (
-    <Box className="hidden lg:block w-full sticky top-24 rounded-3xl border border-(--app-border) bg-(--app-surface) shadow-[0_16px_40px_rgba(15,23,42,0.08)] overflow-hidden">
+    <Box className="hidden lg:block w-full sticky top-24 rounded-xl border border-(--app-border) bg-(--app-surface) shadow-[0_16px_40px_rgba(15,23,42,0.08)] overflow-hidden">
       <Box className="px-5 py-4 border-b border-(--app-border) bg-(--app-surface-alt) flex items-center justify-between">
         <Box className="flex items-center gap-2.5">
           <ShoppingBagOutlinedIcon className="text-(--app-primary) text-[20px]" />

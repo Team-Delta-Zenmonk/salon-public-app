@@ -63,7 +63,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
 
   return (
     <Box className="space-y-4">
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
         <Box className="flex items-center gap-3 mb-5 pb-4 border-b border-(--app-border)">
           <Box className="w-10 h-10 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center">
             <AccessTimeIcon className="text-[22px]" />
@@ -126,7 +126,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
       </Box>
 
       <Box className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col justify-between">
+        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col justify-between">
           <Box>
             <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) mb-2">
               About {salon?.name}
@@ -145,7 +145,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
           )}
         </Box>
 
-        <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
           <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) mb-4">
             Venue Amenities
           </Typography>
@@ -164,7 +164,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
         </Box>
       </Box>
 
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <Box className="flex items-start gap-3.5 max-w-2xl">
           <Box className="w-10 h-10 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center shrink-0 mt-0.5">
             <LocationOnOutlinedIcon className="text-[22px]" />
@@ -192,7 +192,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
         )}
       </Box>
 
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
         <Box className="flex items-center gap-2.5 mb-3">
           <PolicyOutlinedIcon className="text-(--app-primary) text-[22px]" />
           <Typography className="font-extrabold text-base text-(--app-text)">

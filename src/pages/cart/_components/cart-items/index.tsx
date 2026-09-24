@@ -11,6 +11,7 @@ import { deleteCartAction } from "../../../../features/salon/cart/delete-cart/de
 import ConfirmRemoveItemDialog from "../remove-item-dialog";
 import { getServiceStaffsAction } from "../../../../features/salon/staff/get-service-staffs/get-service-staffs.action";
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
+import { useStorefront } from "../../../../providers/storefront-provider";
 
 interface CartItemProps {
   item: any;
@@ -84,8 +85,8 @@ function StaffSelector({
           : "bg-[var(--app-bg)] border-[var(--app-primary)]/15 hover:border-[var(--app-primary)]/50";
 
         const avatarClass = isSelected
-          ? "w-11 h-11 transition-all duration-150 border-2 border-[var(--app-primary)] bg-[var(--app-surface)]"
-          : "w-11 h-11 transition-all duration-150 border border-[var(--app-primary)]/20 bg-[var(--app-surface)]";
+          ? "w-11 h-11 transition-all duration-150 border-2 border-[var(--app-primary)] bg-[var(--app-surface)] capitalize"
+          : "w-11 h-11 transition-all duration-150 border border-[var(--app-primary)]/20 bg-[var(--app-surface)] capitalize";
 
         const staffNameClass = isSelected ? "text-[var(--app-text)] font-bold" : "text-[var(--app-muted)]/70 font-medium";
         const staffPriceClass = isSelected ? "text-[var(--app-primary)] font-semibold" : "text-[var(--app-muted)]/50 font-medium";
@@ -112,7 +113,7 @@ function StaffSelector({
 
             <Typography
               variant="caption"
-              className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass}`}
+              className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass} capitalize`}
               title={staffName || "Artisan"}
             >
               {staffName || "Artisan"}
@@ -133,6 +134,7 @@ function StaffSelector({
 export default function CartItem({ item }: Readonly<CartItemProps>) {
   const dispatch = useAppDispatch();
   const { isGuest, salonId, items, cartUuid } = useAppSelector((s) => s.cart);
+  const { salon } = useStorefront();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [staffList, setStaffList] = useState<any[]>([]);
   const [staffLoading, setStaffLoading] = useState(false);
@@ -149,23 +151,35 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   const gender = service?.gender;
   const selectedStaffId = item.staff?.uuid ?? item.staff_uuid ?? null;
 
+  const effectiveSalonId = salonId || salon?.uuid || service?.salon_id || item?.salon_id;
+
   useEffect(() => {
-    if (!service?.uuid || !salonId) return;
+    if (!service?.uuid || !effectiveSalonId) return;
 
     const fetchStaff = async () => {
       setStaffLoading(true);
       try {
-        const data = await dispatch(getServiceStaffsAction({ serviceUuid: service.uuid, salonId })).unwrap();
-        setStaffList(data);
+        const data = await dispatch(getServiceStaffsAction({ serviceUuid: service.uuid, salonId: effectiveSalonId })).unwrap();
+        if (Array.isArray(data) && data.length > 0) {
+          setStaffList(data);
+        } else if (salon?.staff && salon.staff.length > 0) {
+          setStaffList(salon.staff.map((st: any) => ({ staff: st, staff_id: st.uuid || st.id, price, duration: duration || service?.duration })));
+        } else {
+          setStaffList([]);
+        }
       } catch {
-        setStaffList([]);
+        if (salon?.staff && salon.staff.length > 0) {
+          setStaffList(salon.staff.map((st: any) => ({ staff: st, staff_id: st.uuid || st.id, price, duration: duration || service?.duration })));
+        } else {
+          setStaffList([]);
+        }
       } finally {
         setStaffLoading(false);
       }
     };
 
     fetchStaff();
-  }, [service?.uuid]);
+  }, [service?.uuid, effectiveSalonId, salon?.staff]);
 
   const onStaffClick = (entry: any) => {
     if (updating) return;
@@ -247,7 +261,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           />
 
           <Box className="flex-1 min-w-0">
-            <Typography className="font-editorial text-lg sm:text-xl font-bold text-[var(--app-text)] truncate" title={name}>
+            <Typography className="font-editorial text-lg sm:text-xl font-bold text-[var(--app-text)] truncate capitalize" title={name}>
               {name}
             </Typography>
             <Box className="flex items-center gap-2 mt-1">
@@ -270,13 +284,13 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
               <Box className="flex items-center gap-2 mt-2 px-2.5 py-1 rounded-lg bg-[var(--app-bg)] border border-[var(--app-primary)]/20 w-fit">
                 <Avatar
                   src={currentStaffInfo.photo}
-                  className="w-5 h-5 text-[10px] border border-[var(--app-primary)] shrink-0"
+                  className="w-5 h-5 text-[10px] border border-[var(--app-primary)] shrink-0 capitalize"
                 >
                   {currentStaffInfo.name?.[0]}
                 </Avatar>
                 <Typography
                   variant="caption"
-                  className="text-[var(--app-text)] text-xs font-medium truncate"
+                  className="text-[var(--app-text)] text-xs font-medium truncate capitalize"
                 >
                   {currentStaffInfo.name}
                 </Typography>

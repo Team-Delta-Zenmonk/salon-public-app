@@ -116,7 +116,7 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
 
       <Box
         className={`
-          mt-4 p-4 rounded-[12px] border border-dashed border-[var(--app-border)]
+          mt-4 p-4 rounded-xl border border-dashed border-[var(--app-border)]
           flex items-center justify-center gap-3
           ${isDark ? "bg-white/3" : "bg-gray-50/50"}
         `}
@@ -137,7 +137,7 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
           variant="contained"
           disabled={!stripe || processing || isExpired}
           className={`
-            rounded-[12px] font-black py-4 text-sm normal-case transition-all duration-200
+            rounded-xl font-black py-4 text-sm normal-case transition-all duration-200
             bg-[var(--app-primary)] text-white shadow-[0_8px_16px_-4px_var(--app-primary-soft)]
             hover:shadow-[0_12px_20px_-4px_var(--app-primary-soft)]
             disabled:opacity-50

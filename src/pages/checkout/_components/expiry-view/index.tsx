@@ -7,7 +7,7 @@ interface ExpiryViewProps {
 
 export default function ExpiryView({ onReturn }: Readonly<ExpiryViewProps>) {
   return (
-    <Box className="p-10 text-center border border-[var(--app-border)] !bg-[var(--app-primary-soft)] rounded-[32px] shadow-sm animate-in fade-in zoom-in-95 duration-500">
+    <Box className="p-10 text-center border border-[var(--app-border)] !bg-[var(--app-primary-soft)] rounded-2xl shadow-sm animate-in fade-in zoom-in-95 duration-500">
       <Box className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-6">
         <ErrorOutlineIcon color="error" className="text-[32px]" />
       </Box>
@@ -18,7 +18,7 @@ export default function ExpiryView({ onReturn }: Readonly<ExpiryViewProps>) {
       <Button
         variant="contained"
         onClick={onReturn}
-        className="rounded-[12px] px-10 py-3 font-black normal-case shadow-lg shadow-[var(--app-primary-soft)] transition-all active:scale-95"
+        className="rounded-xl px-10 py-3 font-black normal-case shadow-lg shadow-[var(--app-primary-soft)] transition-all active:scale-95"
       >
         Return to Cart
       </Button>

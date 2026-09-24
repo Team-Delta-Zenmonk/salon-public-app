@@ -37,34 +37,33 @@ export default function SignUp() {
       <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT COLUMN: Editorial Hero Showcase & Member Privileges (5 cols) */}
         <aside className="lg:col-span-5 flex flex-col gap-6">
-          {/* Visual Card with Image & Dark Gradient Overlay */}
-          <Box className="relative rounded-2xl overflow-hidden panel-rim bg-[var(--app-bg)] shadow-2xl group">
+          {/* Visual Card with Image & Gradient Overlay */}
+          <Box className="relative rounded-2xl overflow-hidden border border-[var(--app-border)]/40 bg-[var(--app-surface-alt)] shadow-lg group">
             <Box className="aspect-[3/4] w-full relative overflow-hidden">
               <img
                 alt="Precision Hair Silhouette Model"
                 className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9MuS3xDHkjwiYKF8-kgmQ9VV1GOmKNpg6rFlOEMJ-uVHxoWnGQDxpXqsN5UTVQOkLYjCU6CSOuLXjAGh6VZrx-e5VHil70eIX7Zav-fnW6SdNaYyYVomK8vImtYk1VEY32vBra5cslZbUVPb9r1zVrfoUjw6A2NA7KRT2opCDSXOoUW2p9drgf-aejtR1YL0_I5etQ_AIElztjZTcsx9Lnm8HJxvl7oAuRYchHFwLLQHdiKmEryioof6MdFuY-yqDnB57GdEV0qQ"
               />
-              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/50 to-transparent" />
-              <Box className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)]/80 via-transparent to-[var(--app-bg)]/30" />
-              <Box className="absolute -bottom-10 -left-10 w-48 h-48 /20 blur-3xl pointer-events-none rounded-full" />
+              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-surface-alt)] via-[var(--app-surface-alt)]/40 to-transparent" />
+              <Box className="absolute inset-0 bg-gradient-to-r from-[var(--app-surface-alt)]/60 via-transparent to-[var(--app-surface-alt)]/20" />
 
               {/* Salon Seal Badge */}
-              <Box className="absolute top-4 left-4 bg-[var(--app-surface-alt)]/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--app-primary)]/30 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full" />
+              <Box className="absolute top-4 left-4 bg-[var(--app-surface-alt)]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--app-primary)]/30 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--app-primary)]" />
                 <span className="text-[10px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
                   Master Cut & Silhouette No. 44
                 </span>
               </Box>
               <Box className="absolute top-4 right-4">
-                <span className="px-2.5 py-1 rounded bg-[var(--app-bg)]/80 backdrop-blur-sm border border-[var(--app-border)]/40 text-[10px] font-bold text-[var(--app-muted)]">
+                <span className="px-2.5 py-1 rounded bg-[var(--app-surface-alt)]/90 backdrop-blur-sm border border-[var(--app-border)]/40 text-[10px] font-bold text-[var(--app-muted)]">
                   COLLECTION '25
                 </span>
               </Box>
             </Box>
 
             {/* VIP Testimonial Quote Panel */}
-            <Box className="p-5 relative -mt-16 z-10 bg-gradient-to-b from-[var(--app-surface-alt)]/90 to-[var(--app-bg)]/95 backdrop-blur-md rounded-b-2xl border-t border-[var(--app-border)]/30">
+            <Box className="p-5 relative -mt-16 z-10 bg-[var(--app-surface-alt)] backdrop-blur-md rounded-b-2xl border-t border-[var(--app-border)]/30">
               <Box className="flex items-center gap-1 text-[var(--app-primary)] mb-2">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <StarRoundedIcon key={s} className="text-[16px] text-[var(--app-primary)]" />
@@ -85,7 +84,7 @@ export default function SignUp() {
           </Box>
 
           {/* Salon Membership Perks Teaser Box */}
-          <Box className="bg-[var(--app-surface-alt)] rounded-2xl p-6 panel-rim space-y-4 shadow-xl">
+          <Box className="bg-[var(--app-surface-alt)] rounded-2xl p-6 border border-[var(--app-border)]/40 space-y-4 shadow-md">
             <Box className="flex items-center justify-between">
               <Typography className="font-editorial text-lg font-semibold text-[var(--app-text)] flex items-center gap-2">
                 <WorkspacePremiumOutlinedIcon className="text-[var(--app-primary)]" />
@@ -97,7 +96,7 @@ export default function SignUp() {
             </Box>
             <ul className="space-y-4 p-0 m-0 list-none">
               <li className="flex items-start gap-3">
-                <Box className="mt-0.5 w-6 h-6 rounded-full /40 flex items-center justify-center shrink-0">
+                <Box className="mt-0.5 w-6 h-6 rounded-full bg-[var(--app-primary-soft)] text-[var(--app-primary)] flex items-center justify-center shrink-0">
                   <MeetingRoomOutlinedIcon className="text-[14px]" />
                 </Box>
                 <Box>
@@ -106,7 +105,7 @@ export default function SignUp() {
                 </Box>
               </li>
               <li className="flex items-start gap-3">
-                <Box className="mt-0.5 w-6 h-6 rounded-full /40 flex items-center justify-center shrink-0">
+                <Box className="mt-0.5 w-6 h-6 rounded-full bg-[var(--app-primary-soft)] text-[var(--app-primary)] flex items-center justify-center shrink-0">
                   <LocalBarOutlinedIcon className="text-[14px]" />
                 </Box>
                 <Box>
@@ -115,7 +114,7 @@ export default function SignUp() {
                 </Box>
               </li>
               <li className="flex items-start gap-3">
-                <Box className="mt-0.5 w-6 h-6 rounded-full /40 flex items-center justify-center shrink-0">
+                <Box className="mt-0.5 w-6 h-6 rounded-full bg-[var(--app-primary-soft)] text-[var(--app-primary)] flex items-center justify-center shrink-0">
                   <HistoryEduOutlinedIcon className="text-[14px]" />
                 </Box>
                 <Box>
@@ -129,7 +128,7 @@ export default function SignUp() {
 
         {/* RIGHT COLUMN: Elegant Dossier Intake & Authentication Pane (7 cols) */}
         <section className="lg:col-span-7 flex flex-col gap-6">
-          <Box className="bg-[var(--app-surface-alt)] rounded-2xl p-6 sm:p-8 panel-rim shadow-2xl relative space-y-6 border border-[var(--app-border)]/40">
+          <Box className="bg-[var(--app-surface-alt)] rounded-2xl p-6 sm:p-8 border border-[var(--app-border)]/40 shadow-lg relative space-y-6">
             <Box className="border-b border-[var(--app-border)]/30 pb-4 space-y-2">
               <Box className="flex items-center gap-2">
                 <span className="text-[10px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
@@ -148,7 +147,7 @@ export default function SignUp() {
               </Typography>
             </Box>
 
-            <Box className="rounded-xl border border-[var(--app-border)]/40 bg-[var(--app-bg)] p-4 text-xs text-[var(--app-muted)] space-y-1">
+            <Box className="rounded-xl border border-[var(--app-border)]/30 bg-[var(--app-surface)] p-4 text-xs text-[var(--app-muted)] space-y-1">
               <span className="font-bold text-[var(--app-primary)] uppercase block text-[10px] tracking-wider">
                 Sanctuary One-Tap Access
               </span>

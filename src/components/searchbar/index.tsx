@@ -44,7 +44,7 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
   return (
     <TextField
       size="medium"
-      className="w-full max-w-175 [&_.MuiInputBase-root]:h-10 sm:[&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-xl sm:[&_.MuiInputBase-root]:rounded-[14px] [&_.MuiOutlinedInput-notchedOutline]:border-(--app-muted)/35 [&_.MuiInputBase-root:hover_.MuiOutlinedInput-notchedOutline]:border-(--app-primary) [&_.MuiInputBase-root.Mui-focused_.MuiOutlinedInput-notchedOutline]:border-(--app-primary)"
+      className="w-full max-w-175 [&_.MuiInputBase-root]:h-10 sm:[&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-xl sm:[&_.MuiInputBase-root]:rounded-xl [&_.MuiOutlinedInput-notchedOutline]:border-(--app-muted)/35 [&_.MuiInputBase-root:hover_.MuiOutlinedInput-notchedOutline]:border-(--app-primary) [&_.MuiInputBase-root.Mui-focused_.MuiOutlinedInput-notchedOutline]:border-(--app-primary)"
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleOnChange}

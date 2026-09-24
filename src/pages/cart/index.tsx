@@ -93,7 +93,7 @@ export default function Cart() {
   if (isFetchingCart || !loaded) {
     return (
       <Box className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-5">
-        <Skeleton variant="rounded" height={176} className="rounded-3xl" />
+        <Skeleton variant="rounded" height={176} className="rounded-xl" />
         {[1, 2].map((i) => (
           <Skeleton key={i} variant="rounded" height={96} className="rounded-2xl" />
         ))}
@@ -104,7 +104,7 @@ export default function Cart() {
   if (!items.length) {
     return (
       <Box className="flex flex-col items-center justify-center p-10 sm:p-16 text-center gap-4">
-        <Box className="w-18 h-18 rounded-3xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
+        <Box className="w-18 h-18 rounded-xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
           <StorefrontIcon className="text-[32px] text-(--app-muted)" />
         </Box>
         <Box>
@@ -155,7 +155,7 @@ export default function Cart() {
 
                 <Box className="flex-1 min-w-0">
                   <Box className="flex items-center gap-3 mb-2 flex-wrap">
-                    <Typography className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--app-text)] tracking-tight">
+                    <Typography className="font-editorial text-2xl sm:text-3xl font-bold text-[var(--app-text)] tracking-tight capitalize">
                       {salon.name}
                     </Typography>
                     <Box className="px-3 py-1 /10 rounded-full border border-[var(--app-primary)]/30">
@@ -167,7 +167,7 @@ export default function Cart() {
 
                   <Box className="flex items-center gap-2 text-xs text-[var(--app-muted)]/70">
                     <PlaceIcon className="text-sm text-[var(--app-primary)]" />
-                    <Typography variant="body2" className="text-xs text-[var(--app-muted)]/70 truncate">
+                    <Typography variant="body2" className="text-xs text-[var(--app-muted)]/70 truncate capitalize">
                       {salon.address}
                     </Typography>
                   </Box>

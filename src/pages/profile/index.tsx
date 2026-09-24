@@ -51,7 +51,7 @@ export default function Profile() {
               <Typography className="font-editorial text-xl sm:text-2xl font-bold text-[var(--app-text)] truncate">
                 {fullName}
               </Typography>
-              <Box className="mt-1 px-3 py-0.5 /10 border border-[var(--app-primary)]/30 rounded-full w-fit">
+              <Box className="mt-1 px-3 py-0.5 /10 border border-[var(--app-primary)]/30 rounded-full w-fit capitalize">
                 <Typography className="text-[10px] font-mono font-semibold text-[var(--app-primary)] uppercase tracking-widest">
                   VIP Patron Member
                 </Typography>

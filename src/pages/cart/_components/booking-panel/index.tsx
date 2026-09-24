@@ -209,7 +209,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         slotProps={{
           paper: {
             className:
-              "flex flex-col bg-(--app-surface) overflow-hidden rounded-t-[20px] sm:rounded-[20px] sm:mb-3 sm:max-w-[560px] sm:mx-auto max-h-[94dvh] sm:max-h-[88vh] border border-(--app-border)",
+              "flex flex-col bg-(--app-surface) overflow-hidden rounded-t-2xl sm:rounded-2xl sm:mb-3 sm:max-w-[560px] sm:mx-auto max-h-[94dvh] sm:max-h-[88vh] border border-(--app-border)",
           },
           transition: { timeout: 320 },
         }}
@@ -224,7 +224,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
           <IconButton
             onClick={onClose}
             size="small"
-            className="bg-(--app-surface-alt) border border-(--app-border) hover:bg-(--app-bg) rounded-[10px]"
+            className="bg-(--app-surface-alt) border border-(--app-border) hover:bg-(--app-bg) rounded-lg"
           >
             <CloseIcon className="text-(--app-muted) text-base" />
           </IconButton>

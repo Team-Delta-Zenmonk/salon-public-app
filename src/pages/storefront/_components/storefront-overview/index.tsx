@@ -37,7 +37,7 @@ export default function StorefrontOverview({
 
   return (
     <Box className="space-y-6 sm:space-y-8">
-      <Box className="relative overflow-hidden rounded-3xl border border-(--app-border) shadow-[0_20px_50px_rgba(15,23,42,0.14)]">
+      <Box className="relative overflow-hidden rounded-xl border border-(--app-border) shadow-[0_20px_50px_rgba(15,23,42,0.14)]">
         <Box className="absolute inset-0 bg-linear-to-br from-(--app-hero-from)/90 via-(--app-primary)/85 to-(--app-hero-to)/90" />
         <Box className="absolute inset-0 bg-linear-to-t from-black/50 via-black/15 to-transparent" />
         <Box className="absolute inset-0 bg-radial-[circle_at_20%_30%] from-white/15 to-transparent" />
@@ -141,7 +141,7 @@ export default function StorefrontOverview({
 
       <StorefrontGallery photos={salon?.photos} logo={salon?.logo} />
 
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
         <Box className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-(--app-border)">
           <Box>
             <Box className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function StorefrontOverview({
       </Box>
 
       {staff.length > 0 && (
-        <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
           <Box className="flex items-center justify-between gap-3 mb-5 pb-3 border-b border-(--app-border)">
             <Box>
               <Typography className="text-lg sm:text-xl font-black text-(--app-text)">
@@ -212,14 +212,14 @@ export default function StorefrontOverview({
                   <Avatar
                     src={photo}
                     alt={fullName}
-                    className="w-14 h-14 mx-auto ring-2 ring-(--app-border) group-hover:scale-105 transition-transform"
+                    className="w-14 h-14 mx-auto ring-2 ring-(--app-border) group-hover:scale-105 transition-transform capitalize"
                   >
                     {initials || "S"}
                   </Avatar>
                   <Typography className="font-bold text-xs text-(--app-text) truncate mt-2">
                     {fullName}
                   </Typography>
-                  <Typography className="text-[10px] text-(--app-muted) truncate mt-0.5">
+                  <Typography className="text-[10px] text-(--app-muted) truncate mt-0.5 capitalize">
                     {member.title || member.role || "Stylist"}
                   </Typography>
                 </Box>
@@ -229,7 +229,7 @@ export default function StorefrontOverview({
         </Box>
       )}
 
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_10px_28px_rgba(15,23,42,0.05)]">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_10px_28px_rgba(15,23,42,0.05)]">
         <Box className="flex items-start gap-3.5 min-w-0">
           <Box className="w-11 h-11 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center shrink-0">
             <AccessTimeIcon className="text-[22px]" />

@@ -86,7 +86,7 @@ export default function BookingSuccess() {
         <Box className={styles.animateSlideUp}>
           <Card
             elevation={0}
-            className="bg-(--app-surface) border border-(--app-border) overflow-hidden rounded-[24px] sm:rounded-[32px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.18)] relative"
+            className="bg-(--app-surface) border border-(--app-border) overflow-hidden rounded-2xl sm:rounded-2xl shadow-[0_30px_70px_-20px_rgba(0,0,0,0.18)] relative"
           >
             <Box className={styles.cardShine} />
 

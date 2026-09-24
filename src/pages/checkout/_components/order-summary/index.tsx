@@ -17,11 +17,11 @@ export default function OrderSummary({ salon, booking, dateStr }: Readonly<Order
   return (
     <Paper
       elevation={0}
-      className="rounded-[18px] bg-[var(--app-surface)] border border-[var(--app-border)] overflow-hidden"
+      className="rounded-xl bg-[var(--app-surface)] border border-[var(--app-border)] overflow-hidden"
     >
       <Box className={`p-4 border-b border-[var(--app-border)] ${isDark ? "bg-white/5" : "bg-black/2"}`}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Box className="w-11 h-11 rounded-[12px] bg-white border border-[var(--app-border)] p-1 flex items-center justify-center overflow-hidden">
+          <Box className="w-11 h-11 rounded-xl bg-white border border-[var(--app-border)] p-1 flex items-center justify-center overflow-hidden">
             <img src={salon?.logo || ""} alt={salon?.name} className="max-w-full max-h-full object-contain" />
           </Box>
           <Box className="min-w-0">

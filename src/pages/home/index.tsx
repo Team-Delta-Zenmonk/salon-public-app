@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Box, Typography, Button, Avatar } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -9,6 +9,8 @@ import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
@@ -34,8 +36,50 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [addingItemIds, setAddingItemIds] = useState<string[]>([]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  const fallbackPhotos = [
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuDg4fWQGY7q01kQEu7Azo-ZxML-xjADF9Algitpt7Ou5sct21_1ua4IwDBx4jGE1pKbAzk6X4b7Tc3z055WSJ-jWOYfOUxzhwKfGYwhm6m4_IHkLoBbjPFJiXN8PaaPHxG56I1j5s0IwbflHjDOE3nSfXTxCTCukrnB2J2fhzv7PJVD2Cvoap0pFNZB9Ju8Jito4BmDcyjiVxQt9eMTS3aoL8UFBE7oamYkIWM52o4E00IFOp6Ie-skBv75NSxqd3h6gB6P_J4FHEU",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuAFMkai6tqROm_DonJ_7nSmEjMzHFcmPJmUMfjP1sVIpqOtPImAtz70lBJCodNCeDqojEQm4L1jcmAdG3RqYu-Sgtqtbrr2FSquSgP5if7Vyz2sRcyzD9DJ8C19QuCSwqfDmaVWJgEPWTlB7YSjFEEgrHUdIAMqlagl_kBx8qXcgLQ0dWeWMqILJo5yCvRfa_Zyj8wdnuNZRiE3x0Dii-W70sbseI2Ozcm6paYV-LffI7W_QHG1Tl5H70D0-iV2HhWI9l_EyZdZvA4",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuCrw5TTPmKj4iyxLRJcfvYzsFy0Is8HDNZX88J0zbU17I2S5PfH8IJe9mM5LMYSJUJ8h9yIUzxv9-xSoZtrvPUnqiBtZ0rdCNqzmUXephKg8iOIOA-PJz9Y5ZEcNCzRdQ3euTyBVjoc-ZnRCr62fTqc3xjU3S0-Mp_n8P4116iDauWQYLlvDL6Oxx1FHl3BDFFeK38FvLfGRC-iVB47xq8P2bPbGLwimA7bZf6Oxg3tIO-N3DinnhUdsZcVqi7FGIWBtdNowsqgES4",
+  ];
+
+  const galleryImages = useMemo(() => {
+    const urls = photos.map((p) => p?.secure_url || p?.url).filter(Boolean);
+    return urls.length > 0 ? urls : fallbackPhotos;
+  }, [photos]);
+
+  useEffect(() => {
+    if (galleryImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [galleryImages.length]);
 
   const rootServices = useMemo(() => services.filter((s: any) => s.parent_id === null), [services]);
+  const salonCategories: any[] = salon?.categories || [];
+
+  const categorySanctuaries = useMemo(() => {
+    const list: { id: string; label: string }[] = [{ id: "all", label: "All Services" }];
+    const seen = new Set<string>();
+
+    salonCategories.forEach((cat) => {
+      if (cat.name && !seen.has(cat.name.toLowerCase())) {
+        seen.add(cat.name.toLowerCase());
+        list.push({ id: String(cat.id || cat.uuid || cat.name).toLowerCase(), label: cat.name });
+      }
+    });
+
+    services.forEach((s) => {
+      if (s.category?.name && !seen.has(s.category.name.toLowerCase())) {
+        seen.add(s.category.name.toLowerCase());
+        list.push({ id: s.category.name.toLowerCase(), label: s.category.name });
+      }
+    });
+
+    return list;
+  }, [salonCategories, services]);
 
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
@@ -107,8 +151,11 @@ export default function HomePage() {
         if (sg !== "unisex" && sg !== selectedGender) return false;
       }
       if (selectedCategory !== "all") {
-        const catName = s.category?.name?.toLowerCase() || s.name?.toLowerCase() || "";
-        if (!catName.includes(selectedCategory)) return false;
+        const catName = s.category?.name?.toLowerCase() || "";
+        const catId = String(s.category?.id || s.category_id || "").toLowerCase();
+        if (selectedCategory !== catName && selectedCategory !== catId && !catName.includes(selectedCategory)) {
+          return false;
+        }
       }
       return true;
     });
@@ -187,64 +234,85 @@ export default function HomePage() {
             </Box>
           </Box>
 
-          {/* Right Column: Split Luxury Salon Gallery Bento (Stitch 1:1) */}
+          {/* Right Column: Split Luxury Salon Gallery Bento with image shifting */}
           <Box className="lg:col-span-6 grid grid-cols-2 gap-4">
-            {/* Showcase Tile 1: Hair Sculpture */}
+            {/* Showcase Tile 1: Main Tall Box */}
             <Box className="group relative rounded-xl overflow-hidden panel-rim bg-[var(--app-surface-alt)] aspect-[4/5] row-span-2 shadow-2xl transition-all duration-300 hover:scale-[1.01]">
-              <img
-                alt="Haute Hair Sculpture"
-                src={
-                  heroPhoto ||
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuDg4fWQGY7q01kQEu7Azo-ZxML-xjADF9Algitpt7Ou5sct21_1ua4IwDBx4jGE1pKbAzk6X4b7Tc3z055WSJ-jWOYfOUxzhwKfGYwhm6m4_IHkLoBbjPFJiXN8PaaPHxG56I1j5s0IwbflHjDOE3nSfXTxCTCukrnB2J2fhzv7PJVD2Cvoap0pFNZB9Ju8Jito4BmDcyjiVxQt9eMTS3aoL8UFBE7oamYkIWM52o4E00IFOp6Ie-skBv75NSxqd3h6gB6P_J4FHEU"
-                }
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/20 to-transparent" />
-              <Box className="absolute bottom-4 left-4 right-4">
+              {galleryImages.map((imgUrl: string, idx: number) => {
+                const isVisible = idx === carouselIndex % galleryImages.length;
+                return (
+                  <img
+                    key={`bento-1-${imgUrl}`}
+                    alt="Sanctuary Showcase 1"
+                    src={imgUrl}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
+                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
+                  />
+                );
+              })}
+              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/20 to-transparent z-10 pointer-events-none" />
+              <Box className="absolute bottom-4 left-4 right-4 z-20 pointer-events-none">
                 <span className="text-[11px] font-bold text-[var(--app-primary)] uppercase tracking-widest block">
-                  Haute Salon
+                  Haute Atelier
                 </span>
-                <Typography className="font-editorial text-lg text-[var(--app-text)] font-semibold mt-0.5">
-                  Haute Hair Sculpture & Balayage
+                <Typography className="font-editorial text-lg text-[var(--app-text)] font-semibold mt-0.5 capitalize">
+                  {salon?.name || "Sanctuary Ambience"}
                 </Typography>
                 <Typography className="text-xs text-[#f6dce3] mt-1">
-                  Multi-tonal crimson gloss & precision geometry
+                  Bespoke hair sculpture & precision design
                 </Typography>
               </Box>
             </Box>
 
-            {/* Showcase Tile 2: Dermal Micro-Infusion */}
+            {/* Showcase Tile 2: Top Right Square Box */}
             <Box className="group relative rounded-xl overflow-hidden panel-rim bg-[var(--app-surface-alt)] aspect-square shadow-xl transition-all duration-300 hover:scale-[1.01]">
-              <img
-                alt="Clinical Dermal Treatment"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFMkai6tqROm_DonJ_7nSmEjMzHFcmPJmUMfjP1sVIpqOtPImAtz70lBJCodNCeDqojEQm4L1jcmAdG3RqYu-Sgtqtbrr2FSquSgP5if7Vyz2sRcyzD9DJ8C19QuCSwqfDmaVWJgEPWTlB7YSjFEEgrHUdIAMqlagl_kBx8qXcgLQ0dWeWMqILJo5yCvRfa_Zyj8wdnuNZRiE3x0Dii-W70sbseI2Ozcm6paYV-LffI7W_QHG1Tl5H70D0-iV2HhWI9l_EyZdZvA4"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/30 to-transparent" />
-              <Box className="absolute bottom-3 left-3 right-3">
+              {galleryImages.map((imgUrl: string, idx: number) => {
+                const isVisible = idx === (carouselIndex + 1) % galleryImages.length;
+                return (
+                  <img
+                    key={`bento-2-${imgUrl}`}
+                    alt="Sanctuary Showcase 2"
+                    src={imgUrl}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
+                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
+                  />
+                );
+              })}
+              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/30 to-transparent z-10 pointer-events-none" />
+              <Box className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none">
                 <span className="text-[10px] font-bold text-[var(--app-primary)] uppercase tracking-widest block">
                   Clinical Dermal
                 </span>
-                <Typography className="text-sm font-semibold text-[var(--app-text)] leading-tight">
-                  Radiant Micro-Infusion
+                <Typography className="font-editorial text-sm text-[var(--app-text)] font-semibold leading-tight">
+                  Hydro-dermal therapy
                 </Typography>
               </Box>
             </Box>
 
-            {/* Showcase Tile 3: Master Barber Shave */}
+            {/* Showcase Tile 3: Bottom Right Square Box */}
             <Box className="group relative rounded-xl overflow-hidden panel-rim bg-[var(--app-surface-alt)] aspect-square shadow-xl transition-all duration-300 hover:scale-[1.01]">
-              <img
-                alt="Master Barber Shave Ritual"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrw5TTPmKj4iyxLRJcfvYzsFy0Is8HDNZX88J0zbU17I2S5PfH8IJe9mM5LMYSJUJ8h9yIUzxv9-xSoZtrvPUnqiBtZ0rdCNqzmUXephKg8iOIOA-PJz9Y5ZEcNCzRdQ3euTyBVjoc-ZnRCr62fTqc3xjU3S0-Mp_n8P4116iDauWQYLlvDL6Oxx1FHl3BDFFeK38FvLfGRC-iVB47xq8P2bPbGLwimA7bZf6Oxg3tIO-N3DinnhUdsZcVqi7FGIWBtdNowsqgES4"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/30 to-transparent" />
-              <Box className="absolute bottom-3 left-3 right-3">
+              {galleryImages.map((imgUrl: string, idx: number) => {
+                const isVisible = idx === (carouselIndex + 2) % galleryImages.length;
+                return (
+                  <img
+                    key={`bento-3-${imgUrl}`}
+                    alt="Sanctuary Showcase 3"
+                    src={imgUrl}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
+                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
+                  />
+                );
+              })}
+              <Box className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/30 to-transparent z-10 pointer-events-none" />
+              <Box className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none">
                 <span className="text-[10px] font-bold text-[var(--app-primary)] uppercase tracking-widest block">
-                  Master Barber
+                  Botanical Rituals
                 </span>
-                <Typography className="text-sm font-semibold text-[var(--app-text)] leading-tight">
-                  Precision Razor Shave
+                <Typography className="font-editorial text-sm text-[var(--app-text)] font-semibold leading-tight">
+                  Sensory botanical rinse
                 </Typography>
               </Box>
             </Box>
@@ -270,20 +338,13 @@ export default function HomePage() {
           </Typography>
         </Box>
 
-        {/* Category Tabs */}
+        {/* Category Tabs (Dynamic from Backend) */}
         <Box className="flex items-center gap-2 overflow-x-auto pb-4 border-b border-[var(--app-border)]/20 mb-6 [scrollbar-width:none]">
-          {[
-            { id: "all", label: "All Services" },
-            { id: "hair", label: "Hair Sculpture & Color" },
-            { id: "dermal", label: "Dermal & Facials" },
-            { id: "grooming", label: "Beard & Grooming" },
-            { id: "scalp", label: "Scalp Rituals" },
-            { id: "nail", label: "Nail Couture" },
-          ].map((cat) => {
+          {categorySanctuaries.map((cat) => {
             const isSel = selectedCategory === cat.id;
             const tabClass = isSel
-              ? "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-[var(--app-surface-alt)] text-[var(--app-text)] border border-[var(--app-primary)]/50 shadow-sm"
-              : "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-[var(--app-surface-alt)] text-[var(--app-muted)] hover:text-[var(--app-primary)]";
+              ? "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-[var(--app-surface-alt)] text-[var(--app-text)] border border-[var(--app-primary)]/50 shadow-sm capitalize"
+              : "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-[var(--app-surface-alt)] text-[var(--app-muted)] hover:text-[var(--app-primary)] capitalize";
 
             return (
               <button
@@ -338,7 +399,7 @@ export default function HomePage() {
             const assignedStaff = staff[0];
             const staffName = assignedStaff
               ? `${assignedStaff.first_name || ""} ${assignedStaff.last_name || ""}`.trim()
-              : "Elena Vance";
+              : "";
 
             const btnClass = added
               ? "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--app-primary)]/20 transition-all active:scale-95 normal-case border-0 bg-emerald-600 text-white"
@@ -362,11 +423,11 @@ export default function HomePage() {
                     </Box>
                   </Box>
 
-                  <Typography className="font-editorial text-xl font-semibold text-[var(--app-text)] group-hover:text-[var(--app-primary)] transition-colors leading-snug">
+                  <Typography className="font-editorial text-xl font-semibold text-[var(--app-text)] group-hover:text-[var(--app-primary)] transition-colors leading-snug capitalize">
                     {service.name}
                   </Typography>
 
-                  <Typography className="text-xs text-[var(--app-muted)] leading-relaxed line-clamp-2">
+                  <Typography className="text-xs text-[var(--app-muted)] leading-relaxed line-clamp-2 capitalize">
                     {service.description ||
                       "Bespoke dry shears tailored to cranial geometry, finished with Japanese camellia heat therapy and an architectural movement blowout."}
                   </Typography>
@@ -378,19 +439,21 @@ export default function HomePage() {
                       <span>{service.duration || 60} Min</span>
                     </Box>
                     <Box className="h-3 w-px bg-[var(--app-border)]/30" />
-                    <Box className="flex items-center gap-2 flex-1 min-w-0">
-                      <Avatar className="w-6 h-6 rounded-full /20 font-bold text-[10px]">
-                        {staffName[0]}
-                      </Avatar>
-                      <Box className="flex-1 truncate">
-                        <Typography className="text-[11px] font-bold text-[var(--app-text)] truncate">
-                          {staffName}
-                        </Typography>
-                        <Typography className="text-[9px] text-[#f6dce3] leading-none">
-                          Master Colorist
-                        </Typography>
+                    {assignedStaff && (
+                      <Box className="flex items-center gap-2 flex-1 min-w-0">
+                        <Avatar className="w-6 h-6 rounded-full /20 font-bold text-[10px] capitalize">
+                          {staffName[0]}
+                        </Avatar>
+                        <Box className="flex-1 truncate">
+                          <Typography className="text-[11px] font-bold text-[var(--app-text)] truncate capitalize">
+                            {staffName}
+                          </Typography>
+                          <Typography className="text-[9px] text-[#f6dce3] leading-none capitalize">
+                            {assignedStaff.role || "Stylist"}
+                          </Typography>
+                        </Box>
                       </Box>
-                    </Box>
+                    )}
                   </Box>
                 </Box>
 
@@ -438,7 +501,7 @@ export default function HomePage() {
                   {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""} Selected
                 </span>
               </Box>
-              <Typography className="text-xs text-[var(--app-text)] font-semibold truncate max-w-md">
+              <Typography className="text-xs text-[var(--app-text)] font-semibold truncate max-w-md capitalize">
                 {cart.items[0]?.name || "Service Selected"}
               </Typography>
             </Box>

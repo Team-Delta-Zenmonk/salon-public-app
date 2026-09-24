@@ -91,7 +91,7 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
         </Box>
 
         <Box className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-          <Skeleton variant="rounded" height={220} className="rounded-3xl" />
+          <Skeleton variant="rounded" height={220} className="rounded-xl" />
           <Box className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Skeleton variant="rounded" height={140} className="rounded-2xl" />
             <Skeleton variant="rounded" height={140} className="rounded-2xl" />
@@ -105,7 +105,7 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
   if (error || !salon) {
     return (
       <Box className="min-h-screen bg-(--app-bg) flex flex-col items-center justify-center p-6 text-center">
-        <Box className="w-18 h-18 rounded-3xl bg-(--app-surface) border border-(--app-border) flex items-center justify-center mb-4 shadow-md">
+        <Box className="w-18 h-18 rounded-xl bg-(--app-surface) border border-(--app-border) flex items-center justify-center mb-4 shadow-md">
           <StorefrontIcon className="text-[36px] text-(--app-muted)" />
         </Box>
         <Typography className="text-xl sm:text-2xl font-black text-(--app-text)">

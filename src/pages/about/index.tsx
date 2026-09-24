@@ -17,7 +17,7 @@ export default function AboutPage() {
   return (
     <Box className="space-y-12 pb-24 text-[var(--app-text)]">
       {/* Hero Header Section */}
-      <section className="relative overflow-hidden pt-8 pb-10 px-4 md:px-12 bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 rounded-3xl">
+      <section className="relative overflow-hidden pt-8 pb-10 px-4 md:px-12 bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 rounded-xl">
         <Box className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <Box className="space-y-3">
             <Box className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export default function AboutPage() {
       <main className="max-w-[1440px] mx-auto px-4 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Sanctuary Philosophy & Etiquette Charter */}
         <Box className="lg:col-span-7 space-y-8">
-          <Box className="p-6 sm:p-8 rounded-3xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
+          <Box className="p-6 sm:p-8 rounded-xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
             <Typography className="font-editorial text-2xl font-bold text-[var(--app-text)]">
               The {salonName} Philosophy
             </Typography>
@@ -50,7 +50,7 @@ export default function AboutPage() {
             </Typography>
           </Box>
 
-          <Box className="p-6 sm:p-8 rounded-3xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
+          <Box className="p-6 sm:p-8 rounded-xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
             <Box className="flex items-center gap-2 text-[var(--app-primary)]">
               <ShieldOutlinedIcon className="text-[22px]" />
               <Typography className="font-editorial text-xl font-bold text-[var(--app-text)]">
@@ -66,7 +66,7 @@ export default function AboutPage() {
         {/* Right Column: Location, Concierge & Working Hours */}
         <Box className="lg:col-span-5 space-y-6">
           {/* Working Hours Card */}
-          <Box className="p-6 sm:p-8 rounded-3xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
+          <Box className="p-6 sm:p-8 rounded-xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
             <Box className="flex items-center gap-2 text-[var(--app-primary)]">
               <AccessTimeOutlinedIcon className="text-[22px]" />
               <Typography className="font-editorial text-xl font-bold text-[var(--app-text)]">
@@ -97,7 +97,7 @@ export default function AboutPage() {
           </Box>
 
           {/* Location Card */}
-          <Box className="p-6 sm:p-8 rounded-3xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
+          <Box className="p-6 sm:p-8 rounded-xl bg-[var(--app-surface-alt)] panel-rim space-y-4 shadow-xl">
             <Box className="flex items-center gap-2 text-[var(--app-primary)]">
               <LocationOnOutlinedIcon className="text-[22px]" />
               <Typography className="font-editorial text-xl font-bold text-[var(--app-text)]">

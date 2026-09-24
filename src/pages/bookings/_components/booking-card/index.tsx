@@ -56,10 +56,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 {booking.salon?.name?.charAt(0)}
               </Avatar>
               <Box className="min-w-0">
-                <Typography className="font-editorial text-base font-bold text-[var(--app-text)] leading-tight truncate">
+                <Typography className="font-editorial text-base font-bold text-[var(--app-text)] leading-tight truncate capitalize">
                   {booking.salon?.name}
                 </Typography>
-                <Typography className="text-xs text-[var(--app-muted)]/70 truncate mt-0.5">
+                <Typography className="text-xs text-[var(--app-muted)]/70 truncate mt-0.5 capitalize">
                   {booking.salon?.address?.split(",")[0]}
                 </Typography>
               </Box>
@@ -134,10 +134,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               {booking.salon?.name?.charAt(0)}
             </Avatar>
             <Box className="min-w-0">
-              <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] leading-tight mb-1 truncate">
+              <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] leading-tight mb-1 truncate capitalize">
                 {booking.salon?.name}
               </Typography>
-              <Typography className="text-xs text-[var(--app-muted)]/70 truncate">
+              <Typography className="text-xs text-[var(--app-muted)]/70 truncate capitalize">
                 {booking.salon?.address || "Flagship Sanctuary"}
               </Typography>
             </Box>

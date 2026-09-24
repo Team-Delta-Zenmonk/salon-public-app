@@ -45,7 +45,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
       slotProps={{
         paper: {
           className:
-            "rounded-3xl overflow-hidden border border-(--app-border) bg-(--app-surface) flex flex-col max-h-[90vh] sm:max-h-[85vh]",
+            "rounded-xl overflow-hidden border border-(--app-border) bg-(--app-surface) flex flex-col max-h-[90vh] sm:max-h-[85vh]",
         },
         backdrop: { className: "backdrop-blur-sm bg-black/35" },
       }}

@@ -68,7 +68,7 @@ export default function BookingConfirmDialog({
       slotProps={{
         paper: {
           className:
-            "bg-(--app-surface) overflow-hidden rounded-[20px] w-[calc(100%-24px)] max-w-[420px] mx-auto border border-(--app-border)",
+            "bg-(--app-surface) overflow-hidden rounded-2xl w-[calc(100%-24px)] max-w-[420px] mx-auto border border-(--app-border)",
           style: { boxShadow: "0 20px 60px rgba(0,0,0,0.2)" },
         },
         backdrop: {
@@ -78,7 +78,7 @@ export default function BookingConfirmDialog({
     >
       <DialogContent className="p-0">
         <Box className="flex items-center gap-3 px-5 sm:px-6 pt-6 pb-5 border-b border-(--app-border)">
-          <Box className="w-9 h-9 rounded-[10px] bg-(--app-primary-soft) border border-(--app-border) flex items-center justify-center shrink-0">
+          <Box className="w-9 h-9 rounded-lg bg-(--app-primary-soft) border border-(--app-border) flex items-center justify-center shrink-0">
             <CheckCircleOutlineIcon className="text-(--app-primary) text-xl" />
           </Box>
           <Box>
@@ -91,7 +91,7 @@ export default function BookingConfirmDialog({
 
         <Box className="px-5 sm:px-6 py-5 flex flex-col gap-4">
           <Box className="flex items-center gap-3">
-            <Box className="w-9 h-9 rounded-[10px] bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center shrink-0">
+            <Box className="w-9 h-9 rounded-lg bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center shrink-0">
               <CalendarMonthIcon className="text-(--app-muted) text-[17px]" />
             </Box>
             <Box>
@@ -107,7 +107,7 @@ export default function BookingConfirmDialog({
           </Box>
 
           <Box className="flex items-center gap-3">
-            <Box className="w-9 h-9 rounded-[10px] bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center shrink-0">
+            <Box className="w-9 h-9 rounded-lg bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center shrink-0">
               <AccessTimeIcon className="text-(--app-muted) text-[17px]" />
             </Box>
             <Box>

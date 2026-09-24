@@ -19,7 +19,7 @@ const SalonLoginCarousel = () => {
   const active = useMemo(() => salonImages[currentIndex], [currentIndex]);
 
   return (
-    <Box className="relative h-full min-h-130 w-full overflow-hidden rounded-3xl border border-(--app-border) bg-(--app-surface)">
+    <Box className="relative h-full min-h-130 w-full overflow-hidden rounded-xl border border-(--app-border) bg-(--app-surface)">
       <Box className="pointer-events-none absolute inset-0 bg-linear-to-br from-(--app-primary-soft)/70 via-transparent to-(--app-surface-alt)" />
 
       <Box className="flex h-full w-full items-center justify-center p-6 sm:p-8">

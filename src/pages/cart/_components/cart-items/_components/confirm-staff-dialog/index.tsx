@@ -61,10 +61,10 @@ export default function ConfirmStaffDialog({
                 <Typography className="text-(--app-muted) uppercase tracking-wide text-[10px] font-semibold">
                   Current
                 </Typography>
-                <Avatar src={currentStaff?.photo} className="w-13 h-13 border-2 border-(--app-border)">
+                <Avatar src={currentStaff?.photo} className="w-13 h-13 border-2 border-(--app-border) capitalize">
                   {currentStaff?.name?.[0]}
                 </Avatar>
-                <Typography className="text-(--app-text) font-semibold text-center text-xs max-w-20 truncate">
+                <Typography className="text-(--app-text) font-semibold text-center text-xs max-w-20 truncate capitalize">
                   {currentStaff?.name}
                 </Typography>
               </Box>
@@ -90,7 +90,7 @@ export default function ConfirmStaffDialog({
               <Avatar src={newStaff?.photo} className="w-15 h-15 border-2 border-(--app-primary)">
                 {newStaff?.name?.[0]}
               </Avatar>
-              <Typography className="text-(--app-text) text-sm font-bold">{newStaff?.name}</Typography>
+              <Typography className="text-(--app-text) text-sm font-bold capitalize">{newStaff?.name}</Typography>
             </Box>
           )}
 

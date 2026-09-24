@@ -117,7 +117,7 @@ export default function StorefrontServices({
 
   return (
     <Box>
-      <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 mb-6 shadow-[0_10px_26px_rgba(15,23,42,0.05)] space-y-4">
+      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 mb-6 shadow-[0_10px_26px_rgba(15,23,42,0.05)] space-y-4">
         <Box className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <Box>
             <Typography className="text-xl sm:text-2xl font-black text-(--app-text) tracking-tight">
@@ -206,7 +206,7 @@ export default function StorefrontServices({
       <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
         <Box className="space-y-4">
           {filteredRootServices.length === 0 ? (
-            <Box className="rounded-3xl border border-(--app-border) bg-(--app-surface) p-12 text-center">
+            <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-12 text-center">
               <TuneIcon className="text-4xl text-(--app-muted) mb-2 opacity-50" />
               <Typography className="text-base font-bold text-(--app-text)">
                 No treatments match your search

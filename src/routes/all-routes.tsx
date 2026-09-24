@@ -13,6 +13,7 @@ import Checkout from "../pages/checkout";
 import ProtectedRoute from "./protected-route";
 import UnProtectedRoute from "./unprotected-route";
 import { StorefrontProvider } from "../providers/storefront-provider";
+import NotFoundPage from "../pages/not-found";
 
 function AllRoutes() {
   return (
@@ -52,10 +53,9 @@ function AllRoutes() {
             <Route path="/salons/:salonSlug/bookings/success" element={<BookingSuccess />} />
             <Route path="/salons/:salonSlug/profile" element={<Profile />} />
           </Route>
-        </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
       </Routes>
     </StorefrontProvider>
   );

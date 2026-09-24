@@ -80,7 +80,7 @@ export default function SlotGrid({
             key={item.id}
             variant="rounded"
             height={44}
-            className="rounded-[10px]"
+            className="rounded-lg"
             style={{ animationDelay: item.animationDelay }}
           />
         ))}
@@ -128,7 +128,7 @@ export default function SlotGrid({
                     key={slot.start}
                     onClick={locked ? undefined : () => onSelectSlot(slot)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
-                    className={`py-3 px-1 rounded-[10px] text-center border-[1.5px] transition-all duration-150 animate-[slotIn_0.25s_ease_both] ${slotStateClass}`}
+                    className={`py-3 px-1 rounded-lg text-center border-[1.5px] transition-all duration-150 animate-[slotIn_0.25s_ease_both] ${slotStateClass}`}
                   >
                     {locked ? (
                       <Box className="flex items-center justify-center gap-1.5">

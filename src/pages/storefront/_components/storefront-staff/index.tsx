@@ -63,7 +63,7 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
               >
                 <Box className="p-3 sm:p-4 flex items-center gap-3">
                   <Box className="relative shrink-0">
-                    <Avatar src={photo} alt={fullName} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-(--app-border)">
+                    <Avatar src={photo} alt={fullName} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-(--app-border) capitalize">
                       {initials || "—"}
                     </Avatar>
                     <Box className="absolute -right-0.5 -bottom-0.5 w-3 h-3 rounded-full border border-(--app-surface) bg-emerald-500" />

@@ -10,7 +10,7 @@ export default function StorefrontFooter() {
     <footer className="mt-auto bg-[var(--app-surface)] border-t border-[var(--app-border)] pt-16 pb-20 md:pb-12 text-[var(--app-text)]">
       <div className="px-4 md:px-12 max-w-[1440px] mx-auto">
         {/* Top Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-[var(--app-border)]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-12 border-b border-[var(--app-border)]">
           {/* Atelier Brand Intro */}
           <div className="md:col-span-1 flex flex-col gap-3">
             <div className="flex items-center gap-3">
@@ -29,24 +29,6 @@ export default function StorefrontFooter() {
               {salon?.about ||
                 "The epicenter of luxury coiffure and bespoke dermal treatments. Where master craftsmanship meets sensory relaxation."}
             </p>
-          </div>
-
-          {/* Hours of Ceremony */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-bold text-[var(--app-primary)] tracking-widest uppercase">
-              Hours of Ceremony
-            </span>
-            <ul className="text-xs text-[var(--app-muted)] space-y-1.5 list-none p-0 m-0">
-              <li className="flex justify-between">
-                <span>Mon - Thu</span> <span className="text-[var(--app-text)]">10:00 AM – 8:30 PM</span>
-              </li>
-              <li className="flex justify-between">
-                <span>Fri - Sat</span> <span className="text-[var(--app-text)]">9:00 AM – 9:30 PM</span>
-              </li>
-              <li className="flex justify-between">
-                <span>Sunday</span> <span className="text-[var(--app-text)]">11:00 AM – 6:00 PM</span>
-              </li>
-            </ul>
           </div>
 
           {/* Etiquette Charter */}

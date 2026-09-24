@@ -14,7 +14,7 @@ export default function SpecialistsPage() {
   return (
     <Box className="space-y-10 pb-24 text-[var(--app-text)]">
       {/* Editorial Header Section (Stitch 1:1 Spec) */}
-      <section className="relative overflow-hidden pt-6 pb-8 px-4 md:px-12 bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 rounded-3xl">
+      <section className="relative overflow-hidden pt-6 pb-8 px-4 md:px-12 bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)] border-b border-[var(--app-border)]/20 rounded-xl">
         <Box className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <Box className="space-y-2">
             <Box className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export default function SpecialistsPage() {
       {/* Main Staff Dossier Grid */}
       <main className="max-w-[1440px] mx-auto px-4 md:px-12">
         {staff.length === 0 ? (
-          <Box className="text-center py-20 px-4 rounded-3xl border border-dashed border-[var(--app-border)] bg-[var(--app-bg)]">
+          <Box className="text-center py-20 px-4 rounded-xl border border-dashed border-[var(--app-border)] bg-[var(--app-bg)]">
             <WorkspacePremiumOutlinedIcon className="text-[var(--app-muted)] text-[48px] mb-3" />
             <Typography className="font-editorial text-xl font-bold text-[var(--app-text)]">
               Artisans Presently Conducting Consultations
@@ -79,7 +79,7 @@ export default function SpecialistsPage() {
                         <Avatar
                           src={photo}
                           alt={fullName}
-                          className="w-20 h-20 rounded-2xl border-2 border-[var(--app-border)] object-cover bg-[var(--app-surface-alt)] group-hover:border-[var(--app-primary)] transition-colors"
+                          className="w-20 h-20 rounded-2xl border-2 border-[var(--app-border)] object-cover bg-[var(--app-surface-alt)] group-hover:border-[var(--app-primary)] transition-colors capitalize"
                         >
                           {member.first_name?.[0] || "S"}
                         </Avatar>
@@ -92,10 +92,10 @@ export default function SpecialistsPage() {
                           <StarRoundedIcon className="text-[14px] text-[var(--app-primary)]" />
                           <span className="text-[var(--app-muted)] font-normal text-[11px]">(140 Sessions)</span>
                         </Box>
-                        <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] group-hover:text-[var(--app-primary)] transition-colors truncate">
+                        <Typography className="font-editorial text-lg font-bold text-[var(--app-text)] group-hover:text-[var(--app-primary)] transition-colors truncate capitalize">
                           {fullName}
                         </Typography>
-                        <Typography className="text-xs text-[var(--app-primary)] font-semibold uppercase tracking-wider mt-0.5">
+                        <Typography className="text-xs text-[var(--app-primary)] font-semibold uppercase tracking-wider mt-0.5 capitalize">
                           {member.title || member.role || "Artistic Director & Colorist"}
                         </Typography>
                       </Box>
@@ -116,7 +116,7 @@ export default function SpecialistsPage() {
                     fullWidth
                     variant="contained"
                     onClick={() => navigate(`/services?specialist=${encodeURIComponent(fullName)}`)}
-                    endIcon={<ArrowForwardIcon className="text-[16px]" />}
+                    endIcon={<ArrowForwardIcon className="text-[16px] capitalize" />}
                     className="mt-6"
                   >
                     Select Specialist for Ritual

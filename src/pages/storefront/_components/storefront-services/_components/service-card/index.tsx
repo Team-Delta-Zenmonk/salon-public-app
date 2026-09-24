@@ -157,7 +157,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
               component="img"
               src={service.logo}
               alt={service.name}
-              className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover"
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover capitalize"
             />
           ) : (
             <Avatar className="w-11 h-11 sm:w-12 sm:h-12 bg-(--app-surface-alt) text-(--app-text)">
@@ -165,9 +165,9 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
             </Avatar>
           )}
 
-          <Box className="flex-1 min-w-0">
+          <Box className="flex-1 min-w-0 capitalize">
             <Box className="font-semibold text-(--app-text) text-sm sm:text-base truncate">{service.name}</Box>
-            <Box className="text-[0.76rem] sm:text-sm text-(--app-muted) line-clamp-2 mt-0.5">
+            <Box className="text-[0.76rem] sm:text-sm text-(--app-muted) line-clamp-2 mt-0.5 capitalize">
               {service.description}
             </Box>
 
