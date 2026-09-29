@@ -1,3 +1,4 @@
+"use client";
 import { AppBar, Toolbar, IconButton, Box, Avatar, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
@@ -5,7 +6,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CartIcon from "./_components/cart-button";
 import { useAppSelector } from "../../store/hook";
 import type { RootState } from "../../store/store";
-import { useNavigate } from "react-router-dom";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useAppThemeMode } from "../../theme/theme-provider";
 import { themeOptions, type AppThemeId } from "../../theme/theme";
 import { useState } from "react";
@@ -17,7 +18,7 @@ interface HeaderProps {
 
 export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
   const cartCount = useAppSelector((state: RootState) => state.cart.items.length);
-  const navigate = useNavigate();
+  const navigate = useStorefrontNavigate();
   const { themeId, setThemeId } = useAppThemeMode();
   const [themeMenuAnchor, setThemeMenuAnchor] = useState<null | HTMLElement>(null);
   const themeMenuOpen = Boolean(themeMenuAnchor);

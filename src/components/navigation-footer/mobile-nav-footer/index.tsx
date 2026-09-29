@@ -1,12 +1,14 @@
+"use client";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { usePathname } from "next/navigation";
+import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { navigation } from "../../../layouts/navigation";
 
 export default function MobileNavFooter() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const navigate = useStorefrontNavigate();
 
-  const current = navigation.find((i) => location.pathname.startsWith(i.to))?.to || "/discovery";
+  const current = navigation.find((i) => (pathname || "").startsWith(i.to))?.to || "/discovery";
 
   return (
     <BottomNavigation

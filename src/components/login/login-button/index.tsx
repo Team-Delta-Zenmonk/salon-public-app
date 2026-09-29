@@ -1,11 +1,13 @@
+"use client";
 import { useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { GoogleResponse } from "../../../auth/get-google-response";
 import { useAppDispatch } from "../../../store/hook";
 import { loginCustomerAction } from "../../../features/auth/login/login.action";
 import { callSnack } from "../../snackbar";
+
 interface LoginButtonProps {
   collapsed?: boolean;
 }
@@ -20,8 +22,10 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
   const { getSignInWithPopup } = GoogleResponse();
   const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
-  const location = useLocation();
-  const routeState = (location.state ?? null) as AuthRedirectState | null;
+  const searchParams = useSearchParams();
+
+  const searchRedirect = searchParams?.get("redirectTo") || undefined;
+  const searchResume = searchParams?.get("resumeBooking") === "true";
 
   const logInWithGoogle = async () => {
     setLoading(true);
@@ -29,11 +33,11 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
       const googleResponse = await getSignInWithPopup();
       await dispatch(loginCustomerAction({ token: googleResponse?.token })).unwrap();
 
-      if (routeState?.redirectTo) {
-        navigate(routeState.redirectTo, {
+      if (searchRedirect) {
+        navigate(searchRedirect, {
           replace: true,
           state: {
-            resumeBooking: !!routeState.resumeBooking,
+            resumeBooking: searchResume,
           } satisfies AuthRedirectState,
         });
         return;
@@ -59,11 +63,16 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
           loading ? (
             <CircularProgress size={18} />
           ) : (
-            <Box component="img" src="/assets/google.svg" alt="Google" className="w-4.5 h-4.5" />
+            <img
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+              alt="Google"
+              className="w-4 h-4"
+            />
           )
         }
+        className="!border-(--app-border) !text-(--app-text) hover:!bg-(--app-primary-soft) hover:!border-(--app-primary) !py-3 !rounded-xl !normal-case !font-semibold !text-sm transition-all shadow-sm"
       >
-        {loading ? "Signing in..." : !collapsed && "Sign in"}
+        {!collapsed && (loading ? "Signing in..." : "Continue with Google")}
       </Button>
     </Box>
   );

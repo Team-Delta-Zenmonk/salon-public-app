@@ -1,8 +1,14 @@
+"use client";
+import dynamic from "next/dynamic";
 import { Controller } from "react-hook-form";
 import type { LatLngValue } from "./_components/location-map";
-import MapPicker from "./_components/location-map";
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import { reverseGeocode } from "../../features/maps/mapbox-geocode.service";
+
+const MapPicker = dynamic(() => import("./_components/location-map"), {
+  ssr: false,
+  loading: () => <Skeleton variant="rounded" height={300} className="w-full rounded-lg" />,
+});
 
 type LocationMapProps = {
   control: any;
@@ -31,6 +37,7 @@ export default function LocationMap({ control, latitude, longitude, label, disab
       clearErrors("address.address");
     }
   };
+
   return (
     <Box className="space-y-2">
       {label && <Box className=" text-lg font-semibold mb-2">{label}</Box>}

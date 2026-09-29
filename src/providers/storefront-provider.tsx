@@ -1,5 +1,6 @@
+"use client";
 import { createContext, useContext, useEffect, useState, useMemo, useCallback, type ReactNode } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Box, Typography, Button, Skeleton } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -30,12 +31,17 @@ export function useStorefront() {
 
 export function StorefrontProvider({ children }: Readonly<{ children: ReactNode }>) {
   const dispatch = useAppDispatch();
-  const location = useLocation();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const resolvedSlug = useMemo(() => getSalonSlug(), [location.pathname, location.search]);
+  const searchString = searchParams ? searchParams.toString() : "";
+  const resolvedSlug = useMemo(
+    () => getSalonSlug(pathname || "", searchString),
+    [pathname, searchString]
+  );
 
   const fetchProfile = useCallback(async () => {
     setLoading(true);
@@ -58,7 +64,7 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
       setSalon(salonData);
       dispatch(setCartSalon(salonData));
 
-      if (salonData?.name) {
+      if (typeof document !== "undefined" && salonData?.name) {
         document.title = `${salonData.name} | Book Online`;
       }
     } catch (err: any) {
@@ -143,3 +149,5 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
     </StorefrontContext.Provider>
   );
 }
+
+export default StorefrontProvider;

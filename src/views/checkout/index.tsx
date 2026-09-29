@@ -1,0 +1,145 @@
+"use client";
+import { useState, useCallback, useEffect } from "react";
+import { Box, Container, Typography, Paper } from "@mui/material";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import { Elements } from "@stripe/react-stripe-js";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
+import { stripePromise } from "../../common/stripe-client";
+import CheckoutHeader from "./_components/checkout-header";
+import MobileSummaryBar from "./_components/mobile-summary-bar";
+import OrderSummary from "./_components/order-summary";
+import PaymentForm from "./_components/payment-form";
+import AssistanceCard from "./_components/assistance-card";
+import SecurityFooter from "./_components/security-footer";
+import ExpiryView from "./_components/expiry-view";
+import PaymentProcessing from "./_components/payment-processing";
+import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
+import { useCheckoutData } from "./hooks/useCheckoutData";
+import { useStripeAppearance } from "./hooks/useStripeAppearance";
+
+interface PaymentPanelProps {
+  clientSecret: string;
+  stripeAppearance: ReturnType<typeof useStripeAppearance>;
+  currentBooking: NonNullable<any>;
+  isExpired: boolean;
+  displaySalon: any;
+  onPaymentSuccess: () => void;
+}
+
+export default function Checkout() {
+  const navigate = useStorefrontNavigate();
+  const { currentBooking, clientSecret, displaySalon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
+    useCheckoutData();
+
+  const stripeAppearance = useStripeAppearance();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePaymentSuccess = useCallback(() => {
+    setIsProcessing(true);
+  }, []);
+
+  const handleProcessingComplete = useCallback(() => {
+    navigate("/bookings/success", {
+      state: { bookingUuid: currentBooking?.uuid, booking: currentBooking },
+      replace: true,
+    });
+  }, [navigate, currentBooking]);
+
+  useEffect(() => {
+    if (!currentBooking && getPaymentCompleted()) {
+      navigate("/bookings", { replace: true });
+    }
+  }, [currentBooking, navigate]);
+
+  if (!currentBooking || !clientSecret) return null;
+
+  if (isProcessing) {
+    return (
+      <PaymentProcessing
+        salonName={displaySalon?.name || "the salon"}
+        onComplete={handleProcessingComplete}
+      />
+    );
+  }
+
+  return (
+    <Box className="min-h-screen w-full bg-(--app-bg) text-(--app-text) flex flex-col relative">
+      <Box className="fixed top-0 right-0 w-1/2 h-full bg-gradient-to-br from-(--app-primary)/5 to-transparent clip-path-angled z-0 hidden lg:block" />
+
+      <CheckoutHeader
+        onBack={handleResetBooking}
+        isExpired={isExpired}
+        urgency={urgency}
+        formattedTime={formattedTime}
+      />
+
+      <MobileSummaryBar salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
+
+      <Container
+        maxWidth="lg"
+        className="px-4 relative z-10 mt-6 lg:mt-20 flex-1 flex flex-col justify-center pb-12"
+      >
+        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <Box className="lg:col-span-7 order-1 w-full">
+            {isExpired ? (
+              <ExpiryView onReturn={handleResetBooking} />
+            ) : (
+              <PaymentPanel
+                clientSecret={clientSecret}
+                stripeAppearance={stripeAppearance}
+                currentBooking={currentBooking}
+                isExpired={isExpired}
+                displaySalon={displaySalon}
+                onPaymentSuccess={handlePaymentSuccess}
+              />
+            )}
+          </Box>
+
+          <Box className="hidden lg:block lg:col-span-5 w-full animate-in fade-in slide-in-from-right-4 duration-500">
+            <Typography className="font-editorial text-xl font-bold text-(--app-text) mb-5 ml-1">
+              Reservation Summary
+            </Typography>
+            <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
+            <AssistanceCard phone={displaySalon?.phone} isDesktop />
+          </Box>
+        </Box>
+      </Container>
+
+      <style>{`
+        .clip-path-angled {
+          clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+      `}</style>
+    </Box>
+  );
+}
+
+function PaymentPanel({
+  clientSecret,
+  stripeAppearance,
+  currentBooking,
+  isExpired,
+  displaySalon,
+  onPaymentSuccess,
+}: Readonly<PaymentPanelProps>) {
+  return (
+    <Box className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <Typography className="font-editorial text-lg font-bold text-(--app-text) mb-6 ml-1 flex items-center gap-2.5">
+        <PaymentsIcon className="text-(--app-primary) text-xl" />
+        Payment Sanctuary
+      </Typography>
+
+      <Paper
+        elevation={0}
+        className="p-6 sm:p-8 bg-(--app-surface) border border-(--app-primary)/15 rounded-2xl shadow-2xl"
+      >
+        <Elements stripe={stripePromise} options={{ clientSecret, appearance: stripeAppearance }}>
+          <PaymentForm booking={currentBooking} isExpired={isExpired} onPaymentSuccess={onPaymentSuccess} />
+        </Elements>
+      </Paper>
+
+      <AssistanceCard phone={displaySalon?.phone} />
+      <SecurityFooter />
+    </Box>
+  );
+}

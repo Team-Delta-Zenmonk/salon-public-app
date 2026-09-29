@@ -8,7 +8,6 @@ import { removeCartItemAction } from "./remove-item/remove-item.action";
 import { deleteCartAction } from "./delete-cart/delete-cart.action";
 import { updateCartItemAction } from "./update-item/update-item.action";
 
-const guestCart = getGuestCart();
 const sortItems = (items: any[]) => [...items].sort((a: any, b: any) => a.id - b.id);
 
 interface CartState {
@@ -22,11 +21,11 @@ interface CartState {
 
 const initialState: CartState = {
   cartUuid: null,
-  salonId: guestCart?.salon?.uuid ?? null,
-  salon: guestCart?.salon ?? null,
-  items: guestCart?.items ?? [],
-  isGuest: !!guestCart,
-  loaded: true,
+  salonId: null,
+  salon: null,
+  items: [],
+  isGuest: true,
+  loaded: false,
 };
 
 export const cartSlice = createSlice({
@@ -84,6 +83,18 @@ export const cartSlice = createSlice({
         state.salon = action.payload;
         state.salonId = action.payload.uuid;
       }
+    },
+
+    initializeGuestCart(state) {
+      if (state.loaded) return;
+      const guestCart = getGuestCart();
+      if (guestCart) {
+        state.salonId = guestCart.salon?.uuid ?? null;
+        state.salon = guestCart.salon ?? null;
+        state.items = guestCart.items ?? [];
+        state.isGuest = true;
+      }
+      state.loaded = true;
     },
 
     clearCart(state) {
@@ -158,6 +169,13 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addItemLocal, clearCart, removeItemLocal, updateItemLocalStaff, setCartSalon } = cartSlice.actions;
+export const {
+  addItemLocal,
+  initializeGuestCart,
+  clearCart,
+  removeItemLocal,
+  updateItemLocalStaff,
+  setCartSalon,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

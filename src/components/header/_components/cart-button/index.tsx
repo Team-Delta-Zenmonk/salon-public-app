@@ -16,7 +16,7 @@ export default function CartIcon({ count = 0, onClick }: Readonly<CartIconProps>
      <Badge
         badgeContent={count}
         color="primary"
-        className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-[var(--app-primary)] [&_.MuiBadge-badge]:text-white"
+        className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-(--app-primary) [&_.MuiBadge-badge]:text-white"
       >
         <ShoppingCartOutlinedIcon />
       </Badge>

@@ -1,3 +1,4 @@
+"use client";
 import {
   AppBar,
   Toolbar,
@@ -20,7 +21,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { getNormalizedStorefrontPath } from "../../../common/storefront-slug.utils";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
@@ -32,7 +33,7 @@ import { STOREFRONT_NAV_ITEMS } from "../../navigation";
 
 export default function StorefrontHeader() {
   const navigate = useStorefrontNavigate();
-  const location = useLocation();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const { salon } = useStorefront();
 
@@ -58,7 +59,7 @@ export default function StorefrontHeader() {
     navigate("/");
   };
 
-  const normalizedPath = getNormalizedStorefrontPath(location.pathname);
+  const normalizedPath = getNormalizedStorefrontPath(pathname || "");
   const isActive = (path: string) => {
     if (path === "/") return normalizedPath === "/";
     return normalizedPath.startsWith(path);
@@ -68,14 +69,14 @@ export default function StorefrontHeader() {
     <AppBar
       position="sticky"
       elevation={0}
-      className="bg-[var(--app-surface)]/90 backdrop-blur-md top-0 sticky z-50 border-b border-[var(--app-border)] shadow-2xl"
+      className="!bg-(--app-surface)/90 backdrop-blur-md top-0 sticky z-50 !border-b !border-(--app-border) shadow-2xl"
     >
       <Toolbar className="flex justify-between items-center w-full px-4 md:px-12 max-w-[1440px] mx-auto py-3 min-h-20">
         {/* Brand Logo & Sparkle Motif (Stitch 1:1 Spec) */}
         <Box className="flex items-center gap-3">
           <IconButton
             size="small"
-            className="md:hidden text-[var(--app-text)] -ml-2"
+            className="md:hidden text-(--app-text) -ml-2"
             onClick={() => setMobileDrawerOpen(true)}
             aria-label="Open navigation menu"
           >
@@ -86,7 +87,7 @@ export default function StorefrontHeader() {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => navigate("/")}
           >
-            <Box className="w-10 h-10 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr from-[var(--app-primary)] to-[var(--app-muted)] shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+            <Box className="w-10 h-10 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr from-(--app-primary) to-(--app-muted) shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
               {salon?.logo ? (
                 <img
                   src={salon.logo}
@@ -103,10 +104,10 @@ export default function StorefrontHeader() {
             </Box>
 
             <Box className="flex flex-col">
-              <span className="font-editorial text-lg tracking-wider text-[var(--app-text)] font-semibold leading-tight group-hover:text-[var(--app-primary)] transition-colors">
+              <span className="font-editorial text-lg tracking-wider text-(--app-text) font-semibold leading-tight group-hover:text-(--app-primary) transition-colors">
                 {salonName}
               </span>
-              <span className="text-[11px] tracking-[0.2em] text-[var(--app-primary)] font-bold uppercase -mt-1 opacity-90">
+              <span className="text-[11px] tracking-[0.2em] text-(--app-primary) font-bold uppercase -mt-1 opacity-90">
                 {salonSub}
               </span>
             </Box>
@@ -124,8 +125,8 @@ export default function StorefrontHeader() {
                 type="button"
                 className={`text-sm font-semibold transition-all duration-200 cursor-pointer bg-transparent border-0 py-1 ${
                   active
-                    ? "text-[var(--app-primary)] border-b-2 border-[var(--app-primary)] pb-1"
-                    : "text-[var(--app-muted)] hover:text-[var(--app-primary)]"
+                    ? "text-(--app-primary) border-b-2 border-(--app-primary) pb-1"
+                    : "text-(--app-muted) hover:text-(--app-primary)"
                 }`}
               >
                 {item.label}
@@ -139,7 +140,7 @@ export default function StorefrontHeader() {
           {/* Theme Palette Switcher Button */}
           <IconButton
             onClick={(e) => setThemeMenuAnchor(e.currentTarget)}
-            className="p-2 text-[var(--app-muted)] hover:text-[var(--app-primary)] transition-colors"
+            className="p-2 text-(--app-muted) hover:text-(--app-primary) transition-colors"
             aria-label="Appearance Theme"
             title="Switch Visual Theme"
           >
@@ -154,12 +155,12 @@ export default function StorefrontHeader() {
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             slotProps={{
               paper: {
-                className: "mt-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] min-w-52 shadow-xl p-1 text-[var(--app-text)]",
+                className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-52 shadow-xl p-1 text-(--app-text)",
               },
             }}
           >
-            <Box className="px-3 py-2 border-b border-[var(--app-border)] mb-1">
-              <Typography className="text-xs font-bold text-[var(--app-primary)] uppercase tracking-wider">
+            <Box className="px-3 py-2 border-b border-(--app-border) mb-1">
+              <Typography className="text-xs font-bold text-(--app-primary) uppercase tracking-wider">
                 Theme Presets
               </Typography>
             </Box>
@@ -172,12 +173,12 @@ export default function StorefrontHeader() {
                     setThemeId(option.id);
                     setThemeMenuAnchor(null);
                   }}
-                  className="flex items-center justify-between py-2 text-xs font-semibold rounded-xl hover:bg-[var(--app-surface-alt)]"
+                  className="flex items-center justify-between py-2 text-xs font-semibold rounded-xl hover:bg-(--app-surface-alt)"
                 >
-                  <span className={selected ? "text-[var(--app-primary)] font-bold" : "text-[var(--app-text)]"}>
+                  <span className={selected ? "text-(--app-primary) font-bold" : "text-(--app-text)"}>
                     {option.label}
                   </span>
-                  {selected && <CheckIcon className="text-[var(--app-primary)] text-[16px]" />}
+                  {selected && <CheckIcon className="text-(--app-primary) text-[16px]" />}
                 </MenuItem>
               );
             })}
@@ -188,11 +189,11 @@ export default function StorefrontHeader() {
             onClick={() => navigate("/cart")}
             type="button"
             aria-label="Shopping Bag"
-            className="relative p-2 text-[var(--app-muted)] hover:text-[var(--app-primary)] transition-colors duration-200 cursor-pointer bg-transparent border-0 flex items-center justify-center"
+            className="relative p-2 text-(--app-muted) hover:text-(--app-primary) transition-colors duration-200 cursor-pointer bg-transparent border-0 flex items-center justify-center"
           >
             <ShoppingBagOutlinedIcon className="text-[24px]" />
             {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center bg-[var(--app-primary)] text-white ring-2 ring-[var(--app-surface)] shadow-xs">
+              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center bg-(--app-primary) text-white ring-2 ring-(--app-surface) shadow-xs">
                 {cartCount}
               </span>
             )}
@@ -213,10 +214,10 @@ export default function StorefrontHeader() {
             <>
               <IconButton
                 onClick={(e) => setUserMenuAnchor(e.currentTarget)}
-                className="p-0 border border-[var(--app-border)] rounded-full ring-2 ring-[var(--app-primary)]/20"
+                className="p-0 border border-(--app-border) rounded-full ring-2 ring-(--app-primary)/20"
                 aria-label="User account menu"
               >
-                <Avatar className="w-8 h-8 sm:w-9 sm:h-9 bg-[var(--app-surface-alt)] text-[var(--app-primary)] font-bold text-xs border border-[var(--app-border)]">
+                <Avatar className="w-8 h-8 sm:w-9 sm:h-9 bg-(--app-surface-alt) text-(--app-primary) font-bold text-xs border border-(--app-border)">
                   {customer?.first_name?.[0] || customer?.name?.[0] || "U"}
                 </Avatar>
               </IconButton>
@@ -229,15 +230,15 @@ export default function StorefrontHeader() {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{
                   paper: {
-                    className: "mt-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] min-w-52 shadow-xl p-1 text-[var(--app-text)]",
+                    className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-52 shadow-xl p-1 text-(--app-text)",
                   },
                 }}
               >
-                <Box className="px-3 py-2 border-b border-[var(--app-border)] mb-1">
-                  <Typography className="text-xs font-bold text-[var(--app-text)]">
+                <Box className="px-3 py-2 border-b border-(--app-border) mb-1">
+                  <Typography className="text-xs font-bold text-(--app-text)">
                     {customer?.first_name || customer?.name || "Customer"}
                   </Typography>
-                  <Typography className="text-[10px] text-[var(--app-muted)] truncate">
+                  <Typography className="text-[10px] text-(--app-muted) truncate">
                     {customer?.email || ""}
                   </Typography>
                 </Box>
@@ -246,9 +247,9 @@ export default function StorefrontHeader() {
                     setUserMenuAnchor(null);
                     navigate("/bookings");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-[var(--app-surface-alt)]"
+                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-(--app-surface-alt)"
                 >
-                  <CalendarMonthOutlinedIcon className="text-[16px] text-[var(--app-muted)]" />
+                  <CalendarMonthOutlinedIcon className="text-[16px] text-(--app-muted)" />
                   My Bookings
                 </MenuItem>
                 <MenuItem
@@ -256,9 +257,9 @@ export default function StorefrontHeader() {
                     setUserMenuAnchor(null);
                     navigate("/profile");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-[var(--app-surface-alt)]"
+                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-(--app-surface-alt)"
                 >
-                  <PersonOutlineIcon className="text-[16px] text-[var(--app-muted)]" />
+                  <PersonOutlineIcon className="text-[16px] text-(--app-muted)" />
                   My Profile
                 </MenuItem>
                 <MenuItem
@@ -280,20 +281,20 @@ export default function StorefrontHeader() {
         open={mobileDrawerOpen}
         onClose={() => setMobileDrawerOpen(false)}
         PaperProps={{
-          className: "w-64 h-full bg-[var(--app-surface)] border-r border-[var(--app-border)] p-5 flex flex-col justify-between overflow-hidden text-[var(--app-text)]",
+          className: "w-64 h-full bg-(--app-surface) border-r border-(--app-border) p-5 flex flex-col justify-between overflow-hidden text-(--app-text)",
         }}
       >
         <Box>
-          <Box className="flex items-center justify-between pb-4 border-b border-[var(--app-border)] mb-5">
+          <Box className="flex items-center justify-between pb-4 border-b border-(--app-border) mb-5">
             <Box className="flex items-center gap-2.5 min-w-0">
               <Box className="w-8 h-8 rounded-lg flex items-center justify-center font-editorial font-bold text-sm shrink-0">
                 {salonName[0]}
               </Box>
-              <Typography className="font-editorial font-bold text-sm text-[var(--app-text)] truncate">
+              <Typography className="font-editorial font-bold text-sm text-(--app-text) truncate">
                 {salonName}
               </Typography>
             </Box>
-            <IconButton size="small" onClick={() => setMobileDrawerOpen(false)} className="text-[var(--app-muted)]">
+            <IconButton size="small" onClick={() => setMobileDrawerOpen(false)} className="text-(--app-muted)">
               <CloseIcon className="text-[18px]" />
             </IconButton>
           </Box>
@@ -311,8 +312,8 @@ export default function StorefrontHeader() {
                   }}
                   className={`justify-start px-4 py-3 rounded-xl font-bold text-xs capitalize ${
                     active
-                      ? "bg-[var(--app-surface-alt)] text-[var(--app-primary)] border border-[var(--app-primary)]/30"
-                      : "text-[var(--app-muted)] hover:bg-[var(--app-surface-alt)] hover:text-[var(--app-text)]"
+                      ? "bg-(--app-surface-alt) text-(--app-primary) border border-(--app-primary)/30"
+                      : "text-(--app-muted) hover:bg-(--app-surface-alt) hover:text-(--app-text)"
                   }`}
                 >
                   {item.label}
@@ -322,7 +323,7 @@ export default function StorefrontHeader() {
           </Box>
         </Box>
 
-        <Box className="pt-4 border-t border-[var(--app-border)]">
+        <Box className="pt-4 border-t border-(--app-border)">
           {isAuthenticated ? (
             <Box className="space-y-2">
               <Button
@@ -332,7 +333,7 @@ export default function StorefrontHeader() {
                   navigate("/bookings");
                   setMobileDrawerOpen(false);
                 }}
-                className="rounded-xl text-xs font-bold border-[var(--app-border)] text-[var(--app-text)]"
+                className="rounded-xl text-xs font-bold border-(--app-border) text-(--app-text)"
               >
                 My Bookings
               </Button>
@@ -353,7 +354,7 @@ export default function StorefrontHeader() {
                 navigate("/signup");
                 setMobileDrawerOpen(false);
               }}
-              className="rounded-xl text-xs font-bold hover:bg-[var(--app-primary)]/90"
+              className="rounded-xl text-xs font-bold hover:bg-(--app-primary)/90"
             >
               Sign In / Reserve
             </Button>

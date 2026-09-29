@@ -15,6 +15,84 @@
   --app-text: #e5e1e8;
   --app-muted: #e6bcbc;
   --app-ring: #ffb3b4;
+  --app-hero-from: #141318;
+  --app-hero-to: #201f24;
+  --app-chip-tone: rgba(255, 82, 98, 0.08);
+}
+
+[data-theme="crimsonShear"] {
+  --app-bg: #141318;
+  --app-surface: #141318;
+  --app-surface-alt: #1c1b20;
+  --app-border: #5d3f3f;
+  --app-primary: #ffb3b4;
+  --app-primary-soft: rgba(255, 82, 98, 0.15);
+  --app-text: #e5e1e8;
+  --app-muted: #e6bcbc;
+  --app-hero-from: #141318;
+  --app-hero-to: #201f24;
+  --app-ring: #ffb3b4;
+  --app-chip-tone: rgba(255, 82, 98, 0.08);
+}
+
+[data-theme="obsidianFlame"] {
+  --app-bg: #09080b;
+  --app-surface: #0c0a0d;
+  --app-surface-alt: #151218;
+  --app-border: #3d3224;
+  --app-primary: #f3c677;
+  --app-primary-soft: rgba(243, 198, 119, 0.15);
+  --app-text: #f7f5f0;
+  --app-muted: #c4bcae;
+  --app-hero-from: #09080b;
+  --app-hero-to: #16131c;
+  --app-ring: #f3c677;
+  --app-chip-tone: rgba(243, 198, 119, 0.1);
+}
+
+[data-theme="vintageBlush"] {
+  --app-bg: #fdf6f2;
+  --app-surface: #fffaf7;
+  --app-surface-alt: #f9efea;
+  --app-border: #e8d3cb;
+  --app-primary: #b84252;
+  --app-primary-soft: rgba(184, 66, 82, 0.1);
+  --app-text: #2d2325;
+  --app-muted: #7a6367;
+  --app-hero-from: #fdf6f2;
+  --app-hero-to: #f5e8e2;
+  --app-ring: #b84252;
+  --app-chip-tone: rgba(184, 66, 82, 0.06);
+}
+
+[data-theme="midnightSapphire"] {
+  --app-bg: #060c1c;
+  --app-surface: #0b1329;
+  --app-surface-alt: #131d3b;
+  --app-border: #233766;
+  --app-primary: #7da8ff;
+  --app-primary-soft: rgba(125, 168, 255, 0.15);
+  --app-text: #e8efff;
+  --app-muted: #9eb5e6;
+  --app-hero-from: #060c1c;
+  --app-hero-to: #101a36;
+  --app-ring: #7da8ff;
+  --app-chip-tone: rgba(125, 168, 255, 0.08);
+}
+
+[data-theme="softRosePearl"] {
+  --app-bg: #faf4f6;
+  --app-surface: #ffffff;
+  --app-surface-alt: #fcf4f6;
+  --app-border: #f0d8de;
+  --app-primary: #d6536b;
+  --app-primary-soft: rgba(214, 83, 107, 0.12);
+  --app-text: #1f1719;
+  --app-muted: #6b595c;
+  --app-hero-from: #faf4f6;
+  --app-hero-to: #f5e4e8;
+  --app-ring: #d6536b;
+  --app-chip-tone: rgba(214, 83, 107, 0.08);
 }
 
 @theme {
@@ -62,12 +140,6 @@ body {
   min-height: 100%;
   background-color: var(--app-bg);
   color: var(--app-text);
-}
-
-#root {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 body {

@@ -1,21 +1,22 @@
+"use client";
 import { BottomNavigation, BottomNavigationAction, Badge } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { getNormalizedStorefrontPath } from "../../../common/storefront-slug.utils";
 import { useAppSelector } from "../../../store/hook";
 
 export default function MobileBottomNav() {
-  const location = useLocation();
+  const pathname = usePathname();
   const navigate = useStorefrontNavigate();
   const cartCount = useAppSelector((state) => state.cart.items.length);
 
   const getActiveTab = () => {
-    const p = getNormalizedStorefrontPath(location.pathname);
+    const p = getNormalizedStorefrontPath(pathname || "");
     if (p === "/") return "/";
     if (p.startsWith("/services")) return "/services";
     if (p.startsWith("/cart")) return "/cart";
@@ -59,7 +60,7 @@ export default function MobileBottomNav() {
             badgeContent={cartCount}
             color="primary"
             max={9}
-            className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-[var(--app-primary)] [&_.MuiBadge-badge]:text-white"
+            className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-(--app-primary) [&_.MuiBadge-badge]:text-white"
           >
             <ShoppingBagOutlinedIcon className="text-[20px]" />
           </Badge>

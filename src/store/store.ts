@@ -1,7 +1,6 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
-import type { Persistor } from "redux-persist";
-import { persistReducer, persistStore } from "redux-persist";
+import { persistReducer } from "redux-persist";
 import createWebStorage from "redux-persist/es/storage/createWebStorage";
 import categoryReducer from "../features/category/category.slice";
 import salonReducer from "../features/salon/salon.slice";
@@ -10,7 +9,16 @@ import cartReducer from "../features/salon/cart/cart.slice";
 import bookingReducer from "../features/salon/bookings/booking.slice";
 import customerBookingReducer from "../features/customer-booking/customer-booking.slice";
 
-const storage = createWebStorage("local");
+const createNoopStorage = () => ({
+  getItem: (_key: string) => Promise.resolve(null),
+  setItem: (_key: string, value: any) => Promise.resolve(value),
+  removeItem: (_key: string) => Promise.resolve(),
+});
+
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 const rootReducer = combineSlices({
   auth: authReducer,
@@ -40,9 +48,6 @@ export const makeStore = () => {
       }),
   });
 };
-
-export const store = makeStore();
-export const persistor: Persistor = persistStore(store);
 
 export type AppStore = ReturnType<typeof makeStore>;
 

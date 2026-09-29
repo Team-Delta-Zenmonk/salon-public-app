@@ -1,8 +1,8 @@
 import axios from "axios";
 import { callSnack } from "../../components/snackbar";
 
-const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-const MAPBOX_BASE_URL = import.meta.env.VITE_MAPBOX_BASE_URL;
+const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+const MAPBOX_BASE_URL = process.env.NEXT_PUBLIC_MAPBOX_BASE_URL;
 
 export interface ReverseGeocodeResult {
   formattedAddress: string;

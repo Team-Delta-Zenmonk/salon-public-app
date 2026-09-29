@@ -2,7 +2,6 @@ import { Button } from "@mui/material";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useState } from "react";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
-import { persistor } from "../../store/store";
 import { callSnack } from "../snackbar";
 import { GoogleResponse } from "../../auth/get-google-response";
 import { useAppDispatch } from "../../store/hook";
@@ -22,7 +21,9 @@ export default function LogoutButton({ collapsed = false }: Readonly<LogoutButto
     try {
       await logout();
       dispatch(logoutAction());
-      await persistor.purge();
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("persist:root");
+      }
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Logout failed", err);
