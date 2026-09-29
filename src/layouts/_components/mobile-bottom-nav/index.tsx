@@ -55,7 +55,12 @@ export default function MobileBottomNav() {
         label="Cart"
         value="/cart"
         icon={
-          <Badge badgeContent={cartCount} color="primary" max={99}>
+          <Badge
+            badgeContent={cartCount}
+            color="primary"
+            max={9}
+            className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-[var(--app-primary)] [&_.MuiBadge-badge]:text-white"
+          >
             <ShoppingBagOutlinedIcon className="text-[20px]" />
           </Badge>
         }

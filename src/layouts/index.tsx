@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import StorefrontHeader from "./_components/storefront-header";
 import StorefrontFooter from "./_components/storefront-footer";
 import MobileBottomNav from "./_components/mobile-bottom-nav";
-import { StorefrontProvider } from "../providers/storefront-provider";
 
 export default function AppLayout() {
   return (

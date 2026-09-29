@@ -192,7 +192,7 @@ export default function StorefrontHeader() {
           >
             <ShoppingBagOutlinedIcon className="text-[24px]" />
             {cartCount > 0 && (
-              <span className="absolute top-1 right-0.5 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-[var(--app-surface)]">
+              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center bg-[var(--app-primary)] text-white ring-2 ring-[var(--app-surface)] shadow-xs">
                 {cartCount}
               </span>
             )}

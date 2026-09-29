@@ -6,20 +6,12 @@ import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
-import AddIcon from "@mui/icons-material/Add";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { addItemLocal } from "../../features/salon/cart/cart.slice";
-import { addCartItemAction } from "../../features/salon/cart/add-item/add-item.action";
-import { createCartAction } from "../../features/salon/cart/create-cart/create-cart.action";
-import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
 import { calculateTotals } from "../../common/cart.utils";
-import { callSnack } from "../../components/snackbar";
 
 export default function HomePage() {
   const navigate = useStorefrontNavigate();
@@ -84,65 +76,6 @@ export default function HomePage() {
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
 
-  const onAddToCart = async (item: any) => {
-    if (isAdded(item.uuid)) {
-      navigate("/cart");
-      return;
-    }
-
-    const payload = {
-      service_id: item.uuid,
-      duration: item.duration,
-      name: item.name,
-      base_price: item.price,
-    };
-
-    if (!isAuthenticated) {
-      dispatch(
-        addItemLocal({
-          service_id: item.uuid,
-          base_price: item.price,
-          final_price: item.price,
-          duration: item.duration,
-          service: {
-            uuid: item.uuid,
-            name: item.name,
-            logo: item.logo,
-            gender: item.gender,
-            duration: item.duration,
-            price: item.price,
-          },
-          salon: {
-            uuid: salon?.uuid,
-            name: salon?.name,
-            logo: salon?.logo,
-            address: salon?.address,
-            type: salon?.type,
-          },
-        })
-      );
-      callSnack("Added to cart", "success");
-      return;
-    }
-
-    setAddingItemIds((prev) => [...prev, item.uuid]);
-    try {
-      if (cart.cartUuid) {
-        await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
-        await dispatch(getCartAction(customer!.uuid));
-        callSnack("Added to cart", "success");
-      } else {
-        await dispatch(
-          createCartAction({ salon_id: salon!.uuid, user_id: customer!.uuid, items: [payload] })
-        ).unwrap();
-        callSnack("Cart created and item added", "success");
-      }
-    } catch (error: any) {
-      callSnack(error?.message || "Failed to add item", "error");
-    } finally {
-      setAddingItemIds((prev) => prev.filter((id) => id !== item.uuid));
-    }
-  };
 
   const filteredServices = useMemo(() => {
     return rootServices.filter((s) => {
@@ -210,7 +143,7 @@ export default function HomePage() {
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
               <Typography className="text-xs font-semibold text-[var(--app-text)]">
-                Open Today • <span className="text-[var(--app-primary)] font-bold">4.9 ★</span> (1,840 Patrons)
+                Open Today
               </Typography>
             </Box>
 
@@ -401,9 +334,7 @@ export default function HomePage() {
               ? `${assignedStaff.first_name || ""} ${assignedStaff.last_name || ""}`.trim()
               : "";
 
-            const btnClass = added
-              ? "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--app-primary)]/20 transition-all active:scale-95 normal-case border-0 bg-emerald-600 text-white"
-              : "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--app-primary)]/20 transition-all active:scale-95 normal-case border-0 bg-[var(--app-primary)] text-white hover:brightness-110";
+            const btnClass = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md shadow-[var(--app-primary)]/20 transition-all active:scale-95 normal-case border-0 bg-[var(--app-primary)] text-white hover:brightness-110";
 
             return (
               <Box
@@ -416,11 +347,6 @@ export default function HomePage() {
                     <span className="px-2.5 py-1 rounded /30 border border-[var(--app-primary)] text-[10px] font-bold uppercase">
                       {service.gender || "Unisex"} Focus
                     </span>
-                    <Box className="flex items-center gap-1 text-[var(--app-primary)] text-xs font-bold">
-                      <span>4.9</span>
-                      <StarRoundedIcon className="text-[16px] text-[var(--app-primary)]" />
-                      <span className="text-[var(--app-muted)] font-normal text-xs">(320)</span>
-                    </Box>
                   </Box>
 
                   <Typography className="font-editorial text-xl font-semibold text-[var(--app-text)] group-hover:text-[var(--app-primary)] transition-colors leading-snug capitalize">
@@ -470,12 +396,10 @@ export default function HomePage() {
 
                   <Button
                     variant="contained"
-                    disabled={addingItemIds.includes(service.uuid)}
-                    onClick={() => onAddToCart(service)}
-                    startIcon={added ? undefined : <AddIcon className="text-[18px]" />}
+                    onClick={() => navigate("/services")}
                     className={btnClass}
                   >
-                    {added ? "✓ In Cart" : "Add to Cart"}
+                    {"Book Now"}
                   </Button>
                 </Box>
               </Box>

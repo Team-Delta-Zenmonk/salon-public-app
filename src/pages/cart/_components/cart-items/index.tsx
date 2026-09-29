@@ -105,8 +105,8 @@ function StaffSelector({
               </Avatar>
 
               {isSelected && (
-                <Box className="absolute -bottom-1 -right-1 w-4 h-4 border border-[var(--app-bg)] rounded-full flex items-center justify-center">
-                  <CheckIcon className="text-[10px] text-[var(--app-bg)]" />
+                <Box className="absolute -bottom-1 -right-1 w-5 h-5 bg-[var(--app-primary)] border-2 border-[var(--app-surface)] rounded-full flex items-center justify-center shadow-xs">
+                  <CheckIcon className="text-[12px] text-white" />
                 </Box>
               )}
             </Box>

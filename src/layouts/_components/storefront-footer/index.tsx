@@ -5,7 +5,6 @@ export default function StorefrontFooter() {
   const { salon } = useStorefront();
 
   const salonName = salon?.name?.toUpperCase() || "CRIMSON & SHEAR";
-
   return (
     <footer className="mt-auto bg-[var(--app-surface)] border-t border-[var(--app-border)] pt-16 pb-20 md:pb-12 text-[var(--app-text)]">
       <div className="px-4 md:px-12 max-w-[1440px] mx-auto">
@@ -16,9 +15,9 @@ export default function StorefrontFooter() {
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-[var(--app-surface-alt)] p-0.5 shrink-0 border border-[var(--app-border)]">
                 <img
-                  alt="Scissors & Comb Sparkle Brand Icon"
                   className="w-full h-full object-cover rounded-md"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1XYBNkbZmqEwkR3adhjz9QTOyWbaMxUk-gfuu_Mge1ZI579t29IMLyeogxRK2lexlZXOkzRqxVeSVLaaGoLBAe9cRHHB9JMnXg9N0hIqs_TGliGBA4Yfpq7vXPs9LsvA_EY0trF4-zxLyEM8Z-R_Ns_Z7QtVvmTVwqR8x54ElH1DUCaGNI5ufS5JuyYytDDZQ8UXnNQpj4jWA1XwMCvOb_CIzGfbxU9apPJ2Yf2dx3sbB9Gj2A2Lt3-8UY"
+                  src={salon?.logo}
+                  alt={salonName}
                 />
               </div>
               <span className="font-editorial text-lg text-[var(--app-text)] font-semibold tracking-wide">

@@ -13,7 +13,11 @@ export default function CartIcon({ count = 0, onClick }: Readonly<CartIconProps>
       onClick={onClick}
       className="border border-(--app-border) bg-(--app-surface) hover:bg-(--app-surface-alt) rounded-xl"
     >
-      <Badge badgeContent={count} color="primary" className="[&_.MuiBadge-badge]:font-bold">
+     <Badge
+        badgeContent={count}
+        color="primary"
+        className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-[var(--app-primary)] [&_.MuiBadge-badge]:text-white"
+      >
         <ShoppingCartOutlinedIcon />
       </Badge>
     </IconButton>
