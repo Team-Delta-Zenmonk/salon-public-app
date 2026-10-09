@@ -1,0 +1,150 @@
+.card {
+  position: relative;
+  margin-bottom: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  background-color: var(--app-surface, #ffffff);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.statusStrip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.375rem;
+}
+
+.mobileBox {
+  display: block;
+  padding: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .mobileBox {
+    display: none;
+  }
+}
+
+.desktopBox {
+  display: none;
+  padding: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .desktopBox {
+    display: block;
+  }
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.salonInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.salonAvatar {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  background-color: var(--app-surface-alt, #faf8f5) !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.salonName {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.125rem !important;
+  font-weight: 500 !important;
+  color: var(--app-text, #18181b) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.salonAddress {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, #71717a) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.statusPill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.detailsBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--app-surface-alt, #faf8f5);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dateTimeText {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.servicesText {
+  font-size: 0.6875rem !important;
+  color: var(--app-muted, #71717a) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 14rem;
+}
+
+.priceText {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.payBtn {
+  background-color: var(--app-primary, #18181b) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+.cancelBtn {
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.15)) !important;
+  color: #ef4444 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}

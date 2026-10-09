@@ -1,0 +1,103 @@
+.checkoutPage {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--app-bg, #fdfbf7);
+  color: var(--app-text, #18181b);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: inherit;
+}
+
+.container {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  position: relative;
+  z-index: 10;
+  margin-top: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    margin-top: 3rem;
+  }
+}
+
+.checkoutGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .checkoutGrid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.leftColumn {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .leftColumn {
+    grid-column: span 7 / span 7;
+  }
+}
+
+.rightColumn {
+  display: none;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .rightColumn {
+    display: block;
+    grid-column: span 5 / span 5;
+  }
+}
+
+.summaryTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  color: var(--app-text, #18181b) !important;
+  margin-bottom: 1rem !important;
+  margin-left: 0.25rem !important;
+}
+
+.paymentTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  color: var(--app-text, #18181b) !important;
+  margin-bottom: 1.5rem !important;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.paymentIcon {
+  color: var(--app-champagne, #d4af37) !important;
+  font-size: 1.25rem !important;
+}
+
+.paymentPaper {
+  padding: 1.5rem !important;
+  background-color: var(--app-surface, #ffffff) !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+@media (min-width: 640px) {
+  .paymentPaper {
+    padding: 2rem !important;
+  }
+}

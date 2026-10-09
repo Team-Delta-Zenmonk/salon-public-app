@@ -14,7 +14,7 @@ export interface EllipsisCellProps extends React.HTMLAttributes<HTMLSpanElement>
 export const EllipsisCell: React.FC<EllipsisCellProps> = ({
   value,
   maxLines = 1,
-  maxChars,
+  maxChars = 50,
   className,
   forceTooltip = false,
   children,
@@ -37,8 +37,8 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
       const target = (element.querySelector("input, textarea") as HTMLElement) || element;
       setIsOverflowing(
         isCharTruncated ||
-          target.scrollWidth > target.clientWidth ||
-          target.scrollHeight > target.clientHeight
+        target.scrollWidth > target.clientWidth ||
+        target.scrollHeight > target.clientHeight
       );
     };
 
@@ -194,17 +194,17 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
           children
             ? "min-w-0 max-w-full pointer-events-auto [&_*]:pointer-events-auto"
             : "overflow-hidden text-ellipsis min-w-0 max-w-full pointer-events-auto [&_*]:pointer-events-auto select-none",
-          maxLines === 1 && !children ? "inline-block whitespace-nowrap truncate" : "",
+          maxLines === 1 && !children ? "inline-flex max-w-full truncate" : "",
           className
         )}
         style={
           maxLines > 1
             ? {
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                WebkitLineClamp: maxLines,
-                wordBreak: "break-word",
-              }
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: maxLines,
+              wordBreak: "break-word",
+            }
             : undefined
         }
         {...props}

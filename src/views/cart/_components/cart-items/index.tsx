@@ -12,6 +12,7 @@ import ConfirmRemoveItemDialog from "../remove-item-dialog";
 import { getServiceStaffsAction } from "../../../../features/salon/staff/get-service-staffs/get-service-staffs.action";
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
 import { useStorefront } from "../../../../providers/storefront-provider";
+import EllipsisCell from "@/components/ellipse-cell";
 
 interface CartItemProps {
   item: any;
@@ -96,9 +97,8 @@ function StaffSelector({
           <Box
             key={staffKey}
             onClick={() => onStaffClick(entry)}
-            className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-3 py-2 min-w-22 border ${cardClass} ${
-              updating ? "opacity-50 pointer-events-none" : ""
-            }`}
+            className={`flex flex-col items-center gap-1.5 cursor-pointer group transition-all duration-150 rounded-xl px-3 py-2 min-w-22 border ${cardClass} ${updating ? "opacity-50 pointer-events-none" : ""
+              }`}
           >
             <Box className="relative">
               <Avatar src={photo} className={avatarClass}>
@@ -112,13 +112,7 @@ function StaffSelector({
               )}
             </Box>
 
-            <Typography
-              variant="caption"
-              className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass} capitalize`}
-              title={staffName || "Artisan"}
-            >
-              {staffName || "Artisan"}
-            </Typography>
+            <EllipsisCell value={staffName || "Artisan"} className={`text-[11px] text-center w-full leading-tight truncate ${staffNameClass} capitalize`} maxChars={10} />
 
             {staffPrice && (
               <Typography variant="caption" className={`text-[10px] ${staffPriceClass}`}>
@@ -262,9 +256,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           />
 
           <Box className="flex-1 min-w-0">
-            <Typography className="font-editorial text-lg sm:text-xl font-bold text-(--app-text) truncate capitalize" title={name}>
-              {name}
-            </Typography>
+            <EllipsisCell value={name} className="font-editorial text-lg sm:text-xl font-bold text-(--app-text) capitalize" maxChars={20} />
             <Box className="flex items-center gap-2 mt-1">
               <AccessTimeIcon className="text-(--app-primary) text-sm shrink-0" />
               <Typography variant="caption" className="text-xs text-(--app-muted)/70 truncate">
@@ -289,12 +281,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
                 >
                   {currentStaffInfo.name?.[0]}
                 </Avatar>
-                <Typography
-                  variant="caption"
-                  className="text-(--app-text) text-xs font-medium truncate capitalize"
-                >
-                  {currentStaffInfo.name}
-                </Typography>
+                <EllipsisCell value={currentStaffInfo.name} className="text-(--app-text) text-xs font-medium truncate capitalize" maxChars={20} />
                 <Box className="w-1.5 h-1.5 rounded-full shrink-0" />
               </Box>
             )}

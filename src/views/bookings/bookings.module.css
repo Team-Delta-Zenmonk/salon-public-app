@@ -1,0 +1,179 @@
+.bookingsPage {
+  min-height: 100vh;
+  background-color: var(--app-bg, #fdfbf7);
+  color: var(--app-text, #18181b);
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  font-family: inherit;
+}
+
+.mainContainer {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .mainContainer {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.heroHeader {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .heroHeader {
+    padding: 2rem;
+  }
+}
+
+.heroFlex {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .heroFlex {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.headerTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--app-muted, #71717a);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mainTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.875rem !important;
+  color: var(--app-text, #18181b) !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .mainTitle {
+    font-size: 2.25rem !important;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--app-surface, #ffffff);
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  color: var(--app-text, #18181b);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--app-muted, #71717a);
+  max-width: 42rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.tabGroup {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  background-color: var(--app-surface, #ffffff);
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .tabGroup {
+    align-self: center;
+  }
+}
+
+.tabBtn {
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+  border: 0;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--app-muted, #71717a);
+}
+
+.tabBtnActive {
+  background-color: var(--app-primary, #18181b);
+  color: var(--app-primary-contrast, #ffffff);
+}
+
+.emptyState {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  text-align: center;
+  background-color: var(--app-surface, #ffffff);
+  border-radius: 0.75rem;
+  border: 1px dashed var(--app-border, rgba(0, 0, 0, 0.15));
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.emptyTitle {
+  font-family: var(--font-bodoni-moda), serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--app-text, #18181b);
+  margin-bottom: 0.5rem;
+}
+
+.emptySub {
+  font-size: 0.75rem;
+  color: var(--app-muted, #71717a);
+}

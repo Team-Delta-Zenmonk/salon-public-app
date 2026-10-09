@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -21,8 +22,19 @@ export default function OrderSummary({ salon, booking, dateStr }: Readonly<Order
     >
       <Box className={`p-4 border-b border-(--app-border) ${isDark ? "bg-white/5" : "bg-black/2"}`}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Box className="w-11 h-11 rounded-xl bg-white border border-(--app-border) p-1 flex items-center justify-center overflow-hidden">
-            <img src={salon?.logo || ""} alt={salon?.name} className="max-w-full max-h-full object-contain" />
+          <Box className="w-11 h-11 rounded-xl bg-white border border-(--app-border) p-1 flex items-center justify-center overflow-hidden relative">
+            {salon?.logo ? (
+              <Image
+                src={salon.logo}
+                alt={salon?.name || "Salon Logo"}
+                fill
+                sizes="44px"
+                className="object-contain p-1"
+                unoptimized
+              />
+            ) : (
+              <span className="font-bold text-(--app-text) text-xs">{salon?.name?.[0] || "S"}</span>
+            )}
           </Box>
           <Box className="min-w-0">
             <Typography className="font-black text-(--app-text) text-[0.9rem] md:text-[1.05rem] leading-tight truncate">

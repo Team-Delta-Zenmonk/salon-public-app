@@ -6,9 +6,9 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import SparklesIcon from "@mui/icons-material/AutoAwesome";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Avatar } from "@mui/material";
 import StorefrontGallery from "../storefront-gallery";
-import ServiceCard from "../storefront-services/_components/service-card";
+import ServiceCard from "@/components/service-card";
+import StaffCard from "@/components/staff-card";
 import type { StorefrontTab } from "../storefront-header";
 
 interface StorefrontOverviewProps {
@@ -171,7 +171,6 @@ export default function StorefrontOverview({
               key={service.uuid}
               service={service}
               subServices={subServicesMap[service.id] || []}
-              salon={salon}
             />
           ))}
         </Box>
@@ -197,34 +196,10 @@ export default function StorefrontOverview({
             </Button>
           </Box>
 
-          <Box className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-            {staff.slice(0, 5).map((member: any) => {
-              const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim() || "Specialist";
-              const photo = member.photos?.secure_url || member.photos?.url;
-              const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
-
-              return (
-                <Box
-                  key={member.uuid}
-                  onClick={() => onNavigateTab("specialists")}
-                  className="p-3.5 rounded-2xl border border-(--app-border) bg-(--app-surface-alt) hover:border-(--app-primary)/40 transition-all duration-200 text-center cursor-pointer group"
-                >
-                  <Avatar
-                    src={photo}
-                    alt={fullName}
-                    className="w-14 h-14 mx-auto ring-2 ring-(--app-border) group-hover:scale-105 transition-transform capitalize"
-                  >
-                    {initials || "S"}
-                  </Avatar>
-                  <Typography className="font-bold text-xs text-(--app-text) truncate mt-2">
-                    {fullName}
-                  </Typography>
-                  <Typography className="text-[10px] text-(--app-muted) truncate mt-0.5 capitalize">
-                    {member.title || member.role || "Stylist"}
-                  </Typography>
-                </Box>
-              );
-            })}
+          <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {staff.slice(0, 3).map((member: any) => (
+              <StaffCard key={member.uuid || member.id} member={member} />
+            ))}
           </Box>
         </Box>
       )}

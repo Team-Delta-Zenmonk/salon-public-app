@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, Avatar, Typography, Box, Button, CircularProgress } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import EllipsisCell from "@/components/ellipse-cell";
 
 interface ConfirmStaffDialogProps {
   open: boolean;
@@ -64,9 +65,7 @@ export default function ConfirmStaffDialog({
                 <Avatar src={currentStaff?.photo} className="w-13 h-13 border-2 border-(--app-border) capitalize">
                   {currentStaff?.name?.[0]}
                 </Avatar>
-                <Typography className="text-(--app-text) font-semibold text-center text-xs max-w-20 truncate capitalize">
-                  {currentStaff?.name}
-                </Typography>
+                <EllipsisCell value={currentStaff?.name} className="text-(--app-text) font-semibold text-center text-xs max-w-20 capitalize" maxChars={10} />
               </Box>
 
               <Box className="flex flex-col items-center">
@@ -80,9 +79,7 @@ export default function ConfirmStaffDialog({
                 <Avatar src={newStaff?.photo} className="w-13 h-13 border-2 border-(--app-primary)">
                   {newStaff?.name?.[0]}
                 </Avatar>
-                <Typography className="text-(--app-text) font-bold text-center text-xs max-w-20 truncate">
-                  {newStaff?.name}
-                </Typography>
+                <EllipsisCell value={newStaff?.name ?? ""} className="text-(--app-text) font-bold text-center text-xs max-w-20" maxChars={10} />
               </Box>
             </Box>
           ) : (
@@ -90,7 +87,7 @@ export default function ConfirmStaffDialog({
               <Avatar src={newStaff?.photo} className="w-15 h-15 border-2 border-(--app-primary)">
                 {newStaff?.name?.[0]}
               </Avatar>
-              <Typography className="text-(--app-text) text-sm font-bold capitalize">{newStaff?.name}</Typography>
+              <EllipsisCell value={newStaff?.name ?? ""} className="text-(--app-text) text-sm font-bold capitalize" maxChars={10} />
             </Box>
           )}
 

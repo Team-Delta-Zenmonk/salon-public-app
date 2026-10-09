@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import { Box, Typography, Tabs, Tab, Fade } from "@mui/material";
+import { Box, Typography, Fade } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { getCustomerBookingsAction } from "../../features/customer-booking/get-customer-bookings/get-customer-bookings.action";
 import { resetCustomerBookings } from "../../features/customer-booking/customer-booking.slice";
@@ -13,8 +13,6 @@ import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { useDownloadInvoice } from "../../features/customer-booking/hooks/use-download-invoice";
-import { callSnack } from "../../components/snackbar";
-import styles from "./booking.module.scss";
 
 const WEBHOOK_SETTLE_DELAY_MS = 3000;
 
@@ -66,7 +64,7 @@ export default function Bookings() {
             page: 1,
             limit: 10,
             status: getStatusFromTab(tabValue),
-          }),
+          })
         ).unwrap();
       } catch (err) {
         console.error("Failed to fetch bookings:", err);
@@ -86,7 +84,7 @@ export default function Bookings() {
             page: page + 1,
             limit: 10,
             status: getStatusFromTab(tabValue),
-          }),
+          })
         ).unwrap();
       } catch (err) {
         console.error("Failed to fetch more bookings:", err);
@@ -119,7 +117,7 @@ export default function Bookings() {
           page: 1,
           limit: 10,
           status: getStatusFromTab(tabValue),
-        }),
+        })
       ).unwrap();
     } catch (err) {
       console.error("Failed to refresh bookings:", err);
@@ -129,7 +127,6 @@ export default function Bookings() {
   };
 
   const isProcessing = isContinuing || isCancelling;
-
   const { downloadInvoice: handleDownloadInvoice, downloadingUuid } = useDownloadInvoice();
 
   const renderBookingList = () => {
@@ -161,59 +158,70 @@ export default function Bookings() {
     }
 
     return (
-      <Box className="py-16 text-center bg-(--app-surface) rounded-2xl border border-(--app-primary)/15 border-dashed p-8">
-        <Typography variant="h6" className="font-editorial text-xl font-bold text-(--app-text) mb-2">
+      <div className="py-20 text-center bg-[#FCFAF7] rounded-[2px] border border-[#E5DFD5] border-dashed p-8">
+        <p className="font-serif text-2xl font-medium text-[#1C1A17] mb-2">
           No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} reservations found
-        </Typography>
-        <Typography variant="body2" className="text-xs text-(--app-muted)/70">
+        </p>
+        <p className="font-sans text-xs text-[#766A5E]">
           {tabValue === 0
             ? "Reserve your first haute salon ceremony!"
             : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} dossier is empty.`}
-        </Typography>
-      </Box>
+        </p>
+      </div>
     );
   };
 
   return (
-    <Box className="min-h-screen bg-(--app-bg) text-(--app-text) py-8 sm:py-12">
-      <Box className="flex flex-col w-full max-w-4xl mx-auto px-4 sm:px-6">
-        <Box className="w-full shrink-0 mb-8">
-          <Typography className="font-editorial text-3xl sm:text-4xl font-bold text-(--app-text) mb-2">
-            My Dossier & Ceremonies
-          </Typography>
-          <Typography className="text-xs text-(--app-muted)/70 font-mono tracking-wider uppercase">
-            Curated history of your luxury appointments
-          </Typography>
+    <Box className="min-h-screen bg-[#FCF9F3] text-[#1C1C18] py-10 font-sans">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 md:px-12 space-y-8">
+        <section className="relative overflow-hidden rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5] p-6 md:p-8">
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-[#735A37] font-sans text-[10px] font-semibold uppercase tracking-[0.14em]">
+                <span>CLIENT SUITE</span>
+                <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span>RESERVATION DOSSIER</span>
+              </div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <h1 className="font-serif text-3xl sm:text-4xl text-[#1C1A17] font-normal">
+                  My Dossier & Ceremonies
+                </h1>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5] text-[#1C1A17] font-sans text-[10px] font-semibold uppercase tracking-wider">
+                  <span className="material-symbols-outlined text-[14px] text-[#A88B64]">verified</span>
+                  MASTER GUARANTEE
+                </span>
+              </div>
+              <p className="font-sans text-xs text-[#766A5E] max-w-2xl leading-relaxed">
+                Curated historical archive of your luxury salon appointments, treatments, and invoice receipts.
+              </p>
+            </div>
 
-          <Box className="border-b border-(--app-primary)/15 mt-6 mb-8">
-            <Tabs
-              value={tabValue}
-              onChange={(_, val) => setTabValue(val)}
-              variant="scrollable"
-              scrollButtons="auto"
-              allowScrollButtonsMobile
-              sx={{
-                "& .MuiTabs-indicator": { backgroundColor: "var(--app-primary)", height: 3 },
-                "& .MuiTab-root": {
-                  color: "var(--app-muted)/60",
-                  textTransform: "uppercase",
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.1em",
-                  fontWeight: 600,
-                  "&.Mui-selected": { color: "var(--app-primary)" },
-                },
-              }}
-            >
-              <Tab label="All" />
-              <Tab label="Pending" />
-              <Tab label="Confirmed" />
-              <Tab label="Cancelled" />
-              <Tab label="Expired" />
-            </Tabs>
-          </Box>
-        </Box>
+            <div className="flex items-center self-start md:self-center bg-[#FCFAF7] p-1 rounded-[2px] border border-[#E5DFD5] flex-wrap gap-1">
+              {[
+                { label: "ALL", idx: 0 },
+                { label: "PENDING", idx: 1 },
+                { label: "CONFIRMED", idx: 2 },
+                { label: "CANCELLED", idx: 3 },
+                { label: "EXPIRED", idx: 4 },
+              ].map((tab) => (
+                <button
+                  key={tab.idx}
+                  type="button"
+                  onClick={() => setTabValue(tab.idx)}
+                  className={`px-3.5 py-2 rounded-[2px] font-sans text-[11px] font-semibold tracking-wider transition-all border-0 cursor-pointer ${
+                    tabValue === tab.idx
+                      ? "bg-[#1C1A17] text-[#FCFAF7]"
+                      : "text-[#766A5E] hover:text-[#1C1A17] bg-transparent"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        <Box className="w-full">
+        <div className="w-full">
           <InfiniteScroll
             dataLength={bookings.length}
             next={fetchMoreData}
@@ -226,8 +234,8 @@ export default function Bookings() {
             }
             endMessage={
               bookings.length > 0 && !isLoading ? (
-                <Box className="pb-4 pt-6">
-                  <Typography variant="body2" className="text-xs text-(--app-muted)/50 text-center font-mono uppercase tracking-widest">
+                <Box className="pb-4 pt-6 text-center">
+                  <Typography variant="body2" className="text-[10px] text-[#766A5E] font-sans uppercase tracking-[0.14em] font-semibold">
                     End of {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} ceremonies
                   </Typography>
                 </Box>
@@ -249,8 +257,8 @@ export default function Bookings() {
             onConfirm={handleConfirmCancel}
             onClose={() => setCancelDialogOpen(false)}
           />
-        </Box>
-      </Box>
+        </div>
+      </main>
     </Box>
   );
 }

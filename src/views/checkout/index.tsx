@@ -13,7 +13,9 @@ import AssistanceCard from "./_components/assistance-card";
 import SecurityFooter from "./_components/security-footer";
 import ExpiryView from "./_components/expiry-view";
 import PaymentProcessing from "./_components/payment-processing";
-import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
+import { getPaymentCompleted, clearGuestCart } from "../../features/salon/cart/cart.utils";
+import { clearCart } from "../../features/salon/cart/cart.slice";
+import { useAppDispatch } from "../../store/hook";
 import { useCheckoutData } from "./hooks/useCheckoutData";
 import { useStripeAppearance } from "./hooks/useStripeAppearance";
 
@@ -27,6 +29,7 @@ interface PaymentPanelProps {
 }
 
 export default function Checkout() {
+  const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
   const { currentBooking, clientSecret, displaySalon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
     useCheckoutData();
@@ -39,11 +42,13 @@ export default function Checkout() {
   }, []);
 
   const handleProcessingComplete = useCallback(() => {
+    dispatch(clearCart());
+    clearGuestCart();
     navigate("/bookings/success", {
       state: { bookingUuid: currentBooking?.uuid, booking: currentBooking },
       replace: true,
     });
-  }, [navigate, currentBooking]);
+  }, [dispatch, navigate, currentBooking]);
 
   useEffect(() => {
     if (!currentBooking && getPaymentCompleted()) {
@@ -63,9 +68,7 @@ export default function Checkout() {
   }
 
   return (
-    <Box className="min-h-screen w-full bg-(--app-bg) text-(--app-text) flex flex-col relative">
-      <Box className="fixed top-0 right-0 w-1/2 h-full bg-gradient-to-br from-(--app-primary)/5 to-transparent clip-path-angled z-0 hidden lg:block" />
-
+    <Box className="min-h-screen w-full bg-[#FCF9F3] text-[#1C1C18] flex flex-col relative font-sans">
       <CheckoutHeader
         onBack={handleResetBooking}
         isExpired={isExpired}
@@ -77,9 +80,9 @@ export default function Checkout() {
 
       <Container
         maxWidth="lg"
-        className="px-4 relative z-10 mt-6 lg:mt-20 flex-1 flex flex-col justify-center pb-12"
+        className="px-6 relative z-10 mt-6 lg:mt-12 flex-1 flex flex-col justify-center pb-16"
       >
-        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           <Box className="lg:col-span-7 order-1 w-full">
             {isExpired ? (
               <ExpiryView onReturn={handleResetBooking} />
@@ -95,21 +98,15 @@ export default function Checkout() {
             )}
           </Box>
 
-          <Box className="hidden lg:block lg:col-span-5 w-full animate-in fade-in slide-in-from-right-4 duration-500">
-            <Typography className="font-editorial text-xl font-bold text-(--app-text) mb-5 ml-1">
-              Reservation Summary
+          <Box className="hidden lg:block lg:col-span-5 w-full">
+            <Typography className="font-serif text-xl font-medium text-[#1C1A17] mb-4 ml-1">
+              Reservation Investment Summary
             </Typography>
             <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
             <AssistanceCard phone={displaySalon?.phone} isDesktop />
           </Box>
         </Box>
       </Container>
-
-      <style>{`
-        .clip-path-angled {
-          clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
-        }
-      `}</style>
     </Box>
   );
 }
@@ -123,15 +120,15 @@ function PaymentPanel({
   onPaymentSuccess,
 }: Readonly<PaymentPanelProps>) {
   return (
-    <Box className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <Typography className="font-editorial text-lg font-bold text-(--app-text) mb-6 ml-1 flex items-center gap-2.5">
-        <PaymentsIcon className="text-(--app-primary) text-xl" />
+    <Box>
+      <Typography className="font-serif text-2xl font-medium text-[#1C1A17] mb-6 flex items-center gap-2.5">
+        <PaymentsIcon className="text-[#A88B64] text-xl" />
         Payment Sanctuary
       </Typography>
 
       <Paper
         elevation={0}
-        className="p-6 sm:p-8 bg-(--app-surface) border border-(--app-primary)/15 rounded-2xl shadow-2xl"
+        className="p-6 sm:p-8 bg-[#FCFAF7] border border-[#E5DFD5] rounded-[2px] shadow-xs"
       >
         <Elements stripe={stripePromise} options={{ clientSecret, appearance: stripeAppearance }}>
           <PaymentForm booking={currentBooking} isExpired={isExpired} onPaymentSuccess={onPaymentSuccess} />
@@ -143,3 +140,4 @@ function PaymentPanel({
     </Box>
   );
 }
+

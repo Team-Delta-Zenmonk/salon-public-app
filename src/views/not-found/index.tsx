@@ -43,7 +43,6 @@ export default function NotFoundPage() {
           boxShadow: `0 0 30px ${primaryColor}15`,
         }}
       >
-        {/* Soft Dynamic Glow Background Spot */}
         <Box
           className="absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl pointer-events-none transition-colors duration-300"
           style={{ backgroundColor: `${primaryColor}20` }}
@@ -53,7 +52,6 @@ export default function NotFoundPage() {
           style={{ backgroundColor: `${primaryColor}15` }}
         />
 
-        {/* Icon Header */}
         <Box className="flex justify-center mb-6">
           <Box
             className="w-20 h-20 rounded-2xl flex items-center justify-center border shadow-lg transition-all duration-300"
@@ -67,7 +65,6 @@ export default function NotFoundPage() {
           </Box>
         </Box>
 
-        {/* 404 Display */}
         <Box className="mb-2">
           <Typography
             variant="h1"
@@ -96,7 +93,6 @@ export default function NotFoundPage() {
           The page or salon service you are looking for doesn&apos;t exist, was moved, or is temporarily unavailable.
         </Typography>
 
-        {/* Action Options */}
         <Box className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
             variant="outlined"
@@ -128,7 +124,6 @@ export default function NotFoundPage() {
           </Button>
         </Box>
 
-        {/* Extra link */}
         <Box className="mt-6 pt-6 border-t" style={{ borderColor: borderColor }}>
           <Link
             href={servicesPath}

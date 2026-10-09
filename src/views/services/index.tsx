@@ -6,27 +6,52 @@ import {
   InputAdornment,
   IconButton,
   Button,
-  Avatar,
-  TextField,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
-import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
-import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
+import EllipsisCell from "@/components/ellipse-cell";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
-import ServiceCard from "../storefront/_components/storefront-services/_components/service-card";
+import ServiceCard from "@/components/service-card";
 import { useSearchParams } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { addItemLocal, removeItemLocal } from "../../features/salon/cart/cart.slice";
+import { calculateTotals } from "../../common/cart.utils";
 
 export default function ServicesPage() {
+  const navigate = useStorefrontNavigate();
+  const dispatch = useAppDispatch();
   const { salon } = useStorefront();
   const searchParams = useSearchParams();
+
+  const cart = useAppSelector((state) => state.cart);
 
   const [searchQuery, setSearchQuery] = useState(searchParams?.get("search") || "");
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams?.get("category") || "all");
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("curated");
+
+  const isAdded = (serviceId: string) =>
+    cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
+
+  const toggleCart = (service: any) => {
+    const serviceId = service.uuid || service.id;
+    if (isAdded(serviceId)) {
+      dispatch(removeItemLocal(serviceId));
+    } else {
+      dispatch(
+        addItemLocal({
+          service_id: serviceId,
+          name: service.name,
+          base_price: service.price,
+          duration: service.duration,
+          salon,
+          service,
+        })
+      );
+    }
+  };
+
+  const { totalPrice } = calculateTotals(cart.items);
 
   useEffect(() => {
     const cat = searchParams?.get("category");
@@ -50,46 +75,36 @@ export default function ServicesPage() {
     }, {});
   }, [services]);
 
-  // Build category sanctuaries list
-  const categorySanctuaries = useMemo(() => {
-    const list: { id: string; label: string; count: number }[] = [
-      { id: "all", label: "All Services", count: rootServices.length },
+  const categoryTabs = useMemo(() => {
+    const list: { id: string; label: string }[] = [
+      { id: "all", label: "All Services" },
     ];
     const seen = new Set<string>();
 
     salonCategories.forEach((cat) => {
       if (cat.name && !seen.has(cat.name.toLowerCase())) {
         seen.add(cat.name.toLowerCase());
-        const count = rootServices.filter(
-          (s) =>
-            s.category?.name?.toLowerCase() === cat.name.toLowerCase() ||
-            String(s.category?.id || s.category_id) === String(cat.id || cat.uuid)
-        ).length;
-        list.push({ id: String(cat.id || cat.uuid || cat.name).toLowerCase(), label: cat.name, count });
+        list.push({ id: String(cat.id || cat.uuid || cat.name).toLowerCase(), label: cat.name });
       }
     });
 
     services.forEach((s) => {
       if (s.category?.name && !seen.has(s.category.name.toLowerCase())) {
         seen.add(s.category.name.toLowerCase());
-        const count = rootServices.filter(
-          (item) => item.category?.name?.toLowerCase() === s.category.name.toLowerCase()
-        ).length;
-        list.push({ id: s.category.name.toLowerCase(), label: s.category.name, count });
+        list.push({ id: s.category.name.toLowerCase(), label: s.category.name });
       }
     });
 
     return list;
-  }, [salonCategories, services, rootServices]);
+  }, [salonCategories, services]);
 
-  // Filter root services
   const filteredServices = useMemo(() => {
     let result = rootServices.filter((service) => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = service.name?.toLowerCase().includes(q);
         const matchesDesc = service.description?.toLowerCase().includes(q);
-        const subs = subServicesMap[service.id] || [];
+        const subs = subServicesMap[service.id] || subServicesMap[service.uuid] || [];
         const matchesSub = subs.some(
           (sub) => sub.name?.toLowerCase().includes(q) || sub.description?.toLowerCase().includes(q)
         );
@@ -97,8 +112,15 @@ export default function ServicesPage() {
       }
 
       if (selectedGender !== "all") {
-        const sg = service.gender?.toLowerCase() || "unisex";
-        if (sg !== "unisex" && sg !== selectedGender) return false;
+        const sg = (service.gender || "unisex").toLowerCase();
+        const target = selectedGender.toLowerCase();
+        if (target === "women") {
+          if (sg !== "women" && sg !== "female" && sg !== "unisex" && sg !== "gender-neutral") return false;
+        } else if (target === "men") {
+          if (sg !== "men" && sg !== "male" && sg !== "unisex" && sg !== "gender-neutral") return false;
+        } else if (target === "gender-neutral") {
+          if (sg !== "unisex" && sg !== "gender-neutral") return false;
+        }
       }
 
       if (selectedCategory !== "all") {
@@ -117,238 +139,187 @@ export default function ServicesPage() {
       result = [...result].sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortBy === "price-desc") {
       result = [...result].sort((a, b) => (b.price || 0) - (a.price || 0));
+    } else if (sortBy === "duration") {
+      result = [...result].sort((a, b) => (a.duration || 0) - (b.duration || 0));
     }
 
     return result;
   }, [rootServices, searchQuery, selectedGender, selectedCategory, sortBy, subServicesMap]);
 
   return (
-    <Box className="space-y-6 pb-24 text-(--app-text)">
-      {/* HERO / ATELIER CONTEXT BAR (Stitch Spec) */}
-      <section className="w-full bg-gradient-to-b from-(--app-bg) via-(--app-bg) to-(--app-bg) border-b border-(--app-border)/20 pt-6 pb-8 px-4 md:px-12 rounded-xl">
-        <Box className="max-w-[1440px] mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <Box className="space-y-2">
-            <Box className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-(--app-primary-soft) border border-(--app-primary)/40 text-(--app-primary) text-[10px] font-bold uppercase tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full animate-pulse" />
-                HAUTE APPOINTMENTS OPEN
+    <div className="w-full bg-(--bg-surface) min-h-screen text-(--color-on-surface)">
+      <section className="max-w-[1280px] w-full mx-auto px-4 md:px-12 pt-8 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4">
+          <div className="space-y-2 max-w-2xl">
+            <div className="flex items-center gap-2 text-(--color-secondary)">
+              <span className="w-1.5 h-1.5 rounded-full bg-(--color-secondary)" />
+              <span className="font-sans text-xs uppercase tracking-widest text-(--color-secondary) font-semibold">
+                Sanctuary Menu
               </span>
-            </Box>
-            <Typography className="font-editorial text-3xl sm:text-5xl font-bold text-(--app-text) tracking-tight">
-              Salon Services & <span className="italic font-normal text-(--app-primary)">Haute Formulations</span>
-            </Typography>
-            <Typography className="text-xs sm:text-sm text-(--app-muted) max-w-2xl">
-              Curated botanical therapies, architectural color precision, and tailored Japanese scalp rituals executed by certified master stylists.
-            </Typography>
-          </Box>
+              <span className="text-(--color-outline-variant)">•</span>
+              <span className="font-sans text-xs text-(--color-on-surface-variant) font-medium">
+                {filteredServices.length} Curated Offerings
+              </span>
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl text-(--color-on-surface) tracking-tight font-bold">
+              Treatment Catalog
+            </h1>
+            <p className="font-sans text-sm text-(--color-on-surface-variant) leading-relaxed">
+              Architectural forms, biodynamic formulations, and tranquil restorative therapies calibrated for holistic scalp health and precision styling.
+            </p>
+          </div>
 
-          {/* Location Selector Dropdown & Active Sanctuary Banner */}
-          <Box className="flex items-center gap-3 bg-(--app-surface-alt) p-3 rounded-xl border border-(--app-border)/30">
-            <Box className="w-10 h-10 rounded-lg bg-(--app-surface-alt) flex items-center justify-center text-(--app-primary)">
-              <StorefrontOutlinedIcon className="text-[20px]" />
-            </Box>
-            <Box>
-              <Box className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold text-(--app-muted) uppercase tracking-wider">
-                  ACTIVE SANCTUARY
-                </span>
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              </Box>
-              <Typography className="text-xs font-bold text-(--app-text)">
-                {salon?.name || "Flagship Salon — Main Studio"}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {categoryTabs.map((tab) => {
+              const isActive = selectedCategory === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(tab.id)}
+                  className={`px-4 py-2 rounded-[4px] font-sans text-xs uppercase tracking-wider transition-all border-0 cursor-pointer ${isActive
+                      ? "bg-(--color-primary) text-(--color-on-primary) font-semibold shadow-xs"
+                      : "bg-(--bg-surface-container) hover:bg-(--bg-surface-container-high) text-(--color-on-surface-variant)"
+                    }`}
+                >
+                  <EllipsisCell value={tab.label} maxChars={12} />
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
-      {/* MAIN CATALOG 2-COLUMN SECTION (Stitch 1:1) */}
-      <main className="w-full max-w-[1440px] mx-auto px-4 md:px-12 py-4">
-        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* LEFT FILTER SIDEBAR (approx 320px) */}
-          <aside className="lg:col-span-4 xl:col-span-3 space-y-6">
-            {/* Search Input */}
-            <Box className="bg-(--app-surface-alt) rounded-xl p-4 border border-(--app-border)/30 shadow-lg space-y-4">
-              <Box className="relative">
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search rituals, color, actives..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon className="text-(--app-muted) text-[20px]" />
-                        </InputAdornment>
-                      ),
-                      endAdornment: searchQuery ? (
-                        <InputAdornment position="end">
-                          <IconButton size="small" onClick={() => setSearchQuery("")} className="text-(--app-muted)">
-                            <CloseIcon className="text-[16px]" />
-                          </IconButton>
-                        </InputAdornment>
-                      ) : null,
-                      className: "rounded-lg bg-(--app-bg) text-xs text-(--app-text) border-(--app-border)/40 py-0.5",
-                    },
-                  }}
-                />
-              </Box>
-
-              {/* Service Sanctuaries Categories */}
-              <Box>
-                <Box className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-(--app-muted) tracking-wider uppercase">
-                    SERVICE SANCTUARIES
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory("all");
-                      setSearchQuery("");
-                      setSelectedGender("all");
-                    }}
-                    className="text-[10px] font-bold text-(--app-primary) bg-transparent border-0 cursor-pointer uppercase hover:underline"
-                  >
-                    RESET
-                  </button>
-                </Box>
-                <ul className="space-y-1 p-0 m-0 list-none">
-                  {categorySanctuaries.map((cat) => {
-                    const isSel = selectedCategory === cat.id;
-                    const catBtnClass = isSel
-                      ? "w-full flex items-center justify-between px-3 py-2 rounded-lg bg-(--app-surface-alt) border-l-4 border-(--app-primary) text-(--app-primary) font-semibold text-xs transition-all text-left border-y-0 border-r-0 cursor-pointer"
-                      : "w-full flex items-center justify-between px-3 py-2 rounded-lg text-(--app-muted) hover:bg-(--app-surface-alt) text-xs transition-all text-left border-0 bg-transparent cursor-pointer";
-
-                    return (
-                      <li key={cat.id}>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedCategory(cat.id)}
-                          className={catBtnClass}
-                        >
-                          <span className="capitalize">{cat.label}</span>
-                          <span className={isSel ? "text-[10px] bg-(--app-primary)/20 text-(--app-primary) px-2 py-0.5 rounded-full font-bold" : "text-[10px] bg-(--app-surface-alt) px-2 py-0.5 rounded-full text-(--app-muted)"}>
-                            {cat.count}
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Box>
-
-              {/* Target Guest Demographic Filter */}
-              <Box className="pt-2 border-t border-(--app-border)/20">
-                <Typography className="block text-[10px] font-bold text-(--app-muted) tracking-wider uppercase mb-2">
-                  TARGET GUEST
-                </Typography>
-                <Box className="grid grid-cols-2 gap-2">
-                  {[
-                    { id: "all", label: "All" },
-                    { id: "female", label: "Female" },
-                    { id: "male", label: "Male" },
-                    { id: "unisex", label: "Unisex" },
-                  ].map((g) => {
-                    const isSel = selectedGender === g.id;
-                    const gBtnClass = isSel
-                      ? "px-3 py-1.5 rounded-lg bg-(--app-surface-alt) border border-(--app-primary) text-(--app-primary) text-xs font-semibold text-center cursor-pointer"
-                      : "px-3 py-1.5 rounded-lg border border-(--app-border)/30 text-(--app-muted) hover:border-(--app-primary) text-xs transition-all text-center bg-transparent cursor-pointer";
-
-                    return (
-                      <button
-                        key={g.id}
-                        type="button"
-                        onClick={() => setSelectedGender(g.id)}
-                        className={gBtnClass}
-                      >
-                        {g.label}
-                      </button>
-                    );
-                  })}
-                </Box>
-              </Box>
-            </Box>
-
-            {/* Bespoke Consultation Note */}
-            <Box className="p-4 rounded-xl bg-(--app-surface-alt) border border-(--app-primary)/30 relative overflow-hidden">
-              <Box className="flex items-center gap-2 mb-2 text-(--app-primary)">
-                <AutoAwesomeOutlinedIcon className="text-[18px]" />
-                <span className="text-[10px] font-bold tracking-widest uppercase">
-                  BESPOKE CONSULTATION
-                </span>
-              </Box>
-              <Typography className="text-xs text-(--app-muted) leading-relaxed">
-                Every hair sculpture includes a micro-digital scalp & strand elasticity diagnosis prior to chemical contact.
-              </Typography>
-            </Box>
-          </aside>
-
-          {/* MAIN CATALOG GRID */}
-          <section className="lg:col-span-8 xl:col-span-9 space-y-4">
-            {/* Controls Bar */}
-            <Box className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-(--app-border)/20">
-              <Box>
-                <Typography className="text-xl font-semibold text-(--app-text) capitalize">
-                  {selectedCategory === "all" ? "All Salon Offerings" : selectedCategory}
-                </Typography>
-                <Typography className="text-xs text-(--app-muted)">
-                  Showing {filteredServices.length} offerings
-                </Typography>
-              </Box>
-
-              <Box className="flex items-center gap-2 bg-(--app-surface-alt) px-3 py-1.5 rounded-lg border border-(--app-border)/30">
-                <span className="text-[10px] font-bold text-(--app-muted) uppercase">SORT BY:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent text-(--app-text) text-xs border-none focus:outline-none cursor-pointer"
+      <section className="w-full bg-(--bg-surface-container-low) py-4 border-y border-(--color-hairline)/60">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            <div className="md:col-span-5 relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-(--color-on-surface-variant) pointer-events-none text-[20px]">
+                search
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search treatments by name, formula, or ritual..."
+                className="w-full h-12 pl-11 pr-10 bg-(--bg-surface-container-lowest) text-(--color-on-surface) placeholder:text-(--color-outline) font-sans text-xs rounded-[4px] border border-(--color-hairline) focus:outline-none focus:ring-1 focus:ring-(--color-secondary) transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-(--color-on-surface-variant) hover:text-(--color-on-surface) bg-transparent border-0 cursor-pointer"
                 >
-                  <option value="curated" className="bg-(--app-surface-alt) text-(--app-text)">Curated Order</option>
-                  <option value="price-desc" className="bg-(--app-surface-alt) text-(--app-text)">Price: High to Low</option>
-                  <option value="price-asc" className="bg-(--app-surface-alt) text-(--app-text)">Price: Low to High</option>
-                </select>
-              </Box>
-            </Box>
-
-            {/* Services List */}
-            <Box className="flex flex-col gap-6 pt-2">
-              {filteredServices.length === 0 ? (
-                <Box className="text-center py-16 px-4 rounded-xl border border-dashed border-(--app-border) bg-(--app-bg)">
-                  <ContentCutOutlinedIcon className="text-(--app-muted) text-[40px] mb-2" />
-                  <Typography className="font-bold text-sm text-(--app-text)">
-                    No treatments match your current filters
-                  </Typography>
-                  <Typography className="text-xs text-(--app-muted) mt-1 max-w-sm mx-auto">
-                    Try clearing search terms or selecting another service sanctuary.
-                  </Typography>
-                  <Button
-                    size="small"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("all");
-                      setSelectedGender("all");
-                    }}
-                    className="mt-4 rounded-full px-5 py-2 text-xs font-bold text-(--app-primary) normal-case"
-                  >
-                    Reset Filters
-                  </Button>
-                </Box>
-              ) : (
-                filteredServices.map((service) => (
-                  <ServiceCard
-                    key={service.uuid || service.id}
-                    service={service}
-                    subServices={subServicesMap[service.id] || []}
-                    salon={salon}
-                  />
-                ))
+                  <span className="material-symbols-outlined text-[18px]">close</span>
+                </button>
               )}
-            </Box>
-          </section>
-        </Box>
-      </main>
-    </Box>
+            </div>
+
+            <div className="md:col-span-4 flex items-center bg-(--bg-surface-container-lowest) rounded-[4px] px-3 h-12 border border-(--color-hairline)">
+              <span className="font-sans text-[10px] uppercase tracking-wider text-(--color-outline) px-1 select-none font-semibold whitespace-nowrap">
+                Suitability:
+              </span>
+              <select
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+                className="w-full bg-transparent text-(--color-on-surface) font-sans text-xs py-2 focus:outline-none cursor-pointer border-0"
+              >
+                <option value="all">All Genders</option>
+                <option value="gender-neutral">Gender Neutral</option>
+                <option value="women">Women</option>
+                <option value="men">Men</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-3 flex items-center bg-(--bg-surface-container-lowest) rounded-[4px] px-3 h-12 border border-(--color-hairline)">
+              <span className="font-sans text-[10px] uppercase tracking-wider text-(--color-outline) px-1 select-none font-semibold whitespace-nowrap">
+                Sort:
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full bg-transparent text-(--color-on-surface) font-sans text-xs py-2 focus:outline-none cursor-pointer border-0"
+              >
+                <option value="curated">Curated Order</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="duration">Duration: Brief to Long</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-[1280px] w-full mx-auto px-4 md:px-12 py-10 pb-32">
+        {filteredServices.length === 0 ? (
+          <div className="text-center py-16 px-4 rounded-[4px] border border-dashed border-(--color-hairline) bg-(--bg-surface-container-lowest)">
+            <ContentCutOutlinedIcon className="text-(--color-outline) text-[40px] mb-2" />
+            <Typography className="font-semibold text-sm text-(--color-on-surface)">
+              No treatments match your current filters
+            </Typography>
+            <Typography className="text-xs text-(--color-on-surface-variant) mt-1 max-w-sm mx-auto">
+              Try clearing search terms or selecting another service sanctuary.
+            </Typography>
+            <Button
+              size="small"
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("all");
+                setSelectedGender("all");
+              }}
+              className="mt-4 rounded-[4px] px-5 py-2 text-xs font-semibold text-(--color-on-primary) bg-(--color-primary) hover:bg-(--color-on-surface-variant) normal-case"
+            >
+              Reset Filters
+            </Button>
+          </div>
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredServices.map((service) => (
+              <ServiceCard
+                key={service.uuid || service.id}
+                service={service}
+                subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+                isAdded={isAdded(service.uuid || service.id)}
+                isSubAdded={(subId) => isAdded(subId)}
+                onToggleCart={toggleCart}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {cart.items.length > 0 && (
+        <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col sm:flex-row items-center justify-between px-6 py-4 w-[calc(100%-2rem)] max-w-3xl bg-(--bg-surface-container-lowest) rounded-[4px] border border-(--color-primary) shadow-xl backdrop-blur-md">
+          <div className="flex items-center gap-4 w-full sm:w-auto mb-3 sm:mb-0">
+            <div className="w-10 h-10 rounded-[4px] bg-(--color-primary) flex items-center justify-center text-(--color-on-primary) shrink-0">
+              <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-sans text-[10px] font-bold text-(--color-secondary) tracking-wider uppercase">
+                  ACTIVE RESERVATION
+                </span>
+                <span className="h-1 w-1 rounded-full bg-(--color-on-surface)" />
+                <span className="text-[11px] text-(--color-on-surface-variant) font-sans">
+                  {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""}
+                </span>
+              </div>
+              <p className="font-serif text-sm text-(--color-on-surface) font-medium truncate max-w-sm capitalize">
+                {cart.items[0]?.name || "Selected Ritual"}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => navigate("/cart")}
+            className="w-full sm:w-auto bg-(--color-primary) hover:bg-(--color-on-surface-variant) text-(--color-on-primary) px-6 py-3 rounded-[4px] font-sans text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-0"
+          >
+            <span>PROCEED TO SCHEDULE (₹{totalPrice})</span>
+            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
+        </aside>
+      )}
+    </div>
   );
 }

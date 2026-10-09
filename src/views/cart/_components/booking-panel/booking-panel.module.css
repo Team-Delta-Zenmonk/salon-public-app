@@ -1,0 +1,146 @@
+.drawerPaper {
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: var(--app-surface, #ffffff) !important;
+  overflow: hidden !important;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  max-height: 94vh !important;
+}
+
+@media (min-width: 640px) {
+  .drawerPaper {
+    border-radius: 1rem !important;
+    margin-bottom: 0.75rem !important;
+    max-width: 560px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-height: 88vh !important;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.25rem 1rem 1.25rem;
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.subtitle {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, #71717a) !important;
+}
+
+.closeBtn {
+  background-color: var(--app-surface-alt, #faf8f5) !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  border-radius: 0.5rem !important;
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.body::-webkit-scrollbar {
+  display: none;
+}
+
+.sectionBlock {
+  padding-top: 1.25rem;
+}
+
+.sectionLabel {
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--app-muted, #71717a) !important;
+  margin-bottom: 0.75rem !important;
+  padding-left: 1.25rem !important;
+  display: block;
+}
+
+.footer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  flex-shrink: 0;
+  background-color: var(--app-surface, #ffffff);
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--app-muted, #71717a);
+}
+
+.dot {
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background-color: var(--app-border, rgba(0, 0, 0, 0.15));
+}
+
+.totalPrice {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  border: 0;
+}
+
+.actionBtnActive {
+  background-color: var(--app-primary, #18181b);
+  color: var(--app-primary-contrast, #ffffff);
+  cursor: pointer;
+}
+
+.actionBtnInactive {
+  background-color: var(--app-surface-alt, #faf8f5);
+  color: var(--app-muted, #71717a);
+  cursor: default;
+}
+
+.btnText {
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+}
+
+.footerNote {
+  font-size: 0.6875rem !important;
+  color: var(--app-muted, #71717a) !important;
+  text-align: center;
+  margin-top: 0.625rem !important;
+  display: block;
+}

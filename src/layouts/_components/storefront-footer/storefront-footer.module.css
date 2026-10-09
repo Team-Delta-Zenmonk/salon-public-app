@@ -1,0 +1,175 @@
+.footer {
+  margin-top: auto;
+  background-color: var(--app-surface-alt);
+  border-top: 1px solid var(--app-border);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  color: var(--app-text);
+  font-family: var(--app-font-family);
+}
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--app-border);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.columnNarrow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoWrapper {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: var(--app-surface);
+  padding: 0.125rem;
+  flex-shrink: 0;
+  border: 1px solid var(--app-border);
+  position: relative;
+}
+
+.logoFallback {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: var(--app-primary);
+  color: var(--app-bg);
+  font-family: var(--app-font-family);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.brandTitle {
+  font-family: var(--app-font-family);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--app-text);
+  letter-spacing: 0.05em;
+}
+
+.aboutText {
+  font-size: 0.75rem;
+  color: var(--app-muted);
+  line-height: 1.625;
+}
+
+.sectionBadge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--app-champagne);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.addressBlock {
+  font-size: 0.75rem;
+  color: var(--app-muted);
+  line-height: 1.625;
+}
+
+.phoneText {
+  display: block;
+  font-weight: 500;
+  color: var(--app-text);
+  margin-top: 0.125rem;
+}
+
+.bottomBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--app-muted);
+}
+
+@media (min-width: 768px) {
+  .bottomBar {
+    flex-direction: row;
+  }
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.6875rem;
+}
+
+@media (min-width: 768px) {
+  .copyright {
+    text-align: left;
+  }
+}
+
+.brandNameCopyright {
+  font-family: var(--app-font-family);
+  color: var(--app-text);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.linkGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  font-size: 0.6875rem;
+}
+
+.footerLink {
+  color: var(--app-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  color: var(--app-text);
+}

@@ -1,129 +1,139 @@
 "use client";
-import { Box, Typography, Avatar, Button, Divider, Paper } from "@mui/material";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
+import { Box, Typography, Avatar } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { logout } from "../../features/auth/auth.slice";
+import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 
-import { useStorefront } from "../../providers/storefront-provider";
-
-export default function Profile() {
-  const navigate = useStorefrontNavigate();
+export default function ProfilePage() {
   const dispatch = useAppDispatch();
-  const { customer } = useAppSelector((state) => state.auth);
-  const { salon } = useStorefront();
-
-  const salonName = salon?.name || "Sanctuary";
-  const fullName = `${customer?.first_name || ""} ${customer?.last_name || ""}`.trim() || customer?.name || "Client";
-  const initials = customer?.first_name?.[0] || customer?.name?.[0] || "U";
+  const navigate = useStorefrontNavigate();
+  const { customer, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
 
-  return (
-    <Box className="min-h-screen bg-(--app-bg) text-(--app-text) py-10 px-4">
-      <Box className="max-w-2xl mx-auto space-y-8">
-        <Box>
-          <Typography className="font-editorial text-3xl sm:text-4xl font-bold text-(--app-text) tracking-tight">
-            Client Dossier & {salonName} Profile
-          </Typography>
-          <Typography className="text-xs text-(--app-muted)/70 mt-1 font-mono uppercase tracking-wider">
-            Manage your personal sanctuary membership & credentials
-          </Typography>
-        </Box>
-
-        {/* Profile Card */}
-        <Paper
-          elevation={0}
-          className="rounded-2xl border border-(--app-primary)/15 bg-(--app-surface) p-6 sm:p-8 space-y-6 shadow-2xl"
-        >
-          <Box className="flex items-center gap-5">
-            <Avatar className="w-18 h-18 sm:w-22 sm:h-22 bg-gradient-to-br from-(--app-primary) to-(--app-primary) text-(--app-bg) font-editorial font-bold text-2xl border-2 border-(--app-primary)/30 shadow-lg">
-              {initials}
-            </Avatar>
-            <Box className="min-w-0">
-              <Typography className="font-editorial text-xl sm:text-2xl font-bold text-(--app-text) truncate">
-                {fullName}
-              </Typography>
-              <Box className="mt-1 px-3 py-0.5 /10 border border-(--app-primary)/30 rounded-full w-fit capitalize">
-                <Typography className="text-[10px] font-mono font-semibold text-(--app-primary) uppercase tracking-widest">
-                  VIP Patron Member
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-
-          <Divider className="border-(--app-primary)/10" />
-
-          {/* Contact Info */}
-          <Box className="space-y-3">
-            <Typography className="text-[10px] font-mono font-bold uppercase tracking-widest text-(--app-primary)/70">
-              Credentials & Contact
-            </Typography>
-
-            <Box className="flex items-center gap-3 text-xs sm:text-sm text-(--app-text) p-4 rounded-xl bg-(--app-bg) border border-(--app-primary)/10">
-              <EmailOutlinedIcon className="text-(--app-primary) text-lg" />
-              <span className="font-medium">{customer?.email || "No email provided"}</span>
-            </Box>
-
-            {customer?.phone && (
-              <Box className="flex items-center gap-3 text-xs sm:text-sm text-(--app-text) p-4 rounded-xl bg-(--app-bg) border border-(--app-primary)/10">
-                <PhoneOutlinedIcon className="text-(--app-primary) text-lg" />
-                <span className="font-medium">{customer.phone}</span>
-              </Box>
-            )}
-          </Box>
-
-          <Divider className="border-(--app-primary)/10" />
-
-          {/* Quick Links */}
-          <Box className="space-y-3">
-            <Typography className="text-[10px] font-mono font-bold uppercase tracking-widest text-(--app-primary)/70">
-              Sanctuary Actions
-            </Typography>
-
-            <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => navigate("/bookings")}
-                startIcon={<CalendarMonthOutlinedIcon className="text-(--app-primary)" />}
-                className="justify-start rounded-xl py-3.5 px-4 font-bold text-xs uppercase tracking-wider border border-(--app-primary)/20 hover:/10 hover:border-(--app-primary)"
-              >
-                My Reservations
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => navigate("/services")}
-                startIcon={<ContentCutOutlinedIcon className="text-(--app-primary)" />}
-                className="justify-start rounded-xl py-3.5 px-4 font-bold text-xs uppercase tracking-wider border border-(--app-primary)/20 hover:/10 hover:border-(--app-primary)"
-              >
-                Reserve Ceremony
-              </Button>
-            </Box>
-          </Box>
-
-          <Divider className="border-(--app-primary)/10" />
-
-          {/* Sign Out */}
-          <Button
-            fullWidth
-            variant="text"
-            onClick={handleLogout}
-            startIcon={<LogoutOutlinedIcon />}
-            className="rounded-xl py-3 font-bold text-xs uppercase tracking-wider hover:/10"
+  if (!isAuthenticated) {
+    return (
+      <Box className="w-full max-w-[1440px] mx-auto px-6 md:px-12 py-20 text-center text-[#1C1C18] bg-[#FCF9F3]">
+        <div className="max-w-md mx-auto p-8 rounded-[2px] bg-[#FCFAF7] border border-[#E5DFD5] space-y-4">
+          <span className="material-symbols-outlined text-[48px] text-[#A88B64]">account_circle</span>
+          <h2 className="font-serif text-2xl text-[#1C1A17] font-medium">Member Sanctuary Required</h2>
+          <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+            Please sign in or create an atelier dossier to access your personalized treatments and bookings history.
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate("/signup")}
+            className="w-full bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] rounded-[2px] py-3 font-sans text-xs font-semibold uppercase tracking-[0.1em] border-0 cursor-pointer transition-all"
           >
-            Sign Out of Sanctuary Account
-          </Button>
-        </Paper>
+            SIGN IN / CREATE DOSSIER
+          </button>
+        </div>
       </Box>
+    );
+  }
+
+  const fullName = `${customer?.first_name || customer?.name || "Private"} ${customer?.last_name || "Client"}`.trim();
+
+  return (
+    <Box className="w-full max-w-[1440px] mx-auto px-6 md:px-12 py-10 text-[#1C1C18] bg-[#FCF9F3] min-h-screen font-sans">
+      <div className="flex items-center justify-between pb-4 border-b border-[#E5DFD5] mb-8 flex-wrap gap-2">
+        <div className="flex items-center gap-2">
+          <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase">MEMBER SANCTUARY</span>
+          <span className="text-[#E5DFD5] text-xs">/</span>
+          <span className="font-sans text-[10px] font-semibold text-[#766A5E] tracking-[0.1em] uppercase">CLIENT DOSSIER</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="font-sans text-[10px] font-semibold text-[#766A5E] uppercase tracking-[0.12em]">CLIENT ID #{customer?.uuid?.slice(0, 8) || "8924"}</span>
+          <div className="h-3 w-px bg-[#E5DFD5]" />
+          <span className="font-sans text-[10px] font-semibold text-[#1C1A17] uppercase tracking-[0.12em]">PRIVATE SALON PATRON</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <aside className="lg:col-span-5 flex flex-col gap-6">
+          <div className="rounded-[2px] overflow-hidden bg-[#FCFAF7] border border-[#E5DFD5]">
+            <div className="p-6 bg-[#F6F3ED] border-b border-[#E5DFD5] flex items-center gap-4">
+              <Avatar className="w-14 h-14 rounded-[2px] bg-[#1C1A17] text-[#FCFAF7] font-serif text-xl border border-[#E5DFD5]">
+                {fullName[0]}
+              </Avatar>
+              <div>
+                <h3 className="font-serif text-2xl text-[#1C1A17] font-medium capitalize">{fullName}</h3>
+                <p className="font-sans text-xs text-[#766A5E]">{customer?.email}</p>
+                {customer?.phone && (
+                  <p className="font-sans text-[11px] text-[#A88B64] mt-0.5">{customer.phone}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5DFD5]/60">
+                <span className="font-sans text-xs text-[#766A5E]">ACCOUNT STATUS</span>
+                <span className="font-sans text-xs font-semibold text-[#5A6B5C] uppercase tracking-wider">ACTIVE PATRON</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="font-sans text-xs text-[#766A5E]">DOSSIER VERIFICATION</span>
+                <span className="font-sans text-xs font-semibold text-[#1C1A17] uppercase tracking-wider">AUTHENTICATED</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <section className="lg:col-span-7 flex flex-col gap-6">
+          <div className="bg-[#FCFAF7] rounded-[2px] p-6 sm:p-8 border border-[#E5DFD5] space-y-6">
+            <div className="flex items-center justify-between border-b border-[#E5DFD5] pb-4">
+              <div>
+                <span className="font-sans text-[10px] font-semibold text-[#A88B64] uppercase tracking-[0.14em]">PATRON DOSSIER</span>
+                <h2 className="font-serif text-2xl font-medium text-[#1C1A17]">Client Specifications</h2>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-[2px] bg-[#FCFAF7] text-[#8F4D47] hover:bg-[#F2EEE7] font-sans text-xs font-semibold uppercase tracking-[0.1em] border border-[#E5DFD5] cursor-pointer transition-colors"
+              >
+                SIGN OUT
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]/60">
+                <span className="font-sans text-[10px] font-semibold text-[#766A5E] block uppercase tracking-[0.1em] mb-1">FIRST NAME</span>
+                <span className="font-sans text-sm text-[#1C1A17] font-semibold capitalize">
+                  {customer?.first_name || customer?.name || "Not provided"}
+                </span>
+              </div>
+              <div className="p-4 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]/60">
+                <span className="font-sans text-[10px] font-semibold text-[#766A5E] block uppercase tracking-[0.1em] mb-1">LAST NAME</span>
+                <span className="font-sans text-sm text-[#1C1A17] font-semibold capitalize">
+                  {customer?.last_name || "—"}
+                </span>
+              </div>
+              <div className="p-4 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]/60">
+                <span className="font-sans text-[10px] font-semibold text-[#766A5E] block uppercase tracking-[0.1em] mb-1">EMAIL ADDRESS</span>
+                <span className="font-sans text-sm text-[#1C1A17] font-semibold">{customer?.email || "—"}</span>
+              </div>
+              <div className="p-4 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]/60">
+                <span className="font-sans text-[10px] font-semibold text-[#766A5E] block uppercase tracking-[0.1em] mb-1">PHONE NUMBER</span>
+                <span className="font-sans text-sm text-[#1C1A17] font-semibold">{customer?.phone || "—"}</span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-[#E5DFD5] flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => navigate("/bookings")}
+                className="px-6 py-3 rounded-[2px] bg-[#1C1A17] text-[#FCFAF7] font-sans text-xs font-semibold uppercase tracking-[0.1em] border-0 cursor-pointer flex items-center gap-2"
+              >
+                <span>VIEW CEREMONIES & BOOKINGS</span>
+                <span className="material-symbols-outlined text-[16px]">calendar_month</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
     </Box>
   );
 }
+

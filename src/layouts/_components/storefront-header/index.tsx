@@ -6,7 +6,6 @@ import {
   Typography,
   Avatar,
   IconButton,
-  Button,
   Menu,
   MenuItem,
   Drawer,
@@ -14,22 +13,19 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
-import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { getNormalizedStorefrontPath } from "../../../common/storefront-slug.utils";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
-import { useAppThemeMode } from "../../../theme/theme-provider";
-import { themeOptions } from "../../../theme/theme";
 import { logout } from "../../../features/auth/auth.slice";
 import { useStorefront } from "../../../providers/storefront-provider";
 import { STOREFRONT_NAV_ITEMS } from "../../navigation";
+import EllipsisCell from "@/components/ellipse-cell";
+import Image from "next/image";
 
 export default function StorefrontHeader() {
   const navigate = useStorefrontNavigate();
@@ -41,17 +37,14 @@ export default function StorefrontHeader() {
   const cartCount = cartItems.length;
 
   const { isAuthenticated, customer } = useAppSelector((state) => state.auth);
-  const { themeId, setThemeId } = useAppThemeMode();
 
-  const [themeMenuAnchor, setThemeMenuAnchor] = useState<null | HTMLElement>(null);
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  const themeMenuOpen = Boolean(themeMenuAnchor);
   const userMenuOpen = Boolean(userMenuAnchor);
 
-  const salonName = salon?.name?.toUpperCase() || "CRIMSON & SHEAR";
-  const salonSub = salon?.type ? `${salon.type.toUpperCase()} ATELIER` : "HAUTE COIFFURE ATELIER";
+  const salonName = salon?.name || "ATELIER SOLSTICE";
+  const salonSub = salon?.type ? `${salon.type.toUpperCase()} SANCTUARY` : "HAUTE COIFFURE & SPA";
 
   const handleLogout = () => {
     setUserMenuAnchor(null);
@@ -69,11 +62,10 @@ export default function StorefrontHeader() {
     <AppBar
       position="sticky"
       elevation={0}
-      className="!bg-(--app-surface)/90 backdrop-blur-md top-0 sticky z-50 !border-b !border-(--app-border) shadow-2xl"
+      className="!bg-(--app-surface)/95 backdrop-blur-md top-0 sticky z-50 !border-b !border-(--app-border) shadow-xs"
     >
-      <Toolbar className="flex justify-between items-center w-full px-4 md:px-12 max-w-[1440px] mx-auto py-3 min-h-20">
-        {/* Brand Logo & Sparkle Motif (Stitch 1:1 Spec) */}
-        <Box className="flex items-center gap-3">
+      <Toolbar className="flex justify-between items-center w-full px-6 md:px-12 max-w-[1440px] mx-auto py-4 min-h-20">
+        <Box className="flex items-center gap-4">
           <IconButton
             size="small"
             className="md:hidden text-(--app-text) -ml-2"
@@ -87,35 +79,33 @@ export default function StorefrontHeader() {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => navigate("/")}
           >
-            <Box className="w-10 h-10 rounded-xl overflow-hidden p-0.5 bg-gradient-to-tr from-(--app-primary) to-(--app-muted) shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shrink-0">
+            <Box className="w-10 h-10 rounded-[2px] overflow-hidden p-0.5 border border-(--app-border) bg-(--app-surface-alt) flex items-center justify-center transition-all duration-300 group-hover:border-(--app-primary) shrink-0 relative">
               {salon?.logo ? (
-                <img
+                <Image
                   src={salon.logo}
                   alt={salonName}
-                  className="w-full h-full object-cover rounded-lg"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                  unoptimized
                 />
               ) : (
-                <img
-                  alt="Scissors & Comb Sparkle Brand Icon"
-                  className="w-full h-full object-cover rounded-lg"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1XYBNkbZmqEwkR3adhjz9QTOyWbaMxUk-gfuu_Mge1ZI579t29IMLyeogxRK2lexlZXOkzRqxVeSVLaaGoLBAe9cRHHB9JMnXg9N0hIqs_TGliGBA4Yfpq7vXPs9LsvA_EY0trF4-zxLyEM8Z-R_Ns_Z7QtVvmTVwqR8x54ElH1DUCaGNI5ufS5JuyYytDDZQ8UXnNQpj4jWA1XwMCvOb_CIzGfbxU9apPJ2Yf2dx3sbB9Gj2A2Lt3-8UY"
-                />
+                <span className="font-serif text-(--app-text) font-medium text-lg">
+                  {salonName[0]}
+                </span>
               )}
             </Box>
 
             <Box className="flex flex-col">
-              <span className="font-editorial text-lg tracking-wider text-(--app-text) font-semibold leading-tight group-hover:text-(--app-primary) transition-colors">
-                {salonName}
-              </span>
-              <span className="text-[11px] tracking-[0.2em] text-(--app-primary) font-bold uppercase -mt-1 opacity-90">
+              <EllipsisCell value={salonName} className="font-serif text-xl tracking-tight text-(--app-text) font-medium leading-none group-hover:text-(--app-champagne) transition-colors" maxChars={20} />
+              <span className="font-sans text-[9px] tracking-[0.18em] text-(--app-muted) uppercase mt-1 font-semibold">
                 {salonSub}
               </span>
             </Box>
           </Box>
         </Box>
 
-        {/* Desktop Navigation Links (Stitch Spec) */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+        <nav className="hidden md:flex items-center gap-8 lg:gap-10">
           {STOREFRONT_NAV_ITEMS.map((item) => {
             const active = isActive(item.to);
             return (
@@ -123,11 +113,10 @@ export default function StorefrontHeader() {
                 key={item.to}
                 onClick={() => navigate(item.to)}
                 type="button"
-                className={`text-sm font-semibold transition-all duration-200 cursor-pointer bg-transparent border-0 py-1 ${
-                  active
-                    ? "text-(--app-primary) border-b-2 border-(--app-primary) pb-1"
-                    : "text-(--app-muted) hover:text-(--app-primary)"
-                }`}
+                className={`font-sans text-xs font-semibold uppercase tracking-[0.12em] transition-all duration-200 cursor-pointer bg-transparent border-0 py-1 ${active
+                  ? "text-(--app-text) border-b-2 border-(--app-primary) pb-1"
+                  : "text-(--app-muted) hover:text-(--app-text)"
+                  }`}
               >
                 {item.label}
               </button>
@@ -135,90 +124,38 @@ export default function StorefrontHeader() {
           })}
         </nav>
 
-        {/* Trailing Actions (Shopping Bag, Theme Switcher, Book Treatment Button & User Profile) */}
-        <Box className="flex items-center gap-3 sm:gap-4 shrink-0">
-          {/* Theme Palette Switcher Button */}
-          <IconButton
-            onClick={(e) => setThemeMenuAnchor(e.currentTarget)}
-            className="p-2 text-(--app-muted) hover:text-(--app-primary) transition-colors"
-            aria-label="Appearance Theme"
-            title="Switch Visual Theme"
-          >
-            <PaletteOutlinedIcon className="text-[22px]" />
-          </IconButton>
-
-          <Menu
-            anchorEl={themeMenuAnchor}
-            open={themeMenuOpen}
-            onClose={() => setThemeMenuAnchor(null)}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-            slotProps={{
-              paper: {
-                className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-52 shadow-xl p-1 text-(--app-text)",
-              },
-            }}
-          >
-            <Box className="px-3 py-2 border-b border-(--app-border) mb-1">
-              <Typography className="text-xs font-bold text-(--app-primary) uppercase tracking-wider">
-                Theme Presets
-              </Typography>
-            </Box>
-            {themeOptions.map((option) => {
-              const selected = themeId === option.id;
-              return (
-                <MenuItem
-                  key={option.id}
-                  onClick={() => {
-                    setThemeId(option.id);
-                    setThemeMenuAnchor(null);
-                  }}
-                  className="flex items-center justify-between py-2 text-xs font-semibold rounded-xl hover:bg-(--app-surface-alt)"
-                >
-                  <span className={selected ? "text-(--app-primary) font-bold" : "text-(--app-text)"}>
-                    {option.label}
-                  </span>
-                  {selected && <CheckIcon className="text-(--app-primary) text-[16px]" />}
-                </MenuItem>
-              );
-            })}
-          </Menu>
-
-          {/* Shopping Bag Icon Button with Counter Badge */}
+        <Box className="hidden md:flex items-center gap-4 sm:gap-6 shrink-0">
           <button
             onClick={() => navigate("/cart")}
             type="button"
-            aria-label="Shopping Bag"
-            className="relative p-2 text-(--app-muted) hover:text-(--app-primary) transition-colors duration-200 cursor-pointer bg-transparent border-0 flex items-center justify-center"
+            aria-label="Shopping Cart"
+            className="relative p-2 text-(--app-text) hover:text-(--app-champagne) transition-colors duration-200 cursor-pointer bg-transparent border-0 flex items-center justify-center"
           >
-            <ShoppingBagOutlinedIcon className="text-[24px]" />
+            <ShoppingBagOutlinedIcon className="text-[22px]" />
             {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center bg-(--app-primary) text-white ring-2 ring-(--app-surface) shadow-xs">
+              <span className="absolute -top-0.5 -right-0.5 text-[9px] font-semibold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center bg-(--app-primary) text-(--app-surface)">
                 {cartCount}
               </span>
             )}
           </button>
 
-          {/* Book Treatment CTA */}
-          <Button
-            variant="contained"
+          <button
+            type="button"
             onClick={() => navigate(isAuthenticated ? "/services" : "/signup")}
-            startIcon={<CalendarTodayOutlinedIcon className="text-[18px]" />}
-            className="px-5 py-2.5 rounded-lg text-xs font-bold crimson-glow hover:brightness-110 active:scale-[0.98] transition-all duration-200 shadow-lg normal-case border-0"
+            className="hidden lg:inline-flex px-5 py-2.5 rounded-[2px] bg-(--app-primary) text-(--app-surface) font-sans text-xs font-semibold uppercase tracking-[0.1em] hover:bg-(--app-text)/90 transition-all cursor-pointer border-0"
           >
-            {isAuthenticated ? "Book Treatment" : "Sign In / Book"}
-          </Button>
+            {isAuthenticated ? "RESERVE RITUAL" : "CLIENT SIGN IN"}
+          </button>
 
-          {/* User Profile Avatar */}
           {isAuthenticated && (
             <>
               <IconButton
                 onClick={(e) => setUserMenuAnchor(e.currentTarget)}
-                className="p-0 border border-(--app-border) rounded-full ring-2 ring-(--app-primary)/20"
+                className="p-0 border border-(--app-border) rounded-full"
                 aria-label="User account menu"
               >
-                <Avatar className="w-8 h-8 sm:w-9 sm:h-9 bg-(--app-surface-alt) text-(--app-primary) font-bold text-xs border border-(--app-border)">
-                  {customer?.first_name?.[0] || customer?.name?.[0] || "U"}
+                <Avatar className="w-8 h-8 bg-(--app-surface-alt) text-(--app-text) font-serif font-medium text-sm border border-(--app-border)">
+                  {customer?.first_name?.[0] || customer?.name?.[0] || "C"}
                 </Avatar>
               </IconButton>
 
@@ -230,13 +167,13 @@ export default function StorefrontHeader() {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{
                   paper: {
-                    className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-52 shadow-xl p-1 text-(--app-text)",
+                    className: "mt-2 rounded-[2px] border border-(--app-border) bg-(--app-surface) min-w-56 shadow-md p-1 text-(--app-text)",
                   },
                 }}
               >
                 <Box className="px-3 py-2 border-b border-(--app-border) mb-1">
-                  <Typography className="text-xs font-bold text-(--app-text)">
-                    {customer?.first_name || customer?.name || "Customer"}
+                  <Typography className="text-xs font-semibold text-(--app-text)">
+                    {customer?.first_name || customer?.name || "Client"}
                   </Typography>
                   <Typography className="text-[10px] text-(--app-muted) truncate">
                     {customer?.email || ""}
@@ -247,7 +184,7 @@ export default function StorefrontHeader() {
                     setUserMenuAnchor(null);
                     navigate("/bookings");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-(--app-surface-alt)"
+                  className="text-xs rounded-[2px] flex items-center gap-2 hover:bg-(--app-surface-alt)"
                 >
                   <CalendarMonthOutlinedIcon className="text-[16px] text-(--app-muted)" />
                   My Bookings
@@ -257,14 +194,14 @@ export default function StorefrontHeader() {
                     setUserMenuAnchor(null);
                     navigate("/profile");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2 hover:bg-(--app-surface-alt)"
+                  className="text-xs rounded-[2px] flex items-center gap-2 hover:bg-(--app-surface-alt)"
                 >
                   <PersonOutlineIcon className="text-[16px] text-(--app-muted)" />
-                  My Profile
+                  Profile
                 </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
-                  className="text-xs rounded-xl text-red-400 hover:bg-red-950/40 flex items-center gap-2"
+                  className="text-xs rounded-[2px] text-[#8F4D47] hover:bg-(--app-surface-alt) flex items-center gap-2"
                 >
                   <LogoutOutlinedIcon className="text-[16px]" />
                   Sign Out
@@ -275,22 +212,21 @@ export default function StorefrontHeader() {
         </Box>
       </Toolbar>
 
-      {/* Mobile Drawer */}
       <Drawer
         anchor="left"
         open={mobileDrawerOpen}
         onClose={() => setMobileDrawerOpen(false)}
         PaperProps={{
-          className: "w-64 h-full bg-(--app-surface) border-r border-(--app-border) p-5 flex flex-col justify-between overflow-hidden text-(--app-text)",
+          className: "w-72 h-full bg-(--app-surface) border-r border-(--app-border) p-6 flex flex-col justify-between overflow-hidden text-(--app-text)",
         }}
       >
         <Box>
-          <Box className="flex items-center justify-between pb-4 border-b border-(--app-border) mb-5">
-            <Box className="flex items-center gap-2.5 min-w-0">
-              <Box className="w-8 h-8 rounded-lg flex items-center justify-center font-editorial font-bold text-sm shrink-0">
+          <Box className="flex items-center justify-between pb-4 border-b border-(--app-border) mb-6">
+            <Box className="flex items-center gap-3 min-w-0">
+              <Box className="w-8 h-8 rounded-[2px] border border-(--app-border) bg-(--app-surface-alt) flex items-center justify-center font-serif text-sm">
                 {salonName[0]}
               </Box>
-              <Typography className="font-editorial font-bold text-sm text-(--app-text) truncate">
+              <Typography className="font-serif font-medium text-base text-(--app-text) truncate">
                 {salonName}
               </Typography>
             </Box>
@@ -299,65 +235,49 @@ export default function StorefrontHeader() {
             </IconButton>
           </Box>
 
-          <Box className="space-y-2">
+          <Box className="space-y-3">
             {STOREFRONT_NAV_ITEMS.map((item) => {
               const active = isActive(item.to);
               return (
-                <Button
+                <button
                   key={item.to}
-                  fullWidth
+                  type="button"
                   onClick={() => {
                     navigate(item.to);
                     setMobileDrawerOpen(false);
                   }}
-                  className={`justify-start px-4 py-3 rounded-xl font-bold text-xs capitalize ${
-                    active
-                      ? "bg-(--app-surface-alt) text-(--app-primary) border border-(--app-primary)/30"
-                      : "text-(--app-muted) hover:bg-(--app-surface-alt) hover:text-(--app-text)"
-                  }`}
+                  className={`w-full text-left px-4 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all cursor-pointer border-0 ${active
+                    ? "bg-(--app-surface-alt) text-(--app-text) border-l-2 border-(--app-primary)"
+                    : "text-(--app-muted) bg-transparent hover:text-(--app-text)"
+                    }`}
                 >
                   {item.label}
-                </Button>
+                </button>
               );
             })}
           </Box>
         </Box>
 
-        <Box className="pt-4 border-t border-(--app-border)">
+        <Box className="pt-3 border-t border-(--app-border)">
           {isAuthenticated ? (
-            <Box className="space-y-2">
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={() => {
-                  navigate("/bookings");
-                  setMobileDrawerOpen(false);
-                }}
-                className="rounded-xl text-xs font-bold border-(--app-border) text-(--app-text)"
-              >
-                My Bookings
-              </Button>
-              <Button
-                fullWidth
-                variant="text"
+              <button
+                type="button"
                 onClick={handleLogout}
-                className="rounded-xl -400 font-bold"
+                className="w-full text-[#8F4D47] bg-transparent font-sans text-xs font-semibold uppercase tracking-[0.1em] cursor-pointer border-0"
               >
-                Sign Out
-              </Button>
-            </Box>
+                SIGN OUT
+              </button>
           ) : (
-            <Button
-              fullWidth
-              variant="contained"
+            <button
+              type="button"
               onClick={() => {
                 navigate("/signup");
                 setMobileDrawerOpen(false);
               }}
-              className="rounded-xl text-xs font-bold hover:bg-(--app-primary)/90"
+              className="w-full bg-(--app-primary) text-(--app-surface) rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] cursor-pointer border-0"
             >
-              Sign In / Reserve
-            </Button>
+              CLIENT SIGN IN / RESERVE
+            </button>
           )}
         </Box>
       </Drawer>

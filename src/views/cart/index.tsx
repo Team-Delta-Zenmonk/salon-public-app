@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Box, Typography, Avatar, Button, Skeleton, Divider } from "@mui/material";
+import { Box, Typography, Avatar, Skeleton } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -19,6 +19,7 @@ import ActiveBookingBanner from "./_components/active-booking-banner";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { callSnack } from "../../components/snackbar";
+import EllipsisCell from "@/components/ellipse-cell";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -42,7 +43,7 @@ export default function Cart() {
       setIsFetchingCart(true);
       dispatch(getCartAction(customer.uuid))
         .unwrap()
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setIsFetchingCart(false));
     } else {
       setIsFetchingCart(false);
@@ -89,10 +90,10 @@ export default function Cart() {
 
   if (isFetchingCart || !loaded) {
     return (
-      <Box className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-4 sm:space-y-5">
-        <Skeleton variant="rounded" height={176} className="rounded-xl" />
+      <Box className="p-6 md:p-12 max-w-[1440px] mx-auto space-y-6">
+        <Skeleton variant="rectangular" height={140} className="rounded-[2px]" />
         {[1, 2].map((i) => (
-          <Skeleton key={i} variant="rounded" height={96} className="rounded-2xl" />
+          <Skeleton key={i} variant="rectangular" height={100} className="rounded-[2px]" />
         ))}
       </Box>
     );
@@ -100,73 +101,60 @@ export default function Cart() {
 
   if (!items.length) {
     return (
-      <Box className="flex flex-col items-center justify-center p-10 sm:p-16 text-center gap-4">
-        <Box className="w-18 h-18 rounded-xl bg-(--app-surface-alt) border border-(--app-border) flex items-center justify-center">
-          <StorefrontIcon className="text-[32px] text-(--app-muted)" />
+      <Box className="flex flex-col items-center justify-center p-12 md:p-20 text-center gap-4 bg-[#FCF9F3] min-h-[60vh]">
+        <Box className="w-16 h-16 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5] flex items-center justify-center">
+          <StorefrontIcon className="text-[28px] text-[#766A5E]" />
         </Box>
         <Box>
-          <Typography className="font-editorial text-xl sm:text-2xl font-bold text-(--app-text)">
-            Your basket is currently empty
-          </Typography>
-          <Typography variant="body2" className="mt-1 text-xs sm:text-sm text-(--app-muted) max-w-sm mx-auto">
+          <h2 className="font-serif text-2xl md:text-3xl text-[#1C1A17] font-medium">
+            Your Basket is Currently Empty
+          </h2>
+          <p className="font-sans text-xs text-[#766A5E] mt-2 max-w-sm mx-auto leading-relaxed">
             Explore our curated menu of hair, skin, and wellness treatments to get started.
-          </Typography>
-          <Button
-            variant="contained"
+          </p>
+          <button
+            type="button"
             onClick={() => navigate("/services")}
-            className="mt-4 rounded-full px-6 py-2.5 font-bold text-xs bg-(--app-primary) text-(--app-primary-contrast) normal-case"
+            className="mt-6 px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] bg-[#1C1A17] text-[#FCFAF7] border-0 cursor-pointer"
           >
-            Explore Services Menu
-          </Button>
+            EXPLORE SERVICE MENU
+          </button>
         </Box>
       </Box>
     );
   }
 
   const { totalPrice, totalDuration } = calculateTotals(items);
-
   const durationText = formatDuration(totalDuration);
 
   return (
     <>
-      <Box className="bg-(--app-bg) min-h-screen text-(--app-text) p-4 sm:p-6 lg:p-10">
-        <Box className="w-full max-w-6xl mx-auto">
+      <Box className="bg-[#FCF9F3] min-h-screen text-[#1C1C18] p-6 md:p-12 font-sans">
+        <Box className="w-full max-w-[1440px] mx-auto">
           {salon && (
-            <Box className="relative rounded-2xl overflow-hidden mb-8 bg-(--app-surface) border border-(--app-primary)/15 shadow-2xl p-6 sm:p-8">
-              {salon.logo && (
-                <Box
-                  component="img"
-                  src={salon.logo}
-                  className="absolute inset-0 w-full h-full object-cover opacity-15 blur-xl scale-110"
-                />
-              )}
-
-              <Box className="absolute inset-0 bg-gradient-to-r from-(--app-bg) via-transparent to-(--app-bg) opacity-80" />
-
+            <Box className="relative rounded-[2px] overflow-hidden mb-8 bg-[#FCFAF7] border border-[#E5DFD5] p-6 sm:p-8">
               <Box className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6">
                 <Avatar
                   src={salon.logo}
-                  variant="rounded"
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-(--app-primary)/30 bg-(--app-bg) shrink-0"
-                />
+                  variant="square"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-[2px] border border-[#E5DFD5] bg-[#F2EEE7] text-[#1C1A17] font-serif shrink-0 text-xl"
+                >
+                  {salon.name?.[0]}
+                </Avatar>
 
                 <Box className="flex-1 min-w-0">
-                  <Box className="flex items-center gap-3 mb-2 flex-wrap">
-                    <Typography className="font-editorial text-2xl sm:text-3xl font-bold text-(--app-text) tracking-tight capitalize">
-                      {salon.name}
-                    </Typography>
-                    <Box className="px-3 py-1 /10 rounded-full border border-(--app-primary)/30">
-                      <Typography className="text-(--app-primary) text-[10px] font-semibold tracking-widest uppercase">
+                  <Box className="flex items-center gap-3 mb-1 flex-wrap">
+                    <EllipsisCell value={salon.name} className="font-serif text-2xl sm:text-3xl font-medium text-[#1C1A17] tracking-tight capitalize" maxChars={20}/>
+                    <Box className="px-2.5 py-0.5 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5]">
+                      <Typography className="text-[#766A5E] text-[10px] font-semibold tracking-widest uppercase">
                         {(salon.type ?? "SANCTUARY")}
                       </Typography>
                     </Box>
                   </Box>
 
-                  <Box className="flex items-center gap-2 text-xs text-(--app-muted)/70">
-                    <PlaceIcon className="text-sm text-(--app-primary)" />
-                    <Typography variant="body2" className="text-xs text-(--app-muted)/70 truncate capitalize">
-                      {salon.address}
-                    </Typography>
+                  <Box className="flex items-center gap-2 text-xs text-[#766A5E]">
+                    <PlaceIcon className="text-sm text-[#A88B64]" />
+                    <EllipsisCell value={salon.address} className="text-xs text-[#766A5E] capitalize" maxChars={20} />
                   </Box>
                 </Box>
               </Box>
@@ -175,72 +163,66 @@ export default function Cart() {
 
           {activeBooking && <ActiveBookingBanner />}
 
-          <Box className="flex items-center justify-between mb-6 border-b border-(--app-primary)/10 pb-4">
+          <Box className="flex items-center justify-between mb-6 border-b border-[#E5DFD5] pb-4">
             <Typography
               variant="caption"
-              className="font-mono text-xs font-bold text-(--app-primary) tracking-[0.2em] uppercase"
+              className="font-sans text-xs font-semibold text-[#1C1A17] tracking-[0.14em] uppercase"
             >
-              Selected Ceremonies ({items.length})
+              SELECTED CEREMONIES ({items.length})
             </Typography>
           </Box>
 
-          <Box className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 items-start">
+          <Box className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
             <Box className="space-y-4">
               {items.map((item: any) => (
                 <CartItem key={item.uuid ?? item.service_id} item={item} />
               ))}
             </Box>
 
-            <Box className="bg-(--app-surface) border border-(--app-primary)/15 rounded-2xl overflow-hidden lg:sticky lg:top-8 shadow-2xl">
-              <Box className="px-6 py-5 border-b border-(--app-primary)/10 bg-(--app-surface-alt)">
-                <Typography className="font-editorial text-lg font-bold text-(--app-text) tracking-wide">
-                  Reservation Summary
+            <Box className="bg-[#FCFAF7] border border-[#E5DFD5] rounded-[2px] overflow-hidden lg:sticky lg:top-28 shadow-xs">
+              <Box className="px-6 py-5 border-b border-[#E5DFD5] bg-[#F6F3ED]">
+                <Typography className="font-serif text-xl font-medium text-[#1C1A17] tracking-wide">
+                  Reservation Investment Summary
                 </Typography>
               </Box>
 
               <Box className="p-6 space-y-4">
-                <Box className="flex justify-between items-center text-sm">
-                  <Box className="flex items-center gap-2 text-(--app-muted)/70">
-                    <AccessTimeIcon className="text-base text-(--app-primary)" />
-                    <Typography variant="body2">Total Duration</Typography>
+                <Box className="flex justify-between items-center text-xs text-[#766A5E]">
+                  <Box className="flex items-center gap-2">
+                    <AccessTimeIcon className="text-sm text-[#A88B64]" />
+                    <span>Estimated Total Duration</span>
                   </Box>
-                  <Typography variant="body2" className="font-semibold text-(--app-text)">
-                    {durationText}
-                  </Typography>
+                  <span className="font-semibold text-[#1C1A17]">{durationText}</span>
                 </Box>
 
-                <Box className="flex justify-between items-center text-sm">
-                  <Box className="flex items-center gap-2 text-(--app-muted)/70">
-                    <CalendarMonthIcon className="text-base text-(--app-primary)" />
-                    <Typography variant="body2">Ceremonies</Typography>
+                <Box className="flex justify-between items-center text-xs text-[#766A5E]">
+                  <Box className="flex items-center gap-2">
+                    <CalendarMonthIcon className="text-sm text-[#A88B64]" />
+                    <span>Selected Treatments</span>
                   </Box>
-                  <Typography variant="body2" className="font-semibold text-(--app-text)">
-                    {items.length}
-                  </Typography>
+                  <span className="font-semibold text-[#1C1A17]">{items.length}</span>
                 </Box>
 
-                <Divider className="my-4 border-(--app-primary)/10" />
+                <hr className="my-4 border-[#E5DFD5]" />
 
                 <Box className="flex justify-between items-baseline mb-6">
-                  <Typography className="font-editorial text-base font-bold text-(--app-text)">Total Investment</Typography>
-                  <Typography className="font-editorial text-3xl font-bold text-(--app-primary)">
+                  <span className="font-serif text-base font-medium text-[#1C1A17]">Total Investment</span>
+                  <span className="font-serif text-3xl font-medium text-[#1C1A17]">
                     ₹{totalPrice}
-                  </Typography>
+                  </span>
                 </Box>
 
-                <Button
-                  fullWidth
-                  variant="contained"
-                  disableElevation
+                <button
+                  type="button"
                   onClick={onProceedToBook}
-                  className="rounded-xl font-bold py-3.5 tracking-widest uppercase transition-all duration-300 hover:brightness-110 shadow-lg"
+                  className="w-full bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] cursor-pointer transition-all border-0"
                 >
-                  Proceed to Schedule
-                </Button>
+                  PROCEED TO SCHEDULE & ARTISAN
+                </button>
 
-                <Typography variant="caption" className="block text-center text-[11px] text-(--app-muted)/50 mt-2">
-                  Select your artisan specialist & preferred timing
-                </Typography>
+                <p className="block text-center text-[10px] text-[#766A5E] uppercase tracking-wider mt-2">
+                  Select your specialist & preferred timing slot
+                </p>
               </Box>
             </Box>
           </Box>
@@ -251,3 +233,4 @@ export default function Cart() {
     </>
   );
 }
+

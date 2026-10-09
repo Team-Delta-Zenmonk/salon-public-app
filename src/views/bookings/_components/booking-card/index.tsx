@@ -6,6 +6,7 @@ import type { CustomerBooking } from "../../../../common/booking.types";
 import { BookingStatus } from "../../../../common/booking.enums";
 import { getBookingStatusConfig, isBookingCancelable, isBookingPast } from "../../../../common/booking.utils";
 import dayjs from "dayjs";
+import EllipsisCell from "@/components/ellipse-cell";
 
 interface BookingCardProps {
   booking: CustomerBooking;
@@ -35,9 +36,8 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 
   return (
     <Box
-      className={`group relative mb-5 rounded-2xl border border-(--app-primary)/15 bg-(--app-surface) overflow-hidden transition-all duration-300 hover:border-(--app-primary)/40 shadow-xl ${
-        disabled ? "opacity-60 pointer-events-none" : ""
-      }`}
+      className={`group relative mb-5 rounded-2xl border border-(--app-primary)/15 bg-(--app-surface) overflow-hidden transition-all duration-300 hover:border-(--app-primary)/40 shadow-xl ${disabled ? "opacity-60 pointer-events-none" : ""
+        }`}
     >
       <Box
         className="absolute left-0 top-0 bottom-0 w-1.5"
@@ -56,12 +56,9 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 {booking.salon?.name?.charAt(0)}
               </Avatar>
               <Box className="min-w-0">
-                <Typography className="font-editorial text-base font-bold text-(--app-text) leading-tight truncate capitalize">
-                  {booking.salon?.name}
-                </Typography>
-                <Typography className="text-xs text-(--app-muted)/70 truncate mt-0.5 capitalize">
-                  {booking.salon?.address?.split(",")[0]}
-                </Typography>
+                <EllipsisCell value={booking.salon?.name} maxChars={10} className="font-editorial text-base font-bold text-(--app-text) leading-tight capitalize" />
+                <br />
+                <EllipsisCell value={booking.salon?.address?.split(",")[0] ?? ""} maxChars={30} className="text-xs text-(--app-muted)/70 mt-0.5 capitalize" />
               </Box>
             </Box>
             <Box
@@ -77,9 +74,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               <Typography className="text-xs font-bold text-(--app-text) flex items-center gap-1.5">
                 {formatDateShortUTC(booking.booking_date)} • {formatTimeUTC(booking.booking_start_time)}
               </Typography>
-              <Typography className="text-[11px] text-(--app-muted)/70 truncate max-w-48">
-                {booking.booking_services?.map((s) => s.service?.name).join(", ")}
-              </Typography>
+              <EllipsisCell value={booking.booking_services?.map((s) => s.service?.name).join(", ")} maxChars={30} className="text-[11px] text-(--app-muted)/70 max-w-48" />
             </Box>
             <Typography className="font-editorial text-lg font-bold text-(--app-primary)">₹{booking.total_price}</Typography>
           </Box>
@@ -134,12 +129,9 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               {booking.salon?.name?.charAt(0)}
             </Avatar>
             <Box className="min-w-0">
-              <Typography className="font-editorial text-lg font-bold text-(--app-text) leading-tight mb-1 truncate capitalize">
-                {booking.salon?.name}
-              </Typography>
-              <Typography className="text-xs text-(--app-muted)/70 truncate capitalize">
-                {booking.salon?.address || "Flagship Sanctuary"}
-              </Typography>
+              <EllipsisCell value={booking.salon?.name} maxChars={10} className="font-editorial text-lg font-bold text-(--app-text) leading-tight mb-1 capitalize" />
+              <br />
+              <EllipsisCell value={booking.salon?.address || "Flagship Sanctuary"} maxChars={20} className="text-xs text-(--app-muted)/70 capitalize" />
             </Box>
           </Box>
 
@@ -196,10 +188,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             </Typography>
             <Box className="flex flex-wrap gap-2">
               {booking.booking_services?.map((bs, index) => (
-                <Typography key={bs.id} className="text-xs font-medium text-(--app-muted)/80">
-                  {bs.service?.name}
-                  {index < (booking.booking_services?.length || 0) - 1 ? " • " : ""}
-                </Typography>
+                <EllipsisCell key={bs.id} value={`${bs.service?.name} ${index < (booking.booking_services?.length || 0) - 1 ? " • " : ""}`} maxChars={30} className="text-xs font-medium text-(--app-muted)/80" />
               ))}
             </Box>
           </Box>

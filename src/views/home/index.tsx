@@ -1,18 +1,14 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
-import { Box, Typography, Button, Avatar } from "@mui/material";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
-import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
-import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
+import { Box } from "@mui/material";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { calculateTotals } from "../../common/cart.utils";
+import { addItemLocal, removeItemLocal } from "../../features/salon/cart/cart.slice";
+import EllipsisCell from "@/components/ellipse-cell";
+import ServiceCard from "@/components/service-card";
+import StaffCard from "@/components/staff-card";
 
 const FALLBACK_PHOTOS = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDg4fWQGY7q01kQEu7Azo-ZxML-xjADF9Algitpt7Ou5sct21_1ua4IwDBx4jGE1pKbAzk6X4b7Tc3z055WSJ-jWOYfOUxzhwKfGYwhm6m4_IHkLoBbjPFJiXN8PaaPHxG56I1j5s0IwbflHjDOE3nSfXTxCTCukrnB2J2fhzv7PJVD2Cvoap0pFNZB9Ju8Jito4BmDcyjiVxQt9eMTS3aoL8UFBE7oamYkIWM52o4E00IFOp6Ie-skBv75NSxqd3h6gB6P_J4FHEU",
@@ -31,7 +27,6 @@ export default function HomePage() {
   const salonCategories: any[] = useMemo(() => salon?.categories || [], [salon?.categories]);
 
   const cart = useAppSelector((state) => state.cart);
-
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -50,6 +45,16 @@ export default function HomePage() {
   }, [galleryImages.length]);
 
   const rootServices = useMemo(() => services.filter((s: any) => s.parent_id === null), [services]);
+
+  const subServicesMap = useMemo(() => {
+    return services.reduce<Record<string | number, any[]>>((acc, s) => {
+      if (s.parent_id) {
+        acc[s.parent_id] = acc[s.parent_id] || [];
+        acc[s.parent_id].push(s);
+      }
+      return acc;
+    }, {});
+  }, [services]);
 
   const categorySanctuaries = useMemo(() => {
     const list: { id: string; label: string }[] = [{ id: "all", label: "All Services" }];
@@ -75,6 +80,23 @@ export default function HomePage() {
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
 
+  const toggleCart = (service: any) => {
+    const serviceId = service.uuid || service.id;
+    if (isAdded(serviceId)) {
+      dispatch(removeItemLocal(serviceId));
+    } else {
+      dispatch(
+        addItemLocal({
+          service_id: serviceId,
+          name: service.name,
+          base_price: service.price,
+          duration: service.duration,
+          salon,
+          service,
+        })
+      );
+    }
+  };
 
   const filteredServices = useMemo(() => {
     return rootServices.filter((s) => {
@@ -95,351 +117,245 @@ export default function HomePage() {
 
   const { totalPrice } = calculateTotals(cart.items);
 
-  const heroPhoto =
-    typeof photos[0] === "string" ? photos[0] : photos[0]?.secure_url || photos[0]?.url;
-
   return (
-    <Box className="space-y-16 pb-36 text-(--app-text)">
-      {/* 1. HERO BANNER & EDITORIAL SHOWCASE (Stitch 1:1 Spec) */}
-      <section className="relative overflow-hidden pt-6 sm:pt-12 pb-8 px-4 md:px-12 max-w-[1440px] mx-auto w-full">
-        {/* Ambient Backdrop Lights */}
-        <Box className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-(--app-primary)/20 blur-3xl pointer-events-none" />
-        <Box className="absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full bg-(--app-primary)/10 blur-[120px] pointer-events-none" />
-
-        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
-          {/* Left Column: Copy & Value Proposition */}
-          <Box className="lg:col-span-6 flex flex-col items-start gap-5">
-            {/* Glow Subtitle Badge */}
-            <Box className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-(--app-primary-soft) border border-(--app-primary)/40 text-(--app-primary) text-[10px] font-bold uppercase tracking-widest">
-                <AutoAwesomeOutlinedIcon className="text-[14px]" />
-                FLAGSHIP SANCTUARY & ATELIER
+    <Box className="space-y-20 pb-36 text-[#1C1C18] bg-[#FCF9F3] min-h-screen">
+      <section className="relative pt-12 lg:pt-16 pb-12 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
+          <div className="lg:col-span-7 flex flex-col items-start gap-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1C1A17]" />
+              <span className="font-sans text-[10px] font-semibold text-[#766A5E] tracking-[0.14em] uppercase">
+                HAUTE COIFFURE & DERMAL SANCTUARY
               </span>
-            </Box>
+            </div>
 
-            {/* Main Editorial Headline */}
-            <Typography
-              component="h1"
-              className="font-editorial text-4xl sm:text-6xl lg:text-7xl font-bold text-(--app-text) leading-[1.1] tracking-tight"
-            >
-              Precision Craft, <br />
-              <span className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-(--app-primary) to-(--app-primary)">
-                Sculpted Silhouettes
-              </span>{" "}
-              <br />
-              & Avant-Garde Beauty
-            </Typography>
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#1C1A17] leading-[1.08] tracking-tight">
+              Tactile Quietude, <br /> Tailored Shears & Avant-Garde Beauty
+            </h1>
 
-            <Typography className="text-base sm:text-lg text-(--app-muted) max-w-xl leading-relaxed">
-              {salon?.about ||
-                "An intimate, sanctuary-level atelier where master scissorsmiths and clinical facialists transform the sensory ritual of luxury grooming into contemporary art."}
-            </Typography>
+            <EllipsisCell
+              value={salon?.about || "An intimate, sanctuary-level atelier where master scissorsmiths and clinical facialists transform the sensory ritual of luxury grooming into contemporary art."}
+              className="font-sans text-base sm:text-lg text-[#4B463F] max-w-2xl leading-relaxed my-2 font-normal"
+            />
 
-            {/* Live Status Tag */}
-            <Box className="flex items-center gap-3 py-2 px-3.5 rounded-lg bg-(--app-surface-alt) panel-rim">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            <div className="flex items-center gap-3 py-2 px-3.5 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5A6B5C] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5A6B5C]" />
               </span>
-              <Typography className="text-xs font-semibold text-(--app-text)">
-                Open Today
-              </Typography>
-            </Box>
+              <span className="font-sans text-xs font-semibold uppercase tracking-[0.1em] text-[#1C1C18]">
+                OPEN FOR BESPOKE APPOINTMENTS TODAY
+              </span>
+            </div>
 
-            {/* CTA Buttons */}
-            <Box className="flex flex-wrap items-center gap-3 pt-2">
-              <Button
-                component="a"
-                href="#services-matrix"
-                variant="contained"
-                endIcon={<ArrowDownwardIcon className="text-[18px]" />}
-                className="px-6 py-3 rounded-lg text-xs font-bold crimson-glow hover:brightness-110 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-(--app-primary)/20 normal-case border-0"
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <a
+                href="#services-menu"
+                className="bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] px-7 py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all flex items-center gap-2 no-underline"
               >
-                Explore Service Menu
-              </Button>
-              <Button
+                <span>EXPLORE RITUAL MENU</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_downward</span>
+              </a>
+              <button
+                type="button"
                 onClick={() => navigate("/specialists")}
-                variant="outlined"
+                className="bg-transparent hover:bg-[#F2EEE7] text-[#1C1A17] border border-[#1C1A17] px-7 py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all flex items-center gap-2 cursor-pointer"
               >
-                Meet Resident Stylists
-              </Button>
-            </Box>
-          </Box>
+                <span>RESIDENT SPECIALISTS</span>
+                <span className="material-symbols-outlined text-[16px]">person</span>
+              </button>
+            </div>
+          </div>
 
-          {/* Right Column: Split Luxury Salon Gallery Bento with image shifting */}
-          <Box className="lg:col-span-6 grid grid-cols-2 gap-4">
-            {/* Showcase Tile 1: Main Tall Box */}
-            <Box className="group relative rounded-xl overflow-hidden panel-rim bg-(--app-surface-alt) aspect-[4/5] row-span-2 shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            <div className="group relative rounded-[2px] overflow-hidden border border-[#E5DFD5] bg-[#F0EEE8] aspect-[3/4] col-span-2 shadow-xs transition-all duration-300">
               {galleryImages.map((imgUrl: string, idx: number) => {
                 const isVisible = idx === carouselIndex % galleryImages.length;
                 return (
                   <img
                     key={`bento-1-${imgUrl}`}
-                    alt="Sanctuary Showcase 1"
+                    alt="Atelier Solstice Craft"
                     src={imgUrl}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
-                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
-                    }`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
+                      }`}
                   />
                 );
               })}
-              <Box className="absolute inset-0 bg-gradient-to-t from-(--app-bg) via-(--app-bg)/20 to-transparent z-10 pointer-events-none" />
-              <Box className="absolute bottom-4 left-4 right-4 z-20 pointer-events-none">
-                <span className="text-[11px] font-bold text-(--app-primary) uppercase tracking-widest block">
-                  Haute Atelier
-                </span>
-                <Typography className="font-editorial text-lg text-(--app-text) font-semibold mt-0.5 capitalize">
-                  {salon?.name || "Sanctuary Ambience"}
-                </Typography>
-                <Typography className="text-xs text-(--app-muted) mt-1">
-                  Bespoke hair sculpture & precision design
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Showcase Tile 2: Top Right Square Box */}
-            <Box className="group relative rounded-xl overflow-hidden panel-rim bg-(--app-surface-alt) aspect-square shadow-xl transition-all duration-300 hover:scale-[1.01]">
-              {galleryImages.map((imgUrl: string, idx: number) => {
-                const isVisible = idx === (carouselIndex + 1) % galleryImages.length;
-                return (
-                  <img
-                    key={`bento-2-${imgUrl}`}
-                    alt="Sanctuary Showcase 2"
-                    src={imgUrl}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
-                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
-                    }`}
-                  />
-                );
-              })}
-              <Box className="absolute inset-0 bg-gradient-to-t from-(--app-bg) via-(--app-bg)/30 to-transparent z-10 pointer-events-none" />
-              <Box className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none">
-                <span className="text-[10px] font-bold text-(--app-primary) uppercase tracking-widest block">
-                  Clinical Dermal
-                </span>
-                <Typography className="font-editorial text-sm text-(--app-text) font-semibold leading-tight">
-                  Hydro-dermal therapy
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Showcase Tile 3: Bottom Right Square Box */}
-            <Box className="group relative rounded-xl overflow-hidden panel-rim bg-(--app-surface-alt) aspect-square shadow-xl transition-all duration-300 hover:scale-[1.01]">
-              {galleryImages.map((imgUrl: string, idx: number) => {
-                const isVisible = idx === (carouselIndex + 2) % galleryImages.length;
-                return (
-                  <img
-                    key={`bento-3-${imgUrl}`}
-                    alt="Sanctuary Showcase 3"
-                    src={imgUrl}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-105 ${
-                      isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
-                    }`}
-                  />
-                );
-              })}
-              <Box className="absolute inset-0 bg-gradient-to-t from-(--app-bg) via-(--app-bg)/30 to-transparent z-10 pointer-events-none" />
-              <Box className="absolute bottom-3 left-3 right-3 z-20 pointer-events-none">
-                <span className="text-[10px] font-bold text-(--app-primary) uppercase tracking-widest block">
-                  Botanical Rituals
-                </span>
-                <Typography className="font-editorial text-sm text-(--app-text) font-semibold leading-tight">
-                  Sensory botanical rinse
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17]/80 via-[#1C1A17]/30 to-transparent z-10 pointer-events-none" />
+              <div className="absolute bottom-6 left-6 right-6 z-20 pointer-events-none">
+                <span className="font-sans text-[10px] font-semibold text-[#A88B64] uppercase tracking-[0.14em] block mb-1">COUTURE ATELIER</span>
+                <h2 className="font-serif text-2xl text-[#FCFAF7] font-normal leading-snug">
+                  Precision Geometry & Botanical Radiance
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* 2. SERVICES GRID & FILTER SYSTEM (Stitch 1:1 Spec) */}
-      <section className="px-4 md:px-12 max-w-[1440px] mx-auto w-full py-10" id="services-matrix">
-        {/* Section Header */}
-        <Box className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-(--app-border)/30 pb-6">
-          <Box>
-            <Box className="flex items-center gap-2 text-(--app-primary) text-[11px] font-bold tracking-widest uppercase mb-1">
-              <ContentCutOutlinedIcon className="text-[16px]" />
-              Bespoke Sanctuary Ceremonies
-            </Box>
-            <Typography className="font-editorial text-3xl sm:text-5xl font-bold text-(--app-text)">
-              Curated Treatment Menu
-            </Typography>
-          </Box>
-          <Typography className="text-xs sm:text-sm text-(--app-muted) max-w-md">
-            Select tailored sessions formulated with botanical actives, French glazes, and surgical-grade styling implements.
-          </Typography>
-        </Box>
+      <section className="border-y border-[#E5DFD5] bg-[#F6F3ED] py-16 px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+          <div className="space-y-3">
+            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">01. TRANQUIL AUTHORITY</span>
+            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Composed Deliberation</h3>
+            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+              Replacing urgent transactional booking software with serene, personalized consultation and spacious private suites.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">02. SENSORY REFINEMENT</span>
+            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Textured Aesthetics</h3>
+            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+              Every detail channels organic linen, brushed bronze metals, and natural stone for an unhurried luxury tempo.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">03. DISCERNING CURATION</span>
+            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Bespoke Formulations</h3>
+            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+              French glazes, surgical-grade shears, and Japanese scalp trichology executed by master certified artisans.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        {/* Category Tabs (Dynamic from Backend) */}
-        <Box className="flex items-center gap-2 overflow-x-auto pb-4 border-b border-(--app-border)/20 mb-6 [scrollbar-width:none]">
+      <section className="px-6 md:px-12 max-w-[1440px] mx-auto w-full py-8" id="services-menu">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-[#E5DFD5] pb-8">
+          <div>
+            <div className="flex items-center gap-2 text-[#735A37] font-sans text-[10px] font-semibold tracking-[0.14em] uppercase mb-2">
+              <span className="material-symbols-outlined text-[16px]">content_cut</span>
+              BESPOKE RITUAL CATALOG
+            </div>
+            <h2 className="font-serif text-4xl sm:text-5xl text-[#1C1A17] font-normal">Curated Treatment Offerings</h2>
+          </div>
+          <p className="font-sans text-xs sm:text-sm text-[#766A5E] max-w-md leading-relaxed">
+            Select tailored ceremonies formulated with botanical actives, French glazes, and surgical-grade styling implements.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 overflow-x-auto py-3 scrollbar-none border-b border-[#E5DFD5]/60 mb-8">
           {categorySanctuaries.map((cat) => {
             const isSel = selectedCategory === cat.id;
-            const tabClass = isSel
-              ? "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-(--app-surface-alt) text-(--app-text) border border-(--app-primary)/50 shadow-sm capitalize"
-              : "px-5 py-2 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all bg-(--app-surface-alt) text-(--app-muted) hover:text-(--app-primary) capitalize";
-
             return (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={tabClass}
+                className={`px-5 py-2.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.08em] shrink-0 cursor-pointer transition-all border ${isSel
+                    ? "bg-[#1C1A17] text-[#FCFAF7] border-[#1C1A17]"
+                    : "bg-[#FCFAF7] text-[#766A5E] border-[#E5DFD5] hover:border-[#1C1A17] hover:text-[#1C1A17]"
+                  }`}
               >
-                {cat.label}
+                <EllipsisCell value={cat.label} maxChars={22} />
               </button>
             );
           })}
-        </Box>
+        </div>
 
-        {/* Sub-Filter Bar (Gender Segmentation) */}
-        <Box className="flex items-center justify-between flex-wrap gap-4 mb-8">
-          <Box className="flex items-center gap-2">
-            <span className="text-[11px] font-bold text-(--app-muted) uppercase mr-2">Client Focus:</span>
+        <div className="flex items-center justify-between flex-wrap gap-4 mb-10">
+          <div className="flex items-center gap-2">
+            <span className="font-sans text-[10px] text-[#766A5E] uppercase tracking-[0.12em] font-semibold mr-2">GUEST FOCUS:</span>
             {[
-              { id: "all", label: "All" },
-              { id: "female", label: "Female" },
-              { id: "male", label: "Male" },
-              { id: "unisex", label: "Unisex" },
+              { id: "all", label: "ALL" },
+              { id: "female", label: "FEMALE" },
+              { id: "male", label: "MALE" },
+              { id: "unisex", label: "UNISEX" },
             ].map((g) => {
               const isSel = selectedGender === g.id;
-              const genderClass = isSel
-                ? "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-(--app-primary) text-white"
-                : "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer bg-(--app-surface-alt) text-(--app-muted) hover:text-(--app-text) hover:bg-(--app-surface-alt)";
-
               return (
                 <button
                   key={g.id}
                   type="button"
                   onClick={() => setSelectedGender(g.id)}
-                  className={genderClass}
+                  className={`px-3.5 py-1.5 rounded-[2px] font-sans text-[11px] font-semibold tracking-wider transition-all cursor-pointer border ${isSel
+                      ? "bg-[#A88B64] text-[#FCFAF7] border-[#A88B64]"
+                      : "bg-[#F6F3ED] text-[#766A5E] border-[#E5DFD5] hover:border-[#1C1A17]"
+                    }`}
                 >
                   {g.label}
                 </button>
               );
             })}
-          </Box>
-          <Box className="text-(--app-muted) text-xs flex items-center gap-1.5">
-            <VerifiedOutlinedIcon className="text-[16px] text-emerald-400" />
+          </div>
+          <div className="text-[#766A5E] font-sans text-xs flex items-center gap-2">
+            <span className="material-symbols-outlined text-[16px] text-[#5A6B5C]">verified</span>
             <span>All rituals include complimentary botanical sensory rinse</span>
-          </Box>
-        </Box>
+          </div>
+        </div>
 
-        {/* Treatment Cards Grid */}
-        <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service: any) => {
-            const added = isAdded(service.uuid);
-            const assignedStaff = staff[0];
-            const staffName = assignedStaff
-              ? `${assignedStaff.first_name || ""} ${assignedStaff.last_name || ""}`.trim()
-              : "";
-
-            const btnClass = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-md shadow-(--app-primary)/20 transition-all active:scale-95 normal-case border-0 bg-(--app-primary) text-white hover:brightness-110";
-
-            return (
-              <Box
-                key={service.uuid || service.id}
-                className="group bg-(--app-surface-alt) rounded-xl panel-rim p-6 flex flex-col justify-between crimson-border-hover transition-all duration-300 shadow-xl relative overflow-hidden"
-              >
-                <Box className="absolute top-0 right-0 w-28 h-28 bg-(--app-primary)/5 rounded-full blur-xl pointer-events-none" />
-                <Box className="space-y-4">
-                  <Box className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded bg-(--app-primary)/10 border border-(--app-primary) text-[10px] font-bold uppercase">
-                      {service.gender || "Unisex"} Focus
-                    </span>
-                  </Box>
-
-                  <Typography className="font-editorial text-xl font-semibold text-(--app-text) group-hover:text-(--app-primary) transition-colors leading-snug capitalize">
-                    {service.name}
-                  </Typography>
-
-                  <Typography className="text-xs text-(--app-muted) leading-relaxed line-clamp-2 capitalize">
-                    {service.description ||
-                      "Bespoke dry shears tailored to cranial geometry, finished with Japanese camellia heat therapy and an architectural movement blowout."}
-                  </Typography>
-
-                  {/* Metrics: Duration & Stylist */}
-                  <Box className="flex items-center gap-4 py-2.5 px-3 rounded-lg bg-(--app-surface-alt) border border-(--app-border)/20">
-                    <Box className="flex items-center gap-1.5 text-(--app-muted) text-xs">
-                      <ScheduleOutlinedIcon className="text-[18px] text-(--app-primary)" />
-                      <span>{service.duration || 60} Min</span>
-                    </Box>
-                    <Box className="h-3 w-px bg-(--app-border)/30" />
-                    {assignedStaff && (
-                      <Box className="flex items-center gap-2 flex-1 min-w-0">
-                        <Avatar className="w-6 h-6 rounded-full bg-(--app-primary)/20 font-bold text-[10px] capitalize">
-                          {staffName[0]}
-                        </Avatar>
-                        <Box className="flex-1 truncate">
-                          <Typography className="text-[11px] font-bold text-(--app-text) truncate capitalize">
-                            {staffName}
-                          </Typography>
-                          <Typography className="text-[9px] text-(--app-muted) leading-none capitalize">
-                            {assignedStaff.role || "Stylist"}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    )}
-                  </Box>
-                </Box>
-
-                {/* Footer Action & Price */}
-                <Box className="flex items-center justify-between mt-6 pt-4 border-t border-(--app-border)/20">
-                  <Box>
-                    <span className="text-[10px] text-(--app-muted) block uppercase font-semibold">
-                      Investment Tier
-                    </span>
-                    <span className="font-editorial text-xl text-(--app-text) font-bold">
-                      ₹{service.price}
-                    </span>
-                  </Box>
-
-                  <Button
-                    variant="contained"
-                    onClick={() => navigate("/services")}
-                    className={btnClass}
-                  >
-                    {"Book Now"}
-                  </Button>
-                </Box>
-              </Box>
-            );
-          })}
-        </Box>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredServices.map((service: any) => (
+            <ServiceCard
+              key={service.uuid || service.id}
+              service={service}
+              subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+              isAdded={isAdded(service.uuid || service.id)}
+              isSubAdded={(subId) => isAdded(subId)}
+              onToggleCart={toggleCart}
+            />
+          ))}
+        </div>
       </section>
 
-      {/* 3. FLOATING ACTIVE RESERVATION ALERT BAR (Stitch BottomNavBar Spec) */}
-      {cart.items.length > 0 && (
-        <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col md:flex-row items-center justify-between px-6 py-3.5 w-[calc(100%-2.5rem)] max-w-4xl bg-(--app-surface-alt) rounded-xl border border-(--app-border)/40 shadow-[0_16px_40px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,43,78,0.15)] backdrop-blur-lg">
-          <Box className="flex items-center gap-3 w-full md:w-auto mb-2 md:mb-0">
-            <Box className="w-10 h-10 rounded-lg bg-(--app-surface-alt) border border-(--app-primary)/40 flex items-center justify-center text-(--app-primary) shrink-0 shadow-inner">
-              <ShoppingBagOutlinedIcon className="text-[22px]" />
-            </Box>
-            <Box className="flex flex-col">
-              <Box className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-(--app-primary) tracking-wider uppercase">
-                  Active Reservation
-                </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-(--app-primary)" />
-                <span className="text-[11px] text-(--app-muted) font-medium">
-                  {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""} Selected
-                </span>
-              </Box>
-              <Typography className="text-xs text-(--app-text) font-semibold truncate max-w-md capitalize">
-                {cart.items[0]?.name || "Service Selected"}
-              </Typography>
-            </Box>
-          </Box>
+      {staff.length > 0 && (
+        <section className="px-6 md:px-12 max-w-[1440px] mx-auto w-full py-8 border-t border-[#E5DFD5]">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-[#E5DFD5] pb-8">
+            <div>
+              <div className="flex items-center gap-2 text-[#A88B64] font-sans text-[10px] font-semibold tracking-[0.14em] uppercase mb-2">
+                <span className="material-symbols-outlined text-[16px]">workspace_premium</span>
+                RESIDENT ARTISANS & STYLISTS
+              </div>
+              <h2 className="font-serif text-4xl sm:text-5xl text-[#1C1A17] font-normal">Meet Our Master Specialists</h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate("/specialists")}
+              className="bg-transparent text-[#1C1A17] border border-[#1C1A17] hover:bg-[#1C1A17] hover:text-[#FCFAF7] px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all cursor-pointer flex items-center gap-2 self-start md:self-auto"
+            >
+              <span>VIEW ALL SPECIALISTS</span>
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+          </div>
 
-          <Button
-            variant="contained"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {staff.slice(0, 3).map((member: any) => (
+              <StaffCard key={member.uuid || member.id} member={member} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {cart.items.length > 0 && (
+        <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col sm:flex-row items-center justify-between px-6 py-4 w-[calc(100%-2rem)] max-w-3xl bg-[#FCFAF7] rounded-[2px] border border-[#1C1A17] shadow-xl backdrop-blur-md">
+          <div className="flex items-center gap-4 w-full sm:w-auto mb-3 sm:mb-0">
+            <div className="w-10 h-10 rounded-[2px] bg-[#1C1A17] flex items-center justify-center text-[#FCFAF7] shrink-0">
+              <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase">ACTIVE RESERVATION</span>
+                <span className="h-1 w-1 rounded-full bg-[#1C1A17]" />
+                <span className="text-[11px] text-[#766A5E] font-sans">
+                  {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""}
+                </span>
+              </div>
+              <p className="font-serif text-sm text-[#1C1A17] font-medium truncate max-w-sm capitalize">
+                {cart.items[0]?.name || "Selected Ritual"}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
             onClick={() => navigate("/cart")}
-            endIcon={<ArrowForwardIcon className="text-[18px]" />}
-            className="w-full md:w-auto rounded-lg px-5 py-2.5 text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-(--app-primary)/20 hover:brightness-110 active:scale-[0.99] transition-all normal-case border-0"
+            className="w-full sm:w-auto bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] flex items-center justify-center gap-2 transition-all cursor-pointer border-0"
           >
-            Instant Checkout ({cart.items.length} Items • ₹{totalPrice})
-          </Button>
+            <span>PROCEED TO SCHEDULE (₹{totalPrice})</span>
+            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
         </aside>
       )}
     </Box>
   );
 }
+

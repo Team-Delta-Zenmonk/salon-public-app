@@ -1,0 +1,264 @@
+/* Assistance Card */
+.assistanceCard {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+}
+
+.assistanceDesktop {
+  display: flex;
+}
+
+.assistanceMobile {
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .assistanceMobile {
+    display: none;
+  }
+}
+
+.iconCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--app-surface, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.helpTitle {
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text, #18181b) !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.helpLink {
+  font-size: 0.6875rem !important;
+  color: var(--app-muted, #71717a) !important;
+  text-decoration: none !important;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.helpLink:hover {
+  color: var(--app-primary, #18181b) !important;
+}
+
+/* Security Footer */
+.securityFooter {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  opacity: 0.5;
+}
+
+.stripeLogoWrapper {
+  position: relative;
+  height: 0.75rem;
+  width: 4rem;
+}
+
+/* Expiry View */
+.expiryCard {
+  padding: 2.5rem;
+  text-align: center;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  background-color: var(--app-surface-alt, #faf8f5);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.warningIconBox {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 9999px;
+  background-color: rgba(239, 68, 68, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+}
+
+.expiryTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.expirySub {
+  color: var(--app-muted, #71717a) !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 2rem !important;
+  max-width: 17.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.returnBtn {
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 2.5rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  background-color: var(--app-primary, #18181b) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+}
+
+/* Checkout Header */
+.headerBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--app-surface, #ffffff);
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  backdrop-filter: blur(12px);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.5rem;
+}
+
+.backBtn {
+  background-color: var(--app-surface, #ffffff) !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  padding: 0.375rem !important;
+  border-radius: 0.5rem !important;
+}
+
+.titleMain {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.timerPaper {
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 9999px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  background-color: var(--app-surface-alt, #faf8f5) !important;
+  color: var(--app-text, #18181b) !important;
+}
+
+.timerCritical {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Mobile Summary Bar */
+.mobileBar {
+  display: block;
+  background-color: var(--app-surface, #ffffff);
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  position: relative;
+  z-index: 40;
+  margin-top: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .mobileBar {
+    display: none;
+  }
+}
+
+.mobileToggleBtn {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 1rem !important;
+  color: var(--app-text, #18181b) !important;
+  border-radius: 0 !important;
+  text-transform: none !important;
+}
+
+/* Payment Form */
+.form {
+  width: 100%;
+}
+
+.elementWrapper {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.errorBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.secureNotice {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--app-border, rgba(0, 0, 0, 0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+}
+
+.submitBtnDesktop {
+  border-radius: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 1rem !important;
+  font-size: 0.875rem !important;
+  text-transform: none !important;
+  background-color: var(--app-primary, #18181b) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+.mobileStickyFooter {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--app-surface, #ffffff);
+  backdrop-filter: blur(16px);
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mobileStickyFooter {
+    display: none;
+  }
+}

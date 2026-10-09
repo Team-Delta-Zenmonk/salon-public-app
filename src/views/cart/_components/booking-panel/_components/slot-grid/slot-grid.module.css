@@ -1,0 +1,110 @@
+.gridContainer {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-bottom: 1rem;
+}
+
+.emptyState {
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+.emptyText {
+  font-size: 0.8125rem !important;
+  color: var(--app-muted, #71717a) !important;
+}
+
+.skeletonGrid {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.groupBlock {
+  margin-bottom: 1.5rem;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.groupLabel {
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--app-muted, #71717a) !important;
+}
+
+.headerLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--app-border, rgba(0, 0, 0, 0.08));
+}
+
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .slotGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.slotCard {
+  padding: 0.75rem 0.25rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.12));
+  background-color: var(--app-surface-alt, #faf8f5);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.slotCard:hover {
+  border-color: var(--app-primary, #18181b);
+}
+
+.slotCardSelected {
+  background-color: var(--app-primary, #18181b);
+  border-color: var(--app-primary, #18181b);
+  color: var(--app-primary-contrast, #ffffff);
+}
+
+.slotCardLocked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: var(--app-border, rgba(0, 0, 0, 0.08));
+  background-color: var(--app-surface-alt, #faf8f5);
+}
+
+.timeText {
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  color: var(--app-text, #18181b);
+}
+
+.timeTextSelected {
+  font-weight: 700 !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+}
+
+.timeTextLocked {
+  font-weight: 500 !important;
+  color: var(--app-muted, #71717a) !important;
+  text-decoration: line-through;
+}

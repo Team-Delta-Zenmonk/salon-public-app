@@ -1,0 +1,299 @@
+.signupPage {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  color: var(--app-text, #18181b);
+  background-color: var(--app-bg, #fdfbf7);
+  min-height: 100vh;
+  font-family: inherit;
+}
+
+@media (min-width: 768px) {
+  .signupPage {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .signupPage {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.crumbGold {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--app-champagne, #d4af37);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.crumbSlash {
+  color: var(--app-border, rgba(0, 0, 0, 0.15));
+  font-size: 0.75rem;
+}
+
+.crumbText {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--app-muted, #71717a);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.protocolInfo {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .protocolInfo {
+    display: flex;
+  }
+}
+
+.protocolLabel {
+  color: var(--app-muted, #71717a);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.dividerDot {
+  height: 0.75rem;
+  width: 1px;
+  background-color: var(--app-border, rgba(0, 0, 0, 0.15));
+}
+
+.tierLabel {
+  color: var(--app-text, #18181b);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .leftColumn {
+    grid-column: span 5 / span 5;
+  }
+}
+
+.cardBox {
+  background-color: var(--app-surface, #ffffff);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+@media (min-width: 640px) {
+  .cardBox {
+    padding: 2rem;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+}
+
+.cardTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  color: var(--app-text, #18181b) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.goldIcon {
+  color: var(--app-champagne, #d4af37) !important;
+}
+
+.privilegeList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.privilegeItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.iconSquare {
+  margin-top: 0.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+  color: var(--app-text, #18181b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+}
+
+.itemHeading {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+}
+
+.itemSub {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, #71717a) !important;
+  margin-top: 0.125rem !important;
+  line-height: 1.5 !important;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .rightColumn {
+    grid-column: span 7 / span 7;
+  }
+}
+
+.formCard {
+  background-color: var(--app-surface, #ffffff);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .formCard {
+    padding: 2.5rem;
+  }
+}
+
+.formHeader {
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  padding-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mainFormTitle {
+  font-family: var(--font-bodoni-moda), serif !important;
+  font-size: 1.875rem !important;
+  font-weight: 400 !important;
+  color: var(--app-text, #18181b) !important;
+  letter-spacing: -0.01em !important;
+}
+
+@media (min-width: 640px) {
+  .mainFormTitle {
+    font-size: 2.25rem !important;
+  }
+}
+
+.formSub {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, #71717a) !important;
+  line-height: 1.5 !important;
+}
+
+@media (min-width: 640px) {
+  .formSub {
+    font-size: 0.875rem !important;
+  }
+}
+
+.noticeBox {
+  border-radius: 0.5rem;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  background-color: var(--app-surface-alt, #faf8f5);
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: var(--app-muted, #71717a);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.noticeHeader {
+  font-weight: 600;
+  color: var(--app-text, #18181b);
+  text-transform: uppercase;
+  display: block;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+}
+
+.buttonWrapper {
+  padding-top: 1rem;
+}
