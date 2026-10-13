@@ -91,7 +91,7 @@ export default function StorefrontFooter() {
             />
             . All Rights Reserved.
           </span>
-          <div className={styles.linkGroup}>
+          <nav aria-label="Footer navigation" className={styles.linkGroup}>
             <Link
               href="/services"
               className={styles.footerLink}
@@ -110,7 +110,7 @@ export default function StorefrontFooter() {
             >
               Concierge Bag
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>

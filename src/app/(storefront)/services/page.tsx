@@ -1,6 +1,13 @@
 import { Suspense } from "react";
 import ServicesPage from "@/views/services";
 import { Box, CircularProgress } from "@mui/material";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Bespoke Services & Treatments",
+  description:
+    "Explore our luxury salon treatments, styling rituals, hair coloring, facials, and grooming therapies.",
+};
 
 export default function Services() {
   return (

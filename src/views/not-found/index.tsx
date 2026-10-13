@@ -27,8 +27,15 @@ export default function NotFoundPage() {
     }
   };
 
+  const appName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+
   return (
-    <Box className={styles.notFoundContainer}>
+    <>
+      <head>
+        <title>404 - Page Not Found | {appName}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
+      <Box className={styles.notFoundContainer}>
       <Box className={styles.notFoundCard}>
         <Box className={styles.blurCircleTop} />
         <Box className={styles.blurCircleBottom} />
@@ -92,5 +99,6 @@ export default function NotFoundPage() {
         </Box>
       </Box>
     </Box>
+    </>
   );
 }

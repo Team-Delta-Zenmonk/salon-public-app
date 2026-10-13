@@ -10,7 +10,7 @@ export default function AppLayout({ children }: { children?: React.ReactNode }) 
     <Box className={styles.layout}>
       <StorefrontHeader />
 
-      <Box component="main" className={styles.mainContent}>
+      <Box component="main" id="main-content" className={styles.mainContent}>
         {children}
       </Box>
 

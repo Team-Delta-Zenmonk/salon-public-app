@@ -29,6 +29,8 @@ export default function MobileBottomNav() {
 
   return (
     <BottomNavigation
+      component="nav"
+      aria-label="Mobile bottom navigation"
       value={getActiveTab()}
       onChange={(_, next) => navigate(next)}
       showLabels

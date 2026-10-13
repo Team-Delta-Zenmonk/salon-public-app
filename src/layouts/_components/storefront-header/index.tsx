@@ -107,7 +107,7 @@ export default function StorefrontHeader() {
           </Box>
         </Box>
 
-        <nav className={styles.navContainer}>
+        <nav aria-label="Main navigation" className={styles.navContainer}>
           {STOREFRONT_NAV_ITEMS.map((item) => {
             const active = isActive(item.to);
             return (
@@ -235,7 +235,7 @@ export default function StorefrontHeader() {
             </IconButton>
           </Box>
 
-          <Box className={styles.drawerNavList}>
+          <Box component="nav" aria-label="Mobile navigation" className={styles.drawerNavList}>
             {STOREFRONT_NAV_ITEMS.map((item) => {
               const active = isActive(item.to);
               const ItemIcon = item.icon;

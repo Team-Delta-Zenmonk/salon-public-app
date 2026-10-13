@@ -1,5 +1,29 @@
 import HomePage from "@/views/home";
+import StructuredData from "@/components/seo/structured-data";
+import {
+  fetchSalonBySlug,
+  buildSalonMetadata,
+} from "@/components/seo/salon-seo.utils";
+import type { Metadata } from "next";
 
-export default function SalonHomePage() {
-  return <HomePage />;
+interface Props {
+  params: Promise<{ salonSlug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { salonSlug } = await params;
+  const salon = await fetchSalonBySlug(salonSlug);
+  return buildSalonMetadata({ slug: salonSlug, salon });
+}
+
+export default async function SalonHomePage({ params }: Props) {
+  const { salonSlug } = await params;
+  const salon = await fetchSalonBySlug(salonSlug);
+
+  return (
+    <>
+      <StructuredData salon={salon} slug={salonSlug} />
+      <HomePage />
+    </>
+  );
 }

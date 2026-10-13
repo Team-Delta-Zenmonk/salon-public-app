@@ -124,8 +124,10 @@ const appThemes: AppThemeOption[] = [
 
 export const themeOptions = appThemes;
 export const defaultThemeId: AppThemeId = "crimsonShear";
+export const defaultAppTheme: AppThemeOption = appThemes[0];
 
-const getThemeOption = (themeId: AppThemeId) => appThemes.find((theme) => theme.id === themeId) ?? appThemes[0];
+export const getThemeOption = (themeId: AppThemeId = defaultThemeId) =>
+  appThemes.find((theme) => theme.id === themeId) ?? defaultAppTheme;
 
 export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
   const selected = getThemeOption(themeId);

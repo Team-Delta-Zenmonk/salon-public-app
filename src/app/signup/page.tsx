@@ -2,6 +2,12 @@ import { Suspense } from "react";
 import SignUp from "@/views/signup";
 import GuestGuard from "@/components/guards/guest-guard";
 import { Box, CircularProgress } from "@mui/material";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Client Sign In & Registration",
+  description: "Sign in or create an account to book your luxury salon appointments seamlessly.",
+};
 
 export default function SignUpPage() {
   return (

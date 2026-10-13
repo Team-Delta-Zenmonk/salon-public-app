@@ -282,3 +282,36 @@ body {
 .iconSizeStyles {
   font-size: 1.25rem !important;
 }
+
+.skip-to-content {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background-color: var(--app-primary);
+  color: var(--app-surface);
+  border-radius: var(--app-radius, 4px);
+  box-shadow: 0 4px 12px var(--shadow-base, rgba(0, 0, 0, 0.15));
+  z-index: 1000;
+  outline: none;
+  font-weight: 600;
+  text-decoration: none;
+}
