@@ -10,6 +10,8 @@ interface SearchBarProps {
   initialValue?: string;
 }
 
+import styles from "./searchbar.module.css";
+
 const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
   const [searchQuery, setSearchQuery] = React.useState(initialValue || "");
 
@@ -44,13 +46,13 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
   return (
     <TextField
       size="medium"
-      className="w-full max-w-175 [&_.MuiInputBase-root]:h-10 sm:[&_.MuiInputBase-root]:h-12 [&_.MuiInputBase-root]:rounded-xl sm:[&_.MuiInputBase-root]:rounded-xl [&_.MuiOutlinedInput-notchedOutline]:border-(--app-muted)/35 [&_.MuiInputBase-root:hover_.MuiOutlinedInput-notchedOutline]:border-(--app-primary) [&_.MuiInputBase-root.Mui-focused_.MuiOutlinedInput-notchedOutline]:border-(--app-primary)"
+      className={styles.searchField}
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleOnChange}
       slotProps={{
         htmlInput: {
-          className: "text-xs sm:text-sm",
+          className: styles.inputControl,
         },
         input: {
           style: {
@@ -58,7 +60,7 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
           },
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon className="text-(--app-muted)" />
+              <SearchIcon className={styles.iconMuted} />
             </InputAdornment>
           ),
           ...(searchQuery && {
@@ -66,7 +68,7 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
               <InputAdornment position="end">
                 <Tooltip title="Clear">
                   <IconButton onClick={handleClearSearch}>
-                    <CloseIcon className="text-(--app-muted)" />
+                    <CloseIcon className={styles.iconMuted} />
                   </IconButton>
                 </Tooltip>
               </InputAdornment>

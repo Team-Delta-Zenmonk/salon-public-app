@@ -7,6 +7,7 @@ import { ExpiryUrgency } from "../../../../../../common/booking.enums";
 import { formatTimeUTC } from "../../../../../../common/date.utils";
 import { getUrgencyColor } from "../../../../../../common/booking.utils";
 import { useActiveBookingActions } from "../../../../../../common/hooks/useActiveBookingActions";
+import styles from "./active-booking-conflict-card.module.css";
 
 export default function ActiveBookingConflictCard() {
   const { activeBooking } = useAppSelector((state) => state.booking);
@@ -36,58 +37,66 @@ export default function ActiveBookingConflictCard() {
   };
 
   return (
-    <Box className="px-5 py-6">
-      <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface-alt) p-5 sm:p-6">
-        <Box className="flex items-start gap-3 mb-5">
-          <Box className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-            <WarningAmberIcon className="text-amber-500 text-xl" />
+    <Box className={styles.container}>
+      <Box className={styles.card}>
+        <Box className={styles.headerRow}>
+          <Box className={styles.warningIconBox}>
+            <WarningAmberIcon sx={{ color: "#f59e0b", fontSize: "1.25rem" }} />
           </Box>
-          <Box className="flex-1 min-w-0">
-            <Typography className="font-bold text-[14px] text-(--app-text) leading-tight">
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography className={styles.title}>
               You already have a pending booking
             </Typography>
-            <Typography className="text-xs text-(--app-muted) mt-1">What would you like to do?</Typography>
+            <Typography className={styles.subtitle}>What would you like to do?</Typography>
           </Box>
         </Box>
 
-        <Box className="rounded-xl bg-(--app-surface) border border-(--app-border) p-3.5 mb-5">
+        <Box className={styles.detailsBox}>
           {timeStr && (
-            <Box className="flex items-center gap-2 mb-2">
-              <AccessTimeIcon className="text-sm text-(--app-muted)" />
-              <Typography className="text-[13px] font-semibold text-(--app-text)">{timeStr}</Typography>
+            <Box className={styles.timeRow}>
+              <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--app-muted)" }} />
+              <Typography className={styles.timeText}>{timeStr}</Typography>
             </Box>
           )}
 
           {!isExpired && (
-            <Box className="flex items-center gap-1.5">
+            <Box className={styles.timerRow}>
               <Box
-                className="w-2 h-2 rounded-full"
                 sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
                   backgroundColor: urgencyColor,
                   animation: urgency === ExpiryUrgency.CRITICAL ? "countdownPulse 1.5s ease infinite" : "none",
                 }}
               />
-              <Typography className="text-[12px] font-bold tabular-nums" sx={{ color: urgencyColor }}>
+              <Typography sx={{ fontSize: 12, fontWeight: 700, fontVariantNumeric: "tabular-nums", color: urgencyColor }}>
                 Expires in {formattedTime}
               </Typography>
             </Box>
           )}
 
-          {isExpired && <Typography className="text-[12px] font-semibold text-red-500">Booking has expired</Typography>}
+          {isExpired && (
+            <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#ef4444" }}>
+              Booking has expired
+            </Typography>
+          )}
         </Box>
 
-        <Box className="flex flex-col gap-2.5">
+        <Box className={styles.actionsColumn}>
           {!isExpired && (
             <Box
               onClick={handleComplete}
-              className={`py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all ${
-                isBusy ? "bg-(--app-primary) cursor-default" : "bg-(--app-primary) cursor-pointer hover:brightness-95"
-              }`}
+              className={styles.completeBtn}
+              sx={{
+                opacity: isBusy ? 0.7 : 1,
+                cursor: isBusy ? "default" : "pointer",
+              }}
             >
               {isContinuing ? (
-                <CircularProgress size={16} className="text-(--app-primary-contrast)" />
+                <CircularProgress size={16} sx={{ color: "var(--app-primary-contrast)" }} />
               ) : (
-                <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">
+                <Typography className={styles.btnText}>
                   Complete this booking
                 </Typography>
               )}
@@ -96,14 +105,16 @@ export default function ActiveBookingConflictCard() {
 
           <Box
             onClick={isBusy ? undefined : handleCancel}
-            className={`py-3.5 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors ${
-              isBusy ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-bg)"
-            }`}
+            className={styles.cancelBtn}
+            sx={{
+              opacity: isBusy ? 0.5 : 1,
+              cursor: isBusy ? "default" : "pointer",
+            }}
           >
             {isCancelling ? (
-              <CircularProgress size={16} className="text-(--app-muted)" />
+              <CircularProgress size={16} sx={{ color: "var(--app-muted)" }} />
             ) : (
-              <Typography className="text-[13px] font-semibold text-(--app-muted)">
+              <Typography className={styles.btnTextSecondary}>
                 {isExpired ? "Dismiss & book a new slot" : "Cancel & book a new slot"}
               </Typography>
             )}

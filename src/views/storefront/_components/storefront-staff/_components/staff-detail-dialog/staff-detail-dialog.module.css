@@ -1,0 +1,260 @@
+.dialogPaper {
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 90vh !important;
+}
+
+@media (min-width: 640px) {
+  .dialogPaper {
+    max-height: 85vh !important;
+  }
+}
+
+.backdrop {
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.headerBanner {
+  position: relative;
+  flex-shrink: 0;
+  padding: 1.25rem 1rem 1rem 1rem;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--app-hero-from, var(--app-primary)) 0%, var(--app-hero-to, var(--app-primary)) 100%);
+}
+
+.headerGlow1 {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background: radial-gradient(circle at 25% 20%, #fff 0%, transparent 45%);
+}
+
+.headerGlow2 {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  background: radial-gradient(circle at 80% 70%, #fff 0%, transparent 40%);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  z-index: 10;
+}
+
+.closeButton:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar {
+  width: 5rem !important;
+  height: 5rem !important;
+  font-size: 26px !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+  border: 3px solid rgba(255, 255, 255, 0.3) !important;
+  outline: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.headerTitle {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  margin-top: 0.75rem !important;
+}
+
+.headerSubtitle {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.875rem !important;
+  margin-top: 0.25rem !important;
+}
+
+.dialogContent {
+  padding: 0 !important;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  scrollbar-width: thin;
+}
+
+.contentWrapper {
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .contentWrapper {
+    padding: 1.75rem 2rem;
+  }
+}
+
+.availabilityBox {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.availableToday {
+  border: 1px solid rgba(16, 185, 129, 0.24);
+  background-color: rgba(16, 185, 129, 0.08);
+}
+
+.notAvailableToday {
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  background-color: rgba(244, 63, 94, 0.06);
+}
+
+.statusDot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.dotAvailable {
+  background-color: #10b981;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.dotUnavailable {
+  background-color: #fb7185;
+}
+
+.availabilityInfo {
+  min-width: 0;
+}
+
+.availabilityBadge {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (min-width: 640px) {
+  .availabilityBadge {
+    font-size: 0.75rem !important;
+  }
+}
+
+.badgeTextAvailable {
+  color: #059669 !important;
+}
+
+.badgeTextUnavailable {
+  color: #f43f5e !important;
+}
+
+.availabilityTime {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text) !important;
+  margin-top: 0.125rem !important;
+}
+
+.availabilityOff {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--app-muted) !important;
+  margin-top: 0.125rem !important;
+}
+
+.sectionTitle {
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  color: var(--app-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 0.75rem !important;
+}
+
+.scheduleSectionTitle {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--app-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 1rem !important;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--app-surface-alt);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+}
+
+.scheduleCard {
+  background-color: var(--app-surface-alt);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+}
+
+.scheduleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .scheduleRow {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+.scheduleRowToday {
+  background-color: var(--app-primary);
+  color: #ffffff;
+}
+
+.scheduleDayName {
+  font-weight: 500 !important;
+}
+
+.todayTag {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.scheduleDayHours {
+  font-weight: 500 !important;
+}

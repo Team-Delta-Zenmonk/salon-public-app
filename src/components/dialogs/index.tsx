@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import styles from "./dialogs.module.css";
 
 interface ConfirmationDialogProps {
   open: boolean;
@@ -30,16 +31,16 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
   return (
     <Dialog open={open} maxWidth="xs" fullWidth fullScreen={fullScreen}>
-      <DialogTitle className="text-(--app-text) font-bold">{title}</DialogTitle>
+      <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
 
       <DialogContent>
-        <Typography variant="body2" className="text-(--app-muted)">
+        <Typography variant="body2" className={styles.description}>
           {description}
         </Typography>
       </DialogContent>
 
-      <DialogActions className="px-6 pb-5">
-        <Button onClick={onClose} color="inherit" className="text-(--app-muted)">
+      <DialogActions className={styles.dialogActions}>
+        <Button onClick={onClose} color="inherit" className={styles.cancelButton}>
           {cancelText}
         </Button>
         <Button
@@ -47,7 +48,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           color={color}
           variant="contained"
           disabled={loading}
-          className="font-semibold shadow-none hover:shadow-none"
+          className={styles.confirmButton}
         >
           {loading ? "Processing..." : confirmText}
         </Button>

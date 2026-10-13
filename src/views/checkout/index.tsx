@@ -19,6 +19,8 @@ import { useAppDispatch } from "../../store/hook";
 import { useCheckoutData } from "./hooks/useCheckoutData";
 import { useStripeAppearance } from "./hooks/useStripeAppearance";
 
+import styles from "./checkout.module.css";
+
 interface PaymentPanelProps {
   clientSecret: string;
   stripeAppearance: ReturnType<typeof useStripeAppearance>;
@@ -68,7 +70,7 @@ export default function Checkout() {
   }
 
   return (
-    <Box className="min-h-screen w-full bg-[#FCF9F3] text-[#1C1C18] flex flex-col relative font-sans">
+    <Box className={styles.checkoutPage}>
       <CheckoutHeader
         onBack={handleResetBooking}
         isExpired={isExpired}
@@ -80,10 +82,10 @@ export default function Checkout() {
 
       <Container
         maxWidth="lg"
-        className="px-6 relative z-10 mt-6 lg:mt-12 flex-1 flex flex-col justify-center pb-16"
+        className={styles.container}
       >
-        <Box className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          <Box className="lg:col-span-7 order-1 w-full">
+        <Box className={styles.checkoutGrid}>
+          <Box className={styles.leftColumn}>
             {isExpired ? (
               <ExpiryView onReturn={handleResetBooking} />
             ) : (
@@ -98,8 +100,8 @@ export default function Checkout() {
             )}
           </Box>
 
-          <Box className="hidden lg:block lg:col-span-5 w-full">
-            <Typography className="font-serif text-xl font-medium text-[#1C1A17] mb-4 ml-1">
+          <Box className={styles.rightColumn}>
+            <Typography className={styles.summaryTitle}>
               Reservation Investment Summary
             </Typography>
             <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
@@ -121,14 +123,14 @@ function PaymentPanel({
 }: Readonly<PaymentPanelProps>) {
   return (
     <Box>
-      <Typography className="font-serif text-2xl font-medium text-[#1C1A17] mb-6 flex items-center gap-2.5">
-        <PaymentsIcon className="text-[#A88B64] text-xl" />
+      <Typography className={styles.paymentTitle}>
+        <PaymentsIcon className={styles.paymentIcon} />
         Payment Sanctuary
       </Typography>
 
       <Paper
         elevation={0}
-        className="p-6 sm:p-8 bg-[#FCFAF7] border border-[#E5DFD5] rounded-[2px] shadow-xs"
+        className={styles.paymentPaper}
       >
         <Elements stripe={stripePromise} options={{ clientSecret, appearance: stripeAppearance }}>
           <PaymentForm booking={currentBooking} isExpired={isExpired} onPaymentSuccess={onPaymentSuccess} />

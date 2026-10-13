@@ -42,44 +42,42 @@ export default function PaymentProcessing({ salonName, onComplete }: Readonly<Pa
 
   return (
     <Box className={styles.processingPage}>
-      <Box className="flex flex-col items-center gap-8 px-6 max-w-sm w-full">
-        <Box className="relative flex items-center justify-center">
+      <Box className={styles.contentWrapper}>
+        <Box className={styles.spinnerContainer}>
           {!isDone ? (
             <>
-              <Box
-                className={`w-20 h-20 rounded-full border-[3px] border-(--app-border) border-t-(--app-primary) ${styles.spinRing}`}
-              />
-              <Box className={`absolute inset-0 flex items-center justify-center ${styles.iconPulse}`}>
-                <Box className="w-10 h-10 rounded-full bg-(--app-primary)/10 flex items-center justify-center">
-                  <Box className="w-5 h-5 rounded-full bg-(--app-primary)" />
+              <Box className={`${styles.spinnerRing} ${styles.spinRing}`} />
+              <Box className={`${styles.iconPulseBox} ${styles.iconPulse}`}>
+                <Box className={styles.innerPulseCircle}>
+                  <Box className={styles.centerDot} />
                 </Box>
               </Box>
             </>
           ) : (
-            <Box className={`flex items-center justify-center ${styles.checkPop}`}>
-              <CheckCircleIcon className="text-[72px] text-[#10b981]" />
+            <Box className={`${styles.spinnerContainer} ${styles.checkPop}`}>
+              <CheckCircleIcon className={styles.checkIcon} />
             </Box>
           )}
         </Box>
 
-        <Box className="text-center space-y-2">
-          <Typography className="font-black text-[22px] sm:text-[26px] text-(--app-text) tracking-tight leading-tight">
+        <Box className={styles.textCenter}>
+          <Typography className={styles.title}>
             {isDone ? "Booking Confirmed!" : "Processing Payment"}
           </Typography>
-          <Typography className="text-[13px] text-(--app-muted) font-medium">
+          <Typography className={styles.subtitle}>
             {isDone ? `Your appointment at ${salonName} is confirmed` : "Please don't close this page"}
           </Typography>
         </Box>
 
-        <Box className="w-full space-y-4">
-          <Box className="w-full h-1.5 bg-(--app-border) rounded-full overflow-hidden">
+        <Box className={styles.stepsSection}>
+          <Box className={styles.progressTrack}>
             <Box
-              className={`h-full bg-(--app-primary) rounded-full ${styles.progressBar}`}
+              className={`${styles.progressFill} ${styles.progressBar}`}
               style={{ "--processing-duration": `${TOTAL_DURATION_MS}ms` } as React.CSSProperties}
             />
           </Box>
 
-          <Box className="space-y-3">
+          <Box className={styles.stepsList}>
             {PROCESSING_STEPS.map((step, index) => {
               const isActive = index === currentStep;
               const isCompleted = index < currentStep || isDone;
@@ -87,36 +85,39 @@ export default function PaymentProcessing({ salonName, onComplete }: Readonly<Pa
               return (
                 <Box
                   key={step.label}
-                  className={`flex items-center gap-3 transition-all duration-300 ${isActive || isCompleted ? "opacity-100" : "opacity-30"
-                    }`}
+                  className={`${styles.stepRow} ${
+                    isActive || isCompleted ? styles.stepActive : styles.stepInactive
+                  }`}
                 >
                   <Box
-                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isCompleted
-                        ? "bg-[#10b981]"
+                    className={`${styles.stepBadge} ${
+                      isCompleted
+                        ? styles.stepBadgeCompleted
                         : isActive
-                          ? "bg-(--app-primary)"
-                          : "bg-(--app-border)"
-                      }`}
+                          ? styles.stepBadgeActive
+                          : styles.stepBadgePending
+                    }`}
                   >
                     {isCompleted ? (
-                      <CheckCircleIcon className="text-white text-[14px]" />
+                      <CheckCircleIcon className={styles.stepCheckIcon} />
                     ) : isActive ? (
-                      <Box className="flex gap-0.5">
+                      <Box className={styles.stepDots}>
                         {[0, 1, 2].map((dot) => (
-                          <Box key={dot} className={`w-1 h-1 rounded-full bg-white ${styles.dot}`} />
+                          <Box key={dot} className={`${styles.stepSingleDot} ${styles.dot}`} />
                         ))}
                       </Box>
                     ) : (
-                      <Box className="w-1.5 h-1.5 rounded-full bg-(--app-muted)" />
+                      <Box className={styles.stepPendingDot} />
                     )}
                   </Box>
                   <Typography
-                    className={`text-[13px] font-semibold transition-colors duration-300 ${isCompleted
-                        ? "text-[#10b981]"
+                    className={`${styles.stepLabel} ${
+                      isCompleted
+                        ? styles.stepLabelCompleted
                         : isActive
-                          ? "text-(--app-text)"
-                          : "text-(--app-muted)"
-                      }`}
+                          ? styles.stepLabelActive
+                          : styles.stepLabelPending
+                    }`}
                   >
                     {step.label}
                   </Typography>
@@ -126,7 +127,7 @@ export default function PaymentProcessing({ salonName, onComplete }: Readonly<Pa
           </Box>
         </Box>
 
-        <Typography className="text-[10px] text-(--app-muted) font-medium tracking-wide opacity-50 mt-2">
+        <Typography className={styles.securityNote}>
           Secured by Stripe • 256-bit encryption
         </Typography>
       </Box>

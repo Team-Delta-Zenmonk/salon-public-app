@@ -1,0 +1,93 @@
+.carouselContainer {
+  position: relative;
+  height: 100%;
+  min-height: 32.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface);
+}
+
+.gradientOverlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(168, 139, 100, 0.15), transparent, var(--app-surface-alt));
+}
+
+.imageWrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .imageWrapper {
+    padding: 2rem;
+  }
+}
+
+.carouselImage {
+  position: relative;
+  height: 100%;
+  max-height: 420px;
+  width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
+}
+
+.footerBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid var(--app-border);
+  background-color: rgba(252, 250, 247, 0.85);
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(4px);
+}
+
+.curatedTitle {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--app-muted);
+}
+
+.dotsWrapper {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  height: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+}
+
+.dotActive {
+  width: 1.75rem;
+  border-color: var(--app-primary);
+  background-color: var(--app-primary);
+}
+
+.dotInactive {
+  width: 0.5rem;
+  border-color: var(--app-border);
+  background-color: var(--app-surface-alt);
+}
+
+.dotInactive:hover {
+  background-color: var(--app-primary-soft);
+}

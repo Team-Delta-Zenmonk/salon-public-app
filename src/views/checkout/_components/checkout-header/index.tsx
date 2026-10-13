@@ -15,24 +15,48 @@ export default function CheckoutHeader({ onBack, isExpired, urgency, formattedTi
   const isCritical = urgency === ExpiryUrgency.CRITICAL;
 
   return (
-    <Box className="fixed top-0 left-0 right-0 z-[1000] bg-(--app-surface) border-b border-(--app-border) backdrop-blur-md">
+    <Box
+      sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        backgroundColor: "var(--bg-surface)",
+        borderBottom: "1px solid var(--color-hairline)",
+        backdropFilter: "blur(12px)",
+      }}
+    >
       <Container maxWidth="lg">
-        <Box className="flex items-center justify-between h-14">
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 56 }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <IconButton
               onClick={onBack}
               size="small"
-              className="bg-(--app-surface) border border-(--app-border) p-1.5 hover:bg-[rgba(var(--app-primary-rgb),0.05)] transition-colors"
+              sx={{
+                backgroundColor: "var(--bg-surface)",
+                border: "1px solid var(--color-hairline)",
+                p: "6px",
+                "&:hover": { backgroundColor: "color-mix(in srgb, var(--color-primary) 5%, transparent)" },
+              }}
             >
-              <ArrowBackIcon className="text-[18px] text-(--app-text)" />
+              <ArrowBackIcon sx={{ fontSize: 18, color: "var(--color-on-surface)" }} />
             </IconButton>
             <Box>
-              <Typography className="text-[0.95rem] md:text-[1.1rem] font-black text-(--app-text) leading-none tracking-tight">
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.95rem", md: "1.1rem" },
+                  fontWeight: 900,
+                  color: "var(--color-on-surface)",
+                  lineHeight: 1,
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Checkout
               </Typography>
-              <Stack direction="row" spacing={0.5} alignItems="center" className="mt-1">
-                <VerifiedUserIcon className="text-[10px] text-green-500" />
-                <Typography className="text-[9px] text-(--app-muted) font-black tracking-widest uppercase">
+              <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: "4px" }}>
+                <VerifiedUserIcon sx={{ fontSize: 10, color: "#22c55e" }} />
+                <Typography sx={{ fontSize: 9, color: "var(--color-tertiary)", fontWeight: 900, letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   Secure
                 </Typography>
               </Stack>
@@ -42,17 +66,33 @@ export default function CheckoutHeader({ onBack, isExpired, urgency, formattedTi
           {!isExpired && (
             <Paper
               elevation={0}
-              className={`
-                px-3 py-1 rounded-full flex items-center gap-2 border transition-all duration-300
-                ${
-                  isCritical
-                    ? "bg-red-500 border-red-500 text-white animate-[countdownPulse_1.5s_ease_infinite]"
-                    : "bg-(--app-primary-soft) border-(--app-primary) text-(--app-primary)"
-                }
-              `}
+              sx={{
+                px: 1.5,
+                py: 0.5,
+                borderRadius: "9999px",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                border: "1px solid",
+                transition: "all 0.3s",
+                ...(isCritical
+                  ? {
+                      backgroundColor: "#ef4444",
+                      borderColor: "#ef4444",
+                      color: "white",
+                      animation: "countdownPulse 1.5s ease infinite",
+                    }
+                  : {
+                      backgroundColor: "var(--app-primary-soft)",
+                      borderColor: "var(--color-primary)",
+                      color: "var(--color-primary)",
+                    }),
+              }}
             >
-              <AccessTimeIcon className="text-[12px]" />
-              <Typography className="text-[11px] font-black tabular-nums">{formattedTime}</Typography>
+              <AccessTimeIcon sx={{ fontSize: 12 }} />
+              <Typography sx={{ fontSize: 11, fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>
+                {formattedTime}
+              </Typography>
             </Paper>
           )}
         </Box>

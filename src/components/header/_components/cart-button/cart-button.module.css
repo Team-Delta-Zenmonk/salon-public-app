@@ -1,0 +1,15 @@
+.cartBtn {
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  border-radius: 0.75rem !important;
+}
+
+.cartBtn:hover {
+  background-color: var(--app-surface-alt) !important;
+}
+
+.cartBadge :global(.MuiBadge-badge) {
+  font-weight: 700;
+  background-color: var(--app-primary);
+  color: #ffffff;
+}

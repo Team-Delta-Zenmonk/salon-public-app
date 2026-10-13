@@ -1,7 +1,7 @@
-import { Box, Typography, Button, IconButton, Divider } from "@mui/material";
+import { Box, Typography, IconButton, Button, Divider } from "@mui/material";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useStorefrontNavigate } from "../../../../common/hooks/useStorefrontNavigate";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
@@ -10,6 +10,7 @@ import { formatDuration } from "../../../../common/date.utils";
 import { removeItemLocal } from "../../../../features/salon/cart/cart.slice";
 import { removeCartItemAction } from "../../../../features/salon/cart/remove-item/remove-item.action";
 import { callSnack } from "../../../../components/snackbar";
+import styles from "./storefront-basket.module.css";
 
 interface StorefrontBasketProps {
   salon: any;
@@ -38,7 +39,6 @@ export default function StorefrontBasket({
         callSnack("Removed from basket", "info");
         return;
       }
-
       if (item.uuid) {
         await dispatch(removeCartItemAction(item.uuid)).unwrap();
         callSnack("Removed from basket", "info");
@@ -57,22 +57,24 @@ export default function StorefrontBasket({
   };
 
   const renderDesktopCard = () => (
-    <Box className="hidden lg:block w-full sticky top-24 rounded-xl border border-(--app-border) bg-(--app-surface) shadow-[0_16px_40px_rgba(15,23,42,0.08)] overflow-hidden">
-      <Box className="px-5 py-4 border-b border-(--app-border) bg-(--app-surface-alt) flex items-center justify-between">
-        <Box className="flex items-center gap-2.5">
-          <ShoppingBagOutlinedIcon className="text-(--app-primary) text-[20px]" />
-          <Typography className="font-bold text-sm text-(--app-text)">Selected Treatments</Typography>
+    <Box className={styles.desktopCard}>
+      <Box className={styles.header}>
+        <Box className={styles.titleGroup}>
+          <ShoppingBagOutlinedIcon sx={{ color: "var(--color-primary)", fontSize: 20 }} />
+          <Typography className={styles.title}>Selected Treatments</Typography>
         </Box>
-        <Box className="px-2.5 py-0.5 rounded-full bg-(--app-primary-soft) text-(--app-primary) font-bold text-xs">
+        <Box className={styles.itemBadge}>
           {items.length} {items.length === 1 ? "item" : "items"}
         </Box>
       </Box>
 
-      <Box className="p-4 max-h-[380px] overflow-y-auto space-y-3">
+      <Box className={styles.itemList}>
         {items.length === 0 ? (
-          <Box className="py-10 px-4 text-center">
-            <Typography className="text-sm font-semibold text-(--app-text)">Your basket is empty</Typography>
-            <Typography className="text-xs text-(--app-muted) mt-1">
+          <Box className={styles.emptyBox}>
+            <Typography sx={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--color-on-surface)" }}>
+              Your basket is empty
+            </Typography>
+            <Typography sx={{ fontSize: "0.75rem", color: "var(--color-tertiary)", mt: "4px" }}>
               Select any treatment to begin booking your appointment.
             </Typography>
           </Box>
@@ -84,29 +86,22 @@ export default function StorefrontBasket({
             const itemId = item.uuid || item.service_id || item.service?.uuid;
 
             return (
-              <Box
-                key={itemId}
-                className="flex items-start justify-between gap-3 p-3 rounded-2xl bg-(--app-surface-alt)/60 border border-(--app-border)/80 hover:border-(--app-primary)/30 transition-all duration-200"
-              >
-                <Box className="min-w-0 flex-1">
-                  <Typography className="text-xs font-bold text-(--app-text) truncate">{name}</Typography>
-                  <Box className="flex items-center gap-2 mt-1 text-[11px] text-(--app-muted)">
+              <Box key={itemId} className={styles.itemCard}>
+                <Box sx={{ minWidth: 0, flex: 1 }}>
+                  <Typography className={styles.itemTitle}>{name}</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", mt: "4px" }}>
                     {duration && (
-                      <Box className="flex items-center gap-0.5">
-                        <AccessTimeIcon className="text-[12px]" />
-                        <span>{duration} min</span>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: "2px" }}>
+                        <AccessTimeIcon sx={{ fontSize: 12, color: "var(--color-tertiary)" }} />
+                        <Typography className={styles.metaText}>{duration} min</Typography>
                       </Box>
                     )}
-                    <span>•</span>
-                    <span className="font-semibold text-(--app-text)">₹{price}</span>
+                    <Typography className={styles.metaText}>•</Typography>
+                    <Typography className={styles.itemPrice}>₹{price}</Typography>
                   </Box>
                 </Box>
-                <IconButton
-                  size="small"
-                  onClick={() => handleRemove(item)}
-                  className="text-(--app-muted) hover:text-red-500 -mr-1 -mt-1"
-                >
-                  <DeleteOutlineIcon className="text-[16px]" />
+                <IconButton size="small" onClick={() => handleRemove(item)} className={styles.removeBtn}>
+                  <DeleteOutlineIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </Box>
             );
@@ -115,21 +110,21 @@ export default function StorefrontBasket({
       </Box>
 
       {items.length > 0 && (
-        <Box className="p-5 border-t border-(--app-border) bg-(--app-surface) space-y-3">
-          <Box className="flex items-center justify-between text-xs text-(--app-muted)">
+        <Box className={styles.footer}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, color: "var(--color-tertiary)" }}>
             <span>Estimated Duration</span>
-            <span className="font-semibold text-(--app-text)">{durationText}</span>
+            <span style={{ fontWeight: 600, color: "var(--color-on-surface)" }}>{durationText}</span>
           </Box>
 
-          <Divider className="border-(--app-border)" />
+          <Divider sx={{ borderColor: "var(--color-hairline)" }} />
 
-          <Box className="flex items-center justify-between">
-            <Typography className="text-xs font-semibold text-(--app-muted)">Total Estimated</Typography>
-            <Typography className="text-xl font-extrabold text-(--app-text)">₹{totalPrice}</Typography>
+          <Box className={styles.totalRow}>
+            <Typography className={styles.totalLabel}>Total Estimated</Typography>
+            <Typography className={styles.totalValue}>₹{totalPrice}</Typography>
           </Box>
 
           {salon?.payment_policy && (
-            <Box className="text-[11px] text-(--app-muted) text-center py-1 px-2 rounded-lg bg-(--app-surface-alt)">
+            <Box sx={{ fontSize: 11, color: "var(--color-tertiary)", textAlign: "center", py: "4px", px: 1, borderRadius: "0.5rem", backgroundColor: "var(--bg-surface-container-low)" }}>
               {salon.payment_policy === "pay_at_venue"
                 ? "✓ Pay at venue after your appointment"
                 : salon.payment_policy === "partial_deposit"
@@ -143,8 +138,17 @@ export default function StorefrontBasket({
             variant="contained"
             size="large"
             onClick={handleProceed}
-            endIcon={<ArrowForwardIcon className="text-[16px]" />}
-            className="rounded-2xl font-bold py-3 text-sm tracking-wide bg-(--app-primary) hover:brightness-110 shadow-lg shadow-(--app-primary)/20"
+            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              borderRadius: "1rem",
+              fontWeight: 700,
+              py: 1.5,
+              fontSize: "0.875rem",
+              letterSpacing: "0.03em",
+              boxShadow: "0 4px 12px color-mix(in srgb, var(--color-primary) 20%, transparent)",
+              "&:hover": { filter: "brightness(1.1)" },
+              textTransform: "none",
+            }}
           >
             Continue to Book
           </Button>
@@ -157,17 +161,39 @@ export default function StorefrontBasket({
     if (items.length === 0) return null;
 
     return (
-      <Box className="lg:hidden fixed bottom-5 left-3 right-3 z-40">
-        <Box className="p-3 rounded-2xl border border-white/20 bg-black/90 backdrop-blur-xl shadow-[0_18px_36px_rgba(0,0,0,0.35)] flex items-center justify-between gap-3 text-white">
-          <Box className="min-w-0 pl-1">
-            <Box className="flex items-center gap-1.5">
-              <Box className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <Typography className="text-xs font-bold text-white truncate">
+      <Box
+        sx={{
+          display: { xs: "block", lg: "none" },
+          position: "fixed",
+          bottom: 20,
+          left: 12,
+          right: 12,
+          zIndex: 40,
+        }}
+      >
+        <Box
+          sx={{
+            p: 1.5,
+            borderRadius: "1rem",
+            border: "1px solid rgba(255,255,255,0.2)",
+            backgroundColor: "rgba(0,0,0,0.9)",
+            backdropFilter: "blur(20px)",
+            boxShadow: "0 18px 36px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 1.5,
+          }}
+        >
+          <Box sx={{ minWidth: 0, pl: "4px" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <Box sx={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#34d399", animation: "pulse 2s ease infinite" }} />
+              <Typography sx={{ fontSize: 12, fontWeight: 700, color: "white" }}>
                 {items.length} {items.length === 1 ? "Treatment" : "Treatments"}
               </Typography>
             </Box>
-            <Typography className="text-base font-extrabold text-white mt-0.5">
-              ₹{totalPrice} <span className="text-[10px] font-normal text-white/70">({durationText})</span>
+            <Typography sx={{ fontSize: 16, fontWeight: 800, color: "white", mt: "2px" }}>
+              ₹{totalPrice} <span style={{ fontSize: 10, fontWeight: 400, color: "rgba(255,255,255,0.7)" }}>({durationText})</span>
             </Typography>
           </Box>
 
@@ -175,8 +201,16 @@ export default function StorefrontBasket({
             variant="contained"
             size="medium"
             onClick={handleProceed}
-            endIcon={<ArrowForwardIcon className="text-[16px]" />}
-            className="rounded-xl font-bold px-4 py-2.5 text-xs bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110 shrink-0"
+            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              borderRadius: "0.75rem",
+              fontWeight: 700,
+              px: 2,
+              py: 1.25,
+              fontSize: "0.75rem",
+              textTransform: "none",
+              flexShrink: 0,
+            }}
           >
             Book Now
           </Button>

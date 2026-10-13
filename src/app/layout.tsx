@@ -38,7 +38,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-(--app-bg) text-(--app-text) antialiased" suppressHydrationWarning>
+      <body style={{ minHeight: "100vh", backgroundColor: "var(--app-bg)", color: "var(--app-text)" }} suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>
     </html>

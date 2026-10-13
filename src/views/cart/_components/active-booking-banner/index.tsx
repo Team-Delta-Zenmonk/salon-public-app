@@ -13,6 +13,7 @@ import { ConfirmationDialog } from "../../../../components/dialogs";
 import { formatTimeUTC } from "../../../../common/date.utils";
 import { getUrgencyColor } from "../../../../common/booking.utils";
 import { useActiveBookingActions } from "../../../../common/hooks/useActiveBookingActions";
+import styles from "./active-booking-banner.module.css";
 
 interface BookingActionButtonsProps {
   isExpired: boolean;
@@ -28,7 +29,6 @@ const TOTAL_SECONDS = 600;
 
 const getBookingDateTime = (activeBooking: any) => {
   const dateObj = activeBooking.booking_date ? new Date(activeBooking.booking_date) : null;
-
   return {
     dateStr: dateObj
       ? `${WEEKDAY_FULL[dateObj.getUTCDay()]}, ${dateObj.getUTCDate()} ${MONTH_SHORT[dateObj.getUTCMonth()]}`
@@ -54,11 +54,8 @@ function BookingActionButtons({
 }: Readonly<BookingActionButtonsProps>) {
   if (isExpired) {
     return (
-      <Box
-        onClick={onStartNew}
-        className="flex-1 py-3 rounded-xl bg-(--app-primary) text-center cursor-pointer hover:brightness-95 transition-all"
-      >
-        <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">Start New Booking</Typography>
+      <Box onClick={onStartNew} className={styles.continueBtn}>
+        <Typography className={styles.continueBtnText}>Start New Booking</Typography>
       </Box>
     );
   }
@@ -67,27 +64,20 @@ function BookingActionButtons({
     <>
       <Box
         onClick={isBusy ? undefined : onCancel}
-        className={`shrink-0 px-5 py-3 rounded-xl border-[1.5px] border-(--app-border) text-center transition-colors ${
-          isBusy ? "opacity-50 cursor-default" : "cursor-pointer hover:bg-(--app-surface-alt)"
-        }`}
+        className={`${styles.cancelBtn} ${isBusy ? styles.btnDisabled : ""}`}
       >
         {isCancelling ? (
-          <CircularProgress size={16} className="text-(--app-muted)" />
+          <CircularProgress size={16} sx={{ color: "var(--app-muted)" }} />
         ) : (
-          <Typography className="text-[13px] font-semibold text-(--app-muted)">Cancel Booking</Typography>
+          <Typography className={styles.cancelBtnText}>Cancel Booking</Typography>
         )}
       </Box>
 
-      <Box
-        onClick={onContinue}
-        className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
-          isBusy ? "bg-(--app-primary) cursor-default" : "bg-(--app-primary) cursor-pointer hover:brightness-95"
-        }`}
-      >
+      <Box onClick={onContinue} className={`${styles.continueBtn} ${isBusy ? styles.btnDisabledCursor : ""}`}>
         {isContinuing ? (
-          <CircularProgress size={16} className="text-(--app-primary-contrast)" />
+          <CircularProgress size={16} sx={{ color: "var(--app-primary-contrast)" }} />
         ) : (
-          <Typography className="text-[13px] font-bold text-(--app-primary-contrast)">Continue Payment</Typography>
+          <Typography className={styles.continueBtnText}>Continue Payment</Typography>
         )}
       </Box>
     </>
@@ -102,29 +92,20 @@ export default function ActiveBookingBanner() {
   const { formattedTime, isExpired, secondsLeft, urgency } = useBookingExpiry(activeBooking?.expires_at);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
-  if (!activeBooking) {
-    return null;
-  }
+  if (!activeBooking) return null;
 
   const { dateStr, timeStr } = getBookingDateTime(activeBooking);
-
   const isBusy = isCancelling || isContinuing;
   const progress = getProgress(isExpired, secondsLeft);
   const urgencyColor = getUrgencyColor(urgency);
 
   const handleContinue = async () => {
-    if (isBusy || isExpired) {
-      return;
-    }
-
+    if (isBusy || isExpired) return;
     await handleContinueActiveBooking(activeBooking);
   };
 
   const handleConfirmCancel = async () => {
-    if (isBusy) {
-      return;
-    }
-
+    if (isBusy) return;
     await handleCancelActiveBooking(activeBooking.uuid);
     setCancelDialogOpen(false);
   };
@@ -136,75 +117,65 @@ export default function ActiveBookingBanner() {
   return (
     <>
       <Box
-        className={`rounded-2xl border overflow-hidden mb-5 sm:mb-6 transition-all duration-300 ${
-          isExpired
-            ? "border-(--app-border) bg-(--app-surface-alt) opacity-75"
-            : "border-(--app-primary)/30 bg-(--app-surface) shadow-[0_4px_20px_var(--app-primary-soft)]"
-        }`}
+        className={`${styles.bannerCard} ${isExpired ? styles.bannerExpired : styles.bannerActive}`}
       >
-        <Box className="flex items-center gap-2.5 px-4 sm:px-5 pt-4 sm:pt-5 pb-3">
+        <Box className={styles.bannerHeader}>
           <Box
-            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-            sx={{
-              backgroundColor: isExpired ? "var(--app-surface-alt)" : "var(--app-primary-soft)",
-            }}
+            className={styles.iconBox}
+            sx={{ backgroundColor: isExpired ? "var(--app-surface-alt)" : "var(--app-primary-soft)" }}
           >
             {isExpired ? (
-              <ErrorOutlineIcon className="text-base" sx={{ color: "var(--app-muted)" }} />
+              <ErrorOutlineIcon sx={{ fontSize: "1rem", color: "var(--app-muted)" }} />
             ) : (
-              <BoltIcon className="text-base" sx={{ color: "var(--app-primary)" }} />
+              <BoltIcon sx={{ fontSize: "1rem", color: "var(--app-primary)" }} />
             )}
           </Box>
 
-          <Box className="flex-1 min-w-0">
-            <Typography className="font-bold text-[13px] text-(--app-text) leading-tight">
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography className={styles.title}>
               {isExpired ? "Booking Expired" : "You have an active booking"}
             </Typography>
           </Box>
 
           {!isExpired && (
             <Box
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+              className={styles.timerBadge}
               sx={{
                 backgroundColor: urgency === ExpiryUrgency.CRITICAL ? "rgba(239,68,68,0.1)" : "var(--app-primary-soft)",
                 animation: urgency === ExpiryUrgency.CRITICAL ? "countdownPulse 1.5s ease infinite" : "none",
               }}
             >
-              <AccessTimeIcon className="text-xs" sx={{ color: urgencyColor }} />
-
-              <Typography className="text-[11px] font-bold tabular-nums" sx={{ color: urgencyColor }}>
+              <AccessTimeIcon sx={{ fontSize: "0.75rem", color: urgencyColor }} />
+              <Typography sx={{ fontSize: 11, fontWeight: 700, fontVariantNumeric: "tabular-nums", color: urgencyColor }}>
                 {formattedTime}
               </Typography>
             </Box>
           )}
         </Box>
 
-        <Box className="px-4 sm:px-5 pb-3 flex items-center gap-2 flex-wrap">
-          <Box className="flex items-center gap-1">
-            <CalendarMonthIcon className="text-xs text-(--app-muted)" />
-            <Typography className="text-[12px] text-(--app-muted)">{dateStr}</Typography>
+        <Box className={styles.metaRow}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+            <CalendarMonthIcon sx={{ fontSize: "0.75rem", color: "var(--app-muted)" }} />
+            <Typography sx={{ fontSize: 12, color: "var(--app-muted)" }}>{dateStr}</Typography>
           </Box>
-
-          <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
-
-          <Typography className="text-[12px] text-(--app-muted)">{timeStr}</Typography>
-
-          <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
-
-          <Typography className="text-[12px] font-semibold text-(--app-text)">₹{activeBooking.total_price}</Typography>
+          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: "var(--app-border)" }} />
+          <Typography sx={{ fontSize: 12, color: "var(--app-muted)" }}>{timeStr}</Typography>
+          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: "var(--app-border)" }} />
+          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "var(--app-text)" }}>₹{activeBooking.total_price}</Typography>
         </Box>
 
         {!isExpired && (
-          <Box className="px-4 sm:px-5 pb-3.5">
+          <Box className={styles.progressWrapper}>
             <LinearProgress
               variant="determinate"
               value={progress}
-              className="rounded-full h-1.5"
               sx={{
+                borderRadius: "9999px",
+                height: 6,
                 backgroundColor: "var(--app-surface-alt)",
                 "& .MuiLinearProgress-bar": {
                   backgroundColor: urgencyColor,
-                  borderRadius: "999px",
+                  borderRadius: "9999px",
                   transition: "transform 1s linear",
                 },
               }}
@@ -212,7 +183,7 @@ export default function ActiveBookingBanner() {
           </Box>
         )}
 
-        <Box className="px-4 sm:px-5 pb-4 sm:pb-5 flex gap-2.5 max-w-sm">
+        <Box className={styles.actionsWrapper}>
           <BookingActionButtons
             isExpired={isExpired}
             isBusy={isBusy}

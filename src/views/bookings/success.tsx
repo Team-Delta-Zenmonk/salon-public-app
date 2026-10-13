@@ -13,7 +13,6 @@ import { clearBookingSession } from "../../features/salon/bookings/booking.slice
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
 import styles from "./success.module.scss";
-import clsx from "clsx";
 
 const BookingSuccess: React.FC = () => {
   const navigate = useStorefrontNavigate();
@@ -80,7 +79,7 @@ const BookingSuccess: React.FC = () => {
 
   return (
     <Box className={styles.successPage}>
-      <Box className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <Box className={styles.confettiOverlay}>
         {CONFETTI_ITEMS.map((item) => (
           <div
             key={item.id}
@@ -97,126 +96,114 @@ const BookingSuccess: React.FC = () => {
         ))}
       </Box>
 
-      <Container maxWidth="xs" className="flex-1 flex flex-col justify-center py-2 sm:py-6 px-4 relative z-10">
+      <Container maxWidth="xs" className={styles.container}>
         <Box className={styles.animateSlideUp}>
-          <Card
-            elevation={0}
-            className="bg-(--app-surface) border border-(--app-border) overflow-hidden rounded-2xl sm:rounded-2xl shadow-[0_30px_70px_-20px_rgba(0,0,0,0.18)] relative"
-          >
+          <Card elevation={0} className={styles.card}>
             <Box className={styles.cardShine} />
 
-            <Box className="pt-8 pb-5 px-6 text-center bg-linear-to-b from-(--app-surface-alt)/40 to-transparent">
-              <Box className="inline-flex items-center justify-center mb-4 relative">
-                <Box
-                  className={clsx(
-                    styles.animateSuccessPop,
-                    "w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-full bg-(--app-surface) flex items-center justify-center border-[3px] border-[#10b981] relative z-10 shadow-[0_8px_24px_rgba(16,185,129,0.2)]",
-                  )}
-                >
-                  <CheckCircleIcon className="text-[#10b981] text-[32px] sm:text-[38px]" />
+            <Box className={styles.cardHeader}>
+              <Box className={styles.iconWrapper}>
+                <Box className={`${styles.animateSuccessPop} ${styles.iconCircle}`}>
+                  <CheckCircleIcon className={styles.checkIcon} />
                 </Box>
+                <Box className={`${styles.animateSuccessRing} ${styles.ringAbs}`} />
                 <Box
-                  className={clsx(
-                    "absolute border-2 border-[#10b981] rounded-full -inset-1",
-                    styles.animateSuccessRing,
-                  )}
-                />
-                <Box
-                  className={clsx("absolute border border-[#10b981] rounded-full -inset-1", styles.animateSuccessRing)}
+                  className={`${styles.animateSuccessRing} ${styles.ringAbs}`}
                   style={{ animationDelay: "0.7s" }}
                 />
               </Box>
 
-              <Typography
-                variant="h5"
-                className="font-black text-(--app-text) mb-1 tracking-tight text-[20px] sm:text-[24px] tracking-[-0.02em]"
-              >
+              <Typography variant="h5" className={styles.confirmedTitle}>
                 Booking Confirmed
               </Typography>
-              <Typography className="text-(--app-muted) text-[11px] font-bold uppercase tracking-widest opacity-60">
+              <Typography className={styles.thankyouText}>
                 Thank you for choosing {displaySalon?.name || "us"}!
               </Typography>
             </Box>
 
-            <Divider className="!border-(--app-border) opacity-30" />
+            <Divider sx={{ borderColor: "var(--color-hairline)", opacity: 0.3 }} />
 
-            <Box className="p-5 flex items-center gap-4">
+            <Box className={styles.salonRow}>
               <Avatar
                 src={displaySalon?.logo}
-                className="!w-[44px] !h-[44px] !bg-(--app-surface-alt) !border-[1.5px] !border-(--app-border) shrink-0"
+                sx={{
+                  width: 44,
+                  height: 44,
+                  bgcolor: "var(--bg-surface-container-low)",
+                  border: "1.5px solid var(--color-hairline)",
+                  flexShrink: 0,
+                }}
               >
                 {displaySalon?.name?.charAt(0) || "S"}
               </Avatar>
-              <Box className="min-w-0 flex-1 text-left">
-                <Typography className="font-black text-[16px] sm:text-[17px] text-(--app-text) leading-tight mb-0.5 truncate">
+              <Box className={styles.salonInfo}>
+                <Typography className={styles.salonName}>
                   {displaySalon?.name || "Salon App"}
                 </Typography>
-                <Box className="flex items-start gap-1 opacity-70">
-                  <LocationOnIcon className="text-[13px] text-(--app-primary) mt-[1px]" />
-                  <Typography className="text-[10px] sm:text-[11px] text-(--app-muted) font-semibold leading-tight line-clamp-1">
+                <Box className={styles.addressRow}>
+                  <LocationOnIcon sx={{ fontSize: 13, color: "var(--color-primary)", mt: "1px" }} />
+                  <Typography className={styles.addressText}>
                     {displaySalon?.address || "Address in booking history"}
                   </Typography>
                 </Box>
               </Box>
             </Box>
 
-            <Box className="px-5">
-              <Divider className="!border-(--app-border) opacity-20" />
+            <Box className={styles.dividerPad}>
+              <Divider sx={{ borderColor: "var(--color-hairline)", opacity: 0.2 }} />
             </Box>
 
-            <Box className="p-5 grid grid-cols-2 gap-4">
-              <Box className="text-left">
-                <Typography className="text-[9px] font-black uppercase tracking-widest text-(--app-muted) opacity-40 mb-1">
-                  Appointment
-                </Typography>
-                <Typography className="font-bold text-[13px] text-(--app-text)">{dateStr}</Typography>
+            <Box className={styles.dateTimeGrid}>
+              <Box>
+                <Typography className={styles.gridLabel}>Appointment</Typography>
+                <Typography className={styles.gridValue}>{dateStr}</Typography>
               </Box>
-              <Box className="text-right">
-                <Typography className="text-[9px] font-black uppercase tracking-widest text-(--app-muted) opacity-40 mb-1">
-                  Timing
-                </Typography>
-                <Typography className="font-bold text-[13px] text-(--app-text)">{timeStr}</Typography>
+              <Box sx={{ textAlign: "right" }}>
+                <Typography className={styles.gridLabel}>Timing</Typography>
+                <Typography className={styles.gridValue}>{timeStr}</Typography>
               </Box>
             </Box>
 
-            <Box className="px-5 pb-5">
-              <Box className="bg-(--app-primary)/5 p-3.5 rounded-2xl border border-(--app-primary)/10 flex gap-3 items-start">
-                <InfoOutlinedIcon className="text-[18px] text-(--app-primary) mt-[2px]" />
-                <Typography className="text-[11px] font-medium text-(--app-text) leading-normal opacity-80 text-left">
+            <Box className={styles.infoPad}>
+              <Box className={styles.infoBox}>
+                <InfoOutlinedIcon sx={{ fontSize: 18, color: "var(--color-primary)", mt: "2px" }} />
+                <Typography className={styles.infoText}>
                   Please arrive 10 mins early. Manage your booking in profile.
                 </Typography>
               </Box>
             </Box>
 
-            <Box className="p-5 bg-(--app-surface-alt)/40 flex flex-col gap-2 border-t border-(--app-border)">
-              <Box className="flex items-center justify-between">
-                <Typography className="text-[10px] font-black text-(--app-muted) uppercase tracking-wider">
-                  Amount Paid Online
-                </Typography>
-                <Typography className="text-[18px] sm:text-[22px] font-black text-(--app-primary) flex items-center leading-none">
-                  <CurrencyRupeeIcon className="text-[14px] -mr-[2px]" />
+            <Box className={styles.paymentSummary}>
+              <Box className={styles.paymentRow}>
+                <Typography className={styles.paymentLabel}>Amount Paid Online</Typography>
+                <Typography className={styles.paymentAmountOnline}>
+                  <CurrencyRupeeIcon sx={{ fontSize: 14, marginRight: "-2px" }} />
                   {booking.amount_paid_online ?? booking.deposit_amount ?? 0}
                 </Typography>
               </Box>
-              <Box className="flex items-center justify-between">
-                <Typography className="text-[10px] font-black text-(--app-muted) uppercase tracking-wider">
-                  To Pay at Venue
-                </Typography>
-                <Typography className="text-[18px] sm:text-[22px] font-black text-(--app-text) flex items-center leading-none">
-                  <CurrencyRupeeIcon className="text-[14px] -mr-[2px]" />
+              <Box className={styles.paymentRow}>
+                <Typography className={styles.paymentLabel}>To Pay at Venue</Typography>
+                <Typography className={styles.paymentAmountVenue}>
+                  <CurrencyRupeeIcon sx={{ fontSize: 14, marginRight: "-2px" }} />
                   {booking.total_price - (booking.amount_paid_online ?? booking.deposit_amount ?? 0)}
                 </Typography>
               </Box>
             </Box>
           </Card>
 
-          <Box className="mt-6 sm:mt-10 space-y-3 px-1">
+          <Box className={styles.ctaGroup}>
             <Button
               fullWidth
               variant="contained"
               size="large"
               onClick={() => handleNavigateAway("/bookings")}
-              className="!rounded-2xl !py-3.5 sm:!py-4 !font-black !text-[14px] !normal-case !shadow-[0_10px_25px_-5px_rgba(var(--app-primary-rgb),0.4)] hover:!-translate-y-0.5 !transition-transform !duration-200"
+              sx={{
+                borderRadius: "1rem",
+                py: 1.75,
+                fontWeight: 900,
+                fontSize: 14,
+                textTransform: "none",
+              }}
             >
               View My Bookings
             </Button>
@@ -225,7 +212,22 @@ const BookingSuccess: React.FC = () => {
               variant="outlined"
               size="large"
               onClick={() => handleNavigateAway("/")}
-              className="!rounded-2xl !py-3.5 sm:!py-4 !font-extrabold !text-[14px] !normal-case !border-2 !border-(--app-primary) !text-(--app-primary) !bg-(--app-surface) hover:!bg-(--app-surface-alt) hover:!-translate-y-0.5 !transition-all !duration-200"
+              sx={{
+                borderRadius: "1rem",
+                py: 1.75,
+                fontWeight: 800,
+                fontSize: 14,
+                textTransform: "none",
+                borderWidth: 2,
+                borderColor: "var(--color-primary)",
+                color: "var(--color-primary)",
+                bgcolor: "var(--bg-surface)",
+                "&:hover": {
+                  bgcolor: "var(--bg-surface-container-low)",
+                  transform: "translateY(-2px)",
+                },
+                transition: "all 0.2s",
+              }}
             >
               Back to Salon Storefront
             </Button>

@@ -1,0 +1,32 @@
+.dialogTitle {
+  color: var(--app-text) !important;
+}
+
+.contentBody {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.semiboldText {
+  font-weight: 600;
+}
+
+.mutedText {
+  margin-top: 0.25rem !important;
+  color: var(--app-muted) !important;
+}
+
+.salonNameText {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.divider {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  border-color: var(--app-border) !important;
+}
+
+.arrowIcon {
+  margin-right: 0.375rem;
+}

@@ -12,6 +12,7 @@ export interface ServiceCardProps {
   isSubAdded?: (subId: string) => boolean;
   onToggleCart?: (item: any) => void;
   assignedStaff?: any;
+  loadingIds?: string[];
   className?: string;
 }
 
@@ -22,6 +23,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   isSubAdded,
   onToggleCart,
   assignedStaff,
+  loadingIds = [],
   className,
 }) => {
   const [expanded, setExpanded] = useState(true);
@@ -40,46 +42,46 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   return (
     <article
       className={clsx(
-        "flex flex-col justify-between bg-(--bg-surface-container-lowest) rounded-[4px] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(28,26,23,0.06)] border border-(--color-hairline)",
-        selectedSubCount > 0 ? "border-(--color-secondary) ring-1 ring-(--color-secondary)" : "hover:border-(--color-bronze-accent)/50",
+        styles.card,
+        selectedSubCount > 0 ? styles.cardWithSelected : styles.cardDefaultHover,
         className
       )}
     >
-      <div className="relative w-full h-56 bg-(--bg-surface-container) overflow-hidden group">
+      <div className={styles.mediaWrapper}>
         {imageSrc ? (
           <Image
             src={imageSrc}
             alt={service.name || "Service Treatment"}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className={styles.serviceImage}
             unoptimized
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-(--bg-surface-container) text-(--color-on-surface) font-serif p-4 text-center">
-            <span className="text-3xl font-normal tracking-widest">{service.name?.[0] || "S"}</span>
-            <span className="text-[10px] tracking-[0.15em] font-sans text-(--color-tertiary) uppercase mt-1">ATELIER RITUAL</span>
+          <div className={styles.fallbackContainer}>
+            <span className={styles.fallbackLetter}>{service.name?.[0] || "S"}</span>
+            <span className={styles.fallbackSubtext}>ATELIER RITUAL</span>
           </div>
         )}
 
-        <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-          <span className="px-3 py-1 bg-(--bg-surface-container-lowest)/90 backdrop-blur-sm text-(--color-on-surface) font-sans text-[10px] font-bold uppercase tracking-widest rounded-[4px] border border-(--color-hairline)">
+        <div className={styles.badgeTopLeft}>
+          <span className={styles.chipTag}>
             {service.gender || "Gender Neutral"}
           </span>
-          <span className="px-3 py-1 bg-(--bg-surface-container-lowest)/90 backdrop-blur-sm text-(--color-on-surface) font-sans text-[10px] font-bold uppercase tracking-widest rounded-[4px] border border-(--color-hairline)">
+          <span className={styles.chipTag}>
             {service.duration || 60} Min
           </span>
         </div>
 
-        <div className="absolute bottom-4 right-4 px-4 py-1.5 bg-(--color-primary) text-(--color-on-primary) font-serif text-lg font-bold rounded-[4px] shadow-sm z-10">
+        <div className={styles.badgeBottomRight}>
           {service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`}
         </div>
       </div>
 
-      <div className="p-6 flex-1 flex flex-col justify-between">
-        <div className="space-y-2">
-          <h2 className="font-serif text-xl sm:text-2xl text-(--color-on-surface) font-medium leading-snug tracking-tight capitalize">
-            <EllipsisCell value={service.name} maxLines={2} maxChars={30} />
+      <div className={styles.bodyContent}>
+        <div className={styles.headerInfo}>
+          <h2 className={styles.serviceTitle}>
+            <EllipsisCell value={service.name} maxLines={2} maxChars={30} className="capitalize" />
           </h2>
           <EllipsisCell
             value={
@@ -88,75 +90,80 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             }
             maxLines={3}
             maxChars={120}
-            className="font-sans text-xs text-(--color-on-surface-variant) leading-relaxed"
+            className={styles.serviceDescription}
           />
         </div>
 
         {hasSubServices ? (
-          <div className="mt-4 pt-4 bg-(--bg-surface-container-low) p-4 rounded-[4px] space-y-3 border border-(--color-hairline)/60">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-(--color-secondary)">
-                BOOKABLE SUB-SERVICES ({subServices.length})
-              </span>
+          <div className={styles.subServicesSection}>
+            <div className={styles.subServicesHeader}>
+              <div>
+                <span className={styles.subServicesTitle}>
+                  BOOKABLE SUB-SERVICES ({subServices.length})
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="text-[10px] font-bold text-(--color-outline) hover:text-(--color-on-surface) bg-transparent border-0 cursor-pointer uppercase transition-colors"
+                className={styles.toggleExpandBtn}
               >
-                {selectedSubCount > 0 ? `${selectedSubCount} selected` : expanded ? "Hide" : "Show All"}
+                {expanded ? "Hide" : "Show All"}
               </button>
             </div>
 
             {expanded && (
-              <div className="space-y-2 pt-1">
+              <div className={styles.subServicesList}>
                 {subServices.map((sub: any) => {
                   const subAdded = checkSubAdded(sub);
+                  const subId = sub.uuid || sub.id;
+                  const isSubLoading = loadingIds.includes(subId);
                   return (
                     <div
-                      key={sub.uuid || sub.id}
+                      key={subId}
                       className={clsx(
-                        "flex items-center justify-between p-3 rounded-[4px] border transition-all",
-                        subAdded
-                          ? "bg-(--bg-surface-container-lowest) border-(--color-secondary) shadow-xs"
-                          : "bg-(--bg-surface-container-lowest) hover:bg-(--bg-surface-container) border-(--color-hairline)"
+                        styles.subServiceItem,
+                        subAdded ? styles.subServiceItemActive : styles.subServiceItemDefault
                       )}
                     >
-                      <div className="min-w-0 flex-1 mr-3">
-                        <div className="flex items-center gap-2">
-                          <span className="font-sans text-xs font-semibold text-(--color-on-surface) capitalize truncate">
-                            {sub.name}
-                          </span>
+                      <div className={styles.subServiceInfo}>
+                        <div className={styles.subServiceNameRow}>
+                          <EllipsisCell value={sub.name} maxChars={10} className={styles.subServiceName} />
                           {sub.duration && (
-                            <span className="text-[10px] font-sans text-(--color-outline) bg-(--bg-surface-container-high) px-1.5 py-0.5 rounded-[2px] shrink-0">
-                              {sub.duration} min
-                            </span>
+                            <EllipsisCell value={`${sub.duration} min`} maxChars={10} className={styles.subServiceDuration} />
                           )}
                         </div>
                         {sub.description && (
-                          <p className="text-[11px] text-(--color-on-surface-variant) font-sans mt-0.5 line-clamp-1">
-                            {sub.description}
-                          </p>
+                          <EllipsisCell value={sub.description} maxChars={10} className={styles.subServiceDesc} />
                         )}
                       </div>
 
-                      <div className="flex items-center gap-3 shrink-0">
-                        <span className="font-sans text-xs font-bold text-(--color-secondary)">
+                      <div className={styles.subServiceActions}>
+                        <span className={styles.subServicePrice}>
                           ₹{sub.price}
                         </span>
                         <button
                           type="button"
+                          disabled={isSubLoading}
                           onClick={() => onToggleCart?.(sub)}
                           className={clsx(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-[4px] font-sans text-[10px] font-semibold uppercase tracking-wider transition-all cursor-pointer border-0",
-                            subAdded
-                              ? "bg-(--color-secondary) text-(--color-on-secondary)"
-                              : "bg-(--color-primary) hover:bg-(--color-on-surface-variant) text-(--color-on-primary)"
+                            styles.subServiceBtn,
+                            isSubLoading && styles.subServiceBtnDisabled,
+                            subAdded ? styles.subServiceBtnBooked : styles.subServiceBtnAdd
                           )}
                         >
-                          <span className="material-symbols-outlined text-[14px]">
-                            {subAdded ? "check" : "add"}
-                          </span>
-                          <span>{subAdded ? "BOOKED" : "ADD"}</span>
+                          {isSubLoading ? (
+                            <>
+                              <span className={styles.spinner} />
+                              <span>{subAdded ? "REMOVING..." : "ADDING..."}</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className={`material-symbols-outlined ${styles.subServiceBtnIcon}`}>
+                                {subAdded ? "check" : "add"}
+                              </span>
+                              <span>{subAdded ? "BOOKED" : "ADD"}</span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
@@ -166,14 +173,14 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             )}
           </div>
         ) : (
-          <div className="mt-4 pt-3 text-xs text-(--color-outline) italic">
+          <div className={styles.emptySubServices}>
             No sub-services available for this category.
           </div>
         )}
 
-        <div className="mt-6 pt-3 flex items-center justify-between gap-4 border-t border-(--color-hairline)">
-          <div className="text-xs text-(--color-outline)">
-            <strong className="font-semibold text-(--color-on-surface)">Atelier Guarantee:</strong> Full consultation included
+        <div className={styles.footerBar}>
+          <div className={styles.guaranteeText}>
+            <strong className={styles.guaranteeStrong}>Atelier Guarantee:</strong> Full consultation included
           </div>
 
           {hasSubServices ? (
@@ -181,41 +188,47 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
               type="button"
               onClick={() => setExpanded(!expanded)}
               className={clsx(
-                "flex items-center gap-2 px-4 py-2.5 rounded-[4px] font-sans text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer border shrink-0",
-                selectedSubCount > 0
-                  ? "bg-(--color-secondary) text-(--color-on-secondary) border-(--color-secondary)"
-                  : "bg-(--bg-surface-container) hover:bg-(--bg-surface-container-high) text-(--color-on-surface) border-(--color-hairline)"
+                styles.footerOptionsBtn,
+                selectedSubCount > 0 ? styles.footerOptionsBtnSelected : styles.footerOptionsBtnDefault
               )}
             >
-              <span className="material-symbols-outlined text-[16px]">
-                {selectedSubCount > 0 ? "task_alt" : expanded ? "expand_less" : "expand_more"}
+              <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>
+                {expanded ? "expand_less" : "expand_more"}
               </span>
-              <span>
-                {selectedSubCount > 0
-                  ? `${selectedSubCount} SUB-SERVICE${selectedSubCount > 1 ? "S" : ""} BOOKED`
-                  : expanded
-                  ? "HIDE OPTIONS"
-                  : "SELECT SUB-SERVICE"}
-              </span>
+              <span>{expanded ? "HIDE OPTIONS" : "SHOW OPTIONS"}</span>
+              {selectedSubCount > 0 && (
+                <span className={styles.footerOptionsCount}>
+                  {selectedSubCount}
+                </span>
+              )}
             </button>
           ) : service.parent_id !== null ? (
             <button
               type="button"
+              disabled={loadingIds.includes(service.uuid || service.id)}
               onClick={() => onToggleCart?.(service)}
               className={clsx(
-                "flex items-center gap-2 px-5 py-3 rounded-[4px] font-sans text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer border-0 shrink-0",
-                isAdded
-                  ? "bg-(--color-secondary) text-(--color-on-secondary) shadow-xs"
-                  : "bg-(--color-primary) hover:bg-(--color-on-surface-variant) text-(--color-on-primary)"
+                styles.footerReserveBtn,
+                loadingIds.includes(service.uuid || service.id) && styles.footerReserveBtnDisabled,
+                isAdded ? styles.footerReserveBtnReserved : styles.footerReserveBtnAdd
               )}
             >
-              <span className="material-symbols-outlined text-[18px]">
-                {isAdded ? "check" : "calendar_today"}
-              </span>
-              <span>{isAdded ? "RESERVED" : "ADD TO BOOKING"}</span>
+              {loadingIds.includes(service.uuid || service.id) ? (
+                <>
+                  <span className={`${styles.spinner} ${styles.spinnerLg}`} />
+                  <span>{isAdded ? "REMOVING..." : "ADDING..."}</span>
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
+                    {isAdded ? "check" : "calendar_today"}
+                  </span>
+                  <span>{isAdded ? "RESERVED" : "ADD TO BOOKING"}</span>
+                </>
+              )}
             </button>
           ) : (
-            <span className="text-[11px] font-semibold text-(--color-outline) uppercase tracking-wider">
+            <span className={styles.selectSubPrompt}>
               SELECT A SUB-SERVICE ABOVE
             </span>
           )}

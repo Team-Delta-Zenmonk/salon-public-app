@@ -11,8 +11,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
+import CustomSelect from "@/components/custom-select";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { useDownloadInvoice } from "../../features/customer-booking/hooks/use-download-invoice";
+import styles from "./bookings.module.css";
 
 const WEBHOOK_SETTLE_DELAY_MS = 3000;
 
@@ -132,7 +134,7 @@ export default function Bookings() {
   const renderBookingList = () => {
     if (isLoading) {
       return (
-        <Box className="space-y-4">
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <BookingSkeleton />
           <BookingSkeleton />
           <BookingSkeleton />
@@ -158,11 +160,11 @@ export default function Bookings() {
     }
 
     return (
-      <div className="py-20 text-center bg-[#FCFAF7] rounded-[2px] border border-[#E5DFD5] border-dashed p-8">
-        <p className="font-serif text-2xl font-medium text-[#1C1A17] mb-2">
+      <div className={styles.emptyState}>
+        <p className={styles.emptyTitle}>
           No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} reservations found
         </p>
-        <p className="font-sans text-xs text-[#766A5E]">
+        <p className={styles.emptySub}>
           {tabValue === 0
             ? "Reserve your first haute salon ceremony!"
             : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} dossier is empty.`}
@@ -172,31 +174,50 @@ export default function Bookings() {
   };
 
   return (
-    <Box className="min-h-screen bg-[#FCF9F3] text-[#1C1C18] py-10 font-sans">
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 md:px-12 space-y-8">
-        <section className="relative overflow-hidden rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5] p-6 md:p-8">
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-[#735A37] font-sans text-[10px] font-semibold uppercase tracking-[0.14em]">
+    <Box className={styles.bookingsPage}>
+      <main className={styles.mainContainer}>
+        <section className={styles.heroHeader}>
+          <div className={styles.heroFlex}>
+            <div className={styles.headerTitleGroup}>
+              <div className={styles.breadcrumb}>
                 <span>CLIENT SUITE</span>
-                <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>chevron_right</span>
                 <span>RESERVATION DOSSIER</span>
               </div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="font-serif text-3xl sm:text-4xl text-[#1C1A17] font-normal">
-                  My Dossier & Ceremonies
+              <div className={styles.titleRow}>
+                <h1 className={styles.mainTitle}>
+                  My Dossier &amp; Ceremonies
                 </h1>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5] text-[#1C1A17] font-sans text-[10px] font-semibold uppercase tracking-wider">
-                  <span className="material-symbols-outlined text-[14px] text-[#A88B64]">verified</span>
+                <span className={styles.badge}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "14px", color: "var(--color-bronze-accent)" }}>verified</span>
                   MASTER GUARANTEE
                 </span>
               </div>
-              <p className="font-sans text-xs text-[#766A5E] max-w-2xl leading-relaxed">
+              <p className={styles.subtitle}>
                 Curated historical archive of your luxury salon appointments, treatments, and invoice receipts.
               </p>
             </div>
 
-            <div className="flex items-center self-start md:self-center bg-[#FCFAF7] p-1 rounded-[2px] border border-[#E5DFD5] flex-wrap gap-1">
+            <div className={styles.mobileSelectWrapper}>
+              <CustomSelect
+                label="Status:"
+                value={tabValue}
+                options={[
+                  { id: 0, label: "ALL" },
+                  { id: 1, label: "PENDING" },
+                  { id: 2, label: "CONFIRMED" },
+                  { id: 3, label: "CANCELLED" },
+                  { id: 4, label: "EXPIRED" },
+                ]}
+                onChange={(val) => setTabValue(Number(val))}
+                buttonSize="md"
+                maxChars={15}
+                menuMaxChars={18}
+                menuWidth={180}
+              />
+            </div>
+
+            <div className={styles.tabGroup}>
               {[
                 { label: "ALL", idx: 0 },
                 { label: "PENDING", idx: 1 },
@@ -208,11 +229,7 @@ export default function Bookings() {
                   key={tab.idx}
                   type="button"
                   onClick={() => setTabValue(tab.idx)}
-                  className={`px-3.5 py-2 rounded-[2px] font-sans text-[11px] font-semibold tracking-wider transition-all border-0 cursor-pointer ${
-                    tabValue === tab.idx
-                      ? "bg-[#1C1A17] text-[#FCFAF7]"
-                      : "text-[#766A5E] hover:text-[#1C1A17] bg-transparent"
-                  }`}
+                  className={`${styles.tabBtn} ${tabValue === tab.idx ? styles.tabBtnActive : ""}`}
                 >
                   {tab.label}
                 </button>
@@ -221,21 +238,21 @@ export default function Bookings() {
           </div>
         </section>
 
-        <div className="w-full">
+        <div className={styles.listContainer}>
           <InfiniteScroll
             dataLength={bookings.length}
             next={fetchMoreData}
             hasMore={total > 0 && bookings.length < total}
             loader={
-              <Box className="mt-4 space-y-4">
+              <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                 <BookingSkeleton />
                 <BookingSkeleton />
               </Box>
             }
             endMessage={
               bookings.length > 0 && !isLoading ? (
-                <Box className="pb-4 pt-6 text-center">
-                  <Typography variant="body2" className="text-[10px] text-[#766A5E] font-sans uppercase tracking-[0.14em] font-semibold">
+                <Box className={styles.endMessage}>
+                  <Typography variant="body2" className={styles.endMessageText}>
                     End of {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} ceremonies
                   </Typography>
                 </Box>
@@ -243,7 +260,7 @@ export default function Bookings() {
             }
           >
             {renderBookingList()}
-            {!isLoading && bookings.length > 0 && bookings.length < total && <Box className="h-6 w-full" />}
+            {!isLoading && bookings.length > 0 && bookings.length < total && <Box sx={{ height: 24, width: "100%" }} />}
           </InfiniteScroll>
 
           <ConfirmationDialog

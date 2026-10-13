@@ -14,7 +14,6 @@ export default function AuthSync() {
 
   const prevAuthRef = useRef<boolean>(false);
 
-  // Initialize guest cart on client mount
   useEffect(() => {
     dispatch(initializeGuestCart());
   }, [dispatch]);

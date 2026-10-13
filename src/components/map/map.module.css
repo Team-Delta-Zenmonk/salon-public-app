@@ -1,0 +1,16 @@
+.skeleton {
+  width: 100% !important;
+  border-radius: 0.5rem !important;
+}
+
+.mapWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mapLabel {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

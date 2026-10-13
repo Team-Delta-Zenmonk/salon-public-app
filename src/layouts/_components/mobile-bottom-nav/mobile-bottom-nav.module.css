@@ -1,0 +1,44 @@
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background-color: var(--app-surface);
+  border-top: 1px solid var(--app-border);
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+.actionItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--app-muted);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.actionItemSelected {
+  color: var(--app-primary) !important;
+  font-weight: 600;
+}
+
+.actionIcon {
+  font-size: 1.25rem;
+  color: var(--app-muted);
+}
+
+.actionItemSelected .actionIcon {
+  color: var(--app-primary) !important;
+}
+
+.badge :global(.MuiBadge-badge) {
+  font-weight: 700;
+  background-color: var(--app-primary);
+  color: #ffffff;
+}

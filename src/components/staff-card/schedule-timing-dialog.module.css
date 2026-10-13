@@ -1,0 +1,231 @@
+.dialogPaper {
+  border-radius: var(--app-radius, 8px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  box-shadow: 0 25px 50px -12px var(--app-shadow-base, rgba(0, 0, 0, 0.25)) !important;
+}
+
+.backdrop {
+  backdrop-filter: blur(4px) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.dialogTitle {
+  padding: 1.25rem 1.25rem 0.75rem 1.25rem !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid var(--app-border) !important;
+}
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.iconCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: var(--app-primary-soft);
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.timeIcon {
+  font-size: 20px !important;
+}
+
+.titleHeading {
+  font-family: var(--app-font-serif, serif) !important;
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text) !important;
+  line-height: 1.25 !important;
+}
+
+.specialistName {
+  font-size: 0.75rem;
+  color: var(--app-muted);
+  margin-top: 0.125rem;
+  text-transform: capitalize;
+}
+
+.closeButton {
+  color: var(--app-muted) !important;
+  border-radius: 9999px !important;
+  padding: 0.375rem !important;
+  transition: all 150ms ease !important;
+}
+
+.closeButton:hover {
+  color: var(--app-text) !important;
+  background-color: var(--app-surface-alt) !important;
+}
+
+.closeIcon {
+  font-size: 18px !important;
+}
+
+.dialogContent {
+  padding: 1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.625rem !important;
+}
+
+@media (min-width: 640px) {
+  .dialogContent {
+    padding: 1.25rem !important;
+  }
+}
+
+.sectionSubtitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--app-muted);
+  padding-left: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.daysList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dayRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--app-radius, 4px);
+  border: 1px solid;
+  transition: all 150ms ease;
+}
+
+.dayRowNotWorking {
+  opacity: 0.45;
+  background-color: var(--app-surface-alt);
+  border-color: var(--app-border);
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.dayRowToday {
+  background-color: var(--app-primary-soft);
+  border-color: var(--app-primary);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dayRowWorking {
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+.dayRowWorking:hover {
+  border-color: var(--app-primary);
+}
+
+.dayLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.statusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.dotNotWorking {
+  background-color: var(--app-muted);
+  opacity: 0.4;
+}
+
+.dotToday {
+  background-color: var(--app-primary);
+}
+
+.dotWorking {
+  background-color: #10B981;
+}
+
+.dayNameNotWorking {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--app-muted);
+  text-decoration: line-through;
+}
+
+.dayNameToday {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--app-primary);
+}
+
+.dayNameWorking {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--app-text);
+}
+
+.todayTag {
+  margin-left: 0.5rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.125rem 0.375rem;
+  border-radius: 2px;
+  background-color: var(--app-primary-soft);
+  color: var(--app-primary);
+}
+
+.dayRight {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-align: right;
+}
+
+.checkIcon {
+  font-size: 14px !important;
+  color: #059669 !important;
+  flex-shrink: 0 !important;
+}
+
+.timeText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.busyIcon {
+  font-size: 14px !important;
+  color: var(--app-muted) !important;
+  flex-shrink: 0 !important;
+}
+
+.notWorkingText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--app-muted);
+  font-style: italic;
+}

@@ -7,7 +7,7 @@ export default function SalonSignUpPage() {
   return (
     <Suspense
       fallback={
-        <Box className="min-h-[50vh] flex items-center justify-center">
+        <Box sx={{ minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <CircularProgress size={32} />
         </Box>
       }

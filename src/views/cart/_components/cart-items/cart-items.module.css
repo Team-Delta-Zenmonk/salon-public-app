@@ -77,6 +77,9 @@
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .staffCard {
@@ -89,8 +92,9 @@
   padding: 0.5rem 0.75rem;
   min-width: 5.5rem;
   border: 1px solid var(--app-border, rgba(0, 0, 0, 0.12));
-  background-color: var(--app-surface-alt, #faf8f5);
+  background-color: var(--app-surface, #ffffff);
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .staffCardSelected {
@@ -150,4 +154,155 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--app-text, #18181b);
+}
+
+.itemCard {
+  background-color: var(--app-surface, #ffffff);
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.itemTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .itemTop {
+    gap: 1.5rem;
+  }
+}
+
+.serviceAvatar {
+  border-radius: 0.75rem !important;
+  flex-shrink: 0;
+  width: 4rem !important;
+  height: 4rem !important;
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  background-color: var(--app-surface-alt, #faf8f5) !important;
+}
+
+@media (min-width: 640px) {
+  .serviceAvatar {
+    width: 5rem !important;
+    height: 5rem !important;
+  }
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  min-width: 0;
+}
+
+.metaDuration {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, #71717a) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metaDot {
+  margin: 0 0.5rem;
+  color: var(--app-muted, #71717a);
+}
+
+.assignedStaffChip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.assignedStaffAvatar {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  font-size: 10px !important;
+  border: 1px solid var(--app-primary, #18181b) !important;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+.assignedStaffName {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--app-text, #18181b);
+  text-transform: capitalize;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.itemPrice {
+  font-family: var(--app-font-serif, serif);
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, #18181b) !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+.staffSection {
+  border-top: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  padding: 1rem 1.25rem;
+  background-color: var(--app-surface-alt, #faf8f5);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.staffHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.staffLabel {
+  color: var(--app-muted, #71717a) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  font-size: 0.625rem !important;
+}
+
+.staffAssigned {
+  color: var(--app-primary, #18181b) !important;
+  font-weight: 600 !important;
+  font-size: 0.625rem !important;
 }

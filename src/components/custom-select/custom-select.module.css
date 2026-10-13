@@ -1,0 +1,131 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+  background-color: var(--app-surface) !important;
+  border: 1px solid var(--app-border) !important;
+  border-radius: var(--app-radius, 4px) !important;
+  height: 2.75rem;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--app-text) !important;
+}
+
+.buttonSm {
+  height: 2.5rem;
+}
+
+.buttonMd {
+  height: 2.75rem;
+}
+
+.buttonLg {
+  height: 3rem;
+}
+
+.buttonRounded4 {
+  border-radius: 4px !important;
+}
+
+.button:hover {
+  border-color: var(--app-primary) !important;
+  background-color: var(--app-surface-alt) !important;
+}
+
+.label {
+  font-family: var(--app-font-family, sans-serif);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--app-muted) !important;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: 0.375rem;
+}
+
+.value {
+  font-size: 0.75rem;
+  color: var(--app-text) !important;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-size: 1.125rem;
+  color: var(--app-muted) !important;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.button:hover .icon {
+  color: var(--app-text) !important;
+}
+
+.menuPaper {
+  margin-top: 0.25rem;
+  border-radius: var(--app-radius, 4px) !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  max-height: 15rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2) !important;
+  padding: 0.25rem !important;
+}
+
+.menuItem {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-family: var(--app-font-family, sans-serif) !important;
+  color: var(--app-text) !important;
+  border-radius: var(--app-radius, 2px) !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.menuItem:hover {
+  background-color: var(--app-surface-alt) !important;
+  color: var(--app-text) !important;
+}
+
+.menuItemSelected {
+  background-color: var(--app-primary) !important;
+  color: var(--app-surface) !important;
+  font-weight: 600 !important;
+}
+
+.menuItemSelected:hover {
+  background-color: var(--app-primary) !important;
+  opacity: 0.95 !important;
+}
+
+.valueText {
+  font-size: 0.75rem;
+  color: var(--app-text) !important;
+  font-weight: 600;
+}
+
+.valueRight {
+  justify-content: flex-end;
+  text-align: right;
+  margin-right: 0.5rem;
+}
+
+.valueTextRight {
+  text-align: right;
+  margin-left: auto;
+}
+
+.menuItemRight {
+  justify-content: flex-end !important;
+  text-align: right !important;
+}

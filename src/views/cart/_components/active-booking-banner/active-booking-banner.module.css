@@ -97,3 +97,36 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
+.bannerActive {
+  border-color: var(--app-primary);
+  background-color: var(--app-surface);
+  box-shadow: 0 4px 20px var(--app-primary-soft);
+}
+
+.bannerExpired {
+  border-color: var(--app-border);
+  background-color: var(--app-surface-alt);
+  opacity: 0.75;
+}
+
+.cancelBtnText {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--app-muted) !important;
+}
+
+.continueBtnText {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--app-primary-contrast) !important;
+}
+
+.btnDisabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btnDisabledCursor {
+  cursor: default;
+}

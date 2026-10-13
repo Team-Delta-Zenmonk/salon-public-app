@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import EllipsisCell from "../../components/ellipse-cell";
+import styles from "./about.module.css";
 
 export default function AboutPage() {
   const { salon } = useStorefront();
@@ -64,216 +65,216 @@ export default function AboutPage() {
     )}`;
 
   return (
-    <Box className="bg-background text-on-surface min-h-screen">
-      <main className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-16 sm:pb-24 space-y-8 sm:space-y-12">
-        <section className="pt-8 pb-4 space-y-4">
-          <div className="flex items-center gap-2 text-on-surface-variant font-label-caps text-xs tracking-widest uppercase">
+    <Box className={styles.pageContainer}>
+      <div className={styles.mainContent}>
+        <section className={styles.heroSection}>
+          <div className={styles.breadcrumbRow}>
             <span>HOME</span>
-            <span className="text-outline-variant">/</span>
+            <span className={styles.breadcrumbDivider}>/</span>
             <span>ATELIER</span>
-            <span className="text-outline-variant">/</span>
-            <span className="text-primary font-semibold">ABOUT & LOCATION</span>
+            <span className={styles.breadcrumbDivider}>/</span>
+            <span className={styles.breadcrumbActive}>ABOUT & LOCATION</span>
           </div>
 
-          <div className="max-w-4xl space-y-3">
-            <h1 className="font-editorial text-3xl sm:text-5xl lg:text-6xl text-on-surface tracking-tight font-bold leading-[1.1]">
+          <div className={styles.heroHeadingWrapper}>
+            <h1 className={styles.heroHeading}>
               The Sanctuary of Architectural Coiffure & Dermal Mastery
             </h1>
-            <EllipsisCell value={displayAbout} className="font-body-md text-base sm:text-lg text-on-surface-variant max-w-3xl leading-relaxed" maxChars={200} maxLines={5} />
+            <EllipsisCell value={displayAbout} className={styles.heroDescription} maxChars={200} maxLines={5} />
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-(--app-border)/30">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low border border-(--app-border) text-on-surface font-label-md text-xs sm:text-sm">
-              <span className="material-symbols-outlined text-primary text-[18px]">verified</span>
+          <div className={styles.pillsRow}>
+            <div className={styles.pill}>
+              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>verified</span>
               <span>Haute Couture Master Guild</span>
             </div>
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low border border-(--app-border) text-on-surface font-label-md text-xs sm:text-sm">
-              <span className="material-symbols-outlined text-primary text-[18px]">spa</span>
+            <div className={styles.pill}>
+              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>spa</span>
               <span>Bespoke Trichological Spa</span>
             </div>
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-low border border-(--app-border) text-on-surface font-label-md text-xs sm:text-sm">
-              <span className="material-symbols-outlined text-primary text-[18px]">distance</span>
-              <span>{salon?.address || "Flagship Atelier • Bandra West"}</span>
+            <div className={styles.pill}>
+              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>distance</span>
+              <EllipsisCell value={salon?.address || "Flagship Atelier • Bandra West"} maxChars={35} maxLines={1} style={{ textTransform: "capitalize" }} />
             </div>
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-high border border-primary/30 text-primary font-label-md text-xs sm:text-sm">
-              <span className="w-2 h-2 rounded-full bg-primary-container animate-ping" />
+            <div className={`${styles.pill} ${styles.pillActive}`}>
+              <span className={styles.pillPulseDot} />
               <span>Open Now Until 9:30 PM (Salon Soirée)</span>
             </div>
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10">
-          <div className="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
-            <article className="bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 panel-rim p-6 sm:p-8 shadow-xl relative overflow-hidden">
-              <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary-container/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">
+        <section className={styles.gridTwelve}>
+          <div className={styles.columnSix}>
+            <article className={styles.panelCard}>
+              <div className={styles.panelCardGlow} />
+              <div className={styles.panelHeader}>
+                <span className={styles.badgeCaps}>
                   Chapter 01 • Origin & Philosophy
                 </span>
-                <span className="font-label-caps text-xs tracking-widest text-on-surface-variant/70 uppercase">
+                <span className={styles.badgeMuted}>
                   Est. 2018
                 </span>
               </div>
-              <h2 className="font-editorial text-2xl sm:text-3xl text-on-surface mb-4 font-semibold">
+              <h2 className={styles.panelHeading}>
                 Sculpting Silhouette Beyond Convention
               </h2>
-              <div className="space-y-4 font-body-md text-base text-on-surface-variant leading-relaxed">
+              <div className={styles.paragraphGroup}>
                 <p>
-                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} />{" "} was conceived not simply as a salon, but as a sterile, acoustic refuge for intentional self-reinvention. Rooted in Parisian runway ateliers and Japanese meditative scalp baths, every service is an uncompromising ritual balancing precision geometric sectioning with high-potency bio-fermented botanical elixirs.
+                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} style={{ textTransform: "capitalize" }} />{" "} was conceived not simply as a salon, but as a sterile, acoustic refuge for intentional self-reinvention. Rooted in Parisian runway ateliers and Japanese meditative scalp baths, every service is an uncompromising ritual balancing precision geometric sectioning with high-potency bio-fermented botanical elixirs.
                 </p>
                 <p>
                   Our flagship sanctuary features six acoustically isolated suites crafted from blackened cedar, cast bronze, and Italian porphyry stone. Here, urban cacophony dissolves into bespoke aromatic misting, hand-forged Damascus shears, and millimeter-level balance calibrated to each patron’s craniometric posture.
                 </p>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-(--app-border)/30 flex items-start gap-4 bg-surface-container-low p-4 sm:p-5 rounded-xl border border-(--app-border)/20">
-                <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/40 relative">
+              <div className={styles.quoteBox}>
+                <div className={styles.avatarWrapper}>
                   <img
-                    className="w-full h-full object-cover"
+                    className={styles.avatarImg}
                     alt={masterStaffName}
                     src={masterStaffPhoto}
                   />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-editorial italic text-tertiary-fixed text-base sm:text-lg leading-snug mb-2">
+                <div className={styles.quoteContent}>
+                  <p className={styles.quoteText}>
                     “Hair is living sculpture. When we shear a single millimeter, we transform not just the silhouette, but the client’s quietest internal cadence.”
                   </p>
-                  <div className="flex items-center justify-between flex-wrap gap-2 pt-1">
-                    <div>
-                      <EllipsisCell value={masterStaffName} maxChars={20} className="font-title-md text-base sm:text-lg text-on-surface font-semibold capitalize" />
-                      <EllipsisCell value={masterStaffRole} maxChars={20} className="font-body-sm text-xs sm:text-sm text-on-surface-variant capitalize" />
+                  <div className={styles.staffDetailsRow}>
+                    <div className={styles.staffInfoCol}>
+                      <EllipsisCell value={masterStaffName} maxChars={20} className={styles.staffName} />
+                      <EllipsisCell value={masterStaffRole} maxChars={20} className={styles.staffRole} />
                     </div>
-                    <EllipsisCell value={`${masterStaffName[0]}. ${masterStaffName.split(" ")[1] || ""}`} maxChars={100} maxLines={5} className="font-editorial italic text-primary text-xl tracking-wide opacity-90 select-none" />
+                    <EllipsisCell value={`${masterStaffName[0]}. ${masterStaffName.split(" ")[1] || ""}`} maxChars={100} maxLines={5} className={styles.signatureText} />
                   </div>
                 </div>
               </div>
             </article>
 
-            <div className="bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 panel-rim p-6 sm:p-8 shadow-xl">
-              <div className="flex items-center justify-between mb-6">
+            <div className={styles.panelCard}>
+              <div className={styles.panelHeader}>
                 <div>
-                  <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">Hospitality Standard</span>
-                  <h3 className="font-editorial text-2xl text-on-surface mt-1 font-semibold">Bespoke Guest Privileges</h3>
+                  <span className={styles.badgeCaps}>Hospitality Standard</span>
+                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Bespoke Guest Privileges</h3>
                 </div>
-                <span className="material-symbols-outlined text-on-surface-variant text-[28px]">room_service</span>
+                <span className="material-symbols-outlined" style={{ color: "var(--app-muted)", fontSize: "28px" }}>room_service</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">wifi</span>
+              <div className={styles.privilegesGrid}>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>wifi</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">High-Speed Encrypted Wi-Fi</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">Sub-gigabit private guest network</p>
+                    <p className={styles.privilegeTitle}>High-Speed Encrypted Wi-Fi</p>
+                    <p className={styles.privilegeSubtitle}>Sub-gigabit private guest network</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">ac_unit</span>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>ac_unit</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">Clean Air Filtration</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">HEPA-14 medical climate chamber</p>
+                    <p className={styles.privilegeTitle}>Clean Air Filtration</p>
+                    <p className={styles.privilegeSubtitle}>HEPA-14 medical climate chamber</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">local_bar</span>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>local_bar</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">Botanical Sensory Bar</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">Vintage Blanc de Blancs & adaptogens</p>
+                    <p className={styles.privilegeTitle}>Botanical Sensory Bar</p>
+                    <p className={styles.privilegeSubtitle}>Vintage Blanc de Blancs & adaptogens</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">local_parking</span>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>local_parking</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">White-Glove Valet</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">Private motor court drop-off</p>
+                    <p className={styles.privilegeTitle}>White-Glove Valet</p>
+                    <p className={styles.privilegeSubtitle}>Private motor court drop-off</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">meeting_room</span>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>meeting_room</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">Private Soundproof Suites</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">Total visual & acoustic isolation</p>
+                    <p className={styles.privilegeTitle}>Private Soundproof Suites</p>
+                    <p className={styles.privilegeSubtitle}>Total visual & acoustic isolation</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors border border-(--app-border)/30">
-                  <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">clean_hands</span>
+                <div className={styles.privilegeCard}>
+                  <div className={styles.privilegeIconSquare}>
+                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>clean_hands</span>
                   </div>
                   <div>
-                    <p className="font-label-md text-sm font-semibold text-on-surface">Sterilized Instruments</p>
-                    <p className="font-body-sm text-xs text-on-surface-variant">Medical autoclave grade sterilization</p>
+                    <p className={styles.privilegeTitle}>Sterilized Instruments</p>
+                    <p className={styles.privilegeSubtitle}>Medical autoclave grade sterilization</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 panel-rim p-6 sm:p-8 shadow-xl">
-              <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
+            <div className={styles.panelCard}>
+              <div className={styles.panelHeader} style={{ flexWrap: "wrap", gap: "0.5rem" }}>
                 <div>
-                  <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">Atelier Operating Hours</span>
-                  <h3 className="font-editorial text-2xl text-on-surface mt-1 font-semibold">Consultation & Service Cadence</h3>
+                  <span className={styles.badgeCaps}>Atelier Operating Hours</span>
+                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Consultation & Service Cadence</h3>
                 </div>
-                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-label-caps text-xs">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="font-bold">OPEN NOW</span>
+                <div className={styles.statusPillOpen}>
+                  <span className={styles.openPulseDot} />
+                  <span style={{ fontWeight: 700 }}>OPEN NOW</span>
                 </div>
               </div>
 
-              <div className="divide-y divide-(--app-border)/30 font-body-md text-sm sm:text-base">
+              <div className={styles.hoursList}>
                 {daysOfWeek.map((day) => {
                   const hours = formatHours(day);
                   const isFri = day === "friday";
 
                   if (isFri) {
                     return (
-                      <div key={day} className="py-3 px-4 -mx-4 rounded-xl bg-surface-container-high/80 border border-primary/30 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-primary font-semibold capitalize">{day}</span>
-                          <span className="px-2.5 py-0.5 text-[10px] rounded-md bg-primary-container text-on-primary-container font-label-caps uppercase font-bold">
+                      <div key={day} className={styles.hoursRowHighlight}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span style={{ color: "var(--app-primary)", fontWeight: 600, textTransform: "capitalize" }}>{day}</span>
+                          <span className={styles.soireeBadge}>
                             Salon Soirée
                           </span>
                         </div>
-                        <span className="text-on-surface font-semibold">{hours}</span>
+                        <span style={{ color: "var(--app-text)", fontWeight: 600 }}>{hours}</span>
                       </div>
                     );
                   }
 
                   return (
-                    <div key={day} className="py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-on-surface font-medium capitalize">{day}</span>
+                    <div key={day} className={styles.hoursRow}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <span style={{ color: "var(--app-text)", fontWeight: 500, textTransform: "capitalize" }}>{day}</span>
                         {day === "sunday" && (
-                          <span className="text-on-surface-variant text-xs hidden sm:inline">(Private Rejuvenation Rituals)</span>
+                          <span style={{ color: "var(--app-muted)", fontSize: "0.75rem" }}>(Private Rejuvenation Rituals)</span>
                         )}
                       </div>
-                      <span className="text-on-surface-variant font-medium">{hours}</span>
+                      <span style={{ color: "var(--app-muted)", fontWeight: 500 }}>{hours}</span>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-(--app-border)/30 flex items-center justify-between text-xs sm:text-sm text-on-surface-variant flex-wrap gap-2">
-                <span className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px] text-primary">schedule</span>
+              <div className={styles.hoursFooterRow}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--app-primary)" }}>schedule</span>
                   VIP Out-of-Hours Appointments upon bespoke request
                 </span>
                 <button
                   type="button"
                   onClick={() => navigate("/services")}
-                  className="text-primary hover:underline font-label-md text-xs sm:text-sm font-semibold bg-transparent border-0 cursor-pointer"
+                  className={styles.linkBtn}
                 >
                   Request Slot
                 </button>
@@ -281,161 +282,158 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 flex flex-col gap-6 sm:gap-8">
-            <div className="bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 panel-rim p-6 sm:p-8 shadow-xl">
-              <div className="flex items-center justify-between mb-6">
+          <div className={styles.columnSix}>
+            <div className={styles.panelCard}>
+              <div className={styles.panelHeader}>
                 <div>
-                  <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">Spatial Experience</span>
-                  <h3 className="font-editorial text-2xl text-on-surface mt-1 font-semibold">Inside the Sanctuary</h3>
+                  <span className={styles.badgeCaps}>Spatial Experience</span>
+                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Inside the Sanctuary</h3>
                 </div>
-                <span className="font-label-caps text-xs text-on-surface-variant font-bold">4 SPACES • FLAGSHIP</span>
+                <span className={styles.badgeMuted} style={{ fontWeight: 700 }}>4 SPACES • FLAGSHIP</span>
               </div>
 
-              <div className="grid grid-cols-12 gap-4 h-[480px]">
-                <div className="col-span-12 sm:col-span-7 h-full relative rounded-xl overflow-hidden group border border-(--app-border)/30">
+              <div className={styles.galleryGrid}>
+                <div className={styles.galleryMain}>
                   <img
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={styles.galleryImg}
                     alt="Main Atelier Chamber"
                     src={galleryImages.main}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                    <div>
-                      <span className="px-2.5 py-0.5 rounded-md bg-surface/80 border border-(--app-border) text-primary font-label-caps text-[10px] tracking-wider uppercase font-bold">
+                  <div className={styles.galleryOverlay} />
+                  <div className={styles.galleryCaptionBottom}>
+                    <div className={styles.galleryBadgeCard}>
+                      <span className={styles.bronzeBadge}>
                         Main Atelier Chamber
                       </span>
-                      <h4 className="font-editorial text-lg text-on-surface mt-1.5 leading-tight font-semibold">
+                      <h4 className={styles.galleryTitle}>
                         Master Styling Stations
                       </h4>
-                    </div>
-                    <div className="w-9 h-9 rounded-full bg-surface-container/90 border border-(--app-border) flex items-center justify-center text-on-surface group-hover:text-primary transition-colors shrink-0">
-                      <span className="material-symbols-outlined text-[18px]">visibility</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="col-span-12 sm:col-span-5 flex flex-col gap-4 h-full">
-                  <div className="h-1/2 relative rounded-xl overflow-hidden group border border-(--app-border)/30">
+                <div className={styles.gallerySideCol}>
+                  <div className={styles.gallerySubCard}>
                     <img
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className={styles.galleryImg}
                       alt="Ritual Hydro-Chamber"
                       src={galleryImages.sub1}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <span className="px-2 py-0.5 rounded-md bg-surface/80 border border-(--app-border) text-primary font-label-caps text-[9px] tracking-wider uppercase font-bold">
-                        Ritual Hydro-Chamber
-                      </span>
-                      <h5 className="font-title-md text-sm text-on-surface font-semibold mt-1 leading-snug">
-                        Japanese Head Spa Suites
-                      </h5>
+                    <div className={styles.galleryOverlay} />
+                    <div className={styles.galleryCaptionBottom}>
+                      <div className={styles.galleryBadgeCard}>
+                        <span className={styles.bronzeBadge}>
+                          Ritual Hydro-Chamber
+                        </span>
+                        <h5 className={styles.galleryTitle}>
+                          Japanese Head Spa Suites
+                        </h5>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="h-1/2 relative rounded-xl overflow-hidden group border border-(--app-border)/30">
+                  <div className={styles.gallerySubCard}>
                     <img
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className={styles.galleryImg}
                       alt="Acoustic Seclusion Suite"
                       src={galleryImages.sub2}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <span className="px-2 py-0.5 rounded-md bg-surface/80 border border-(--app-border) text-primary font-label-caps text-[9px] tracking-wider uppercase font-bold">
-                        Acoustic Seclusion
-                      </span>
-                      <h5 className="font-title-md text-sm text-on-surface font-semibold mt-1 leading-snug">
-                        Private Suite • Vesper
-                      </h5>
+                    <div className={styles.galleryOverlay} />
+                    <div className={styles.galleryCaptionBottom}>
+                      <div className={styles.galleryBadgeCard}>
+                        <span className={styles.bronzeBadge}>
+                          Acoustic Seclusion
+                        </span>
+                        <h5 className={styles.galleryTitle}>
+                          Private Suite • Vesper
+                        </h5>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 panel-rim p-6 sm:p-8 shadow-xl crimson-glow-card relative">
-              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <div>
-                  <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">Flagship Coordinates</span>
-                  <EllipsisCell value={salonName} className="font-editorial text-2xl text-on-surface mt-1 font-semibol" maxChars={200} maxLines={5} />
+            <div className={styles.panelCard}>
+              <div className={styles.panelHeader} style={{ flexWrap: "wrap", gap: "0.5rem" }}>
+                <div className={styles.coordinatesHeaderGroup}>
+                  <span className={styles.badgeCaps}>Flagship Coordinates</span>
+                  <EllipsisCell value={salonName} className={styles.panelHeading} style={{ margin: 0, textTransform: "capitalize" }} maxChars={200} maxLines={5} />
                 </div>
-                <div className="text-right">
-                  <span className="font-label-caps text-xs text-on-surface-variant font-mono">19.0600° N, 72.8335° E</span>
+                <div style={{ textAlign: "right" }}>
+                  <span style={{ fontSize: "0.75rem", color: "var(--app-muted)", fontFamily: "monospace" }}>19.0600° N, 72.8335° E</span>
                 </div>
               </div>
 
-              <div className="relative w-full h-64 rounded-xl overflow-hidden border border-(--app-border) bg-surface-container-lowest my-4">
+              <div className={styles.mapCardBox}>
                 <img
-                  className="w-full h-full object-cover opacity-80 filter brightness-90 contrast-125"
+                  className={styles.mapImg}
                   alt="Location Map"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOho6pHwyNQbmWQP4oQsVB8-70rtEtw-L7FYixpPJoHKFD8QfHKoPGnbWwFFnC-dmo8dSojjJzY-xJE2Be8ql7HoPvpTg0heuaZ24sSe6UY0tFZbU34-eblmDhzPRS3fRONTMPiip3n-9cwitQRumD6wEK5Vdp6P_0qvXwAk661B7aa22q112Zc6OGjzslwy_C0TP1CeyGJ4G_DrBg0gbGQ9-SzuhxIlREJSGsSr0GgsGFzg0BNbAQwahVVRpH7e3d8TcswOtQIxo"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent" />
+                <div className={styles.mapGradientOverlay} />
 
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none">
-                  <div className="relative flex items-center justify-center">
-                    <span className="absolute w-12 h-12 rounded-full bg-primary-container/20 animate-ping" />
-                    <span className="absolute w-8 h-8 rounded-full bg-primary-container/40" />
-                    <div className="w-10 h-10 rounded-full bg-surface-container-highest border-2 border-primary-container flex items-center justify-center shadow-lg crimson-glow-strong">
-                      <span className="material-symbols-outlined text-primary text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <div className={styles.mapPinWrapper}>
+                  <div className={styles.pinCircle}>
+                    <span className={styles.pinPing} />
+                    <span className={styles.pinOuter} />
+                    <div className={styles.pinCenter}>
+                      <span className="material-symbols-outlined" style={{ color: "#A88B64", fontSize: "20px", fontVariationSettings: "'FILL' 1" }}>
                         content_cut
                       </span>
                     </div>
                   </div>
-                  <div className="mt-2 px-3 py-1.5 rounded-lg bg-surface/95 border border-primary/40 text-on-surface shadow-2xl backdrop-blur-md">
-                    <p className="font-label-caps text-primary text-[10px] tracking-wider text-center uppercase font-bold">
-                      {salonName} ATELIER
-                    </p>
-                    <p className="font-body-sm text-[11px] text-on-surface-variant text-center">
-                      Heritage Suite III • Valet Portico
-                    </p>
+                  <div className={styles.pinCallout}>
+                    <EllipsisCell value={salon?.name ?? "Salon Name"} style={{ color: "#A88B64", fontSize: "10px", letterSpacing: "0.05em", textAlign: "center", textTransform: "uppercase", fontWeight: 700 }} maxChars={20} />
+                    <EllipsisCell value={salon?.address ?? "Salon Address"} style={{ fontSize: "11px", color: "var(--app-muted)", textAlign: "center", textTransform: "capitalize" }} maxChars={20} />
                   </div>
                 </div>
 
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-surface/80 border border-(--app-border) text-on-surface font-mono text-xs flex items-center gap-1.5 backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-primary-container" />
+                <div className={styles.mapBadgeTop}>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#A88B64" }} />
                   <span>N 42° E</span>
                 </div>
 
-                <div className="absolute bottom-3 left-3 px-3 py-1 rounded-md bg-surface-container-high/90 border border-(--app-border) text-xs font-label-md text-on-surface flex items-center gap-1.5 backdrop-blur-sm">
-                  <span className="material-symbols-outlined text-primary text-[16px]">local_taxi</span>
+                <div className={styles.mapBadgeBottom}>
+                  <span className="material-symbols-outlined" style={{ color: "#A88B64", fontSize: "16px" }}>local_taxi</span>
                   <span>Valet Court: Gate B</span>
                 </div>
               </div>
 
-              <div className="space-y-3 font-body-md text-sm text-on-surface-variant mt-5">
-                <div className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">location_on</span>
-                  <div>
-                    <p className="text-on-surface font-semibold text-base">Flagship Atelier • Heritage Suite III</p>
-                    <p className="mt-0.5">{salon?.address || "Nargis Dutt Road, Bandra West, Mumbai, Maharashtra 400050"}</p>
+              <div className={styles.addressList}>
+                <div className={styles.addressItem}>
+                  <span className={`material-symbols-outlined ${styles.addressIcon}`}>location_on</span>
+                  <div className={styles.addressContent}>
+                    <p className={styles.addressTitle}>Flagship Atelier • Heritage Suite III</p>
+                    <EllipsisCell value={salon?.address || "Nargis Dutt Road, Bandra West, Mumbai, Maharashtra 400050"} className={styles.addressSubtitle} />
                   </div>
                 </div>
                 {salon?.phone && (
-                  <div className="flex items-start gap-3">
-                    <span className="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">phone_in_talk</span>
-                    <div>
-                      <p className="text-on-surface font-semibold text-base">Dedicated Atelier Concierge</p>
-                      <p className="font-mono text-sm text-primary mt-0.5">{salon.phone} • concierge@crimsonandshear.com</p>
+                  <div className={styles.addressItem}>
+                    <span className={`material-symbols-outlined ${styles.addressIcon}`}>phone_in_talk</span>
+                    <div className={styles.addressContent}>
+                      <p className={styles.addressTitle}>Dedicated Atelier Concierge</p>
+                      <p className={styles.addressContact}>{salon.phone} • concierge@crimsonandshear.com</p>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-4 border-t border-(--app-border)/30">
+              <div className={styles.actionsGrid}>
                 <a
-                  className="bg-primary-container text-on-primary-container font-label-lg text-sm font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary-container/20 crimson-glow-button hover:brightness-110 active:scale-95 transition-all no-underline border-0 cursor-pointer"
+                  className={styles.btnPrimaryGps}
                   href={mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="material-symbols-outlined text-[18px]">near_me</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>near_me</span>
                   <span>Get GPS Directions</span>
                 </a>
                 <a
-                  className="bg-surface-container-high hover:bg-surface-container-highest border border-(--app-border) text-on-surface font-label-lg text-sm font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 no-underline cursor-pointer"
+                  className={styles.btnSecondaryValet}
                   href={`tel:${salon?.phone || "+912289204400"}`}
                 >
-                  <span className="material-symbols-outlined text-[18px] text-primary">directions_car</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--app-primary)" }}>directions_car</span>
                   <span>Call Valet Concierge</span>
                 </a>
               </div>
@@ -443,57 +441,57 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="mt-12 p-6 sm:p-8 rounded-2xl bg-surface-container rounded-2xl border border-(--app-border) dark:border-outline-variant/30 crimson-glow-card relative overflow-hidden">
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary-container/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="max-w-3xl mb-6 space-y-2">
-            <span className="font-label-caps text-xs tracking-widest text-primary uppercase font-bold">The Crimson Etiquette</span>
-            <h3 className="font-editorial text-2xl sm:text-3xl text-on-surface font-semibold">
+        <section className={styles.etiquetteSection}>
+          <div className={styles.etiquetteGlow} />
+          <div className={styles.etiquetteHeader}>
+            <span className={styles.badgeCaps}>The Crimson Etiquette</span>
+            <h3 className={styles.panelHeading} style={{ marginBottom: 0 }}>
               Discretion, Sanctuary & Punctuality Guarantee
             </h3>
-            <p className="font-body-md text-sm sm:text-base text-on-surface-variant leading-relaxed">
+            <p className={styles.heroDescription}>
               To maintain the acoustic peace of our atelier, we observe strict protocols crafted to protect the tranquility of every patron in residency.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-(--app-border)/30 pt-6">
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">volume_off</span>
+          <div className={styles.etiquetteGrid}>
+            <div className={styles.etiquetteItem}>
+              <div className={styles.etiquetteItemHeader}>
+                <div className={styles.etiquetteIconBox}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>volume_off</span>
+                </div>
+                <h4 className={styles.etiquetteTitle}>Silent Suite Option</h4>
               </div>
-              <div>
-                <h4 className="font-title-md text-base text-on-surface font-semibold">Silent Suite Option</h4>
-                <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant mt-1 leading-relaxed">
-                  Select “Acoustic Silence” upon reservation for an appointment conducted free of incidental conversation and personal device audio.
-                </p>
-              </div>
+              <p className={styles.etiquetteDesc}>
+                Select “Acoustic Silence” upon reservation for an appointment conducted free of incidental conversation and personal device audio.
+              </p>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">timer</span>
+            <div className={styles.etiquetteItem}>
+              <div className={styles.etiquetteItemHeader}>
+                <div className={styles.etiquetteIconBox}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>timer</span>
+                </div>
+                <h4 className={styles.etiquetteTitle}>1:1 Dedicated Residency</h4>
               </div>
-              <div>
-                <h4 className="font-title-md text-base text-on-surface font-semibold">1:1 Dedicated Residency</h4>
-                <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant mt-1 leading-relaxed">
-                  No overlapping appointments. Your Master Stylist is locked exclusively to your suite for the entirety of the blocked duration.
-                </p>
-              </div>
+              <p className={styles.etiquetteDesc}>
+                No overlapping appointments. Your Master Stylist is locked exclusively to your suite for the entirety of the blocked duration.
+              </p>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-surface-container-high border border-(--app-border)/40 flex items-center justify-center text-primary shrink-0">
-                <span className="material-symbols-outlined text-[20px]">event_repeat</span>
+            <div className={styles.etiquetteItem}>
+              <div className={styles.etiquetteItemHeader}>
+                <div className={styles.etiquetteIconBox}>
+                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>event_repeat</span>
+                </div>
+                <h4 className={styles.etiquetteTitle}>24-Hour Courtesy Charter</h4>
               </div>
-              <div>
-                <h4 className="font-title-md text-base text-on-surface font-semibold">24-Hour Courtesy Charter</h4>
-                <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant mt-1 leading-relaxed">
-                  Modifications are respectfully received up to 24 hours prior to release reserved trichological preparations and artist schedules.
-                </p>
-              </div>
+              <p className={styles.etiquetteDesc}>
+                Modifications are respectfully received up to 24 hours prior to release reserved trichological preparations and artist schedules.
+              </p>
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </Box>
   );
 }

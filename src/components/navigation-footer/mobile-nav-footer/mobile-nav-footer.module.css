@@ -1,0 +1,5 @@
+.bottomNav {
+  height: 4rem !important;
+  background-color: var(--app-surface) !important;
+  border-top: 1px solid var(--app-border) !important;
+}

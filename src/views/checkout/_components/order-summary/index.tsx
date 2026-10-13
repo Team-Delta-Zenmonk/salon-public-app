@@ -18,80 +18,140 @@ export default function OrderSummary({ salon, booking, dateStr }: Readonly<Order
   return (
     <Paper
       elevation={0}
-      className="rounded-xl bg-(--app-surface) border border-(--app-border) overflow-hidden"
+      sx={{
+        borderRadius: "0.75rem",
+        backgroundColor: "var(--bg-surface)",
+        border: "1px solid var(--color-hairline)",
+        overflow: "hidden",
+      }}
     >
-      <Box className={`p-4 border-b border-(--app-border) ${isDark ? "bg-white/5" : "bg-black/2"}`}>
+      <Box
+        sx={{
+          p: 2,
+          borderBottom: "1px solid var(--color-hairline)",
+          backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)",
+        }}
+      >
         <Stack direction="row" spacing={2} alignItems="center">
-          <Box className="w-11 h-11 rounded-xl bg-white border border-(--app-border) p-1 flex items-center justify-center overflow-hidden relative">
+          <Box
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: "0.75rem",
+              backgroundColor: "white",
+              border: "1px solid var(--color-hairline)",
+              p: 0.5,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
             {salon?.logo ? (
               <Image
                 src={salon.logo}
                 alt={salon?.name || "Salon Logo"}
                 fill
                 sizes="44px"
-                className="object-contain p-1"
+                style={{ objectFit: "contain", padding: "4px" }}
                 unoptimized
               />
             ) : (
-              <span className="font-bold text-(--app-text) text-xs">{salon?.name?.[0] || "S"}</span>
+              <Typography sx={{ fontWeight: 700, color: "var(--color-on-surface)", fontSize: "0.75rem" }}>
+                {salon?.name?.[0] || "S"}
+              </Typography>
             )}
           </Box>
-          <Box className="min-w-0">
-            <Typography className="font-black text-(--app-text) text-[0.9rem] md:text-[1.05rem] leading-tight truncate">
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              sx={{
+                fontWeight: 900,
+                color: "var(--color-on-surface)",
+                fontSize: { xs: "0.9rem", md: "1.05rem" },
+                lineHeight: 1.3,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {salon?.name}
             </Typography>
-            <Typography className="text-[0.75rem] text-(--app-muted) mt-1 truncate">{salon?.address}</Typography>
+            <Typography
+              sx={{
+                fontSize: "0.75rem",
+                color: "var(--color-tertiary)",
+                mt: "2px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {salon?.address}
+            </Typography>
           </Box>
         </Stack>
       </Box>
 
-      <Box className="px-4 py-3 border-b border-(--app-border) dark:border-white/5">
+      <Box sx={{ px: 2, py: 1.5, borderBottom: "1px solid var(--color-hairline)" }}>
         <Stack direction="row" spacing={3}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <CalendarMonthIcon className="text-sm text-(--app-primary)" />
-            <Typography className="font-bold text-(--app-text) text-[12px]">{dateStr}</Typography>
+            <CalendarMonthIcon sx={{ fontSize: "0.875rem", color: "var(--color-primary)" }} />
+            <Typography sx={{ fontWeight: 700, color: "var(--color-on-surface)", fontSize: 12 }}>{dateStr}</Typography>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
-            <AccessTimeIcon className="text-sm text-(--app-primary)" />
-            <Typography className="font-bold text-(--app-text) text-[12px]">
+            <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--color-primary)" }} />
+            <Typography sx={{ fontWeight: 700, color: "var(--color-on-surface)", fontSize: 12 }}>
               {formatTimeUTC(booking.booking_start_time)}
             </Typography>
           </Stack>
         </Stack>
       </Box>
 
-      <Box className="p-4">
+      <Box sx={{ p: 2 }}>
         <Stack spacing={1.5}>
-          {booking.booking_services?.map((item: any, idx: number) => (
-            <Box key={item?.id} className="flex justify-between items-center">
+          {booking.booking_services?.map((item: any) => (
+            <Box key={item?.id} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Box>
-                <Typography className="font-bold text-(--app-text) text-[12px]">{item.service?.name}</Typography>
-                <Typography className="text-[10px] text-(--app-muted)">{item.duration_minutes} mins</Typography>
+                <Typography sx={{ fontWeight: 700, color: "var(--color-on-surface)", fontSize: 12 }}>
+                  {item.service?.name}
+                </Typography>
+                <Typography sx={{ fontSize: 10, color: "var(--color-tertiary)" }}>
+                  {item.duration_minutes} mins
+                </Typography>
               </Box>
-              <Typography className="font-black text-(--app-text) text-[12px]">₹{item.price}</Typography>
+              <Typography sx={{ fontWeight: 900, color: "var(--color-on-surface)", fontSize: 12 }}>
+                ₹{item.price}
+              </Typography>
             </Box>
           ))}
         </Stack>
       </Box>
 
-      <Box className="p-4 bg-(--app-surface-alt) border-t border-(--app-border)">
-        <Box className="flex justify-between items-center">
+      <Box sx={{ p: 2, backgroundColor: "var(--bg-surface-container-low)", borderTop: "1px solid var(--color-hairline)" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Box>
-            <Typography className="text-[10px] font-extrabold text-(--app-text) uppercase tracking-wider">
+            <Typography sx={{ fontSize: 10, fontWeight: 800, color: "var(--color-on-surface)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
               Service Total
             </Typography>
-            <Typography className="text-[9px] text-(--app-muted) font-semibold">Inc. all taxes</Typography>
+            <Typography sx={{ fontSize: 9, color: "var(--color-tertiary)", fontWeight: 600 }}>Inc. all taxes</Typography>
           </Box>
-          <Typography className="text-[1.25rem] font-black text-(--app-primary)">₹{booking.total_price}</Typography>
+          <Typography sx={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--color-primary)" }}>
+            ₹{booking.total_price}
+          </Typography>
         </Box>
-        <Box className="mt-3 pt-3 border-t border-(--app-border)">
-          <Box className="flex justify-between items-center mb-1.5">
-             <Typography className="text-[11px] font-semibold text-(--app-muted)">To Pay Now</Typography>
-             <Typography className="text-[14px] font-black text-(--app-text)">₹{booking.deposit_amount ?? 0}</Typography>
+        <Box sx={{ mt: 1.5, pt: 1.5, borderTop: "1px solid var(--color-hairline)" }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.75 }}>
+            <Typography sx={{ fontSize: 11, fontWeight: 600, color: "var(--color-tertiary)" }}>To Pay Now</Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 900, color: "var(--color-on-surface)" }}>
+              ₹{booking.deposit_amount ?? 0}
+            </Typography>
           </Box>
-          <Box className="flex justify-between items-center">
-             <Typography className="text-[11px] font-semibold text-(--app-muted)">To Pay at Venue</Typography>
-             <Typography className="text-[14px] font-black text-(--app-text)">₹{booking.total_price - (booking.deposit_amount ?? 0)}</Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Typography sx={{ fontSize: 11, fontWeight: 600, color: "var(--color-tertiary)" }}>To Pay at Venue</Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 900, color: "var(--color-on-surface)" }}>
+              ₹{booking.total_price - (booking.deposit_amount ?? 0)}
+            </Typography>
           </Box>
         </Box>
       </Box>

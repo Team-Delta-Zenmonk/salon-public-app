@@ -34,7 +34,6 @@ export function useStorefrontNavigate() {
 
       let targetUrl = buildStorefrontUrl(rawPath);
 
-      // Preserve navigation state (e.g. redirectTo, resumeBooking, bookingUuid)
       if (options?.state) {
         try {
           const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3001";

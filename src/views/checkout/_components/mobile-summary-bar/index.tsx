@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, Collapse } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,32 +15,54 @@ export default function MobileSummaryBar({ salon, booking, dateStr }: Readonly<M
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Box className="block lg:hidden bg-(--app-surface) border-b border-(--app-border) relative z-40 mt-[56px]">
+    <Box
+      sx={{
+        display: { xs: "block", lg: "none" },
+        backgroundColor: "var(--bg-surface)",
+        borderBottom: "1px solid var(--color-hairline)",
+        position: "relative",
+        zIndex: 40,
+        mt: "56px",
+      }}
+    >
       <Button
         fullWidth
         onClick={() => setExpanded(!expanded)}
-        className="flex justify-between py-4 px-4 text-none text-(--app-text) rounded-none"
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          py: 2,
+          px: 2,
+          color: "var(--color-on-surface)",
+          borderRadius: 0,
+          textTransform: "none",
+        }}
       >
         <Stack direction="row" spacing={1.5} alignItems="center">
-          <StorefrontIcon className="text-[18px] text-(--app-primary)" />
-          <Typography className="text-sm font-bold">{expanded ? "Hide Details" : "Show Order Summary"}</Typography>
-          {expanded ? (
-            <KeyboardArrowUpIcon className="text-[18px] text-(--app-muted)" />
-          ) : (
-            <KeyboardArrowDownIcon className="text-[18px] text-(--app-muted)" />
-          )}
+          <StorefrontIcon sx={{ fontSize: 18, color: "var(--color-primary)" }} />
+          <Typography sx={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--color-on-surface)" }}>
+            {expanded ? "Hide Details" : "Show Order Summary"}
+          </Typography>
+          {expanded
+            ? <KeyboardArrowUpIcon sx={{ fontSize: 18, color: "var(--color-tertiary)" }} />
+            : <KeyboardArrowDownIcon sx={{ fontSize: 18, color: "var(--color-tertiary)" }} />
+          }
         </Stack>
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography className="text-[10px] font-bold text-(--app-muted) uppercase mt-0.5">To Pay Now</Typography>
-          <Typography className="text-sm font-black text-(--app-primary)">₹{booking?.deposit_amount ?? 0}</Typography>
+          <Typography sx={{ fontSize: 10, fontWeight: 700, color: "var(--color-tertiary)", textTransform: "uppercase", mt: "2px" }}>
+            To Pay Now
+          </Typography>
+          <Typography sx={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--color-primary)" }}>
+            ₹{booking?.deposit_amount ?? 0}
+          </Typography>
         </Stack>
       </Button>
 
-      {expanded && (
-        <Box className="px-4 pb-5 animate-in fade-in slide-in-from-top-2 duration-300">
+      <Collapse in={expanded}>
+        <Box sx={{ px: 2, pb: 2.5 }}>
           <OrderSummary salon={salon} booking={booking} dateStr={dateStr} />
         </Box>
-      )}
+      </Collapse>
     </Box>
   );
 }

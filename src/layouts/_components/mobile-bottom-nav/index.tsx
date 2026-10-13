@@ -10,6 +10,8 @@ import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNaviga
 import { getNormalizedStorefrontPath } from "../../../common/storefront-slug.utils";
 import { useAppSelector } from "../../../store/hook";
 
+import styles from "./mobile-bottom-nav.module.css";
+
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const navigate = useStorefrontNavigate();
@@ -30,7 +32,7 @@ export default function MobileBottomNav() {
       value={getActiveTab()}
       onChange={(_, next) => navigate(next)}
       showLabels
-      className="h-16 w-full max-w-full bg-(--app-surface)/95 backdrop-blur-md border-t border-(--app-border) px-0 justify-between items-center"
+      className={styles.bottomNav}
       sx={{
         "& .MuiBottomNavigationAction-root": {
           minWidth: 0,
@@ -43,14 +45,16 @@ export default function MobileBottomNav() {
       <BottomNavigationAction
         label="Home"
         value="/"
-        icon={<HomeOutlinedIcon className="text-[20px]" />}
-        className="text-(--app-muted) [&.Mui-selected]:text-(--app-primary) text-[10px]"
+        icon={<HomeOutlinedIcon className={styles.actionIcon} />}
+        className={styles.actionItem}
+        classes={{ selected: styles.actionItemSelected }}
       />
       <BottomNavigationAction
         label="Services"
         value="/services"
-        icon={<ContentCutOutlinedIcon className="text-[20px]" />}
-        className="text-(--app-muted) [&.Mui-selected]:text-(--app-primary) text-[10px]"
+        icon={<ContentCutOutlinedIcon className={styles.actionIcon} />}
+        className={styles.actionItem}
+        classes={{ selected: styles.actionItemSelected }}
       />
       <BottomNavigationAction
         label="Cart"
@@ -60,24 +64,27 @@ export default function MobileBottomNav() {
             badgeContent={cartCount}
             color="primary"
             max={9}
-            className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-(--app-primary) [&_.MuiBadge-badge]:text-white"
+            className={styles.badge}
           >
-            <ShoppingBagOutlinedIcon className="text-[20px]" />
+            <ShoppingBagOutlinedIcon className={styles.actionIcon} />
           </Badge>
         }
-        className="text-(--app-muted) [&.Mui-selected]:text-(--app-primary) text-[10px]"
+        className={styles.actionItem}
+        classes={{ selected: styles.actionItemSelected }}
       />
       <BottomNavigationAction
         label="Bookings"
         value="/bookings"
-        icon={<CalendarMonthOutlinedIcon className="text-[20px]" />}
-        className="text-(--app-muted) [&.Mui-selected]:text-(--app-primary) text-[10px]"
+        icon={<CalendarMonthOutlinedIcon className={styles.actionIcon} />}
+        className={styles.actionItem}
+        classes={{ selected: styles.actionItemSelected }}
       />
       <BottomNavigationAction
         label="Account"
         value="/profile"
-        icon={<PersonOutlineOutlinedIcon className="text-[20px]" />}
-        className="text-(--app-muted) [&.Mui-selected]:text-(--app-primary) text-[10px]"
+        icon={<PersonOutlineOutlinedIcon className={styles.actionIcon} />}
+        className={styles.actionItem}
+        classes={{ selected: styles.actionItemSelected }}
       />
     </BottomNavigation>
   );

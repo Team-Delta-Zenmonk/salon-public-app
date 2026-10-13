@@ -81,3 +81,10 @@
 .disabledIconButton {
   background-color: var(--secondary-300);
 }
+
+.fullWidthCapitalize {
+  width: 100%;
+  min-width: 0;
+  display: block;
+  text-transform: capitalize;
+}

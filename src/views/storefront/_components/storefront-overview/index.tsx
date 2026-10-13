@@ -10,6 +10,7 @@ import StorefrontGallery from "../storefront-gallery";
 import ServiceCard from "@/components/service-card";
 import StaffCard from "@/components/staff-card";
 import type { StorefrontTab } from "../storefront-header";
+import styles from "./storefront-overview.module.css";
 
 interface StorefrontOverviewProps {
   salon: any;
@@ -36,57 +37,57 @@ export default function StorefrontOverview({
   const popularServices = rootServices.slice(0, 4);
 
   return (
-    <Box className="space-y-6 sm:space-y-8">
-      <Box className="relative overflow-hidden rounded-xl border border-(--app-border) shadow-[0_20px_50px_rgba(15,23,42,0.14)]">
-        <Box className="absolute inset-0 bg-linear-to-br from-(--app-hero-from)/90 via-(--app-primary)/85 to-(--app-hero-to)/90" />
-        <Box className="absolute inset-0 bg-linear-to-t from-black/50 via-black/15 to-transparent" />
-        <Box className="absolute inset-0 bg-radial-[circle_at_20%_30%] from-white/15 to-transparent" />
+    <Box className={styles.container}>
+      <Box className={styles.heroCard}>
+        <Box className={styles.heroGradientBg} />
+        <Box className={styles.heroDarkOverlay} />
+        <Box className={styles.heroRadialOverlay} />
 
-        <Box className="relative p-5 sm:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <Box className="max-w-2xl text-white">
-            <Box className="flex flex-wrap items-center gap-2 mb-3">
+        <Box className={styles.heroBody}>
+          <Box className={styles.heroTextCol}>
+            <Box className={styles.chipsRow}>
               <Chip
-                icon={<StarRoundedIcon className="text-amber-400 !text-[15px]" />}
+                icon={<StarRoundedIcon sx={{ color: "#fbbf24", fontSize: "15px !important" }} />}
                 label={`${ratingText} Rating`}
-                className="bg-white/20 text-white border-white/25 h-7 text-xs font-bold backdrop-blur-md"
+                className={styles.heroChip}
               />
               <Chip
                 label={salon?.type || "Luxury Unisex Salon"}
-                className="bg-white/20 text-white border-white/25 h-7 text-xs font-bold capitalize backdrop-blur-md"
+                className={`${styles.heroChip} ${styles.heroChipCapitalize}`}
               />
               <Chip
-                icon={<VerifiedOutlinedIcon className="text-emerald-300 !text-[15px]" />}
+                icon={<VerifiedOutlinedIcon sx={{ color: "#6ee7b7", fontSize: "15px !important" }} />}
                 label="Verified Venue"
-                className="bg-white/20 text-white border-white/25 h-7 text-xs font-bold backdrop-blur-md"
+                className={styles.heroChip}
               />
             </Box>
 
-            <Typography className="text-white font-black text-2xl sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+            <Typography className={styles.heroTitle}>
               {salon?.name}
             </Typography>
 
             {salon?.about && (
-              <Typography className="text-white/85 text-xs sm:text-sm mt-3 line-clamp-2 leading-relaxed max-w-xl">
+              <Typography className={styles.heroAbout}>
                 {salon.about}
               </Typography>
             )}
 
             {salon?.address && (
-              <Box className="mt-3 flex items-start gap-1.5 text-white/90">
-                <LocationOnOutlinedIcon className="text-white/70 text-[18px] shrink-0 mt-0.5" />
-                <Typography className="text-xs sm:text-sm leading-snug break-words">
+              <Box className={styles.heroAddressRow}>
+                <LocationOnOutlinedIcon className={styles.heroAddressIcon} />
+                <Typography className={styles.heroAddressText}>
                   {salon.address}
                 </Typography>
               </Box>
             )}
 
-            <Box className="mt-6 flex flex-wrap items-center gap-3">
+            <Box className={styles.heroBtnRow}>
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => onNavigateTab("services")}
-                endIcon={<ArrowForwardIcon className="text-[16px]" />}
-                className="rounded-2xl px-6 py-3 font-bold text-xs sm:text-sm bg-white text-gray-900 hover:bg-white/90 shadow-xl"
+                endIcon={<ArrowForwardIcon sx={{ fontSize: "16px" }} />}
+                className={styles.primaryHeroBtn}
               >
                 Explore Services & Book
               </Button>
@@ -100,7 +101,7 @@ export default function StorefrontOverview({
                   variant="outlined"
                   size="large"
                   startIcon={<MapOutlinedIcon />}
-                  className="rounded-2xl px-5 py-3 font-bold text-xs sm:text-sm border-white/40 text-white hover:bg-white/10"
+                  className={styles.secondaryHeroBtn}
                 >
                   Get Directions
                 </Button>
@@ -108,26 +109,26 @@ export default function StorefrontOverview({
             </Box>
           </Box>
 
-          <Box className="grid grid-cols-2 gap-2.5 w-full lg:w-72 shrink-0">
-            <Box className="p-3.5 rounded-2xl bg-black/25 border border-white/20 backdrop-blur-md text-white">
-              <Typography className="text-[10px] uppercase font-bold tracking-wider text-white/70">
+          <Box className={styles.statsGrid}>
+            <Box className={styles.statCard}>
+              <Typography className={styles.statLabel}>
                 Treatments
               </Typography>
-              <Typography className="text-2xl font-black mt-1">{services.length}+</Typography>
+              <Typography className={styles.statValue}>{services.length}+</Typography>
             </Box>
 
-            <Box className="p-3.5 rounded-2xl bg-black/25 border border-white/20 backdrop-blur-md text-white">
-              <Typography className="text-[10px] uppercase font-bold tracking-wider text-white/70">
+            <Box className={styles.statCard}>
+              <Typography className={styles.statLabel}>
                 Specialists
               </Typography>
-              <Typography className="text-2xl font-black mt-1">{staff.length}</Typography>
+              <Typography className={styles.statValue}>{staff.length}</Typography>
             </Box>
 
-            <Box className="col-span-2 p-3.5 rounded-2xl bg-black/25 border border-white/20 backdrop-blur-md text-white">
-              <Typography className="text-[10px] uppercase font-bold tracking-wider text-white/70">
+            <Box className={styles.statCardFull}>
+              <Typography className={styles.statLabel}>
                 Payment Policy
               </Typography>
-              <Typography className="text-xs font-bold mt-1 leading-snug">
+              <Typography className={styles.policyText}>
                 {salon?.payment_policy === "pay_at_venue"
                   ? "Pay at venue after service"
                   : salon?.payment_policy === "partial_deposit"
@@ -141,16 +142,16 @@ export default function StorefrontOverview({
 
       <StorefrontGallery photos={salon?.photos} logo={salon?.logo} />
 
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-        <Box className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-(--app-border)">
+      <Box className={styles.sectionCard}>
+        <Box className={styles.sectionHeader}>
           <Box>
-            <Box className="flex items-center gap-2">
-              <SparklesIcon className="text-(--app-primary) text-[20px]" />
-              <Typography className="text-lg sm:text-xl font-black text-(--app-text)">
+            <Box className={styles.sectionTitleGroup}>
+              <SparklesIcon sx={{ color: "var(--app-primary)", fontSize: "20px" }} />
+              <Typography className={styles.sectionTitle}>
                 Popular Treatments
               </Typography>
             </Box>
-            <Typography className="text-xs text-(--app-muted) mt-1">
+            <Typography className={styles.sectionSubtitle}>
               Top requested haircuts, coloring, styling, and wellness rituals.
             </Typography>
           </Box>
@@ -158,14 +159,14 @@ export default function StorefrontOverview({
           <Button
             variant="text"
             onClick={() => onNavigateTab("services")}
-            endIcon={<ArrowForwardIcon className="text-[14px]" />}
-            className="text-xs font-bold text-(--app-primary) hover:bg-(--app-primary-soft) rounded-xl px-3 py-1.5 self-start sm:self-auto -ml-2 sm:ml-0"
+            endIcon={<ArrowForwardIcon sx={{ fontSize: "14px" }} />}
+            className={styles.viewAllBtn}
           >
             View All ({services.length}) Services
           </Button>
         </Box>
 
-        <Box className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Box className={styles.servicesGrid}>
           {popularServices.map((service: any) => (
             <ServiceCard
               key={service.uuid}
@@ -177,26 +178,26 @@ export default function StorefrontOverview({
       </Box>
 
       {staff.length > 0 && (
-        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 lg:p-8 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-          <Box className="flex items-center justify-between gap-3 mb-5 pb-3 border-b border-(--app-border)">
+        <Box className={styles.sectionCard}>
+          <Box className={styles.sectionHeaderRow}>
             <Box>
-              <Typography className="text-lg sm:text-xl font-black text-(--app-text)">
+              <Typography className={styles.sectionTitle}>
                 Meet Our Specialists
               </Typography>
-              <Typography className="text-xs text-(--app-muted) mt-0.5">
+              <Typography className={styles.sectionSubtitle}>
                 Experienced artisans passionate about hair, skin, and grooming.
               </Typography>
             </Box>
             <Button
               variant="text"
               onClick={() => onNavigateTab("specialists")}
-              className="text-xs font-bold text-(--app-primary) hover:bg-(--app-primary-soft) rounded-xl px-3 py-1"
+              className={styles.viewAllBtn}
             >
               See All Team ➔
             </Button>
           </Box>
 
-          <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Box className={styles.staffGrid}>
             {staff.slice(0, 3).map((member: any) => (
               <StaffCard key={member.uuid || member.id} member={member} />
             ))}
@@ -204,16 +205,16 @@ export default function StorefrontOverview({
         </Box>
       )}
 
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_10px_28px_rgba(15,23,42,0.05)]">
-        <Box className="flex items-start gap-3.5 min-w-0">
-          <Box className="w-11 h-11 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center shrink-0">
-            <AccessTimeIcon className="text-[22px]" />
+      <Box className={styles.scheduleBanner}>
+        <Box className={styles.scheduleInfoGroup}>
+          <Box className={styles.scheduleIconBox}>
+            <AccessTimeIcon sx={{ fontSize: "22px" }} />
           </Box>
           <Box>
-            <Typography className="font-bold text-sm sm:text-base text-(--app-text)">
+            <Typography className={styles.scheduleTitle}>
               Operating Schedule & Policies
             </Typography>
-            <Typography className="text-xs text-(--app-muted) mt-0.5">
+            <Typography className={styles.scheduleSubtitle}>
               Check complete weekly hours, location directions, and booking terms.
             </Typography>
           </Box>
@@ -222,7 +223,7 @@ export default function StorefrontOverview({
         <Button
           variant="outlined"
           onClick={() => onNavigateTab("hours")}
-          className="rounded-xl px-4 py-2 font-bold text-xs text-(--app-text) border-(--app-border) hover:bg-(--app-surface-alt) shrink-0"
+          className={styles.scheduleBtn}
         >
           View Full Schedule & Location
         </Button>

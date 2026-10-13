@@ -1,5 +1,6 @@
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Badge, IconButton } from "@mui/material";
+import styles from "./cart-button.module.css";
 
 interface CartIconProps {
   count?: number;
@@ -11,12 +12,12 @@ export default function CartIcon({ count = 0, onClick }: Readonly<CartIconProps>
     <IconButton
       size="small"
       onClick={onClick}
-      className="border border-(--app-border) bg-(--app-surface) hover:bg-(--app-surface-alt) rounded-xl"
+      className={styles.cartBtn}
     >
-     <Badge
+      <Badge
         badgeContent={count}
         color="primary"
-        className="[&_.MuiBadge-badge]:font-bold [&_.MuiBadge-badge]:bg-(--app-primary) [&_.MuiBadge-badge]:text-white"
+        className={styles.cartBadge}
       >
         <ShoppingCartOutlinedIcon />
       </Badge>

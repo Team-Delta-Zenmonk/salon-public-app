@@ -10,6 +10,8 @@ import { getStorefrontProfileService } from "../features/salon/get-storefront-pr
 import { getSalonService } from "../features/salon/get-salon/get-salon.service";
 import { useAppDispatch } from "../store/hook";
 import { setCartSalon } from "../features/salon/cart/cart.slice";
+import { useAppThemeMode } from "../theme/theme-provider";
+import { themeOptions, defaultThemeId } from "../theme/theme";
 
 interface StorefrontContextType {
   salon: Salon | null;
@@ -31,11 +33,27 @@ export function useStorefront() {
 
 export function StorefrontProvider({ children }: Readonly<{ children: ReactNode }>) {
   const dispatch = useAppDispatch();
+  const { setThemeId } = useAppThemeMode();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [salon, setSalon] = useState<Salon | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!salon) return;
+    const themeCode =
+      salon.theme?.code ||
+      salon.storefront_theme?.code ||
+      (salon as any)?.storefrontTheme?.code;
+
+    const matchedTheme = themeOptions.find((t) => t.id === themeCode);
+    if (matchedTheme) {
+      setThemeId(matchedTheme.id);
+    } else {
+      setThemeId(defaultThemeId);
+    }
+  }, [salon, setThemeId]);
 
   const searchString = searchParams ? searchParams.toString() : "";
   const resolvedSlug = useMemo(
@@ -53,7 +71,6 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
         const res = await getStorefrontProfileService(resolvedSlug);
         salonData = res.salon;
       } catch {
-        // Fallback if resolvedSlug is a direct UUID
         salonData = await getSalonService(resolvedSlug);
       }
 
@@ -84,24 +101,35 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
   if (loading) {
     return (
-      <Box className="min-h-screen bg-(--app-bg)">
-        <Box className="h-16 border-b border-(--app-border) bg-(--app-surface) px-6 flex items-center justify-between">
-          <Box className="flex items-center gap-3">
-            <Skeleton variant="rounded" width={38} height={38} className="rounded-xl" />
+      <Box style={{ minHeight: "100vh", backgroundColor: "var(--app-bg)" }}>
+        <Box
+          style={{
+            height: "4rem",
+            borderBottom: "1px solid var(--app-border)",
+            backgroundColor: "var(--app-surface)",
+            paddingLeft: "1.5rem",
+            paddingRight: "1.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Skeleton variant="rounded" width={38} height={38} style={{ borderRadius: "0.75rem" }} />
             <Skeleton variant="text" width={140} height={24} />
           </Box>
-          <Box className="flex items-center gap-3">
-            <Skeleton variant="rounded" width={80} height={36} className="rounded-xl" />
+          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Skeleton variant="rounded" width={80} height={36} style={{ borderRadius: "0.75rem" }} />
             <Skeleton variant="circular" width={36} height={36} />
           </Box>
         </Box>
 
-        <Box className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-          <Skeleton variant="rounded" height={220} className="rounded-xl" />
-          <Box className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
+        <Box style={{ maxWidth: "72rem", margin: "0 auto", padding: "2rem 1rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <Skeleton variant="rounded" height={220} style={{ borderRadius: "0.75rem" }} />
+          <Box style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
           </Box>
         </Box>
       </Box>
@@ -110,14 +138,52 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
   if (error || !salon) {
     return (
-      <Box className="min-h-screen bg-(--app-bg) flex flex-col items-center justify-center p-6 text-center">
-        <Box className="w-18 h-18 rounded-xl bg-(--app-surface) border border-(--app-border) flex items-center justify-center mb-4 shadow-md">
-          <StorefrontIcon className="text-[36px] text-(--app-muted)" />
+      <Box
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "var(--app-bg)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "1.5rem",
+          textAlign: "center",
+        }}
+      >
+        <Box
+          style={{
+            width: "4.5rem",
+            height: "4.5rem",
+            borderRadius: "0.75rem",
+            backgroundColor: "var(--app-surface)",
+            border: "1px solid var(--app-border)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "1rem",
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <StorefrontIcon style={{ fontSize: "36px", color: "var(--app-muted)" }} />
         </Box>
-        <Typography className="text-xl sm:text-2xl font-black text-(--app-text)">
+        <Typography
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: 900,
+            color: "var(--app-text)",
+          }}
+        >
           Salon Not Found
         </Typography>
-        <Typography className="text-xs sm:text-sm text-(--app-muted) max-w-md mt-2 mb-6">
+        <Typography
+          style={{
+            fontSize: "0.875rem",
+            color: "var(--app-muted)",
+            maxWidth: "28rem",
+            marginTop: "0.5rem",
+            marginBottom: "1.5rem",
+          }}
+        >
           {error || "The salon you are looking for is inactive or does not exist."}
         </Typography>
         <Button
@@ -126,8 +192,15 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
             clearActiveSalonSlug();
             window.location.href = "/?salon=glow";
           }}
-          startIcon={<ArrowBackIcon className="text-[16px]" />}
-          className="rounded-2xl px-6 py-2.5 font-bold text-xs bg-(--app-primary) text-(--app-primary-contrast)"
+          startIcon={<ArrowBackIcon style={{ fontSize: "16px" }} />}
+          style={{
+            borderRadius: "1rem",
+            padding: "0.625rem 1.5rem",
+            fontWeight: 700,
+            fontSize: "0.75rem",
+            backgroundColor: "var(--app-primary)",
+            color: "var(--app-surface)",
+          }}
         >
           Go to Glow Salon
         </Button>

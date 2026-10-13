@@ -1,0 +1,39 @@
+.layout {
+  min-height: 100vh;
+  background-color: var(--app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1 1 0%;
+  width: 100%;
+  max-width: var(--page-max-width, 1440px);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+  padding-top: var(--page-padding-top);
+  padding-bottom: calc(var(--page-padding-bottom) + var(--mobile-bottom-nav-height, 4rem));
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    padding-bottom: var(--page-padding-bottom);
+  }
+}
+
+.mobileNavWrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+@media (min-width: 768px) {
+  .mobileNavWrapper {
+    display: none;
+  }
+}

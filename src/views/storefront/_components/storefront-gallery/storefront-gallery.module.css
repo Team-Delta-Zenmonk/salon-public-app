@@ -1,0 +1,248 @@
+.emptyCard {
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface-alt);
+  padding: 2rem;
+  text-align: center;
+}
+
+.emptyText {
+  color: var(--app-muted) !important;
+}
+
+.galleryCard {
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface);
+  padding: 0.75rem;
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.1);
+}
+
+@media (min-width: 640px) {
+  .galleryCard {
+    padding: 1rem;
+  }
+}
+
+.mobileContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.mobileTitle {
+  color: var(--app-text) !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+.mobileChip {
+  font-size: 0.75rem !important;
+}
+
+.mobileLeadBox {
+  position: relative;
+  height: 15rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.leadImg {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.mobileLeadBox:hover .leadImg {
+  transform: scale(1.05);
+}
+
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.58), transparent, transparent);
+}
+
+.desktopGradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent, transparent);
+}
+
+.mobileLeadText {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.leadHeading {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+}
+
+.leadSubheading {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 0.75rem !important;
+  margin-top: 0.25rem !important;
+}
+
+.mobileStrip {
+  display: flex;
+  gap: 0.625rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.mobileStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileThumbnail {
+  position: relative;
+  min-width: 11rem;
+  width: 11rem;
+  height: 7.75rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  border: 1px solid var(--app-border);
+}
+
+.mobileThumbnail:hover .leadImg {
+  transform: scale(1.05);
+}
+
+.thumbnailOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktopGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .desktopGrid {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopGrid {
+    grid-template-columns: 1.35fr 0.65fr;
+  }
+}
+
+.desktopLeadBox {
+  position: relative;
+  height: 16rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .desktopLeadBox {
+    height: 19rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopLeadBox {
+    height: 23.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .desktopLeadBox {
+    height: 26.25rem;
+  }
+}
+
+.desktopLeadBox:hover .leadImg {
+  transform: scale(1.05);
+}
+
+.desktopSideGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  height: 16rem;
+}
+
+@media (min-width: 640px) {
+  .desktopSideGrid {
+    gap: 1rem;
+    height: 19rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopSideGrid {
+    height: 23.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .desktopSideGrid {
+    height: 26.25rem;
+  }
+}
+
+.sideTile {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.sideTile:hover .leadImg {
+  transform: scale(1.05);
+}
+
+.sideTileSpan2 {
+  grid-row: span 2 / span 2;
+}
+
+.seeAllOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBox {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}

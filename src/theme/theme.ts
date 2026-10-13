@@ -5,8 +5,6 @@ import { createTheme, responsiveFontSizes, type PaletteMode } from "@mui/materia
 export type AppThemeId =
   | "crimsonShear"
   | "obsidianFlame"
-  | "vintageBlush"
-  | "midnightSapphire"
   | "softRosePearl";
 
 export interface AppThemeOption {
@@ -27,6 +25,11 @@ export interface AppThemeOption {
   heroTo: string;
   ring: string;
   chipTone: string;
+  success: string;
+  warning: string;
+  info: string;
+  error: string;
+  shadowBase: string;
 }
 
 const mediumPalette = {
@@ -63,6 +66,11 @@ const appThemes: AppThemeOption[] = [
     heroTo: "#F6F3ED",
     ring: "#A88B64",
     chipTone: "rgba(168, 139, 100, 0.08)",
+    success: "#10b981",
+    warning: "#fbbf24",
+    info: "#3b82f6",
+    error: "#f472b6",
+    shadowBase: "rgba(0,0,0,0.18)"
   },
   {
     id: "obsidianFlame",
@@ -82,44 +90,11 @@ const appThemes: AppThemeOption[] = [
     heroTo: "#16131c",
     ring: "#f3c677",
     chipTone: "rgba(243, 198, 119, 0.1)",
-  },
-  {
-    id: "vintageBlush",
-    label: "Vintage Blush (Haute Warm Light)",
-    mode: "light",
-    fontFamily: GLOBAL_FONT_FAMILY,
-    radius: 10,
-    surface: "#fffaf7",
-    surfaceAlt: "#f9efea",
-    primary: "#b84252",
-    primarySoft: "rgba(184, 66, 82, 0.1)",
-    textMain: "#2d2325",
-    textMuted: "#7a6367",
-    border: "#e8d3cb",
-    background: "#fdf6f2",
-    heroFrom: "#fdf6f2",
-    heroTo: "#f5e8e2",
-    ring: "#b84252",
-    chipTone: "rgba(184, 66, 82, 0.06)",
-  },
-  {
-    id: "midnightSapphire",
-    label: "Midnight Sapphire (Royal Blue)",
-    mode: "dark",
-    fontFamily: GLOBAL_FONT_FAMILY,
-    radius: 10,
-    surface: "#0b1329",
-    surfaceAlt: "#131d3b",
-    primary: "#7da8ff",
-    primarySoft: "rgba(125, 168, 255, 0.15)",
-    textMain: "#e8efff",
-    textMuted: "#9eb5e6",
-    border: "#233766",
-    background: "#060c1c",
-    heroFrom: "#060c1c",
-    heroTo: "#101a36",
-    ring: "#7da8ff",
-    chipTone: "rgba(125, 168, 255, 0.08)",
+    success: "#10b981",
+    warning: "#fbbf24",
+    info: "#3b82f6",
+    error: "#f472b6",
+    shadowBase: "rgba(0,0,0,0.18)",
   },
   {
     id: "softRosePearl",
@@ -139,6 +114,11 @@ const appThemes: AppThemeOption[] = [
     heroTo: "#f5e4e8",
     ring: "#d6536b",
     chipTone: "rgba(214, 83, 107, 0.08)",
+    success: "#10b981",
+    warning: "#fbbf24",
+    info: "#3b82f6",
+    error: "#f472b6",
+    shadowBase: "rgba(0,0,0,0.18)",
   },
 ];
 
@@ -239,7 +219,14 @@ export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
             "--app-hero-from": selected.heroFrom,
             "--app-hero-to": selected.heroTo,
             "--app-ring": selected.ring,
-            "--app-chip-tone": selected.chipTone,
+            "--app-champagne": selected.ring,
+            "--app-accent": selected.ring,
+            "--app-radius": `${selected.radius}px`,
+            "--app-success": selected.success,
+            "--app-warning": selected.warning,
+            "--app-info": selected.info,
+            "--app-error": selected.error,
+            "--app-shadow-base": selected.shadowBase,
           },
           "::-webkit-scrollbar": {
             height: "8px",

@@ -13,6 +13,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import TuneIcon from "@mui/icons-material/Tune";
 import ServiceCard from "./_components/service-card";
 import StorefrontBasket from "../storefront-basket";
+import styles from "./storefront-services.module.css";
 
 interface StorefrontServicesProps {
   salon: any;
@@ -117,18 +118,18 @@ export default function StorefrontServices({
 
   return (
     <Box>
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-4 sm:p-6 mb-6 shadow-[0_10px_26px_rgba(15,23,42,0.05)] space-y-4">
-        <Box className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <Box className={styles.headerCard}>
+        <Box className={styles.titleRow}>
           <Box>
-            <Typography className="text-xl sm:text-2xl font-black text-(--app-text) tracking-tight">
+            <Typography className={styles.title}>
               Treatments & Services
             </Typography>
-            <Typography className="text-xs text-(--app-muted) mt-0.5">
+            <Typography className={styles.subtitle}>
               Select treatments tailored to your lifestyle. Options and sub-services expand with full transparent pricing.
             </Typography>
           </Box>
 
-          <Box className="text-xs font-semibold text-(--app-muted) bg-(--app-surface-alt) px-3 py-1.5 rounded-xl border border-(--app-border) self-start md:self-auto shrink-0">
+          <Box className={styles.countBadge}>
             {filteredRootServices.length} {filteredRootServices.length === 1 ? "treatment" : "treatments"} available
           </Box>
         </Box>
@@ -143,23 +144,23 @@ export default function StorefrontServices({
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon className="text-(--app-muted) text-[20px]" />
+                  <SearchIcon sx={{ color: "var(--app-muted)", fontSize: "20px" }} />
                 </InputAdornment>
               ),
               endAdornment: searchQuery ? (
                 <InputAdornment position="end">
                   <IconButton size="small" onClick={() => setSearchQuery("")}>
-                    <ClearIcon className="text-[16px]" />
+                    <ClearIcon sx={{ fontSize: "16px" }} />
                   </IconButton>
                 </InputAdornment>
               ) : null,
-              className: "rounded-2xl bg-(--app-surface-alt) border-(--app-border) text-xs sm:text-sm",
+              className: styles.searchInput,
             },
           }}
         />
 
         {categoryOptions.length > 1 && (
-          <Box className="flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Box className={styles.categoriesStrip}>
             {categoryOptions.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (
@@ -168,19 +169,15 @@ export default function StorefrontServices({
                   label={cat.label}
                   clickable
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`font-bold text-xs h-8 px-2 transition-all shrink-0 rounded-xl ${
-                    isActive
-                      ? "bg-(--app-primary) text-(--app-primary-contrast) shadow-sm"
-                      : "bg-(--app-surface-alt) text-(--app-muted) border border-(--app-border) hover:text-(--app-text)"
-                  }`}
+                  className={`${styles.categoryChip} ${isActive ? styles.categoryChipActive : ""}`}
                 />
               );
             })}
           </Box>
         )}
 
-        <Box className="flex items-center gap-2 pt-1 border-t border-(--app-border)/60 flex-wrap">
-          <Typography className="text-[11px] font-bold text-(--app-muted) uppercase tracking-wider mr-1">
+        <Box className={styles.genderRow}>
+          <Typography className={styles.genderLabel}>
             Target:
           </Typography>
           {genderOptions.map((opt) => {
@@ -192,33 +189,29 @@ export default function StorefrontServices({
                 size="small"
                 clickable
                 onClick={() => setSelectedGender(opt.id)}
-                className={`font-semibold text-[11px] h-6 px-1 rounded-lg ${
-                  isActive
-                    ? "bg-(--app-primary-soft) text-(--app-primary) border border-(--app-primary)/30"
-                    : "bg-transparent text-(--app-muted) border border-(--app-border) hover:bg-(--app-surface-alt)"
-                }`}
+                className={`${styles.genderChip} ${isActive ? styles.genderChipActive : ""}`}
               />
             );
           })}
         </Box>
       </Box>
 
-      <Box className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
-        <Box className="space-y-4">
+      <Box className={styles.mainGrid}>
+        <Box className={styles.servicesList}>
           {filteredRootServices.length === 0 ? (
-            <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-12 text-center">
-              <TuneIcon className="text-4xl text-(--app-muted) mb-2 opacity-50" />
-              <Typography className="text-base font-bold text-(--app-text)">
+            <Box className={styles.emptyState}>
+              <TuneIcon className={styles.emptyIcon} />
+              <Typography className={styles.emptyTitle}>
                 No treatments match your search
               </Typography>
-              <Typography className="text-xs text-(--app-muted) mt-1 max-w-sm mx-auto">
+              <Typography className={styles.emptySubtitle}>
                 Try adjusting your search terms, changing the category, or resetting filters.
               </Typography>
               <Button
                 variant="outlined"
                 size="small"
                 onClick={resetFilters}
-                className="mt-4 rounded-xl font-bold"
+                className={styles.resetBtn}
               >
                 Reset All Filters
               </Button>
@@ -235,7 +228,7 @@ export default function StorefrontServices({
           )}
         </Box>
 
-        <Box className="hidden lg:block self-start">
+        <Box className={styles.desktopBasketCol}>
           <StorefrontBasket salon={salon} variant="desktop-card" onProceed={onProceedToBook} />
         </Box>
       </Box>

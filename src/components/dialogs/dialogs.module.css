@@ -1,0 +1,27 @@
+.dialogTitle {
+  color: var(--app-text);
+  font-weight: 700;
+}
+
+.description {
+  color: var(--app-muted);
+}
+
+.dialogActions {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1.25rem;
+}
+
+.cancelButton {
+  color: var(--app-muted);
+}
+
+.confirmButton {
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.confirmButton:hover {
+  box-shadow: none;
+}

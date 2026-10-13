@@ -19,7 +19,6 @@ export const getSalonSlug = (currentPath?: string, currentSearch?: string | URLS
       ? window.location.pathname
       : "";
 
-  // 1. Check URL query param ?salon=...
   if (searchStr) {
     const searchParams = new URLSearchParams(searchStr);
     const paramSlug = searchParams.get("salon");
@@ -29,14 +28,12 @@ export const getSalonSlug = (currentPath?: string, currentSearch?: string | URLS
         try {
           sessionStorage.setItem(SESSION_SLUG_KEY, slug);
         } catch {
-          // Ignore storage errors in private browsing
         }
       }
       return slug;
     }
   }
 
-  // 2. Check path /salons/:salonSlug
   if (pathStr) {
     const pathMatch = pathStr.match(/^\/salons\/([^/]+)/);
     if (pathMatch && pathMatch[1] && pathMatch[1].trim().length > 0) {
@@ -45,14 +42,12 @@ export const getSalonSlug = (currentPath?: string, currentSearch?: string | URLS
         try {
           sessionStorage.setItem(SESSION_SLUG_KEY, slug);
         } catch {
-          // Ignore storage errors
         }
       }
       return slug;
     }
   }
 
-  // 3. Check Subdomain (e.g. deswal.salon.com or deswal.localhost)
   if (typeof window !== "undefined") {
     const hostname = window.location.hostname.toLowerCase();
     const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
@@ -77,14 +72,12 @@ export const getSalonSlug = (currentPath?: string, currentSearch?: string | URLS
       }
     }
 
-    // 4. Check sessionStorage cache to keep the active salon sticky across route transitions
     try {
       const cachedSlug = sessionStorage.getItem(SESSION_SLUG_KEY);
       if (cachedSlug && cachedSlug.trim().length > 0) {
         return cachedSlug.trim().toLowerCase();
       }
     } catch {
-      // Ignore storage errors
     }
   }
 
@@ -94,7 +87,6 @@ export const getSalonSlug = (currentPath?: string, currentSearch?: string | URLS
 export const buildStorefrontUrl = (to: string): string => {
   if (!to) return to;
 
-  // External URLs or protocols should not be altered
   if (
     to.startsWith("http://") ||
     to.startsWith("https://") ||
@@ -112,7 +104,6 @@ export const buildStorefrontUrl = (to: string): string => {
   const [pathAndQuery, hash] = to.split("#");
   const hashPart = hash ? `#${hash}` : "";
 
-  // 1. If current path uses /salons/:salonSlug prefix, preserve the prefix
   const pathMatch = window.location.pathname.match(/^\/salons\/([^/]+)/);
   if (pathMatch && pathMatch[1]) {
     const prefix = `/salons/${pathMatch[1]}`;
@@ -128,7 +119,6 @@ export const buildStorefrontUrl = (to: string): string => {
     return `${prefix}${cleanTo}${hashPart}`;
   }
 
-  // 2. If testing on localhost or using ?salon= query param, preserve it in the URL
   const searchParams = new URLSearchParams(window.location.search);
   const activeSlug =
     searchParams.get("salon") ||

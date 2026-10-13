@@ -1,0 +1,178 @@
+.title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.25rem !important;
+  letter-spacing: -0.015em;
+  color: var(--app-text) !important;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.125rem !important;
+  }
+}
+
+.subtitle {
+  font-size: 0.76rem !important;
+  color: var(--app-muted) !important;
+  margin-bottom: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .subtitle {
+    font-size: 0.75rem !important;
+  }
+}
+
+.staffGrid {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+}
+
+.staffGrid::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .staffGrid {
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .staffGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow-x: visible;
+  }
+}
+
+@media (min-width: 1024px) {
+  .staffGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .staffGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.staffCard {
+  min-width: 13rem;
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface-alt);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.staffCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+@media (min-width: 768px) {
+  .staffCard {
+    min-width: 0;
+  }
+}
+
+.cardInner {
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .cardInner {
+    padding: 1rem;
+  }
+}
+
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.staffAvatar {
+  width: 3rem !important;
+  height: 3rem !important;
+  outline: 2px solid var(--app-border) !important;
+  text-transform: capitalize;
+}
+
+@media (min-width: 640px) {
+  .staffAvatar {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+}
+
+.onlineBadge {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--app-surface);
+  background-color: #10b981;
+}
+
+.staffInfo {
+  min-width: 0;
+}
+
+.staffName {
+  font-weight: 600 !important;
+  color: var(--app-text) !important;
+  font-size: 0.75rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .staffName {
+    font-size: 0.875rem !important;
+  }
+}
+
+.staffSpecialization {
+  font-size: 10px !important;
+  color: var(--app-muted) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.125rem !important;
+}
+
+@media (min-width: 640px) {
+  .staffSpecialization {
+    font-size: 0.75rem !important;
+  }
+}
+
+.availableChip {
+  margin-top: 0.5rem !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #059669 !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.18) !important;
+  height: 1.375rem !important;
+}
+
+@media (min-width: 640px) {
+  .availableChip {
+    font-size: 10px !important;
+  }
+}

@@ -1,0 +1,17 @@
+.toggleBtn {
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  border-radius: 0.75rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.toggleBtn:hover {
+  background-color: var(--app-surface-alt) !important;
+}
+
+.icon {
+  color: var(--app-muted);
+  font-size: 18px !important;
+}

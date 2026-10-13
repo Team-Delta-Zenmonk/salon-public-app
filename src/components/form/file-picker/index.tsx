@@ -96,7 +96,7 @@ const FilePicker = <T extends FieldValues>({
 
     return (
       <IconButton disabled={disabled} data-test-id={`upload-btn-${identifier}`} className={styles.adornmentIconButton}>
-        <UploadFileIcon data-test-id={`upload-btn-icon-${identifier}`} className="text-secondary-500" />
+        <UploadFileIcon data-test-id={`upload-btn-icon-${identifier}`} className={styles.uploadIcon} />
       </IconButton>
     );
   };

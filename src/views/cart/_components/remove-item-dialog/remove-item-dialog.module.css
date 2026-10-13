@@ -1,0 +1,26 @@
+.paper {
+  border-radius: 0.75rem !important;
+}
+
+.dialogTitle {
+  color: var(--app-text) !important;
+}
+
+.dialogBody {
+  color: var(--app-muted) !important;
+}
+
+.serviceNameInline {
+  font-weight: 600;
+  color: var(--app-text);
+  text-transform: capitalize;
+}
+
+.dialogActions {
+  padding: 0 1.5rem 1.25rem 1.5rem !important;
+}
+
+.progressWhite {
+  color: white !important;
+  margin-right: 0.5rem !important;
+}

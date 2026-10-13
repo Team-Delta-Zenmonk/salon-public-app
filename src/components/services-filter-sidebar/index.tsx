@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import clsx from "clsx";
+import styles from "./services-filter-sidebar.module.css";
 
 export interface CategorySanctuary {
   id: string;
@@ -39,14 +40,14 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
   ];
 
   return (
-    <aside className={clsx("space-y-6 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 scrollbar-none", className)}>
-      <div className="bg-surface-container-low rounded-2xl p-5 sm:p-6 border border-(--app-border) panel-rim shadow-xl space-y-6">
+    <aside className={clsx(styles.sidebar, className)}>
+      <div className={styles.card}>
         <div>
-          <label htmlFor="service-search-input" className="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase block mb-2 font-bold">
+          <label htmlFor="service-search-input" className={styles.labelCaps}>
             SEARCH RITUALS
           </label>
-          <div className="relative">
-            <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px] pointer-events-none">
+          <div className={styles.searchWrapper}>
+            <span className={`material-symbols-outlined ${styles.searchIcon}`}>
               search
             </span>
             <input
@@ -55,37 +56,37 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search by name, active, or ritual..."
-              className="w-full pl-10 pr-9 py-3 bg-surface rounded-xl border border-outline-variant/40 text-on-surface font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/50"
+              className={styles.searchInput}
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => onSearchChange("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface bg-transparent border-0 cursor-pointer p-1"
+                className={styles.clearBtn}
                 aria-label="Clear search"
               >
-                <span className="material-symbols-outlined text-[18px]">close</span>
+                <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>close</span>
               </button>
             )}
           </div>
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-bold">
+          <div className={styles.headerRow}>
+            <span className={styles.labelCaps} style={{ marginBottom: 0 }}>
               SERVICE SANCTUARIES
             </span>
             {(selectedCategory !== "all" || searchQuery || selectedGender !== "all") && (
               <button
                 type="button"
                 onClick={onReset}
-                className="font-label-caps text-label-caps text-primary bg-transparent border-0 cursor-pointer uppercase hover:underline font-bold"
+                className={styles.resetBtn}
               >
                 RESET ALL
               </button>
             )}
           </div>
-          <ul className="space-y-1.5 p-0 m-0 list-none">
+          <ul className={styles.categoryList}>
             {categories.map((cat) => {
               const isSelected = selectedCategory === cat.id;
               return (
@@ -94,21 +95,17 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
                     type="button"
                     onClick={() => onSelectCategory(cat.id)}
                     className={clsx(
-                      "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all text-left cursor-pointer border-0",
-                      isSelected
-                        ? "bg-(--app-primary-soft) text-(--app-primary) border-l-4 border-(--app-primary) font-bold shadow-xs"
-                        : "bg-transparent text-on-surface-variant hover:bg-surface-container/80 hover:text-on-surface"
+                      styles.categoryBtn,
+                      isSelected && styles.categoryBtnActive
                     )}
                   >
-                    <span className="font-body-md text-body-md capitalize truncate mr-2">
+                    <span className={styles.catLabel}>
                       {cat.label}
                     </span>
                     <span
                       className={clsx(
-                        "font-label-caps text-label-caps px-2.5 py-0.5 rounded-full shrink-0",
-                        isSelected
-                          ? "bg-primary text-on-primary font-extrabold"
-                          : "bg-surface-container-high text-on-surface-variant"
+                        styles.catBadge,
+                        isSelected && styles.catBadgeActive
                       )}
                     >
                       {cat.count}
@@ -120,13 +117,13 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
           </ul>
         </div>
 
-        <hr className="border-outline-variant/20 my-2" />
+        <hr className={styles.divider} />
 
         <div>
-          <span className="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase block mb-3 font-bold">
+          <span className={styles.labelCaps}>
             TARGET GUEST
           </span>
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className={styles.genderGrid}>
             {genderOptions.map((g) => {
               const isSelected = selectedGender === g.id;
               return (
@@ -135,10 +132,8 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
                   type="button"
                   onClick={() => onSelectGender(g.id)}
                   className={clsx(
-                    "px-3 py-2.5 rounded-xl font-label-md text-label-md transition-all text-center cursor-pointer",
-                    isSelected
-                      ? "bg-(--app-primary-soft) border border-(--app-primary) text-(--app-primary) font-bold shadow-xs"
-                      : "bg-transparent border border-outline-variant/30 text-on-surface-variant hover:border-primary/60 hover:text-on-surface"
+                    styles.genderBtn,
+                    isSelected && styles.genderBtnActive
                   )}
                 >
                   {g.label}
@@ -149,12 +144,12 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
         </div>
       </div>
 
-      <div className="p-5 rounded-2xl bg-surface-container-low border border-(--app-border) panel-rim relative overflow-hidden shadow-md">
-        <div className="flex items-center gap-2 mb-2 text-primary font-label-caps text-label-caps tracking-widest uppercase font-bold">
-          <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+      <div className={styles.promoCard}>
+        <div className={styles.promoTitle}>
+          <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>auto_awesome</span>
           <span>BESPOKE CONSULTATION</span>
         </div>
-        <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+        <p className={styles.promoText}>
           Every hair sculpture includes a micro-digital scalp & strand elasticity diagnosis prior to chemical contact.
         </p>
       </div>

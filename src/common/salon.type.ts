@@ -51,6 +51,20 @@ export interface Salon {
   services?: Service[];
   staff?: Staff[];
   holidays?: any[];
+  theme?: {
+    id?: number;
+    uuid?: string;
+    code?: string;
+    name?: string;
+    preview_image?: string | null;
+  };
+  storefront_theme?: {
+    id?: number;
+    uuid?: string;
+    code?: string;
+    name?: string;
+    preview_image?: string | null;
+  };
 }
 
 export interface Service {

@@ -52,6 +52,8 @@ export default function ThemeProviderWrapper({ children }: Readonly<{ children: 
       root.style.setProperty("--app-hero-from", selected.heroFrom);
       root.style.setProperty("--app-hero-to", selected.heroTo);
       root.style.setProperty("--app-ring", selected.ring);
+      root.style.setProperty("--app-champagne", selected.ring);
+      root.style.setProperty("--app-accent", selected.ring);
       root.style.setProperty("--app-chip-tone", selected.chipTone);
       root.style.setProperty(
         "--app-primary-contrast",

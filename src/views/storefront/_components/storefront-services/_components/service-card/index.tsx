@@ -6,7 +6,8 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "../../../../../../store/hook";
 import type { RootState } from "../../../../../../store/store";
-import { addItemLocal, clearCart } from "../../../../../../features/salon/cart/cart.slice";
+import { addItemLocal, clearCart, removeItemLocal } from "../../../../../../features/salon/cart/cart.slice";
+import { removeCartItemAction } from "../../../../../../features/salon/cart/remove-item/remove-item.action";
 import { createCartAction } from "../../../../../../features/salon/cart/create-cart/create-cart.action";
 import { addCartItemAction } from "../../../../../../features/salon/cart/add-item/add-item.action";
 import { deleteCartAction } from "../../../../../../features/salon/cart/delete-cart/delete-cart.action";
@@ -14,6 +15,7 @@ import { callSnack } from "../../../../../../components/snackbar";
 import SwitchCartDialog from "./_components/switch-cart-dialog";
 import { getGenderChipConfig } from "./_components/utils/gender-chip-config";
 import { getCartAction } from "../../../../../../features/salon/cart/get-cart/get-cart.action";
+import styles from "./storefront-service-card.module.css";
 
 export default function ServiceCard({ service, subServices, salon }: Readonly<{ service: any; subServices: any[]; salon: any }>) {
   const [open, setOpen] = useState(false);
@@ -66,6 +68,40 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
     }
   };
 
+  const handleRemove = async (serviceId: string) => {
+    if (!isAuthenticated) {
+      dispatch(removeItemLocal(serviceId));
+      callSnack("Removed from cart", "info");
+      return;
+    }
+
+    const cartItem = cart.items.find(
+      (i: any) => i.service?.uuid === serviceId || i.service_id === serviceId,
+    );
+
+    if (cart.cartUuid && cartItem?.uuid) {
+      setAddingItemIds((prev) => [...prev, serviceId]);
+      try {
+        if (cart.items.length === 1) {
+          await dispatch(deleteCartAction(cart.cartUuid)).unwrap();
+        } else {
+          await dispatch(removeCartItemAction(cartItem.uuid)).unwrap();
+        }
+        if (customer?.uuid) {
+          await dispatch(getCartAction(customer.uuid));
+        }
+        callSnack("Removed from cart", "info");
+      } catch (error: any) {
+        callSnack(error?.message || "Failed to remove item", "error");
+      } finally {
+        setAddingItemIds((prev) => prev.filter((id) => id !== serviceId));
+      }
+    } else {
+      dispatch(removeItemLocal(serviceId));
+      callSnack("Removed from cart", "info");
+    }
+  };
+
   const onBook = async (item: any) => {
     const payload = {
       service_id: item.uuid,
@@ -80,7 +116,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
     }
 
     if (isAdded(item.uuid)) {
-      callSnack("Service already in cart", "info");
+      handleRemove(item.uuid);
       return;
     }
 
@@ -133,6 +169,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
         callSnack("Added to cart", "success");
       } else {
         await dispatch(createCartAction({ salon_id: effectiveSalonId, user_id: customer.uuid, items: [payload] })).unwrap();
+        await dispatch(getCartAction(customer.uuid));
         callSnack("Cart created and item added", "success");
       }
     } catch (error: any) {
@@ -147,59 +184,56 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
 
   return (
     <Box
-      className={`border rounded-2xl overflow-hidden transition-all duration-250 ${parentAdded
-          ? "border-(--app-primary) bg-linear-to-b from-(--app-primary-soft) to-(--app-surface) shadow-[0_14px_28px_rgba(15,23,42,0.14)]"
-          : "border-(--app-border) bg-(--app-surface) shadow-[0_10px_24px_rgba(15,23,42,0.06)] hover:shadow-[0_16px_34px_rgba(15,23,42,0.12)]"
-        }`}
+      className={`${styles.card} ${parentAdded ? styles.cardAdded : ""}`}
     >
-      <Box className="flex flex-wrap sm:flex-nowrap items-start justify-between p-3.5 sm:p-5 gap-2.5 sm:gap-4">
-        <Box className="flex items-start gap-2.5 sm:gap-3 flex-1 min-w-0 w-full sm:w-auto">
+      <Box className={styles.mainRow}>
+        <Box className={styles.serviceInfoCol}>
           {service.logo ? (
             <Box
               component="img"
               src={service.logo}
               alt={service.name}
-              className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover capitalize"
+              className={styles.serviceLogo}
             />
           ) : (
-            <Avatar className="w-11 h-11 sm:w-12 sm:h-12 bg-(--app-surface-alt) text-(--app-text)">
+            <Avatar className={styles.serviceAvatar}>
               {service.name?.[0]}
             </Avatar>
           )}
 
-          <Box className="flex-1 min-w-0 capitalize">
-            <Box className="font-semibold text-(--app-text) text-sm sm:text-base truncate">{service.name}</Box>
-            <Box className="text-[0.76rem] sm:text-sm text-(--app-muted) line-clamp-2 mt-0.5 capitalize">
+          <Box className={styles.textGroup}>
+            <Box className={styles.serviceName}>{service.name}</Box>
+            <Box className={styles.serviceDescription}>
               {service.description}
             </Box>
 
-            <Box className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5 sm:mt-3">
+            <Box className={styles.chipsContainer}>
               <Chip
                 size="small"
                 label={formatPrice(service)}
-                className="font-bold bg-(--app-primary-soft)/70 text-(--app-primary) border border-(--app-primary)/15 max-w-28 sm:max-w-none text-[9px] sm:text-[10px] h-5.5 sm:h-6"
+                className={styles.priceChip}
               />
               {service.duration && (
                 <Chip
                   size="small"
                   variant="outlined"
                   label={`${service.duration} min`}
-                  className="bg-(--app-surface-alt)/60 text-(--app-muted) border-(--app-border) max-w-22 sm:max-w-none text-[9px] sm:text-[10px] h-5.5 sm:h-6"
+                  className={styles.durationChip}
                 />
               )}
               {parentGender && (
                 <Chip
                   size="small"
                   label={parentGender.label}
-                  className={`${parentGender.className} text-[9px] sm:text-[10px] h-5.5 sm:h-6`}
+                  className={`${parentGender.className} ${styles.genderChipSmall}`}
                 />
               )}
             </Box>
           </Box>
         </Box>
 
-        <Box className="shrink-0 text-right ml-auto flex flex-col items-end">
-          <Box className="font-extrabold text-(--app-text) text-base sm:text-lg leading-none">
+        <Box className={styles.actionCol}>
+          <Box className={styles.priceLabel}>
             {formatPrice(service).replace("From ", "")}
           </Box>
           {!hasSubServices && (
@@ -208,12 +242,21 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
               variant={parentAdded ? "outlined" : "contained"}
               color={parentAdded ? "success" : "primary"}
               disabled={addingItemIds.includes(service.uuid)}
-              className={`mt-1.5 sm:mt-2 !min-w-[4.8rem] sm:!min-w-[6.4rem] !min-h-0 h-7 sm:h-9.5 !px-2.5 !py-0.5 sm:!px-4 sm:!py-1.5 rounded-lg text-[9px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 border-0 ${parentAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
-                }`}
-              onClick={() => !parentAdded && onBook(service)}
+              className={`${styles.bookButton} ${parentAdded ? styles.bookButtonAdded : ""}`}
+              onClick={() => {
+                if (parentAdded) {
+                  handleRemove(service.uuid);
+                } else {
+                  onBook(service);
+                }
+              }}
             >
-              {addingItemIds.includes(service.uuid) && <CircularProgress size={12} className="text-white mr-1 sm:mr-1.5" />}
-              {parentAdded ? "✓ Added" : addingItemIds.includes(service.uuid) ? "Booking..." : "Book"}
+              {addingItemIds.includes(service.uuid) && (
+                <CircularProgress size={12} color="inherit" sx={{ mr: { xs: 0.5, sm: 0.75 } }} />
+              )}
+              {addingItemIds.includes(service.uuid)
+                ? (parentAdded ? "Removing..." : "Adding...")
+                : (parentAdded ? "✓ Added" : "Book")}
             </Button>
           )}
         </Box>
@@ -221,7 +264,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
         {hasSubServices && (
           <IconButton
             onClick={() => setOpen((v) => !v)}
-            className="border border-(--app-border) bg-(--app-surface-alt) hover:bg-(--app-bg) ml-1 mt-0.5 w-10 h-10"
+            className={styles.expandBtn}
           >
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </IconButton>
@@ -230,64 +273,70 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
 
       {hasSubServices && (
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box className="border-t border-(--app-border) bg-(--app-surface-alt) px-3 sm:px-4 py-3 sm:py-4 space-y-2.5">
+          <Box className={styles.subServicesContainer}>
             {subServices.map((sub) => {
               const subGender = getGenderChipConfig(sub.gender);
               const subAdded = isAdded(sub.uuid);
               return (
                 <Box
                   key={sub.uuid}
-                  className={`flex items-center justify-between gap-3 sm:gap-4 py-3 px-2.5 sm:px-3 rounded-xl transition-all duration-200 ${subAdded
-                      ? "bg-(--app-primary-soft)/60 border border-(--app-primary)"
-                      : "bg-(--app-surface) border border-(--app-border) hover:border-(--app-muted)"
-                    }`}
+                  className={`${styles.subServiceRow} ${subAdded ? styles.subServiceRowAdded : ""}`}
                 >
-                  <Box className="flex items-start gap-3 flex-1 min-w-0">
+                  <Box className={styles.subServiceInfo}>
                     {sub.logo ? (
                       <Box
                         component="img"
                         src={sub.logo}
                         alt={sub.name}
-                        className="w-10 h-10 rounded-lg object-cover shrink-0"
+                        className={styles.subServiceLogo}
                       />
                     ) : (
-                      <Avatar className="w-10 h-10 bg-(--app-surface) text-(--app-text) text-xs sm:text-sm">
+                      <Avatar className={styles.subServiceAvatar}>
                         {sub.name?.[0]}
                       </Avatar>
                     )}
 
-                    <Box className="min-w-0">
-                      <Box className="font-semibold text-xs sm:text-sm truncate text-(--app-text)">{sub.name}</Box>
-                      <Box className="text-[10px] sm:text-xs text-(--app-muted) line-clamp-2 mt-0.5">
+                    <Box sx={{ minWidth: 0 }}>
+                      <Box className={styles.subServiceTitle}>{sub.name}</Box>
+                      <Box className={styles.subServiceDesc}>
                         {sub.description}
                       </Box>
-                      <Box className="flex flex-wrap gap-2 mt-1">
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 0.5 }}>
                         {subGender && (
                           <Chip
                             size="small"
                             label={subGender.label}
-                            className={`${subGender.className} text-[9px] sm:text-[10px] h-5 sm:h-5.5`}
+                            className={`${subGender.className} ${styles.genderChipSmall}`}
                           />
                         )}
                       </Box>
                     </Box>
                   </Box>
 
-                  <Box className="text-right shrink-0 min-w-22 sm:min-w-26 flex flex-col items-end">
-                    <Box className="font-bold text-xs sm:text-sm text-(--app-text)">{formatPrice(sub)}</Box>
+                  <Box className={styles.subServiceAction}>
+                    <Box className={styles.subPrice}>{formatPrice(sub)}</Box>
                     {sub.duration && (
-                      <Box className="text-[10px] sm:text-xs text-(--app-muted) mt-0.5">{sub.duration} min</Box>
+                      <Box className={styles.subDuration}>{sub.duration} min</Box>
                     )}
                     <Button
                       variant={subAdded ? "outlined" : "contained"}
                       color={subAdded ? "success" : "primary"}
                       disabled={addingItemIds.includes(sub.uuid)}
-                      className={`mt-1.5 !min-w-[4.4rem] sm:!min-w-[5.8rem] !min-h-0 h-6 sm:h-8.5 !px-2 sm:!px-3.5 !py-0.5 sm:!py-1 rounded-lg text-[8px] sm:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-200 border-0 ${subAdded ? "bg-emerald-500/10 cursor-default" : "shadow-sm shadow-(--app-primary)/15"
-                        }`}
-                      onClick={() => !subAdded && onBook(sub)}
+                      className={`${styles.subBookButton} ${subAdded ? styles.subBookButtonAdded : ""}`}
+                      onClick={() => {
+                        if (subAdded) {
+                          handleRemove(sub.uuid);
+                        } else {
+                          onBook(sub);
+                        }
+                      }}
                     >
-                      {addingItemIds.includes(sub.uuid) && <CircularProgress size={10} className="text-white mr-1" />}
-                      {subAdded ? "✓ Added" : addingItemIds.includes(sub.uuid) ? "Adding..." : "Book"}
+                      {addingItemIds.includes(sub.uuid) && (
+                        <CircularProgress size={10} color="inherit" sx={{ mr: 0.5 }} />
+                      )}
+                      {addingItemIds.includes(sub.uuid)
+                        ? (subAdded ? "Removing..." : "Adding...")
+                        : (subAdded ? "✓ Added" : "Book")}
                     </Button>
                   </Box>
                 </Box>

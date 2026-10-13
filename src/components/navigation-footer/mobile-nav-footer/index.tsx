@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNavigate";
 import { navigation } from "../../../layouts/navigation";
 
+import styles from "./mobile-nav-footer.module.css";
+
 export default function MobileNavFooter() {
   const pathname = usePathname();
   const navigate = useStorefrontNavigate();
@@ -15,7 +17,7 @@ export default function MobileNavFooter() {
       value={current}
       onChange={(_, next) => navigate(next)}
       showLabels
-      className="h-16 bg-(--app-surface) border-t border-(--app-border)"
+      className={styles.bottomNav}
     >
       {navigation.map((i) => {
         const Icon = i.icon;

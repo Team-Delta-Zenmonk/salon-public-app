@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import styles from "./switch-cart-dialog.module.css";
 
 interface SwitchCartDialogProps {
   open: boolean;
@@ -34,27 +35,27 @@ export default function SwitchCartDialog({
 
   return (
     <Dialog open={open} maxWidth="xs" fullWidth fullScreen={fullScreen}>
-      <DialogTitle className="text-(--app-text)">Switch Salon Cart</DialogTitle>
+      <DialogTitle className={styles.dialogTitle}>Switch Salon Cart</DialogTitle>
       <DialogContent>
-        <Box className="py-2">
+        <Box className={styles.contentBody}>
           <Typography>
             You have{" "}
-            <Box component="span" className="font-semibold">
+            <Box component="span" className={styles.semiboldText}>
               {currentCartItemsCount} item(s)
             </Box>{" "}
             in your current cart.
           </Typography>
-          <Typography variant="body2" color="text.secondary" className="mt-1 text-(--app-muted)">
+          <Typography variant="body2" className={styles.mutedText}>
             Adding this service will create a new cart for{" "}
-            <Box component="span" className="font-semibold text-(--app-text)">
+            <Box component="span" className={styles.salonNameText}>
               {newSalonName}
             </Box>{" "}
             and replace your current cart.
           </Typography>
-          <Divider className="my-2 border-(--app-border)" />
+          <Divider className={styles.divider} />
           <Typography color="warning.main">
             Current cart items will be{" "}
-            <Box component="span" className="font-semibold">
+            <Box component="span" className={styles.semiboldText}>
               deleted
             </Box>
             .
@@ -66,7 +67,7 @@ export default function SwitchCartDialog({
           Cancel
         </Button>
         <Button onClick={onConfirm} variant="contained" color="primary" disabled={loading}>
-          {loading ? <CircularProgress size={16} className="text-white mr-2" /> : <span className="mr-1.5">➜</span>}
+          {loading ? <CircularProgress size={16} sx={{ color: "white", mr: 1 }} /> : <span className={styles.arrowIcon}>➜</span>}
           {loading ? "Switching..." : "Switch & Add Service"}
         </Button>
       </DialogActions>

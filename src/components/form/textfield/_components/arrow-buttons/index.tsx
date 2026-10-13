@@ -40,14 +40,14 @@ function ArrowButtons<T extends FieldValues>({
     >
       <Stack>
         <IconButton
-          className={clsx("p-0", styles.arrowBtn)}
+          className={styles.arrowBtn}
           onClick={handleUp}
           data-test-id={`btn-number-input-arrow-up-${identifier}`}
         >
           <ArrowDropUpIcon className="iconSizeStyles" />
         </IconButton>
         <IconButton
-          className={clsx("p-0", styles.arrowBtn)}
+          className={styles.arrowBtn}
           onClick={handleDown}
           data-test-id={`btn-number-input-arrow-down-${identifier}`}
         >

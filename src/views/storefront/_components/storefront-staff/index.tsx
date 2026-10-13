@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { getStaffAction } from "../../../../features/salon/staff/get-staff/get-staff.action";
 import { useAppDispatch } from "../../../../store/hook";
 import StaffModal from "./_components/staff-detail-dialog";
+import styles from "./storefront-staff.module.css";
 
 interface SalonStaffProps {
   staff: any[];
@@ -43,14 +44,14 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
   return (
     <>
       <Box>
-        <Typography className="text-base sm:text-lg font-bold mb-1 tracking-[-0.015em] text-(--app-text)">
+        <Typography className={styles.title}>
           Meet Our Experts
         </Typography>
-        <Typography className="text-[0.76rem] sm:text-xs text-(--app-muted) mb-4">
+        <Typography className={styles.subtitle}>
           Click on a specialist to view their info and availability.
         </Typography>
 
-        <Box className="flex md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 overflow-x-auto md:overflow-visible pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <Box className={styles.staffGrid}>
           {staff.map((member) => {
             const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim();
             const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
@@ -60,28 +61,28 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
             return (
               <Box
                 key={member.uuid}
-                className="min-w-52 md:min-w-0 rounded-2xl border bg-(--app-surface-alt) border-(--app-border) hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(15,23,42,0.12)] transition-all duration-250 cursor-pointer"
+                className={styles.staffCard}
                 onClick={() => onStaffClick(member)}
               >
-                <Box className="p-3 sm:p-4 flex items-center gap-3">
-                  <Box className="relative shrink-0">
-                    <Avatar src={photo} alt={fullName} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-(--app-border) capitalize">
+                <Box className={styles.cardInner}>
+                  <Box className={styles.avatarContainer}>
+                    <Avatar src={photo} alt={fullName} className={styles.staffAvatar}>
                       {initials || "—"}
                     </Avatar>
-                    <Box className="absolute -right-0.5 -bottom-0.5 w-3 h-3 rounded-full border border-(--app-surface) bg-emerald-500" />
+                    <Box className={styles.onlineBadge} />
                   </Box>
 
-                  <Box className="min-w-0">
-                    <Typography className="font-semibold text-(--app-text) text-xs sm:text-sm truncate">
+                  <Box className={styles.staffInfo}>
+                    <Typography className={styles.staffName}>
                       {fullName || "Unnamed"}
                     </Typography>
-                    <Typography className="text-[10px] sm:text-xs text-(--app-muted) truncate mt-0.5">
+                    <Typography className={styles.staffSpecialization}>
                       {specialization}
                     </Typography>
                     <Chip
                       size="small"
                       label="Available"
-                      className="mt-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-500/10 border border-emerald-500/18 h-5.5"
+                      className={styles.availableChip}
                     />
                   </Box>
                 </Box>

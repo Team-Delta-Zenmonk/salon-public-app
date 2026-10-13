@@ -1,0 +1,42 @@
+.searchField {
+  width: 100%;
+  max-width: 43.75rem;
+}
+
+.searchField :global(.MuiInputBase-root) {
+  height: 2.5rem;
+  border-radius: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .searchField :global(.MuiInputBase-root) {
+    height: 3rem;
+    border-radius: 0.75rem;
+  }
+}
+
+.searchField :global(.MuiOutlinedInput-notchedOutline) {
+  border-color: rgba(118, 106, 94, 0.35);
+}
+
+.searchField :global(.MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--app-primary);
+}
+
+.searchField :global(.MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: var(--app-primary);
+}
+
+.inputControl {
+  font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .inputControl {
+    font-size: 0.875rem;
+  }
+}
+
+.iconMuted {
+  color: var(--app-muted);
+}

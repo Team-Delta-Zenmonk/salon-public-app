@@ -12,6 +12,8 @@ import { themeOptions, type AppThemeId } from "../../theme/theme";
 import { useState } from "react";
 import EllipsisCell from "../ellipse-cell";
 
+import styles from "./header.module.css";
+
 interface HeaderProps {
   onMenuClick: () => void;
 }
@@ -31,31 +33,31 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
   const activeSalonName = useAppSelector((state: RootState) => state.cart.salon?.name) || "Glow Salon";
 
   return (
-    <AppBar position="sticky" elevation={0} color="transparent" className="bg-transparent">
-      <Toolbar className="min-h-14 sm:min-h-16 px-3 sm:px-5">
-        <Box className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+    <AppBar position="sticky" elevation={0} color="transparent" className={styles.appBar}>
+      <Toolbar className={styles.toolbar}>
+        <Box className={styles.leftSection}>
           <IconButton size="small" onClick={onMenuClick}>
             <MenuIcon />
           </IconButton>
           <Box
-            className="leading-tight min-w-0 max-w-[160px] sm:max-w-[220px] cursor-pointer"
+            className={styles.salonBrand}
             onClick={() => navigate("/")}
           >
             <EllipsisCell
               value={activeSalonName}
-              className="font-semibold text-sm sm:text-base text-(--app-text) block"
+              className={styles.salonTitle}
             />
-            <Box className="text-xs sm:text-sm text-(--app-muted) truncate">Discover & Book</Box>
+            <Box className={styles.salonSubtitle}>Discover & Book</Box>
           </Box>
         </Box>
 
-        <Box className="flex items-center gap-2 sm:gap-3">
+        <Box className={styles.rightSection}>
           <IconButton
             onClick={(event) => setThemeMenuAnchor(event.currentTarget)}
-            className="border border-(--app-border) bg-(--app-surface) rounded-xl w-10 h-10 shadow-sm hover:bg-(--app-surface-alt)"
+            className={styles.themeToggleBtn}
             aria-label="Change theme"
           >
-            <PaletteOutlinedIcon className="text-(--app-muted) text-[18px]" />
+            <PaletteOutlinedIcon className={styles.paletteIcon} />
           </IconButton>
           <Menu
             anchorEl={themeMenuAnchor}
@@ -65,7 +67,7 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             slotProps={{
               paper: {
-                className: "mt-2 rounded-xl border border-(--app-border) bg-(--app-surface) min-w-44",
+                className: styles.themeMenuPaper,
               },
             }}
           >
@@ -75,20 +77,20 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
                 <MenuItem
                   key={option.id}
                   onClick={() => onThemeChange(option.id)}
-                  className="flex items-center justify-between gap-4"
+                  className={styles.menuItemRow}
                 >
-                  <Box component="span" className="text-sm text-(--app-text)">
+                  <Box component="span" className={styles.menuItemLabel}>
                     {option.label}
                   </Box>
-                  {selected && <CheckIcon className="text-(--app-primary) text-[16px]" />}
+                  {selected && <CheckIcon className={styles.checkIcon} />}
                 </MenuItem>
               );
             })}
           </Menu>
-          <Box className="hidden md:block">
+          <Box className={styles.cartButtonWrapper}>
             <CartIcon count={cartCount} onClick={() => navigate("/cart")} />
           </Box>
-          <Avatar className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-(--app-primary-soft) text-(--app-text)">U</Avatar>
+          <Avatar className={styles.avatar}>U</Avatar>
         </Box>
       </Toolbar>
     </AppBar>

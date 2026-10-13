@@ -9,22 +9,48 @@ interface AssistanceCardProps {
 export default function AssistanceCard({ phone, isDesktop = false }: Readonly<AssistanceCardProps>) {
   return (
     <Box
-      className={`
-        ${isDesktop ? "mt-4 flex" : "mt-4 mb-4 flex lg:hidden"}
-        p-4 rounded-2xl !bg-(--app-primary-soft)
-        items-center gap-4 animate-in fade-in slide-in-from-bottom-2 duration-400
-        border border-(--app-border)
-      `}
+      sx={{
+        mt: 2,
+        display: "flex",
+        alignItems: "center",
+        gap: 2,
+        p: 2,
+        borderRadius: "1rem",
+        backgroundColor: "var(--app-primary-soft)",
+        border: "1px solid var(--color-hairline)",
+        ...(isDesktop ? {} : { mb: 2, "@media (min-width: 1024px)": { display: "none" } }),
+      }}
     >
-      <Box className="w-10 h-10 rounded-full bg-white/50 dark:bg-white/5 flex items-center justify-center shrink-0">
-        <ErrorOutlineIcon className="text-(--app-primary) text-[20px]" />
+      <Box
+        sx={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          backgroundColor: "rgba(255,255,255,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <ErrorOutlineIcon sx={{ color: "var(--color-primary)", fontSize: 20 }} />
       </Box>
       <Box>
-        <Typography className="text-[13px] font-black text-(--app-text) leading-none mb-1">Need help?</Typography>
+        <Typography sx={{ fontSize: 13, fontWeight: 900, color: "var(--color-on-surface)", lineHeight: 1, mb: "4px" }}>
+          Need help?
+        </Typography>
         <Typography
           component="a"
           href={`tel:${phone || "+91 98765 43210"}`}
-          className="text-[11px] text-(--app-muted) hover:text-(--app-primary) transition-colors no-underline block mt-0.5"
+          sx={{
+            fontSize: 11,
+            color: "var(--color-tertiary)",
+            textDecoration: "none",
+            display: "block",
+            mt: "2px",
+            "&:hover": { color: "var(--color-primary)" },
+            transition: "color 0.2s",
+          }}
         >
           Contact salon: {phone || "+91 98765 43210"}
         </Typography>

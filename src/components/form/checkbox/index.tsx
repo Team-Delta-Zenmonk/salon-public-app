@@ -61,7 +61,7 @@ const CheckboxGroup = <T extends FieldValues>({
               />
             ))}
             {showError && error?.message && (
-              <FormHelperText error data-test-id={`checkbox-error-${identifier}`} className="mt-0 w-100">
+              <FormHelperText error data-test-id={`checkbox-error-${identifier}`} className={styles.helperText}>
                 {error.message}
               </FormHelperText>
             )}

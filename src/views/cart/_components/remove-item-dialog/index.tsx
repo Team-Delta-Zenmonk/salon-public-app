@@ -1,5 +1,7 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, Box, CircularProgress } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import EllipsisCell from "@/components/ellipse-cell";
+import styles from "./remove-item-dialog.module.css";
 
 interface ConfirmRemoveItemDialogProps {
   open: boolean;
@@ -14,25 +16,35 @@ export default function ConfirmRemoveItemDialog({ open, serviceName, removing, o
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Dialog open={open} maxWidth="xs" fullWidth fullScreen={fullScreen}>
-      <DialogTitle className="text-(--app-text)">Remove service?</DialogTitle>
+    <Dialog
+      open={open}
+      maxWidth="xs"
+      fullWidth
+      fullScreen={fullScreen}
+      slotProps={{
+        paper: { className: styles.paper },
+      }}
+    >
+      <DialogTitle className={styles.dialogTitle}>Remove service?</DialogTitle>
 
       <DialogContent>
-        <Typography variant="body2" color="text.secondary" className="text-(--app-muted)">
+        <Typography variant="body2" className={styles.dialogBody}>
           Are you sure you want to remove{" "}
-          <Box component="span" className="font-semibold text-(--app-text)">
-            {serviceName || "this service"}
-          </Box>{" "}
+          <EllipsisCell
+            value={serviceName || "this service"}
+            className={styles.serviceNameInline}
+            maxChars={20}
+          />{" "}
           from your cart?
         </Typography>
       </DialogContent>
 
-      <DialogActions className="px-6 pb-5">
+      <DialogActions className={styles.dialogActions}>
         <Button onClick={onCancel} color="inherit" disabled={removing}>
           Cancel
         </Button>
         <Button onClick={onConfirm} color="error" variant="contained" disabled={removing}>
-          {removing ? <CircularProgress size={16} className="text-white mr-2" /> : null}
+          {removing ? <CircularProgress size={16} className={styles.progressWhite} /> : null}
           {removing ? "Removing..." : "Remove"}
         </Button>
       </DialogActions>

@@ -1,6 +1,7 @@
 "use client";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { Box, Button, Typography } from "@mui/material";
+import styles from "./unauthorized.module.css";
 
 export default function Unauthorized() {
   const handleGoBack = () => {
@@ -10,37 +11,37 @@ export default function Unauthorized() {
   };
 
   return (
-    <Box className="min-h-screen bg-white flex items-center justify-center p-4">
-      <Box className="max-w-lg w-full text-center rounded-xl border border-[#e5e5e5] p-6">
-        <Box className="flex justify-center mb-6">
-          <Box className="w-24 h-24 bg-(--primary-900) rounded-full flex items-center justify-center">
-            <ContentCutIcon className="text-white" />
+    <Box className={styles.container}>
+      <Box className={styles.card}>
+        <Box className={styles.iconWrapper}>
+          <Box className={styles.iconCircle}>
+            <ContentCutIcon className={styles.icon} />
           </Box>
         </Box>
 
-        <Box className="mb-4">
-          <Typography className="text-blue-900" variant="h1">
+        <Box className={styles.codeWrapper}>
+          <Typography className={styles.codeTitle} variant="h1">
             403
           </Typography>
         </Box>
-        <Typography className="text-gray-900 mb-3">Access Denied</Typography>
-        <Box className="text-gray-600 mb-8">
+        <Typography className={styles.title}>Access Denied</Typography>
+        <Box className={styles.description}>
           You don&apos;t have permission to access this page. This area is restricted to authorized users only.
         </Box>
-        <Box className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8 text-left">
-          <Typography className="text-gray-700 mb-2">This might have happened because:</Typography>
-          <ul className="text-gray-600 space-y-1 ml-4">
+        <Box className={styles.reasonsBox}>
+          <Typography className={styles.reasonsTitle}>This might have happened because:</Typography>
+          <ul className={styles.reasonsList}>
             <li>• You don&apos;t have the required permissions</li>
             <li>• Your session has expired</li>
             <li>• This feature is restricted to administrators</li>
             <li>• Your account hasn&apos;t been fully activated</li>
           </ul>
         </Box>
-        <Box className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Box className={styles.actions}>
           <Button
             variant="contained"
             onClick={handleGoBack}
-            className="px-6 py-2.5 border border-blue-900 -600 rounded-lg hover:bg-blue-50 transition-colors"
+            className={styles.backButton}
           >
             Go Back
           </Button>

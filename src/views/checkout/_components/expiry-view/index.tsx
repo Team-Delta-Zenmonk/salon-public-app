@@ -7,18 +7,49 @@ interface ExpiryViewProps {
 
 export default function ExpiryView({ onReturn }: Readonly<ExpiryViewProps>) {
   return (
-    <Box className="p-10 text-center border border-(--app-border) !bg-(--app-primary-soft) rounded-2xl shadow-sm animate-in fade-in zoom-in-95 duration-500">
-      <Box className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-6">
-        <ErrorOutlineIcon color="error" className="text-[32px]" />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        py: 8,
+        px: 3,
+      }}
+    >
+      <Box
+        sx={{
+          width: 64,
+          height: 64,
+          borderRadius: "50%",
+          backgroundColor: "rgba(239,68,68,0.1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 2,
+        }}
+      >
+        <ErrorOutlineIcon color="error" sx={{ fontSize: 32 }} />
       </Box>
-      <Typography className="font-black text-(--app-text) text-xl mb-2">Booking Expired</Typography>
-      <Typography className="text-(--app-muted) text-sm mb-8 max-w-[280px] mx-auto">
+      <Typography sx={{ fontWeight: 900, color: "var(--color-on-surface)", fontSize: "1.25rem", mb: 1 }}>
+        Booking Expired
+      </Typography>
+      <Typography sx={{ color: "var(--color-tertiary)", fontSize: "0.875rem", mb: 4, maxWidth: 280 }}>
         Your session has timed out and the slot has been released. Please return to the cart to re-book.
       </Typography>
       <Button
         variant="contained"
         onClick={onReturn}
-        className="rounded-xl px-10 py-3 font-black normal-case shadow-lg shadow-(--app-primary-soft) transition-all active:scale-95"
+        sx={{
+          borderRadius: "0.75rem",
+          px: 5,
+          py: 1.5,
+          fontWeight: 900,
+          textTransform: "none",
+          boxShadow: "0 4px 12px var(--app-primary-soft)",
+          "&:active": { transform: "scale(0.95)" },
+        }}
       >
         Return to Cart
       </Button>

@@ -5,9 +5,11 @@ import type { LatLngValue } from "./_components/location-map";
 import { Box, Skeleton } from "@mui/material";
 import { reverseGeocode } from "../../features/maps/mapbox-geocode.service";
 
+import styles from "./map.module.css";
+
 const MapPicker = dynamic(() => import("./_components/location-map"), {
   ssr: false,
-  loading: () => <Skeleton variant="rounded" height={300} className="w-full rounded-lg" />,
+  loading: () => <Skeleton variant="rounded" height={300} className={styles.skeleton} />,
 });
 
 type LocationMapProps = {
@@ -39,8 +41,8 @@ export default function LocationMap({ control, latitude, longitude, label, disab
   };
 
   return (
-    <Box className="space-y-2">
-      {label && <Box className=" text-lg font-semibold mb-2">{label}</Box>}
+    <Box className={styles.mapWrapper}>
+      {label && <Box className={styles.mapLabel}>{label}</Box>}
       <Controller
         control={control}
         name={latitude as any}

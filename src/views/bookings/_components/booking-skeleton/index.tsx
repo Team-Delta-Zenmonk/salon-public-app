@@ -1,42 +1,39 @@
 import React from "react";
 import { Card, CardContent, Box, Skeleton, Divider } from "@mui/material";
+import styles from "./booking-skeleton.module.css";
 
 export const BookingSkeleton: React.FC = () => {
   return (
-    <Card
-      elevation={0}
-      className="rounded-2xl mb-3 bg-(--app-surface) border border-(--app-border) shadow-none relative overflow-hidden"
-    >
-      <Box className="absolute left-0 top-0 bottom-0 w-1 md:w-1.5 bg-(--app-border) opacity-50" />
-
-      <CardContent className="!p-4 md:!p-6 !pl-6 md:!pl-8 !pb-4 md:!pb-6">
-        <Box className="flex justify-between items-center mb-6">
-          <Box className="flex items-center gap-4">
-            <Skeleton variant="rounded" className="!w-14 !h-14 !rounded-xl" />
+    <Card elevation={0} className={styles.card}>
+      <Box className={styles.strip} />
+      <CardContent className={styles.content}>
+        <Box className={styles.topRow}>
+          <Box className={styles.topLeft}>
+            <Skeleton variant="rounded" sx={{ width: 56, height: 56, borderRadius: "0.75rem" }} />
             <Box>
-              <Skeleton variant="text" className="!w-[140px] !h-7" />
-              <Skeleton variant="text" className="!w-[200px] !h-5" />
+              <Skeleton variant="text" sx={{ width: 140, height: 28 }} />
+              <Skeleton variant="text" sx={{ width: 200, height: 20 }} />
             </Box>
           </Box>
-          <Skeleton variant="rounded" className="!w-[100px] !h-8 !rounded-2xl" />
+          <Skeleton variant="rounded" sx={{ width: 100, height: 32, borderRadius: "1rem" }} />
         </Box>
 
-        <Divider className="!my-6 !border-dashed opacity-50" />
+        <Divider sx={{ my: 3, borderStyle: "dashed", opacity: 0.5 }} />
 
-        <Box className="flex justify-between items-center">
-          <Box className="flex gap-8">
+        <Box className={styles.bottomRow}>
+          <Box className={styles.bottomLeft}>
             <Box>
-              <Skeleton variant="text" className="!w-10 !h-4" />
-              <Skeleton variant="text" className="!w-[100px] !h-6" />
+              <Skeleton variant="text" sx={{ width: 40, height: 16 }} />
+              <Skeleton variant="text" sx={{ width: 100, height: 24 }} />
             </Box>
             <Box>
-              <Skeleton variant="text" className="!w-10 !h-4" />
-              <Skeleton variant="text" className="!w-[100px] !h-6" />
+              <Skeleton variant="text" sx={{ width: 40, height: 16 }} />
+              <Skeleton variant="text" sx={{ width: 100, height: 24 }} />
             </Box>
           </Box>
-          <Box className="flex gap-4">
-            <Skeleton variant="rounded" className="!w-[120px] !h-10 !rounded-xl" />
-            <Skeleton variant="rounded" className="!w-[120px] !h-10 !rounded-xl" />
+          <Box className={styles.bottomRight}>
+            <Skeleton variant="rounded" sx={{ width: 120, height: 40, borderRadius: "0.75rem" }} />
+            <Skeleton variant="rounded" sx={{ width: 120, height: 40, borderRadius: "0.75rem" }} />
           </Box>
         </Box>
       </CardContent>

@@ -14,6 +14,8 @@ import { getStorefrontProfileService } from "../../features/salon/get-storefront
 import { getSalonService } from "../../features/salon/get-salon/get-salon.service";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 
+import styles from "./storefront.module.css";
+
 export default function StorefrontPage() {
   const params = useParams();
   const salonId = (params?.salonSlug as string) || (params?.salonId as string);
@@ -88,26 +90,26 @@ export default function StorefrontPage() {
 
   if (loading) {
     return (
-      <Box className="min-h-screen bg-(--app-bg)">
-        <Box className="h-16 border-b border-(--app-border) bg-(--app-surface) px-6 flex items-center justify-between">
-          <Box className="flex items-center gap-3">
-            <Skeleton variant="rounded" width={40} height={40} className="rounded-xl" />
+      <Box className={styles.pageContainer}>
+        <Box className={styles.loadingHeader}>
+          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Skeleton variant="rounded" width={40} height={40} style={{ borderRadius: "0.75rem" }} />
             <Skeleton variant="text" width={140} height={24} />
           </Box>
-          <Box className="flex items-center gap-3">
-            <Skeleton variant="rounded" width={80} height={36} className="rounded-xl" />
+          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <Skeleton variant="rounded" width={80} height={36} style={{ borderRadius: "0.75rem" }} />
             <Skeleton variant="circular" width={36} height={36} />
           </Box>
         </Box>
 
-        <Box className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-          <Skeleton variant="rounded" height={220} className="rounded-xl" />
-          <Box className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
-            <Skeleton variant="rounded" height={140} className="rounded-2xl" />
+        <Box className={styles.loadingMain}>
+          <Skeleton variant="rounded" height={220} style={{ borderRadius: "0.75rem" }} />
+          <Box className={styles.loadingCardsGrid}>
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
           </Box>
-          <Skeleton variant="rounded" height={360} className="rounded-xl" />
+          <Skeleton variant="rounded" height={360} style={{ borderRadius: "0.75rem" }} />
         </Box>
       </Box>
     );
@@ -115,14 +117,14 @@ export default function StorefrontPage() {
 
   if (error || !salon) {
     return (
-      <Box className="min-h-screen bg-(--app-bg) flex flex-col items-center justify-center p-6 text-center">
-        <Box className="w-18 h-18 rounded-xl bg-(--app-surface) border border-(--app-border) flex items-center justify-center mb-4 shadow-md">
-          <StorefrontIcon className="text-[36px] text-(--app-muted)" />
+      <Box className={styles.errorContainer}>
+        <Box className={styles.errorIconBox}>
+          <StorefrontIcon style={{ fontSize: "36px", color: "var(--app-muted)" }} />
         </Box>
-        <Typography className="text-xl sm:text-2xl font-black text-(--app-text)">
+        <Typography className={styles.errorTitle}>
           Salon Not Found
         </Typography>
-        <Typography className="text-xs sm:text-sm text-(--app-muted) max-w-md mt-2 mb-6">
+        <Typography className={styles.errorDesc}>
           {error || "The salon you are looking for is inactive or does not exist."}
         </Typography>
         <Button
@@ -130,8 +132,8 @@ export default function StorefrontPage() {
           onClick={() => {
             window.location.href = "/?salon=glow";
           }}
-          startIcon={<ArrowBackIcon className="text-[16px]" />}
-          className="rounded-2xl px-6 py-2.5 font-bold text-xs bg-(--app-primary) text-(--app-primary-contrast)"
+          startIcon={<ArrowBackIcon style={{ fontSize: "16px" }} />}
+          className={styles.errorBtn}
         >
           Go to Glow Salon
         </Button>
@@ -140,10 +142,10 @@ export default function StorefrontPage() {
   }
 
   return (
-    <Box className="min-h-screen bg-(--app-bg) flex flex-col">
+    <Box className={styles.pageContainer}>
       <StorefrontHeader salon={salon} activeTab={activeTab} onTabChange={handleTabChange} />
 
-      <Box className="flex-1 w-full max-w-6xl mx-auto px-3 sm:px-6 pt-5 sm:pt-7">
+      <Box className={styles.contentWrapper}>
         {activeTab === "overview" && (
           <StorefrontOverview salon={salon} onNavigateTab={handleTabChange} />
         )}
@@ -156,8 +158,8 @@ export default function StorefrontPage() {
         )}
 
         {activeTab === "specialists" && (
-          <Box className="space-y-6">
-            <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
+          <Box style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            <Box className={styles.specialistsCard}>
               <StorefrontStaff staff={salon?.staff || []} salonId={salon?.uuid} />
             </Box>
           </Box>

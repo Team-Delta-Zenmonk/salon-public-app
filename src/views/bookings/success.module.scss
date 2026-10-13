@@ -3,12 +3,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  // background-color: var(--app-surface-alt);
   position: relative;
-  // background-image:
-  //   radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--app-primary) 12%, transparent), transparent 70%),
-  //   radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--app-primary) 8%, transparent), transparent 50%),
-  //   radial-gradient(circle at 0% 100%, color-mix(in srgb, var(--app-primary) 8%, transparent), transparent 50%);
   background-size:
     100% 100%,
     100% 100%,
@@ -124,3 +119,291 @@
 .stagger4 {
   animation-delay: 0.4s;
 }
+
+.confettiOverlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--color-hairline);
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.cardHeader {
+  padding-top: 2rem;
+  padding-bottom: 1.25rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  text-align: center;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--bg-surface-container-low) 40%, transparent), transparent);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.iconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 9999px;
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-success, #10b981);
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+}
+
+@media (min-width: 640px) {
+  .iconCircle {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.checkIcon {
+  color: var(--color-success, #10b981) !important;
+  font-size: 32px !important;
+}
+
+@media (min-width: 640px) {
+  .checkIcon {
+    font-size: 38px !important;
+  }
+}
+
+.ringAbs {
+  position: absolute;
+  border: 2px solid var(--color-success, #10b981);
+  border-radius: 9999px;
+  inset: -4px;
+}
+
+.confirmedTitle {
+  font-weight: 900 !important;
+  color: var(--color-on-surface) !important;
+  margin-bottom: 0.25rem !important;
+  letter-spacing: -0.02em !important;
+  font-size: 20px !important;
+}
+
+@media (min-width: 640px) {
+  .confirmedTitle {
+    font-size: 24px !important;
+  }
+}
+
+.thankyouText {
+  color: var(--color-tertiary) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  opacity: 0.6;
+}
+
+.salonRow {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.salonInfo {
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.salonName {
+  font-weight: 900 !important;
+  font-size: 16px !important;
+  color: var(--color-on-surface) !important;
+  line-height: 1.3 !important;
+  margin-bottom: 2px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .salonName {
+    font-size: 17px !important;
+  }
+}
+
+.addressRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  opacity: 0.7;
+}
+
+.addressText {
+  font-size: 10px !important;
+  color: var(--color-tertiary) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+@media (min-width: 640px) {
+  .addressText {
+    font-size: 11px !important;
+  }
+}
+
+.dividerPad {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.dateTimeGrid {
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.gridLabel {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: var(--color-tertiary) !important;
+  opacity: 0.4;
+  margin-bottom: 0.25rem !important;
+}
+
+.gridValue {
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  color: var(--color-on-surface) !important;
+}
+
+.infoPad {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.infoBox {
+  background-color: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  padding: 0.875rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 10%, transparent);
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.infoText {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: var(--color-on-surface) !important;
+  line-height: 1.5 !important;
+  opacity: 0.8;
+  text-align: left;
+}
+
+.paymentSummary {
+  padding: 1.25rem;
+  background-color: color-mix(in srgb, var(--bg-surface-container-low) 40%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.paymentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentLabel {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  color: var(--color-tertiary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.paymentAmountOnline {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--color-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+@media (min-width: 640px) {
+  .paymentAmountOnline {
+    font-size: 22px !important;
+  }
+}
+
+.paymentAmountVenue {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--color-on-surface) !important;
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+@media (min-width: 640px) {
+  .paymentAmountVenue {
+    font-size: 22px !important;
+  }
+}
+
+.ctaGroup {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .ctaGroup {
+    margin-top: 2.5rem;
+  }
+}
+

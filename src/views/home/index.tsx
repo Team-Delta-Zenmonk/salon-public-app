@@ -4,11 +4,20 @@ import { Box } from "@mui/material";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { calculateTotals } from "../../common/cart.utils";
 import { addItemLocal, removeItemLocal } from "../../features/salon/cart/cart.slice";
+import { addCartItemAction } from "../../features/salon/cart/add-item/add-item.action";
+import { removeCartItemAction } from "../../features/salon/cart/remove-item/remove-item.action";
+import { deleteCartAction } from "../../features/salon/cart/delete-cart/delete-cart.action";
+import { createCartAction } from "../../features/salon/cart/create-cart/create-cart.action";
+import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
+import { callSnack } from "../../components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
+import CustomSelect from "@/components/custom-select";
 import ServiceCard from "@/components/service-card";
 import StaffCard from "@/components/staff-card";
+import ReservationFloatingBar from "@/components/reservation-floating-bar";
+
+import styles from "./home.module.css";
 
 const FALLBACK_PHOTOS = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDg4fWQGY7q01kQEu7Azo-ZxML-xjADF9Algitpt7Ou5sct21_1ua4IwDBx4jGE1pKbAzk6X4b7Tc3z055WSJ-jWOYfOUxzhwKfGYwhm6m4_IHkLoBbjPFJiXN8PaaPHxG56I1j5s0IwbflHjDOE3nSfXTxCTCukrnB2J2fhzv7PJVD2Cvoap0pFNZB9Ju8Jito4BmDcyjiVxQt9eMTS3aoL8UFBE7oamYkIWM52o4E00IFOp6Ie-skBv75NSxqd3h6gB6P_J4FHEU",
@@ -27,9 +36,11 @@ export default function HomePage() {
   const salonCategories: any[] = useMemo(() => salon?.categories || [], [salon?.categories]);
 
   const cart = useAppSelector((state) => state.cart);
+  const { isAuthenticated, customer } = useAppSelector((state) => state.auth);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
   const galleryImages = useMemo(() => {
     const urls = photos.map((p) => p?.secure_url || p?.url).filter(Boolean);
@@ -80,21 +91,81 @@ export default function HomePage() {
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
 
-  const toggleCart = (service: any) => {
+  const toggleCart = async (service: any) => {
     const serviceId = service.uuid || service.id;
+    if (loadingIds.includes(serviceId)) return;
+
     if (isAdded(serviceId)) {
-      dispatch(removeItemLocal(serviceId));
-    } else {
-      dispatch(
-        addItemLocal({
-          service_id: serviceId,
-          name: service.name,
-          base_price: service.price,
-          duration: service.duration,
-          salon,
-          service,
-        })
+      if (!isAuthenticated) {
+        dispatch(removeItemLocal(serviceId));
+        callSnack("Removed from cart", "info");
+        return;
+      }
+
+      const cartItem = cart.items.find(
+        (i: any) => i.service?.uuid === serviceId || i.service_id === serviceId,
       );
+
+      if (cart.cartUuid && cartItem?.uuid) {
+        setLoadingIds((prev) => [...prev, serviceId]);
+        try {
+          if (cart.items.length === 1) {
+            await dispatch(deleteCartAction(cart.cartUuid)).unwrap();
+          } else {
+            await dispatch(removeCartItemAction(cartItem.uuid)).unwrap();
+          }
+          if (customer?.uuid) {
+            await dispatch(getCartAction(customer.uuid));
+          }
+          callSnack("Removed from cart", "info");
+        } catch (error: any) {
+          callSnack(error?.message || "Failed to remove item", "error");
+        } finally {
+          setLoadingIds((prev) => prev.filter((id) => id !== serviceId));
+        }
+      } else {
+        dispatch(removeItemLocal(serviceId));
+        callSnack("Removed from cart", "info");
+      }
+    } else {
+      if (!isAuthenticated) {
+        dispatch(
+          addItemLocal({
+            service_id: serviceId,
+            name: service.name,
+            base_price: service.price,
+            duration: service.duration,
+            salon,
+            service,
+          }),
+        );
+        callSnack("Added to cart", "success");
+        return;
+      }
+
+      const payload = {
+        service_id: service.uuid,
+        duration: service.duration,
+        name: service.name,
+        base_price: service.price,
+      };
+
+      setLoadingIds((prev) => [...prev, serviceId]);
+      try {
+        if (cart.cartUuid) {
+          await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
+          await dispatch(getCartAction(customer.uuid));
+          callSnack("Added to cart", "success");
+        } else if (salon?.uuid) {
+          await dispatch(createCartAction({ salon_id: salon.uuid, user_id: customer.uuid, items: [payload] })).unwrap();
+          await dispatch(getCartAction(customer.uuid));
+          callSnack("Cart created and item added", "success");
+        }
+      } catch (error: any) {
+        callSnack(error?.message || "Failed to add item", "error");
+      } finally {
+        setLoadingIds((prev) => prev.filter((id) => id !== serviceId));
+      }
     }
   };
 
@@ -115,60 +186,62 @@ export default function HomePage() {
     });
   }, [rootServices, selectedGender, selectedCategory]);
 
-  const { totalPrice } = calculateTotals(cart.items);
-
   return (
-    <Box className="space-y-20 pb-36 text-[#1C1C18] bg-[#FCF9F3] min-h-screen">
-      <section className="relative pt-12 lg:pt-16 pb-12 px-6 md:px-12 max-w-[1440px] mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
-          <div className="lg:col-span-7 flex flex-col items-start gap-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1C1A17]" />
-              <span className="font-sans text-[10px] font-semibold text-[#766A5E] tracking-[0.14em] uppercase">
+    <Box className={styles.pageContainer}>
+      <section className={styles.heroSection}>
+        <div className={styles.heroGrid}>
+          <div className={styles.heroLeft}>
+            <div className={styles.heroBadge}>
+              <span className={styles.dot} />
+              <span className={styles.badgeText}>
                 HAUTE COIFFURE & DERMAL SANCTUARY
               </span>
             </div>
 
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#1C1A17] leading-[1.08] tracking-tight">
+            <h1 className={styles.heroHeading}>
               Tactile Quietude, <br /> Tailored Shears & Avant-Garde Beauty
             </h1>
 
-            <EllipsisCell
-              value={salon?.about || "An intimate, sanctuary-level atelier where master scissorsmiths and clinical facialists transform the sensory ritual of luxury grooming into contemporary art."}
-              className="font-sans text-base sm:text-lg text-[#4B463F] max-w-2xl leading-relaxed my-2 font-normal"
-            />
+            <div className={styles.heroAboutWrapper}>
+              <EllipsisCell
+                value={salon?.about || "An intimate, sanctuary-level atelier where master scissorsmiths and clinical facialists transform the sensory ritual of luxury grooming into contemporary art."}
+                className={styles.heroAboutText}
+                maxLines={5}
+                maxChars={200}
+              />
+            </div>
 
-            <div className="flex items-center gap-3 py-2 px-3.5 rounded-[2px] bg-[#F6F3ED] border border-[#E5DFD5]">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5A6B5C] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5A6B5C]" />
+            <div className={styles.statusCard}>
+              <span className={styles.pulseWrapper}>
+                <span className={styles.pulseRing} />
+                <span className={styles.pulseDot} />
               </span>
-              <span className="font-sans text-xs font-semibold uppercase tracking-[0.1em] text-[#1C1C18]">
+              <span className={styles.statusText}>
                 OPEN FOR BESPOKE APPOINTMENTS TODAY
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            <div className={styles.heroActions}>
               <a
                 href="#services-menu"
-                className="bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] px-7 py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all flex items-center gap-2 no-underline"
+                className={styles.primaryCta}
               >
                 <span>EXPLORE RITUAL MENU</span>
-                <span className="material-symbols-outlined text-[16px]">arrow_downward</span>
+                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_downward</span>
               </a>
               <button
                 type="button"
                 onClick={() => navigate("/specialists")}
-                className="bg-transparent hover:bg-[#F2EEE7] text-[#1C1A17] border border-[#1C1A17] px-7 py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all flex items-center gap-2 cursor-pointer"
+                className={styles.secondaryBtn}
               >
                 <span>RESIDENT SPECIALISTS</span>
-                <span className="material-symbols-outlined text-[16px]">person</span>
+                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>person</span>
               </button>
             </div>
           </div>
 
-          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-            <div className="group relative rounded-[2px] overflow-hidden border border-[#E5DFD5] bg-[#F0EEE8] aspect-[3/4] col-span-2 shadow-xs transition-all duration-300">
+          <div className={styles.heroRight}>
+            <div className={styles.bentoCard}>
               {galleryImages.map((imgUrl: string, idx: number) => {
                 const isVisible = idx === carouselIndex % galleryImages.length;
                 return (
@@ -176,15 +249,15 @@ export default function HomePage() {
                     key={`bento-1-${imgUrl}`}
                     alt="Atelier Solstice Craft"
                     src={imgUrl}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${isVisible ? "opacity-100 z-10" : "opacity-0 z-0"
-                      }`}
+                    className={styles.bentoImage}
+                    style={{ opacity: isVisible ? 1 : 0, zIndex: isVisible ? 10 : 0 }}
                   />
                 );
               })}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1C1A17]/80 via-[#1C1A17]/30 to-transparent z-10 pointer-events-none" />
-              <div className="absolute bottom-6 left-6 right-6 z-20 pointer-events-none">
-                <span className="font-sans text-[10px] font-semibold text-[#A88B64] uppercase tracking-[0.14em] block mb-1">COUTURE ATELIER</span>
-                <h2 className="font-serif text-2xl text-[#FCFAF7] font-normal leading-snug">
+              <div className={styles.bentoOverlay} />
+              <div className={styles.bentoContent}>
+                <span className={styles.bentoSub}>COUTURE ATELIER</span>
+                <h2 className={styles.bentoTitle}>
                   Precision Geometry & Botanical Radiance
                 </h2>
               </div>
@@ -193,47 +266,74 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-[#E5DFD5] bg-[#F6F3ED] py-16 px-6 md:px-12">
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-          <div className="space-y-3">
-            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">01. TRANQUIL AUTHORITY</span>
-            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Composed Deliberation</h3>
-            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+      <section className={styles.pillarsSection}>
+        <div className={styles.pillarsGrid}>
+          <div className={styles.pillarCard}>
+            <span className={styles.pillarNum}>01. TRANQUIL AUTHORITY</span>
+            <h3 className={styles.pillarTitle}>Composed Deliberation</h3>
+            <p className={styles.pillarDesc}>
               Replacing urgent transactional booking software with serene, personalized consultation and spacious private suites.
             </p>
           </div>
-          <div className="space-y-3">
-            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">02. SENSORY REFINEMENT</span>
-            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Textured Aesthetics</h3>
-            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+          <div className={styles.pillarCard}>
+            <span className={styles.pillarNum}>02. SENSORY REFINEMENT</span>
+            <h3 className={styles.pillarTitle}>Textured Aesthetics</h3>
+            <p className={styles.pillarDesc}>
               Every detail channels organic linen, brushed bronze metals, and natural stone for an unhurried luxury tempo.
             </p>
           </div>
-          <div className="space-y-3">
-            <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase block">03. DISCERNING CURATION</span>
-            <h3 className="font-serif text-xl text-[#1C1A17] font-medium">Bespoke Formulations</h3>
-            <p className="font-sans text-xs text-[#766A5E] leading-relaxed">
+          <div className={styles.pillarCard}>
+            <span className={styles.pillarNum}>03. DISCERNING CURATION</span>
+            <h3 className={styles.pillarTitle}>Bespoke Formulations</h3>
+            <p className={styles.pillarDesc}>
               French glazes, surgical-grade shears, and Japanese scalp trichology executed by master certified artisans.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="px-6 md:px-12 max-w-[1440px] mx-auto w-full py-8" id="services-menu">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-[#E5DFD5] pb-8">
+      <section className={styles.catalogSection} id="services-menu">
+        <div className={styles.catalogHeader}>
           <div>
-            <div className="flex items-center gap-2 text-[#735A37] font-sans text-[10px] font-semibold tracking-[0.14em] uppercase mb-2">
-              <span className="material-symbols-outlined text-[16px]">content_cut</span>
+            <div className={styles.catalogSubBadge}>
+              <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>content_cut</span>
               BESPOKE RITUAL CATALOG
             </div>
-            <h2 className="font-serif text-4xl sm:text-5xl text-[#1C1A17] font-normal">Curated Treatment Offerings</h2>
+            <h2 className={styles.catalogHeading}>Curated Treatment Offerings</h2>
           </div>
-          <p className="font-sans text-xs sm:text-sm text-[#766A5E] max-w-md leading-relaxed">
+          <p className={styles.pillarDesc} style={{ maxWidth: "28rem" }}>
             Select tailored ceremonies formulated with botanical actives, French glazes, and surgical-grade styling implements.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 overflow-x-auto py-3 scrollbar-none border-b border-[#E5DFD5]/60 mb-8">
+        <div className={styles.mobileFilterRow}>
+          <CustomSelect
+            label="Category:"
+            value={selectedCategory}
+            options={categorySanctuaries}
+            onChange={(val) => setSelectedCategory(val)}
+            maxChars={20}
+            menuMaxChars={25}
+            menuWidth={220}
+          />
+
+          <CustomSelect
+            label="Guest Focus:"
+            value={selectedGender}
+            options={[
+              { id: "all", label: "ALL" },
+              { id: "female", label: "FEMALE" },
+              { id: "male", label: "MALE" },
+              { id: "unisex", label: "UNISEX" },
+            ]}
+            onChange={(val) => setSelectedGender(val)}
+            maxChars={15}
+            menuMaxChars={15}
+            menuWidth={180}
+          />
+        </div>
+
+        <div className={`${styles.catalogCategoryBar} ${styles.desktopCategoryBar}`}>
           {categorySanctuaries.map((cat) => {
             const isSel = selectedCategory === cat.id;
             return (
@@ -241,20 +341,17 @@ export default function HomePage() {
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.08em] shrink-0 cursor-pointer transition-all border ${isSel
-                    ? "bg-[#1C1A17] text-[#FCFAF7] border-[#1C1A17]"
-                    : "bg-[#FCFAF7] text-[#766A5E] border-[#E5DFD5] hover:border-[#1C1A17] hover:text-[#1C1A17]"
-                  }`}
+                className={isSel ? styles.catBtnSelected : styles.catBtnDefault}
               >
-                <EllipsisCell value={cat.label} maxChars={22} />
+                <EllipsisCell value={cat.label} maxChars={22} className="capitalize" />
               </button>
             );
           })}
         </div>
 
-        <div className="flex items-center justify-between flex-wrap gap-4 mb-10">
-          <div className="flex items-center gap-2">
-            <span className="font-sans text-[10px] text-[#766A5E] uppercase tracking-[0.12em] font-semibold mr-2">GUEST FOCUS:</span>
+        <div className={styles.filterRow}>
+          <div className={`${styles.genderGroup} ${styles.desktopGenderGroup}`}>
+            <span className={styles.genderLabel}>GUEST FOCUS:</span>
             {[
               { id: "all", label: "ALL" },
               { id: "female", label: "FEMALE" },
@@ -267,23 +364,20 @@ export default function HomePage() {
                   key={g.id}
                   type="button"
                   onClick={() => setSelectedGender(g.id)}
-                  className={`px-3.5 py-1.5 rounded-[2px] font-sans text-[11px] font-semibold tracking-wider transition-all cursor-pointer border ${isSel
-                      ? "bg-[#A88B64] text-[#FCFAF7] border-[#A88B64]"
-                      : "bg-[#F6F3ED] text-[#766A5E] border-[#E5DFD5] hover:border-[#1C1A17]"
-                    }`}
+                  className={isSel ? styles.genderBtnSelected : styles.genderBtnDefault}
                 >
                   {g.label}
                 </button>
               );
             })}
           </div>
-          <div className="text-[#766A5E] font-sans text-xs flex items-center gap-2">
-            <span className="material-symbols-outlined text-[16px] text-[#5A6B5C]">verified</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--app-muted)", fontSize: "0.75rem" }}>
+            <span className="material-symbols-outlined" style={{ fontSize: "16px", color: "var(--app-secondary, #5A6B5C)" }}>verified</span>
             <span>All rituals include complimentary botanical sensory rinse</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className={styles.servicesGrid}>
           {filteredServices.map((service: any) => (
             <ServiceCard
               key={service.uuid || service.id}
@@ -292,32 +386,33 @@ export default function HomePage() {
               isAdded={isAdded(service.uuid || service.id)}
               isSubAdded={(subId) => isAdded(subId)}
               onToggleCart={toggleCart}
+              loadingIds={loadingIds}
             />
           ))}
         </div>
       </section>
 
       {staff.length > 0 && (
-        <section className="px-6 md:px-12 max-w-[1440px] mx-auto w-full py-8 border-t border-[#E5DFD5]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-[#E5DFD5] pb-8">
+        <section className={styles.catalogSection} style={{ borderTop: "1px solid var(--app-border)" }}>
+          <div className={styles.catalogHeader}>
             <div>
-              <div className="flex items-center gap-2 text-[#A88B64] font-sans text-[10px] font-semibold tracking-[0.14em] uppercase mb-2">
-                <span className="material-symbols-outlined text-[16px]">workspace_premium</span>
+              <div className={styles.catalogSubBadge}>
+                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>workspace_premium</span>
                 RESIDENT ARTISANS & STYLISTS
               </div>
-              <h2 className="font-serif text-4xl sm:text-5xl text-[#1C1A17] font-normal">Meet Our Master Specialists</h2>
+              <h2 className={styles.catalogHeading}>Meet Our Master Specialists</h2>
             </div>
             <button
               type="button"
               onClick={() => navigate("/specialists")}
-              className="bg-transparent text-[#1C1A17] border border-[#1C1A17] hover:bg-[#1C1A17] hover:text-[#FCFAF7] px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] transition-all cursor-pointer flex items-center gap-2 self-start md:self-auto"
+              className={styles.secondaryBtn}
             >
               <span>VIEW ALL SPECIALISTS</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_forward</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={styles.servicesGrid}>
             {staff.slice(0, 3).map((member: any) => (
               <StaffCard key={member.uuid || member.id} member={member} />
             ))}
@@ -325,36 +420,7 @@ export default function HomePage() {
         </section>
       )}
 
-      {cart.items.length > 0 && (
-        <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col sm:flex-row items-center justify-between px-6 py-4 w-[calc(100%-2rem)] max-w-3xl bg-[#FCFAF7] rounded-[2px] border border-[#1C1A17] shadow-xl backdrop-blur-md">
-          <div className="flex items-center gap-4 w-full sm:w-auto mb-3 sm:mb-0">
-            <div className="w-10 h-10 rounded-[2px] bg-[#1C1A17] flex items-center justify-center text-[#FCFAF7] shrink-0">
-              <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="font-sans text-[10px] font-semibold text-[#A88B64] tracking-[0.14em] uppercase">ACTIVE RESERVATION</span>
-                <span className="h-1 w-1 rounded-full bg-[#1C1A17]" />
-                <span className="text-[11px] text-[#766A5E] font-sans">
-                  {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""}
-                </span>
-              </div>
-              <p className="font-serif text-sm text-[#1C1A17] font-medium truncate max-w-sm capitalize">
-                {cart.items[0]?.name || "Selected Ritual"}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => navigate("/cart")}
-            className="w-full sm:w-auto bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] flex items-center justify-center gap-2 transition-all cursor-pointer border-0"
-          >
-            <span>PROCEED TO SCHEDULE (₹{totalPrice})</span>
-            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </button>
-        </aside>
-      )}
+      <ReservationFloatingBar />
     </Box>
   );
 }

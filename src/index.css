@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
-@import "tailwindcss" important;
 
 :root {
   --app-font-family: "Plus Jakarta Sans", sans-serif;
@@ -45,62 +44,159 @@
   --color-hairline: #E5DFD5;
   --color-bronze-accent: #A88B64;
 
-  /* Legacy App mappings for compatibility */
   --app-bg: var(--bg-surface);
   --app-surface: var(--bg-surface-container-lowest);
   --app-surface-alt: var(--bg-surface-container-low);
   --app-border: var(--color-hairline);
   --app-primary: var(--color-primary);
+  --app-primary-contrast: var(--color-on-primary, #FFFFFF);
+  --app-primary-hover: #2e2a25;
   --app-primary-container: var(--color-primary-container);
   --app-primary-soft: rgba(168, 139, 100, 0.12);
   --app-text: var(--color-on-surface);
   --app-muted: var(--color-tertiary);
   --app-champagne: var(--color-bronze-accent);
-  --app-ring: var(--color-bronze-accent);
+  --app-radius: 4px;
   --app-hero-from: var(--bg-surface);
   --app-hero-to: var(--bg-surface-container-low);
   --app-chip-tone: rgba(168, 139, 100, 0.08);
+  --color-success: #10b981;
+  --color-warning: #fbbf24;
+  --color-info: #3b82f6;
+  --color-error: #f472b6;
+  --shadow-base: rgba(0,0,0,0.18);
+  --app-success: var(--color-success);
+  --app-warning: var(--color-warning);
+  --app-info: var(--color-info);
+  --app-error: var(--color-error);
+  --app-shadow-base: var(--shadow-base);
+  --mobile-bottom-nav-height: 4rem;
+
+  --page-max-width: 1440px;
+  --page-padding-x: 1.5rem;
+  --page-padding-top: 2rem;
+  --page-padding-bottom: 2.5rem;
+  --app-hex-060c1c: #060c1c;
+  --app-hex-09080b: #09080b;
+  --app-hex-0b1329: #0b1329;
+  --app-hex-0c0a0d: #0c0a0d;
+  --app-hex-101a36: #101a36;
+  --app-hex-131d3b: #131d3b;
+  --app-hex-151218: #151218;
+  --app-hex-16131c: #16131c;
+  --app-hex-18181b: #18181b;
+  --app-hex-1f1719: #1f1719;
+  --app-hex-221a11: #221a11;
+  --app-hex-233766: #233766;
+  --app-hex-2d2325: #2d2325;
+  --app-hex-2e2a25: #2e2a25;
+  --app-hex-31312d: #31312d;
+  --app-hex-3d3224: #3d3224;
+  --app-hex-5a6b5c: #5a6b5c;
+  --app-hex-6b595c: #6b595c;
+  --app-hex-71717a: #71717a;
+  --app-hex-785e3b: #785e3b;
+  --app-hex-7a6367: #7a6367;
+  --app-hex-7da8ff: #7da8ff;
+  --app-hex-8f4d47: #8f4d47;
+  --app-hex-9a7b4f: #9a7b4f;
+  --app-hex-9eb5e6: #9eb5e6;
+  --app-hex-b84252: #b84252;
+  --app-hex-c4bcae: #c4bcae;
+  --app-hex-d4af37: #d4af37;
+  --app-hex-d6536b: #d6536b;
+  --app-hex-e5e5e5: #e5e5e5;
+  --app-hex-e8d3cb: #e8d3cb;
+  --app-hex-e8efff: #e8efff;
+  --app-hex-ef4444: #ef4444;
+  --app-hex-f0d8de: #f0d8de;
+  --app-hex-f3c677: #f3c677;
+  --app-hex-f57f17: #f57f17;
+  --app-hex-f59e0b: #f59e0b;
+  --app-hex-f5e4e8: #f5e4e8;
+  --app-hex-f5e8e2: #f5e8e2;
+  --app-hex-f7f5f0: #f7f5f0;
+  --app-hex-f9a825: #f9a825;
+  --app-hex-f9efea: #f9efea;
+  --app-hex-faf8f5: #faf8f5;
+  --app-hex-fbbf24: #fbbf24;
+  --app-hex-fbc02d: #fbc02d;
+  --app-hex-fcf4f6: #fcf4f6;
+  --app-hex-fdd835: #fdd835;
+  --app-hex-fdf6f2: #fdf6f2;
+  --app-hex-fdfbf7: #fdfbf7;
+  --app-hex-ffeb3b: #ffeb3b;
+  --app-hex-ffee58: #ffee58;
+  --app-hex-fff: #fff;
+  --app-hex-fff176: #fff176;
+  --app-hex-fff59d: #fff59d;
+  --app-hex-fff9c4: #fff9c4;
+  --app-hex-fffaf7: #fffaf7;
+  --app-hex-fffde7: #fffde7;
+
+  --app-custom-select-bg: var(--bg-surface-container-low, #FCFAF7);
+  --app-custom-select-border: var(--color-hairline, #E5DFD5);
+  --app-custom-select-radius: 2px;
+  --app-custom-select-hover-border: var(--color-primary, #1C1A17);
+  --app-custom-select-label: var(--color-tertiary, #766A5E);
+  --app-custom-select-value: var(--color-on-surface, #1C1A17);
+  --app-custom-select-icon: var(--color-tertiary, #766A5E);
+  --app-custom-select-hover-bg: var(--bg-surface-container-low, #F6F3ED);
+  --app-custom-select-selected-bg: var(--color-primary, #1C1A17);
+  --app-custom-select-selected-color: var(--color-on-primary, #FCFAF7);
+
+  --app-reservation-bar-bg: var(--bg-surface-container-lowest, #FFFFFF);
+  --app-reservation-bar-border: var(--color-primary, #1C1A17);
+  --app-reservation-bar-radius: 4px;
+
+  --app-unauthorized-bg: #FFFFFF;
+  --app-unauthorized-card-border: var(--app-hex-e5e5e5, #E5E5E5);
+  --app-unauthorized-info-bg: #EFF6FF;
+  --app-unauthorized-info-border: #DBEAFE;
+  --app-unauthorized-primary: #1E3A8A;
 }
 
-[data-theme="crimsonShear"],
-[data-theme="obsidianFlame"],
-[data-theme="vintageBlush"],
-[data-theme="midnightSapphire"],
-[data-theme="softRosePearl"] {
-  --bg-surface: #FCF9F3;
-  --bg-surface-container-lowest: #FFFFFF;
-  --bg-surface-container-low: #F6F3ED;
-  --bg-surface-container: #F0EEE8;
-  --bg-surface-container-high: #EBE8E2;
-  --color-on-surface: #1C1C18;
-  --color-on-surface-variant: #4B463F;
-  --color-primary: #1C1A17;
-  --color-secondary: #735A37;
-  --color-tertiary: #766A5E;
-  --color-hairline: #E5DFD5;
-  --color-bronze-accent: #A88B64;
+
+[data-theme="crimsonShear"] {
   --app-bg: #FCF9F3;
   --app-surface: #FFFFFF;
   --app-surface-alt: #F6F3ED;
   --app-border: #E5DFD5;
   --app-primary: #1C1A17;
+  --app-primary-contrast: #FFFFFF;
+  --app-primary-hover: #2e2a25;
+  --app-primary-soft: rgba(168, 139, 100, 0.12);
   --app-text: #1C1C18;
   --app-muted: #766A5E;
   --app-champagne: #A88B64;
 }
 
-@theme {
-  --font-serif: var(--app-font-family);
-  --font-sans: var(--app-font-family);
-  --color-app-bg: var(--app-bg);
-  --color-app-surface: var(--app-surface);
-  --color-app-surface-alt: var(--app-surface-alt);
-  --color-app-border: var(--app-border);
-  --color-app-primary: var(--app-primary);
-  --color-app-primary-soft: var(--app-primary-soft);
-  --color-app-text: var(--app-text);
-  --color-app-muted: var(--app-muted);
-  --color-app-ring: var(--app-ring);
+[data-theme="obsidianFlame"] {
+  --app-bg: #09080b;
+  --app-surface: #0c0a0d;
+  --app-surface-alt: #151218;
+  --app-border: #3d3224;
+  --app-primary: #f3c677;
+  --app-primary-contrast: #121016;
+  --app-primary-hover: #e5b660;
+  --app-primary-soft: rgba(243, 198, 119, 0.15);
+  --app-text: #f7f5f0;
+  --app-muted: #c4bcae;
+  --app-champagne: #f3c677;
+}
+
+[data-theme="softRosePearl"] {
+  --app-bg: #faf4f6;
+  --app-surface: #ffffff;
+  --app-surface-alt: #fcf4f6;
+  --app-border: #f0d8de;
+  --app-primary: #d6536b;
+  --app-primary-contrast: #ffffff;
+  --app-primary-hover: #c4425a;
+  --app-primary-soft: rgba(214, 83, 107, 0.12);
+  --app-text: #1f1719;
+  --app-muted: #6b595c;
+  --app-champagne: #d6536b;
 }
 
 *, ::before, ::after {
@@ -169,4 +265,20 @@ body {
 
 .safe-area-bottom {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-padding-x: 3rem;
+    --page-padding-top: 2.5rem;
+    --page-padding-bottom: 3rem;
+  }
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.iconSizeStyles {
+  font-size: 1.25rem !important;
 }

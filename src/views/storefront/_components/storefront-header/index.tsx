@@ -27,6 +27,7 @@ import { useAppThemeMode } from "../../../../theme/theme-provider";
 import { themeOptions } from "../../../../theme/theme";
 import CartIcon from "../../../../components/header/_components/cart-button";
 import { logout } from "../../../../features/auth/auth.slice";
+import styles from "./storefront-header.module.css";
 
 export type StorefrontTab = "overview" | "services" | "specialists" | "hours";
 
@@ -74,20 +75,20 @@ export default function StorefrontHeader({
     <AppBar
       position="sticky"
       elevation={0}
-      className="border-b border-(--app-border) bg-(--app-surface)/95 backdrop-blur-md z-30"
+      className={styles.appBar}
     >
-      <Toolbar className="min-h-16 px-3 sm:px-6 flex items-center justify-between gap-3">
-        <Box className="flex items-center gap-3 min-w-0">
+      <Toolbar className={styles.toolbar}>
+        <Box className={styles.brandContainer}>
           <IconButton
             size="small"
-            className="md:hidden text-(--app-text) -ml-1.5"
+            className={styles.menuButton}
             onClick={() => setMobileDrawerOpen(true)}
           >
             <MenuIcon />
           </IconButton>
 
           <Box
-            className="flex items-center gap-2.5 cursor-pointer min-w-0"
+            className={styles.brandLink}
             onClick={() => onTabChange("overview")}
           >
             {salon?.logo ? (
@@ -95,48 +96,44 @@ export default function StorefrontHeader({
                 src={salon.logo}
                 alt={salonName}
                 variant="rounded"
-                className="w-10 h-10 rounded-xl border border-(--app-border) object-cover shrink-0"
+                className={styles.logoAvatar}
               />
             ) : (
               <Avatar
                 variant="rounded"
-                className="w-10 h-10 rounded-xl bg-(--app-primary) text-(--app-primary-contrast) font-black text-sm shrink-0"
+                className={styles.fallbackAvatar}
               >
                 {salonName[0]}
               </Avatar>
             )}
 
-            <Box className="min-w-0">
-              <Box className="flex items-center gap-1.5">
-                <Typography className="font-extrabold text-sm sm:text-base text-(--app-text) truncate leading-tight">
+            <Box className={styles.brandInfo}>
+              <Box className={styles.titleRow}>
+                <Typography className={styles.salonTitle}>
                   {salonName}
                 </Typography>
                 <Chip
                   size="small"
-                  icon={<StarRoundedIcon className="text-amber-400 !text-[13px]" />}
+                  icon={<StarRoundedIcon className={styles.starIcon} />}
                   label={ratingText}
-                  className="hidden sm:inline-flex h-5 px-1 bg-(--app-surface-alt) text-(--app-text) font-bold text-[10px] border border-(--app-border)"
+                  className={styles.ratingChip}
                 />
               </Box>
-              <Typography className="text-[11px] text-(--app-muted) truncate capitalize leading-tight mt-0.5">
+              <Typography className={styles.salonMeta}>
                 {salon?.type || "Unisex Salon"} • Verified Storefront
               </Typography>
             </Box>
           </Box>
         </Box>
 
-        <Box className="hidden md:flex items-center gap-1 bg-(--app-surface-alt) p-1 rounded-2xl border border-(--app-border)">
+        <Box className={styles.navTabsWrapper}>
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <Button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`px-3.5 py-1.5 rounded-xl font-bold text-xs capitalize transition-all duration-200 ${
-                  isActive
-                    ? "bg-(--app-surface) text-(--app-primary) shadow-sm"
-                    : "text-(--app-muted) hover:text-(--app-text)"
-                }`}
+                className={`${styles.navTabBtn} ${isActive ? styles.navTabBtnActive : ""}`}
               >
                 {tab.label}
               </Button>
@@ -144,13 +141,13 @@ export default function StorefrontHeader({
           })}
         </Box>
 
-        <Box className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <Box className={styles.actionsGroup}>
           <IconButton
             onClick={(e) => setThemeMenuAnchor(e.currentTarget)}
-            className="border border-(--app-border) bg-(--app-surface) rounded-xl w-9 h-9 sm:w-10 sm:h-10 shadow-xs hover:bg-(--app-surface-alt)"
+            className={styles.iconButton}
             aria-label="Change theme"
           >
-            <PaletteOutlinedIcon className="text-(--app-muted) text-[18px]" />
+            <PaletteOutlinedIcon className={styles.paletteIcon} />
           </IconButton>
 
           <Menu
@@ -161,7 +158,7 @@ export default function StorefrontHeader({
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             slotProps={{
               paper: {
-                className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-48 shadow-xl",
+                className: styles.themeMenuPaper,
               },
             }}
           >
@@ -174,10 +171,10 @@ export default function StorefrontHeader({
                     setThemeId(option.id);
                     setThemeMenuAnchor(null);
                   }}
-                  className="flex items-center justify-between py-2 text-xs font-semibold"
+                  className={styles.themeMenuItem}
                 >
-                  <span className="text-(--app-text)">{option.label}</span>
-                  {selected && <CheckIcon className="text-(--app-primary) text-[15px]" />}
+                  <span style={{ color: "var(--app-text)" }}>{option.label}</span>
+                  {selected && <CheckIcon sx={{ color: "var(--app-primary)", fontSize: "15px" }} />}
                 </MenuItem>
               );
             })}
@@ -189,9 +186,9 @@ export default function StorefrontHeader({
             <>
               <IconButton
                 onClick={(e) => setUserMenuAnchor(e.currentTarget)}
-                className="p-0 border border-(--app-border) rounded-full ring-2 ring-(--app-primary)/20"
+                className={styles.userAvatarBtn}
               >
-                <Avatar className="w-8 h-8 sm:w-9 sm:h-9 bg-(--app-primary-soft) text-(--app-primary) font-bold text-xs">
+                <Avatar className={styles.userAvatar}>
                   {customer?.first_name?.[0] || customer?.name?.[0] || "U"}
                 </Avatar>
               </IconButton>
@@ -204,15 +201,15 @@ export default function StorefrontHeader({
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{
                   paper: {
-                    className: "mt-2 rounded-2xl border border-(--app-border) bg-(--app-surface) min-w-52 shadow-xl p-1",
+                    className: styles.userMenuPaper,
                   },
                 }}
               >
-                <Box className="px-3 py-2 border-b border-(--app-border) mb-1">
-                  <Typography className="text-xs font-bold text-(--app-text)">
+                <Box className={styles.userMenuHeader}>
+                  <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "var(--app-text)" }}>
                     {customer?.first_name || customer?.name || "Customer"}
                   </Typography>
-                  <Typography className="text-[10px] text-(--app-muted) truncate">
+                  <Typography sx={{ fontSize: "10px", color: "var(--app-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {customer?.email || ""}
                   </Typography>
                 </Box>
@@ -221,9 +218,9 @@ export default function StorefrontHeader({
                     setUserMenuAnchor(null);
                     navigate("/bookings");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2"
+                  className={styles.userMenuItem}
                 >
-                  <CalendarMonthOutlinedIcon className="text-[16px] text-(--app-muted)" />
+                  <CalendarMonthOutlinedIcon sx={{ fontSize: "16px", color: "var(--app-muted)" }} />
                   My Bookings
                 </MenuItem>
                 <MenuItem
@@ -231,16 +228,16 @@ export default function StorefrontHeader({
                     setUserMenuAnchor(null);
                     navigate("/profile");
                   }}
-                  className="text-xs rounded-xl flex items-center gap-2"
+                  className={styles.userMenuItem}
                 >
-                  <PersonOutlineIcon className="text-[16px] text-(--app-muted)" />
+                  <PersonOutlineIcon sx={{ fontSize: "16px", color: "var(--app-muted)" }} />
                   My Profile
                 </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
-                  className="text-xs rounded-xl text-red-500 hover:bg-red-50 flex items-center gap-2"
+                  className={`${styles.userMenuItem} ${styles.userMenuItemDanger}`}
                 >
-                  <LogoutOutlinedIcon className="text-[16px]" />
+                  <LogoutOutlinedIcon sx={{ fontSize: "16px" }} />
                   Sign Out
                 </MenuItem>
               </Menu>
@@ -250,7 +247,7 @@ export default function StorefrontHeader({
               variant="contained"
               size="small"
               onClick={() => navigate("/signup")}
-              className="rounded-xl font-bold px-3 py-1.5 text-xs bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110"
+              className={styles.signInBtn}
             >
               Sign In
             </Button>
@@ -263,27 +260,27 @@ export default function StorefrontHeader({
         open={mobileDrawerOpen}
         onClose={() => setMobileDrawerOpen(false)}
         PaperProps={{
-          className: "w-72 bg-(--app-surface) border-r border-(--app-border) p-4 flex flex-col justify-between",
+          className: styles.drawerPaper,
         }}
       >
         <Box>
-          <Box className="flex items-center justify-between pb-3 border-b border-(--app-border) mb-4">
-            <Box className="flex items-center gap-2 min-w-0">
+          <Box className={styles.drawerHeader}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
               <Avatar
                 src={salon?.logo}
                 variant="rounded"
-                className="w-9 h-9 rounded-xl bg-(--app-primary) text-(--app-primary-contrast) font-bold text-xs"
+                sx={{ width: 36, height: 36, borderRadius: "0.75rem", bgcolor: "var(--app-primary)", color: "var(--app-primary-contrast)", fontWeight: 700, fontSize: "0.75rem" }}
               >
                 {salonName[0]}
               </Avatar>
-              <Typography className="font-bold text-sm text-(--app-text) truncate">{salonName}</Typography>
+              <Typography sx={{ fontWeight: 700, fontSize: "0.875rem", color: "var(--app-text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{salonName}</Typography>
             </Box>
             <IconButton size="small" onClick={() => setMobileDrawerOpen(false)}>
-              <CloseIcon className="text-[18px]" />
+              <CloseIcon sx={{ fontSize: "18px" }} />
             </IconButton>
           </Box>
 
-          <Box className="space-y-1.5">
+          <Box className={styles.drawerTabsList}>
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -294,11 +291,7 @@ export default function StorefrontHeader({
                     onTabChange(tab.id);
                     setMobileDrawerOpen(false);
                   }}
-                  className={`justify-start px-3.5 py-2 rounded-xl font-bold text-xs capitalize ${
-                    isActive
-                      ? "bg-(--app-primary-soft) text-(--app-primary)"
-                      : "text-(--app-text) hover:bg-(--app-surface-alt)"
-                  }`}
+                  className={`${styles.drawerTabBtn} ${isActive ? styles.drawerTabBtnActive : ""}`}
                 >
                   {tab.label}
                 </Button>
@@ -307,9 +300,9 @@ export default function StorefrontHeader({
           </Box>
         </Box>
 
-        <Box className="pt-4 border-t border-(--app-border)">
+        <Box className={styles.drawerFooter}>
           {isAuthenticated ? (
-            <Box className="space-y-2">
+            <Box className={styles.drawerActions}>
               <Button
                 fullWidth
                 variant="outlined"
@@ -317,7 +310,7 @@ export default function StorefrontHeader({
                   navigate("/bookings");
                   setMobileDrawerOpen(false);
                 }}
-                className="rounded-xl text-xs font-bold"
+                sx={{ borderRadius: "0.75rem", fontSize: "0.75rem", fontWeight: 700 }}
               >
                 My Bookings
               </Button>
@@ -325,7 +318,7 @@ export default function StorefrontHeader({
                 fullWidth
                 variant="text"
                 onClick={handleLogout}
-                className="rounded-xl -500 font-bold"
+                sx={{ borderRadius: "0.75rem", color: "#ef4444", fontWeight: 700 }}
               >
                 Sign Out
               </Button>
@@ -338,7 +331,7 @@ export default function StorefrontHeader({
                 navigate("/signup");
                 setMobileDrawerOpen(false);
               }}
-              className="rounded-xl text-xs font-bold bg-(--app-primary) text-(--app-primary-contrast)"
+              className={styles.signInBtn}
             >
               Sign In / Register
             </Button>

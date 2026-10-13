@@ -190,7 +190,7 @@ const TextField = <T extends FieldValues>({
         );
 
         return (
-          <EllipsisCell value={valString} className="w-full min-w-0 block">
+          <EllipsisCell value={valString} className={styles.fullWidthCapitalize}>
             {muiTextFieldElement}
           </EllipsisCell>
         );

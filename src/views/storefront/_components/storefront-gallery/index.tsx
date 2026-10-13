@@ -3,6 +3,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import ImageLightbox from "../../../../components/image-lightbox";
+import styles from "./storefront-gallery.module.css";
 
 interface SalonGalleryProps {
   photos: any[] | null;
@@ -34,40 +35,40 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
 
   if (!images.length) {
     return (
-      <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface-alt) p-8 text-center">
-        <Typography className="text-(--app-muted)">No photos available</Typography>
+      <Box className={styles.emptyCard}>
+        <Typography className={styles.emptyText}>No photos available</Typography>
       </Box>
     );
   }
 
   return (
     <>
-      <Box className="rounded-2xl border border-(--app-border) bg-(--app-surface) p-3 sm:p-4 shadow-[0_16px_38px_rgba(15,23,42,0.1)]">
+      <Box className={styles.galleryCard}>
         {isMobile ? (
-          <Box className="space-y-3.5">
-            <Box className="flex items-center justify-between px-1">
-              <Typography className="text-(--app-text) font-semibold text-sm">Gallery Preview</Typography>
-              <Chip size="small" label={`${images.length} photos`} className="text-xs" />
+          <Box className={styles.mobileContainer}>
+            <Box className={styles.mobileHeader}>
+              <Typography className={styles.mobileTitle}>Gallery Preview</Typography>
+              <Chip size="small" label={`${images.length} photos`} className={styles.mobileChip} />
             </Box>
 
             <Box
               onClick={() => handleImageClick(0)}
-              className="group relative h-60 rounded-2xl overflow-hidden cursor-pointer"
+              className={styles.mobileLeadBox}
             >
               <Box
                 component="img"
                 src={leadImage.src}
                 alt="Salon hero"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className={styles.leadImg}
               />
-              <Box className="absolute inset-0 bg-linear-to-t from-black/58 via-transparent to-transparent" />
-              <Box className="absolute left-4 bottom-4">
-                <Typography className="text-white font-semibold text-xl">Salon Gallery</Typography>
-                <Typography className="text-white/80 text-xs mt-1">Tap to open full gallery</Typography>
+              <Box className={styles.gradientOverlay} />
+              <Box className={styles.mobileLeadText}>
+                <Typography className={styles.leadHeading}>Salon Gallery</Typography>
+                <Typography className={styles.leadSubheading}>Tap to open full gallery</Typography>
               </Box>
             </Box>
 
-            <Box className="flex gap-2.5 overflow-x-auto pb-1 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <Box className={styles.mobileStrip}>
               {images.slice(1, 8).map((img, idx) => {
                 const imageIndex = idx + 1;
                 const remaining = images.length - (imageIndex + 1);
@@ -78,19 +79,19 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
                   <Box
                     key={imageIndex}
                     onClick={() => handleImageClick(imageIndex)}
-                    className="group relative min-w-44 w-44 h-31 rounded-xl overflow-hidden cursor-pointer snap-start border border-(--app-border)"
+                    className={styles.mobileThumbnail}
                   >
                     <Box
                       component="img"
                       src={img.src}
                       alt={`Salon photo ${imageIndex + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className={styles.leadImg}
                     />
 
                     {showMoreOverlay && (
-                      <Box className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
-                        <VisibilityIcon className="text-white text-lg mb-1" />
-                        <Typography className="text-white font-bold text-base">+{remaining}</Typography>
+                      <Box className={styles.thumbnailOverlay}>
+                        <VisibilityIcon sx={{ color: "white", fontSize: "1.125rem", mb: 0.5 }} />
+                        <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1rem" }}>+{remaining}</Typography>
                       </Box>
                     )}
                   </Box>
@@ -99,24 +100,24 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
             </Box>
           </Box>
         ) : (
-          <Box className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.65fr] gap-3 sm:gap-4">
+          <Box className={styles.desktopGrid}>
             <Box
               onClick={() => handleImageClick(0)}
-              className="group relative h-64 sm:h-76 lg:h-95 xl:h-105 rounded-2xl overflow-hidden cursor-pointer"
+              className={styles.desktopLeadBox}
             >
               <Box
                 component="img"
                 src={leadImage.src}
                 alt="Salon hero"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className={styles.leadImg}
               />
-              <Box className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
-              <Box className="absolute left-4 bottom-4">
-                <Typography className="text-white font-semibold text-sm sm:text-base">Salon Gallery</Typography>
+              <Box className={styles.desktopGradientOverlay} />
+              <Box className={styles.mobileLeadText}>
+                <Typography sx={{ color: "white", fontWeight: 600, fontSize: { xs: "0.875rem", sm: "1rem" } }}>Salon Gallery</Typography>
               </Box>
             </Box>
 
-            <Box className="grid grid-cols-1 grid-rows-2 gap-3 sm:gap-4 h-64 sm:h-76 lg:h-95 xl:h-105">
+            <Box className={styles.desktopSideGrid}>
               {sideImages.map((img, idx) => {
                 const imageIndex = idx + 1;
                 const isLastTile = idx === sideImages.length - 1 && hasMore;
@@ -124,23 +125,23 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
                   <Box
                     key={imageIndex}
                     onClick={() => handleImageClick(imageIndex)}
-                    className={`group relative rounded-2xl overflow-hidden cursor-pointer ${
-                      sideImages.length === 1 ? "row-span-2" : ""
+                    className={`${styles.sideTile} ${
+                      sideImages.length === 1 ? styles.sideTileSpan2 : ""
                     }`}
                   >
                     <Box
                       component="img"
                       src={img.src}
                       alt={`Salon photo ${imageIndex + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className={styles.leadImg}
                     />
                     {isLastTile && (
-                      <Box className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center">
-                        <Box className="w-11 h-11 rounded-xl bg-white/90 flex items-center justify-center mb-2">
-                          <VisibilityIcon className="text-(--app-hero-from)" />
+                      <Box className={styles.seeAllOverlay}>
+                        <Box className={styles.iconBox}>
+                          <VisibilityIcon sx={{ color: "var(--app-hero-from, var(--app-primary))" }} />
                         </Box>
-                        <Typography className="text-white font-bold text-lg">+{images.length - 3}</Typography>
-                        <Typography className="text-white text-xs sm:text-sm font-semibold">See all photos</Typography>
+                        <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1.125rem" }}>+{images.length - 3}</Typography>
+                        <Typography sx={{ color: "white", fontSize: { xs: "0.75rem", sm: "0.875rem" }, fontWeight: 600 }}>See all photos</Typography>
                       </Box>
                     )}
                   </Box>

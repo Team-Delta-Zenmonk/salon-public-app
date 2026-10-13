@@ -3,6 +3,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { SLOT_GROUPS } from "../../../../../../common/slot.constants";
 import { useAppSelector } from "../../../../../../store/hook";
 import { formatTimeUTC } from "../../../../../../common/date.utils";
+import styles from "./slot-grid.module.css";
 
 interface SlotGridProps {
   slots: any[];
@@ -14,40 +15,13 @@ interface SlotGridProps {
 
 const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any): boolean => {
   const sStart = new Date(slotStart).getTime();
-  
   const now = new Date();
-  const currentLocalAsUTC = Date.UTC(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    now.getHours(),
-    now.getMinutes(),
-    now.getSeconds()
-  );
-
-  if (sStart < currentLocalAsUTC) {
-    return true;
-  }
-
+  if (sStart < now.getTime()) return true;
   if (!activeBooking?.booking_start_time || !activeBooking?.booking_end_time) return false;
-
   const sEnd = new Date(slotEnd).getTime();
   const bStart = new Date(activeBooking.booking_start_time).getTime();
   const bEnd = new Date(activeBooking.booking_end_time).getTime();
-
   return sStart < bEnd && sEnd > bStart;
-};
-
-const getSlotStateClass = (locked: boolean, isSelected: boolean): string => {
-  if (locked) {
-    return "bg-(--app-surface-alt) border-(--app-border) opacity-45 cursor-not-allowed";
-  }
-
-  if (isSelected) {
-    return "bg-(--app-primary) border-(--app-primary) shadow-[0_2px_8px_rgba(15,23,42,0.15)] cursor-pointer active:scale-[0.97]";
-  }
-
-  return "bg-(--app-surface-alt) border-(--app-border) hover:bg-(--app-bg) hover:border-(--app-muted) cursor-pointer active:scale-[0.97]";
 };
 
 export default function SlotGrid({
@@ -61,8 +35,8 @@ export default function SlotGrid({
 
   if (!selectedDate) {
     return (
-      <Box className="px-5 py-8 text-center">
-        <Typography className="text-[13px] text-(--app-muted)">Select a date to see available slots</Typography>
+      <Box className={styles.emptyState}>
+        <Typography className={styles.emptyText}>Select a date to see available slots</Typography>
       </Box>
     );
   }
@@ -74,13 +48,13 @@ export default function SlotGrid({
 
   if (loading) {
     return (
-      <Box className="px-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <Box className={styles.skeletonGrid}>
         {SLOT_SKELETON_ITEMS.map((item) => (
           <Skeleton
             key={item.id}
             variant="rounded"
             height={44}
-            className="rounded-lg"
+            sx={{ borderRadius: "0.5rem" }}
             style={{ animationDelay: item.animationDelay }}
           />
         ))}
@@ -90,59 +64,48 @@ export default function SlotGrid({
 
   if (!slots.length) {
     return (
-      <Box className="px-5 py-8 text-center">
-        <Typography className="text-[13px] text-(--app-muted)">No slots available for this date</Typography>
+      <Box className={styles.emptyState}>
+        <Typography className={styles.emptyText}>No slots available for this date</Typography>
       </Box>
     );
   }
 
   return (
-    <Box className="px-5 pb-4">
+    <Box className={styles.gridContainer}>
       {SLOT_GROUPS.map(({ key, label, icon, filter }) => {
         const group = slots.filter((s) => filter(new Date(s.start).getUTCHours()));
-
         if (!group.length) return null;
 
         return (
-          <Box key={key} className="mb-6">
-            <Box className="flex items-center gap-2 mb-3">
-              <Typography className="text-xs">{icon}</Typography>
-
-              <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase">
-                {label}
-              </Typography>
-
-              <Box className="flex-1 h-px bg-(--app-border)" />
-
-              <Typography className="text-[10px] text-(--app-muted)">{group.length} slots</Typography>
+          <Box key={key} className={styles.groupBlock}>
+            <Box className={styles.groupHeader}>
+              <Typography sx={{ fontSize: "0.75rem" }}>{icon}</Typography>
+              <Typography className={styles.groupLabel}>{label}</Typography>
+              <Box className={styles.headerLine} />
+              <Typography className={styles.emptyText}>{group.length} slots</Typography>
             </Box>
 
-            <Box className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <Box className={styles.slotGrid}>
               {group.map((slot, idx) => {
                 const isSelected = selectedSlot?.start === slot.start;
                 const locked = isSlotLocked(slot.start, slot.end, activeBooking);
-                const slotStateClass = getSlotStateClass(locked, isSelected);
 
                 return (
                   <Box
                     key={slot.start}
                     onClick={locked ? undefined : () => onSelectSlot(slot)}
                     style={{ animationDelay: `${idx * 0.03}s` }}
-                    className={`py-3 px-1 rounded-lg text-center border-[1.5px] transition-all duration-150 animate-[slotIn_0.25s_ease_both] ${slotStateClass}`}
+                    className={`${styles.slotCard} ${locked ? styles.slotCardLocked : ""} ${isSelected ? styles.slotCardSelected : ""}`}
                   >
                     {locked ? (
-                      <Box className="flex items-center justify-center gap-1.5">
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.375rem" }}>
                         <LockIcon sx={{ fontSize: 12, color: "var(--app-muted)" }} />
-                        <Typography className="text-[12px] font-medium text-(--app-muted) line-through">
+                        <Typography className={styles.timeTextLocked}>
                           {formatTimeUTC(slot.start)}
                         </Typography>
                       </Box>
                     ) : (
-                      <Typography
-                        className={`text-[12.5px] ${
-                          isSelected ? "font-bold text-(--app-primary-contrast)" : "font-medium text-(--app-text)"
-                        }`}
-                      >
+                      <Typography className={isSelected ? styles.timeTextSelected : styles.timeText}>
                         {formatTimeUTC(slot.start)}
                       </Typography>
                     )}

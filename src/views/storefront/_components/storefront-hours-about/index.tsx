@@ -9,6 +9,7 @@ import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
+import styles from "./storefront-hours-about.module.css";
 
 interface StorefrontHoursAboutProps {
   salon: any;
@@ -53,32 +54,32 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
   };
 
   const amenities = [
-    { icon: <WifiIcon className="text-[18px]" />, label: "High-Speed Wi-Fi" },
-    { icon: <AcUnitIcon className="text-[18px]" />, label: "Climate Controlled AC" },
-    { icon: <LocalParkingIcon className="text-[18px]" />, label: "Client Parking Available" },
-    { icon: <LocalCafeIcon className="text-[18px]" />, label: "Complimentary Beverages" },
-    { icon: <CreditCardIcon className="text-[18px]" />, label: "Cards & Digital Pay Accepted" },
-    { icon: <HealthAndSafetyOutlinedIcon className="text-[18px]" />, label: "Hospital-Grade Sterilization" },
+    { icon: <WifiIcon sx={{ fontSize: "18px" }} />, label: "High-Speed Wi-Fi" },
+    { icon: <AcUnitIcon sx={{ fontSize: "18px" }} />, label: "Climate Controlled AC" },
+    { icon: <LocalParkingIcon sx={{ fontSize: "18px" }} />, label: "Client Parking Available" },
+    { icon: <LocalCafeIcon sx={{ fontSize: "18px" }} />, label: "Complimentary Beverages" },
+    { icon: <CreditCardIcon sx={{ fontSize: "18px" }} />, label: "Cards & Digital Pay Accepted" },
+    { icon: <HealthAndSafetyOutlinedIcon sx={{ fontSize: "18px" }} />, label: "Hospital-Grade Sterilization" },
   ];
 
   return (
-    <Box className="space-y-4">
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-        <Box className="flex items-center gap-3 mb-5 pb-4 border-b border-(--app-border)">
-          <Box className="w-10 h-10 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center">
-            <AccessTimeIcon className="text-[22px]" />
+    <Box className={styles.container}>
+      <Box className={styles.card}>
+        <Box className={styles.headerRow}>
+          <Box className={styles.iconBox}>
+            <AccessTimeIcon className={styles.iconLarge} />
           </Box>
           <Box>
-            <Typography className="font-extrabold text-base sm:text-lg text-(--app-text)">
+            <Typography className={styles.cardTitle}>
               Weekly Operating Schedule
             </Typography>
-            <Typography className="text-xs text-(--app-muted)">
+            <Typography className={styles.cardSubtitle}>
               Regular salon working hours. Last appointment taken 45 minutes prior to close.
             </Typography>
           </Box>
         </Box>
 
-        <Box className="divide-y divide-(--app-border)/60">
+        <Box className={styles.daysList}>
           {DAYS_ORDER.map(({ key, label }) => {
             const isToday = key === currentDayKey;
             const hoursDisplay = formatDayHours(key);
@@ -87,15 +88,11 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
             return (
               <Box
                 key={key}
-                className={`py-3.5 px-3 sm:px-4 rounded-xl flex items-center justify-between transition-colors ${
-                  isToday ? "bg-(--app-primary-soft)/60 border border-(--app-primary)/30" : "hover:bg-(--app-surface-alt)/40"
-                }`}
+                className={`${styles.dayRow} ${isToday ? styles.dayRowToday : ""}`}
               >
-                <Box className="flex items-center gap-2.5">
+                <Box className={styles.dayLabelGroup}>
                   <Typography
-                    className={`text-xs sm:text-sm font-bold ${
-                      isToday ? "text-(--app-primary)" : "text-(--app-text)"
-                    }`}
+                    className={`${styles.dayName} ${isToday ? styles.dayNameToday : ""}`}
                   >
                     {label}
                   </Typography>
@@ -103,18 +100,18 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
                     <Chip
                       size="small"
                       label="Today"
-                      className="bg-(--app-primary) text-(--app-primary-contrast) font-black text-[9px] h-5 px-1 uppercase tracking-wider"
+                      className={styles.todayChip}
                     />
                   )}
                 </Box>
 
                 <Typography
-                  className={`text-xs sm:text-sm font-semibold ${
+                  className={`${styles.dayHours} ${
                     isClosed
-                      ? "text-red-500 font-bold"
+                      ? styles.dayHoursClosed
                       : isToday
-                      ? "text-(--app-primary) font-bold"
-                      : "text-(--app-muted)"
+                      ? styles.dayHoursToday
+                      : ""
                   }`}
                 >
                   {hoursDisplay}
@@ -125,53 +122,53 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
         </Box>
       </Box>
 
-      <Box className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col justify-between">
+      <Box className={styles.gridTwoCol}>
+        <Box className={styles.aboutCard}>
           <Box>
-            <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) mb-2">
+            <Typography className={styles.aboutTitle}>
               About {salon?.name}
             </Typography>
-            <Typography className="text-xs sm:text-sm text-(--app-muted) leading-relaxed">
+            <Typography className={styles.aboutText}>
               {salon?.about ||
                 `${salon?.name} is a premier salon destination dedicated to world-class hair artistry, skin rituals, and aesthetic wellness. Our master stylists blend modern technique with personalized care for an unmatched luxury experience.`}
             </Typography>
           </Box>
 
           {salon?.owner_name && (
-            <Box className="mt-6 pt-4 border-t border-(--app-border) flex items-center justify-between text-xs text-(--app-muted)">
+            <Box className={styles.ownerRow}>
               <span>Owner & Director</span>
-              <span className="font-bold text-(--app-text)">{salon.owner_name}</span>
+              <span className={styles.ownerName}>{salon.owner_name}</span>
             </Box>
           )}
         </Box>
 
-        <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-          <Typography className="font-extrabold text-base sm:text-lg text-(--app-text) mb-4">
+        <Box className={styles.card}>
+          <Typography className={styles.aboutTitle}>
             Venue Amenities
           </Typography>
 
-          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Box className={styles.amenitiesGrid}>
             {amenities.map((item, idx) => (
               <Box
                 key={idx}
-                className="flex items-center gap-2.5 p-3 rounded-2xl bg-(--app-surface-alt) border border-(--app-border) text-(--app-text)"
+                className={styles.amenityItem}
               >
-                <Box className="text-(--app-primary) shrink-0">{item.icon}</Box>
-                <Typography className="text-xs font-semibold">{item.label}</Typography>
+                <Box className={styles.amenityIcon}>{item.icon}</Box>
+                <Typography className={styles.amenityLabel}>{item.label}</Typography>
               </Box>
             ))}
           </Box>
         </Box>
       </Box>
 
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <Box className="flex items-start gap-3.5 max-w-2xl">
-          <Box className="w-10 h-10 rounded-2xl bg-(--app-primary-soft) text-(--app-primary) flex items-center justify-center shrink-0 mt-0.5">
-            <LocationOnOutlinedIcon className="text-[22px]" />
+      <Box className={styles.locationCard}>
+        <Box className={styles.locationInfo}>
+          <Box className={styles.locationIconBox}>
+            <LocationOnOutlinedIcon className={styles.iconLarge} />
           </Box>
           <Box>
-            <Typography className="font-extrabold text-base text-(--app-text)">Location & Address</Typography>
-            <Typography className="text-xs text-(--app-muted) mt-1 leading-snug break-words">
+            <Typography className={styles.cardTitle}>Location & Address</Typography>
+            <Typography className={styles.locationAddress}>
               {salon?.address || "Address available upon booking"}
             </Typography>
           </Box>
@@ -185,24 +182,24 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
             rel="noreferrer"
             variant="contained"
             startIcon={<MapOutlinedIcon />}
-            className="rounded-2xl px-5 py-2.5 text-xs font-bold bg-(--app-primary) text-(--app-primary-contrast) hover:brightness-110 shrink-0"
+            className={styles.mapBtn}
           >
             Open in Google Maps
           </Button>
         )}
       </Box>
 
-      <Box className="rounded-xl border border-(--app-border) bg-(--app-surface) p-5 sm:p-7 shadow-[0_12px_32px_rgba(15,23,42,0.06)]">
-        <Box className="flex items-center gap-2.5 mb-3">
-          <PolicyOutlinedIcon className="text-(--app-primary) text-[22px]" />
-          <Typography className="font-extrabold text-base text-(--app-text)">
+      <Box className={styles.card}>
+        <Box className={styles.policyHeader}>
+          <PolicyOutlinedIcon sx={{ color: "var(--app-primary)", fontSize: "22px" }} />
+          <Typography className={styles.cardTitle}>
             Appointment & Booking Policies
           </Typography>
         </Box>
 
-        <Box className="space-y-2.5 text-xs text-(--app-muted) leading-relaxed">
-          <Box className="flex items-start gap-2">
-            <span className="font-bold text-(--app-text)">• Payment:</span>
+        <Box className={styles.policyList}>
+          <Box className={styles.policyItem}>
+            <span className={styles.policyBold}>• Payment:</span>
             <span>
               {salon?.payment_policy === "pay_at_venue"
                 ? "This salon supports 100% pay at venue. No upfront payment required."
@@ -211,12 +208,12 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
                 : "Full payment is completed securely online at checkout."}
             </span>
           </Box>
-          <Box className="flex items-start gap-2">
-            <span className="font-bold text-(--app-text)">• Cancellation:</span>
+          <Box className={styles.policyItem}>
+            <span className={styles.policyBold}>• Cancellation:</span>
             <span>Free cancellation or rescheduling up to 2 hours before your scheduled appointment slot.</span>
           </Box>
-          <Box className="flex items-start gap-2">
-            <span className="font-bold text-(--app-text)">• Arrival:</span>
+          <Box className={styles.policyItem}>
+            <span className={styles.policyBold}>• Arrival:</span>
             <span>Please arrive 5-10 minutes early so our specialists can prepare your consultation.</span>
           </Box>
         </Box>

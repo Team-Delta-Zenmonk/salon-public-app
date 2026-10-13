@@ -1,0 +1,151 @@
+.appBar {
+  background-color: transparent !important;
+}
+
+.toolbar {
+  min-height: 3.5rem !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+@media (min-width: 640px) {
+  .toolbar {
+    min-height: 4rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .leftSection {
+    gap: 0.75rem;
+  }
+}
+
+.salonBrand {
+  line-height: 1.25;
+  min-width: 0;
+  max-width: 160px;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .salonBrand {
+    max-width: 220px;
+  }
+}
+
+.salonTitle {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--app-text);
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .salonTitle {
+    font-size: 1rem;
+  }
+}
+
+.salonSubtitle {
+  font-size: 0.75rem;
+  color: var(--app-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .salonSubtitle {
+    font-size: 0.875rem;
+  }
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .rightSection {
+    gap: 0.75rem;
+  }
+}
+
+.themeToggleBtn {
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  border-radius: 0.75rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.themeToggleBtn:hover {
+  background-color: var(--app-surface-alt) !important;
+}
+
+.paletteIcon {
+  color: var(--app-muted);
+  font-size: 18px !important;
+}
+
+.themeMenuPaper {
+  margin-top: 0.5rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  min-width: 11rem !important;
+}
+
+.menuItemRow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+}
+
+.menuItemLabel {
+  font-size: 0.875rem;
+  color: var(--app-text);
+}
+
+.checkIcon {
+  color: var(--app-primary);
+  font-size: 16px !important;
+}
+
+.cartButtonWrapper {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .cartButtonWrapper {
+    display: block;
+  }
+}
+
+.avatar {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 9999px !important;
+  background-color: var(--app-primary-soft) !important;
+  color: var(--app-text) !important;
+}
+
+@media (min-width: 640px) {
+  .avatar {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+}

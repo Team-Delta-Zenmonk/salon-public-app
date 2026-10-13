@@ -4,6 +4,8 @@ import ReportGmailerrorredOutlinedIcon from "@mui/icons-material/ReportGmailerro
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { type VariantType } from "notistack";
 
+import styles from "./icon-mapper.module.css";
+
 interface IconMapperProps {
   variant: VariantType | undefined;
 }
@@ -11,13 +13,13 @@ interface IconMapperProps {
 export const IconMapper = ({ variant }: IconMapperProps) => {
   switch (variant) {
     case "success":
-      return <CheckCircleOutlinedIcon className="text-green-600" />;
+      return <CheckCircleOutlinedIcon className={styles.success} />;
     case "error":
-      return <RemoveCircleOutlineIcon className="text-red-600" />;
+      return <RemoveCircleOutlineIcon className={styles.error} />;
     case "warning":
-      return <ReportGmailerrorredOutlinedIcon className="text-amber-600" />;
+      return <ReportGmailerrorredOutlinedIcon className={styles.warning} />;
     case "info":
-      return <InfoOutlinedIcon className="text-blue-600" />;
+      return <InfoOutlinedIcon className={styles.info} />;
     default:
       return null;
   }

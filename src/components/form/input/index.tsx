@@ -5,6 +5,8 @@ import type { InputComponentProps } from "./input-tye";
 import { EllipsisCell } from "../../ellipse-cell";
 
 
+import styles from "./input.module.css";
+
 export const InputComponent = (props: InputComponentProps) => {
   const {
     error,
@@ -41,7 +43,7 @@ export const InputComponent = (props: InputComponentProps) => {
       slotProps={{
         htmlInput: {
           maxLength: maxLength,
-          className: multiline ? "" : "pt-2 pb-2 truncate",
+          className: multiline ? "" : styles.singleLineInput,
           "data-test-id": `input-${identifier}`,
           sx: {
             height: "auto",
@@ -86,7 +88,7 @@ export const InputComponent = (props: InputComponentProps) => {
 
   return (
     <FormControl className={`form-control-${className ?? ""}`} fullWidth={true}>
-      <EllipsisCell value={valString} className="w-full min-w-0 block">
+      <EllipsisCell value={valString} className={styles.fullWidthCapitalize}>
         {textFieldElement}
       </EllipsisCell>
     </FormControl>

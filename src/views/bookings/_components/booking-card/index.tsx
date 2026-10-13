@@ -7,6 +7,7 @@ import { BookingStatus } from "../../../../common/booking.enums";
 import { getBookingStatusConfig, isBookingCancelable, isBookingPast } from "../../../../common/booking.utils";
 import dayjs from "dayjs";
 import EllipsisCell from "@/components/ellipse-cell";
+import styles from "./booking-card.module.css";
 
 interface BookingCardProps {
   booking: CustomerBooking;
@@ -35,80 +36,92 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
 
   return (
-    <Box
-      className={`group relative mb-5 rounded-2xl border border-(--app-primary)/15 bg-(--app-surface) overflow-hidden transition-all duration-300 hover:border-(--app-primary)/40 shadow-xl ${disabled ? "opacity-60 pointer-events-none" : ""
-        }`}
-    >
-      <Box
-        className="absolute left-0 top-0 bottom-0 w-1.5"
-        style={{ backgroundColor: statusConfig.color }}
-      />
-
-      <Box className="lg:hidden p-5">
-        <Box className="flex flex-col gap-4">
-          <Box className="flex items-start justify-between">
-            <Box className="flex items-center gap-3 min-w-0">
+    <Box className={`${styles.card} ${disabled ? styles.cardDisabled : ""}`}>
+      <Box className={styles.statusStrip} />
+      <Box className={styles.mobileBox}>
+        <Box className={styles.mobileInner}>
+          <Box className={styles.headerRow}>
+            <Box className={styles.salonInfo}>
               <Avatar
                 src={booking.salon?.logo}
                 variant="rounded"
-                className="w-12 h-12 rounded-xl border border-(--app-primary)/20 bg-(--app-bg)"
+                className={styles.salonAvatar}
               >
                 {booking.salon?.name?.charAt(0)}
               </Avatar>
-              <Box className="min-w-0">
-                <EllipsisCell value={booking.salon?.name} maxChars={10} className="font-editorial text-base font-bold text-(--app-text) leading-tight capitalize" />
+              <Box sx={{ minWidth: 0 }}>
+                <EllipsisCell
+                  value={booking.salon?.name}
+                  maxChars={10}
+                  className={styles.salonName}
+                />
                 <br />
-                <EllipsisCell value={booking.salon?.address?.split(",")[0] ?? ""} maxChars={30} className="text-xs text-(--app-muted)/70 mt-0.5 capitalize" />
+                <EllipsisCell
+                  value={booking.salon?.address?.split(",")[0] ?? ""}
+                  maxChars={30}
+                  className={styles.salonAddress}
+                />
               </Box>
             </Box>
             <Box
-              className="px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase border"
-              style={{ color: statusConfig.color, borderColor: `${statusConfig.color}40`, backgroundColor: `${statusConfig.color}15` }}
+              className={styles.statusPill}
+              style={{
+                color: statusConfig.color,
+                borderColor: `${statusConfig.color}40`,
+                backgroundColor: `${statusConfig.color}15`,
+              }}
             >
               {statusConfig.label}
             </Box>
           </Box>
 
-          <Box className="flex items-center justify-between bg-(--app-bg) rounded-xl p-4 border border-(--app-primary)/10">
-            <Box className="flex flex-col gap-1">
-              <Typography className="text-xs font-bold text-(--app-text) flex items-center gap-1.5">
+          <Box className={styles.detailsBox}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+              <Typography className={styles.dateTimeText}>
                 {formatDateShortUTC(booking.booking_date)} • {formatTimeUTC(booking.booking_start_time)}
               </Typography>
-              <EllipsisCell value={booking.booking_services?.map((s) => s.service?.name).join(", ")} maxChars={30} className="text-[11px] text-(--app-muted)/70 max-w-48" />
+              <EllipsisCell
+                value={booking.booking_services?.map((s) => s.service?.name).join(", ")}
+                maxChars={30}
+                className={styles.servicesText}
+              />
             </Box>
-            <Typography className="font-editorial text-lg font-bold text-(--app-primary)">₹{booking.total_price}</Typography>
+            <Typography className={styles.priceText}>₹{booking.total_price}</Typography>
           </Box>
 
           {(canPay || showCancel || (onDownloadInvoice && booking.status === BookingStatus.CONFIRMED)) && (
-            <Box className="flex items-center gap-3">
+            <Box className={styles.actionsRow}>
               {canPay && (
                 <Button
                   fullWidth
                   variant="contained"
                   onClick={() => onPayNow(booking)}
                   disabled={disabled}
+                  className={styles.actionBtnItem}
                 >
                   {disabled ? <CircularProgress size={16} color="inherit" /> : "Complete Payment"}
                 </Button>
               )}
               {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
                 <Button
-                  fullWidth={!canPay && !showCancel}
+                  fullWidth
                   variant="contained"
                   onClick={() => onDownloadInvoice(booking)}
                   disabled={disabled || downloadingUuid === booking.uuid}
                   startIcon={downloadingUuid === booking.uuid ? <CircularProgress size={14} color="inherit" /> : <Download fontSize="small" />}
+                  className={styles.actionBtnItem}
                 >
                   Invoice
                 </Button>
               )}
               {showCancel && (
                 <Button
-                  fullWidth={!canPay}
+                  fullWidth
                   variant="contained"
                   color="error"
                   onClick={() => onCancel?.(booking)}
                   disabled={disabled || !isCancelableTime}
+                  className={styles.actionBtnItem}
                 >
                   Cancel
                 </Button>
@@ -118,88 +131,78 @@ export const BookingCard: React.FC<BookingCardProps> = ({
         </Box>
       </Box>
 
-      <Box className="hidden lg:block p-6">
-        <Box className="flex items-center justify-between gap-6">
-          <Box className="flex items-center gap-4 min-w-0 max-w-sm">
+      <Box className={styles.desktopBox}>
+        <Box className={styles.desktopTopRow}>
+          <Box className={styles.desktopSalonCol}>
             <Avatar
               src={booking.salon?.logo}
               variant="rounded"
-              className="w-14 h-14 rounded-xl border border-(--app-primary)/20 bg-(--app-bg)"
+              className={styles.salonAvatarLg}
             >
               {booking.salon?.name?.charAt(0)}
             </Avatar>
-            <Box className="min-w-0">
-              <EllipsisCell value={booking.salon?.name} maxChars={10} className="font-editorial text-lg font-bold text-(--app-text) leading-tight mb-1 capitalize" />
+            <Box sx={{ minWidth: 0 }}>
+              <EllipsisCell value={booking.salon?.name} maxChars={10} className={styles.salonNameLg} />
               <br />
-              <EllipsisCell value={booking.salon?.address || "Flagship Sanctuary"} maxChars={20} className="text-xs text-(--app-muted)/70 capitalize" />
+              <EllipsisCell value={booking.salon?.address || "Flagship Sanctuary"} maxChars={20} className={styles.salonAddressLg} />
             </Box>
           </Box>
 
-          <Box className="flex items-center gap-8 min-w-0">
-            <Box>
-              <Box className="flex items-center gap-1.5 mb-1">
-                <CalendarToday className="text-xs text-(--app-primary)" />
-                <Typography className="text-[10px] font-mono font-bold tracking-widest text-(--app-primary)/70 uppercase">
-                  Date
+          <Box className={styles.desktopMetaRow}>
+            {[
+              { icon: <CalendarToday className={styles.metaIcon} />, label: "Date", value: formatDateUTC(booking.booking_date) },
+              { icon: <AccessTime className={styles.metaIcon} />, label: "Time", value: formatTimeUTC(booking.booking_start_time) },
+              {
+                icon: <CurrencyRupee className={styles.metaIcon} />,
+                label: "Investment",
+                value: `₹${booking.total_price}`,
+                isPrice: true,
+              },
+            ].map(({ icon, label, value, isPrice }) => (
+              <Box key={label}>
+                <Box className={styles.metaLabelRow}>
+                  {icon}
+                  <Typography className={styles.metaLabel}>{label}</Typography>
+                </Box>
+                <Typography className={isPrice ? styles.metaPrice : styles.metaValue}>
+                  {value}
                 </Typography>
               </Box>
-              <Typography className="text-sm font-bold text-(--app-text)">
-                {formatDateUTC(booking.booking_date)}
-              </Typography>
-            </Box>
-
-            <Box>
-              <Box className="flex items-center gap-1.5 mb-1">
-                <AccessTime className="text-xs text-(--app-primary)" />
-                <Typography className="text-[10px] font-mono font-bold tracking-widest text-(--app-primary)/70 uppercase">
-                  Time
-                </Typography>
-              </Box>
-              <Typography className="text-sm font-bold text-(--app-text)">
-                {formatTimeUTC(booking.booking_start_time)}
-              </Typography>
-            </Box>
-
-            <Box>
-              <Box className="flex items-center gap-1.5 mb-1">
-                <CurrencyRupee className="text-xs text-(--app-primary)" />
-                <Typography className="text-[10px] font-mono font-bold tracking-widest text-(--app-primary)/70 uppercase">
-                  Investment
-                </Typography>
-              </Box>
-              <Typography className="font-editorial text-xl font-bold text-(--app-primary)">₹{booking.total_price}</Typography>
-            </Box>
+            ))}
           </Box>
 
           <Box>
             <Box
-              className="px-4 py-1.5 rounded-full text-[10px] font-mono font-bold tracking-widest uppercase border"
-              style={{ color: statusConfig.color, borderColor: `${statusConfig.color}40`, backgroundColor: `${statusConfig.color}15` }}
+              className={styles.statusPillLg}
+              style={{
+                color: statusConfig.color,
+                borderColor: `${statusConfig.color}40`,
+                backgroundColor: `${statusConfig.color}15`,
+              }}
             >
               {statusConfig.label}
             </Box>
           </Box>
         </Box>
 
-        <Box className="mt-5 pt-4 border-t border-(--app-primary)/10 flex items-center justify-between">
-          <Box className="flex items-center gap-3 overflow-hidden">
-            <Typography className="text-[10px] font-mono font-bold tracking-widest text-(--app-primary)/70 uppercase shrink-0">
-              Ceremonies:
-            </Typography>
-            <Box className="flex flex-wrap gap-2">
+        <Box className={styles.desktopBottomRow}>
+          <Box className={styles.ceremoniesRow}>
+            <Typography className={styles.ceremoniesLabel}>Ceremonies:</Typography>
+            <Box className={styles.ceremoniesList}>
               {booking.booking_services?.map((bs, index) => (
-                <EllipsisCell key={bs.id} value={`${bs.service?.name} ${index < (booking.booking_services?.length || 0) - 1 ? " • " : ""}`} maxChars={30} className="text-xs font-medium text-(--app-muted)/80" />
+                <EllipsisCell
+                  key={bs.id}
+                  value={`${bs.service?.name} ${index < (booking.booking_services?.length || 0) - 1 ? " • " : ""}`}
+                  maxChars={30}
+                  className={styles.ceremonyItem}
+                />
               ))}
             </Box>
           </Box>
 
-          <Box className="flex gap-3 shrink-0 ml-6">
+          <Box className={styles.desktopActions}>
             {canPay && (
-              <Button
-                variant="contained"
-                onClick={() => onPayNow(booking)}
-                disabled={disabled}
-              >
+              <Button variant="contained" onClick={() => onPayNow(booking)} disabled={disabled}>
                 {disabled ? <CircularProgress size={16} color="inherit" /> : "Complete Payment"}
               </Button>
             )}
@@ -214,12 +217,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               </Button>
             )}
             {showCancel && (
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => onCancel?.(booking)}
-                disabled={disabled || !isCancelableTime}
-              >
+              <Button variant="contained" color="error" onClick={() => onCancel?.(booking)} disabled={disabled || !isCancelableTime}>
                 Cancel
               </Button>
             )}

@@ -1,0 +1,100 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--app-unauthorized-bg, #FFFFFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  max-width: 32rem;
+  width: 100%;
+  text-align: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--app-unauthorized-card-border, #E5E5E5);
+  padding: 1.5rem;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.iconCircle {
+  width: 6rem;
+  height: 6rem;
+  background-color: var(--primary-900, #1E3A8A);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: #FFFFFF;
+}
+
+.codeWrapper {
+  margin-bottom: 1rem;
+}
+
+.codeTitle {
+  color: var(--app-unauthorized-primary, #1E3A8A);
+}
+
+.title {
+  color: #111827;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.description {
+  color: #4B5563;
+  margin-bottom: 2rem;
+}
+
+.reasonsBox {
+  background-color: var(--app-unauthorized-info-bg, #EFF6FF);
+  border: 1px solid var(--app-unauthorized-info-border, #DBEAFE);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.reasonsTitle {
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.reasonsList {
+  color: #4B5563;
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  list-style-type: none;
+  padding: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .actions {
+    flex-direction: row;
+  }
+}
+
+.backButton {
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease;
+}

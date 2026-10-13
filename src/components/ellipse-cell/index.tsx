@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
+import styles from "./ellipse-cell.module.css";
 
 export interface EllipsisCellProps extends React.HTMLAttributes<HTMLSpanElement> {
   value: string;
@@ -165,7 +168,7 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
 
   const portalContent = showTooltip && Boolean(value) && typeof window !== "undefined" && (
     <div
-      className="fixed z-[99999] px-3 py-1.5 bg-neutral-900 text-white text-xs font-semibold rounded-lg shadow-2xl border border-neutral-700 pointer-events-none max-w-[280px] sm:max-w-xs break-words text-center -translate-x-1/2 animate-in fade-in-0 zoom-in-95"
+      className={styles.tooltip}
       style={{
         top: `${tooltipPos.top}px`,
         left: `${tooltipPos.left}px`,
@@ -191,10 +194,8 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
           if (showTooltip) e.preventDefault();
         }}
         className={clsx(
-          children
-            ? "min-w-0 max-w-full pointer-events-auto [&_*]:pointer-events-auto"
-            : "overflow-hidden text-ellipsis min-w-0 max-w-full pointer-events-auto [&_*]:pointer-events-auto select-none",
-          maxLines === 1 && !children ? "inline-flex max-w-full truncate" : "",
+          children ? styles.cell : styles.cellTruncated,
+          maxLines === 1 && !children ? styles.singleLine : "",
           className
         )}
         style={

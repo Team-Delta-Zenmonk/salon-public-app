@@ -1,37 +1,26 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, IconButton, Drawer } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import SlotGrid from "./_components/slot-grid";
-import BookingConfirmDialog from "./_components/booking-confirm-dialog";
-import ActiveBookingConflictCard from "./_components/active-booking-conflict-card";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
-import { formatDuration } from "../../../../common/date.utils";
-import { calculateTotals } from "../../../../common/cart.utils";
+import { BookingAction, BookingPhase } from "../../../../common/booking.enums";
 import { getSlotsAction } from "../../../../features/salon/bookings/get-slots/get-slots.action";
 import { createBookingAction } from "../../../../features/salon/bookings/create-booking/create-booking.action";
 import { createPaymentAction } from "../../../../features/payments/create-payment/create-payment.action";
-import { BookingAction, BookingPhase } from "../../../../common/booking.enums";
-import BookingDateSelector from "./_components/booking-date-selector";
-import { callSnack } from "../../../../components/snackbar";
 import { useStorefrontNavigate } from "../../../../common/hooks/useStorefrontNavigate";
+import { callSnack } from "../../../../components/snackbar";
+import { calculateTotals } from "../../../../common/cart.utils";
+import { formatDuration } from "../../../../common/date.utils";
+import BookingConfirmDialog from "./_components/booking-confirm-dialog";
+import SlotGrid from "./_components/slot-grid";
+import BookingDateSelector from "./_components/booking-date-selector";
+import ActiveBookingConflictCard from "./_components/active-booking-conflict-card";
+import styles from "./booking-panel.module.css";
 
 interface BookingPanelProps {
   open: boolean;
   onClose: () => void;
-}
-
-interface SlotPanelContentProps {
-  isConflict: boolean;
-  slotsError: string | null;
-  slotsData: { date: string; slots: any[] }[];
-  slotsLoading: boolean;
-  selectedDate: string | null;
-  selectedSlot: any;
-  currentDaySlots: any[];
-  onSelectDate: (date: string) => void;
-  onSelectSlot: (slot: any) => void;
 }
 
 function SlotPanelContent({
@@ -44,38 +33,30 @@ function SlotPanelContent({
   currentDaySlots,
   onSelectDate,
   onSelectSlot,
-}: Readonly<SlotPanelContentProps>) {
+}: any) {
   if (isConflict) return <ActiveBookingConflictCard />;
 
   if (slotsError) {
     return (
-      <Box className="p-8 text-center">
-        <Typography className="text-[13px] text-red-500">{slotsError}</Typography>
+      <Box sx={{ p: 4, textAlign: "center" }}>
+        <Typography sx={{ fontSize: 13, color: "var(--color-error, #ef4444)" }}>{slotsError}</Typography>
       </Box>
     );
   }
 
   return (
     <>
-      <Box className="pt-5 pb-4 border-b border-(--app-border)">
-        <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
-          Select Date
-        </Typography>
+      <Box className={styles.sectionBlock}>
+        <Typography className={styles.sectionLabel}>Select Date</Typography>
         <BookingDateSelector
           days={slotsData}
           selectedDate={selectedDate}
-          onSelectDate={(date) => {
-            onSelectDate(date);
-            onSelectSlot(null);
-          }}
+          onSelectDate={onSelectDate}
           loading={slotsLoading}
         />
       </Box>
-
-      <Box className="pt-5">
-        <Typography className="text-[10px] font-bold text-(--app-muted) tracking-[1.5px] uppercase mb-3 px-5 block">
-          Available Times
-        </Typography>
+      <Box sx={{ pt: 2.5 }}>
+        <Typography className={styles.sectionLabel}>Select Time</Typography>
         <SlotGrid
           slots={currentDaySlots}
           selectedSlot={selectedSlot}
@@ -111,10 +92,8 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
     const fetchSlots = async () => {
       setSlotsLoading(true);
       setSlotsError(null);
-
       const now = new Date();
       const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-
       try {
         const result = await dispatch(getSlotsAction({ cartId, startDate: today, days: 7 })).unwrap();
         const data = result?.message ?? result;
@@ -137,7 +116,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       setSelectedDate(null);
       setSelectedSlot(null);
     };
-  }, [open, cartId, dispatch]);
+  }, [open, cartId, items, dispatch]);
 
   const { totalPrice, totalDuration } = calculateTotals(items);
   const durationText = formatDuration(totalDuration);
@@ -145,9 +124,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
 
   const handleConfirmSlot = async (paymentPreference: "pay_at_venue" | "partial_deposit" | "full_upfront") => {
     if (!cartId || !selectedDate || !selectedSlot || isCreating || isPaying) return;
-
     setIsCreating(true);
-
     try {
       const mappedSlot = {
         ...selectedSlot,
@@ -156,7 +133,6 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
           staff_id: s.staff_id ?? s.staffId ?? s.staff_options?.[0] ?? s.staff?.id,
         })),
       };
-
       const createResult = await dispatch(
         createBookingAction({ cartId, date: selectedDate, slot: mappedSlot, payment_preference: paymentPreference }),
       ).unwrap();
@@ -167,20 +143,15 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       }
 
       const booking = createResult.booking;
-
       if (booking.payment_policy === "pay_at_venue") {
         setConfirmOpen(false);
         onClose();
-        navigate("/bookings/success", {
-          state: { bookingUuid: booking.uuid, booking },
-          replace: true,
-        });
+        navigate("/bookings/success", { state: { bookingUuid: booking.uuid, booking }, replace: true });
         return;
       }
 
       setIsPaying(true);
       const paymentResult = await dispatch(createPaymentAction(booking.uuid)).unwrap();
-
       if (paymentResult.clientSecret) {
         setConfirmOpen(false);
         onClose();
@@ -207,30 +178,26 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         open={open}
         onClose={onClose}
         slotProps={{
-          paper: {
-            className:
-              "flex flex-col bg-(--app-surface) overflow-hidden rounded-t-2xl sm:rounded-2xl sm:mb-3 sm:max-w-[560px] sm:mx-auto max-h-[94dvh] sm:max-h-[88vh] border border-(--app-border)",
+          paper: { className: styles.drawerPaper },
+          backdrop: {
+            sx: {
+              backdropFilter: "blur(4px)",
+              backgroundColor: "rgba(0,0,0,0.55)",
+            },
           },
-          transition: { timeout: 320 },
         }}
-        className="[&_.MuiBackdrop-root]:backdrop-blur-sm [&_.MuiBackdrop-root]:bg-black/55"
       >
-        <Box className="flex items-center justify-between px-4 sm:px-5 pt-5 pb-4 border-b border-(--app-border) shrink-0">
+        <Box className={styles.header}>
           <Box>
-            <Typography className="font-extrabold text-base text-(--app-text) leading-tight">Select a Time</Typography>
-            <Typography className="text-xs text-(--app-muted) mt-0.5">Choose your preferred date & slot</Typography>
+            <Typography className={styles.title}>Select a Time</Typography>
+            <Typography className={styles.subtitle}>Choose your preferred date &amp; slot</Typography>
           </Box>
-
-          <IconButton
-            onClick={onClose}
-            size="small"
-            className="bg-(--app-surface-alt) border border-(--app-border) hover:bg-(--app-bg) rounded-lg"
-          >
-            <CloseIcon className="text-(--app-muted) text-base" />
+          <IconButton onClick={onClose} size="small" className={styles.closeBtn}>
+            <CloseIcon sx={{ fontSize: "1rem", color: "var(--app-muted)" }} />
           </IconButton>
         </Box>
 
-        <Box className="flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <Box className={styles.body}>
           <SlotPanelContent
             isConflict={isConflict}
             slotsError={slotsError}
@@ -245,40 +212,30 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         </Box>
 
         {!isConflict && (
-          <Box className="px-4 sm:px-5 py-5 border-t border-(--app-border) shrink-0 bg-(--app-surface)">
-            <Box className="flex items-center justify-between mb-3">
-              <Box className="flex items-center gap-2">
-                <AccessTimeIcon className="text-(--app-muted) text-sm" />
-                <Typography className="text-[13px] text-(--app-muted)">{durationText}</Typography>
-                <Box className="w-1 h-1 rounded-full bg-(--app-border)" />
-                <Typography className="text-[13px] text-(--app-muted)">
+          <Box className={styles.footer}>
+            <Box className={styles.footerRow}>
+              <Box className={styles.metaGroup}>
+                <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--app-muted)" }} />
+                <Typography sx={{ fontSize: 13, color: "var(--app-muted)" }}>{durationText}</Typography>
+                <Box className={styles.dot} />
+                <Typography sx={{ fontSize: 13, color: "var(--app-muted)" }}>
                   {items.length} service{items.length > 1 ? "s" : ""}
                 </Typography>
               </Box>
-              <Typography className="font-extrabold text-xl text-(--app-text) leading-none">₹{totalPrice}</Typography>
+              <Typography className={styles.totalPrice}>₹{totalPrice}</Typography>
             </Box>
 
             <Box
               onClick={selectedSlot ? () => setConfirmOpen(true) : undefined}
-              className={`flex items-center justify-center gap-2 py-3.5 rounded-xl transition-colors duration-200 ${
-                selectedSlot
-                  ? "bg-(--app-primary) hover:brightness-95 cursor-pointer"
-                  : "bg-(--app-surface-alt) cursor-default"
-              }`}
+              className={`${styles.actionBtn} ${selectedSlot ? styles.actionBtnActive : styles.actionBtnInactive}`}
             >
-              <Typography
-                className={`text-sm font-bold tracking-wide ${
-                  selectedSlot ? "text-(--app-primary-contrast)" : "text-(--app-muted)"
-                }`}
-              >
+              <Typography className={styles.btnText}>
                 {selectedSlot ? "Book Appointment" : "Select a time slot"}
               </Typography>
-              {selectedSlot && <ArrowForwardIcon className="text-(--app-primary-contrast) text-base" />}
+              {selectedSlot && <ArrowForwardIcon sx={{ fontSize: "1rem" }} />}
             </Box>
 
-            <Typography className="text-[11px] text-(--app-muted) text-center mt-2.5 block">
-              You&apos;ll review details before confirming
-            </Typography>
+            <Typography className={styles.footerNote}>You&apos;ll review details before confirming</Typography>
           </Box>
         )}
       </Drawer>

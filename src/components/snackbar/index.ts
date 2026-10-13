@@ -4,6 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { getSnackBarStyles } from "./snackbar.constant";
 import { Message } from "./_components/message";
+import styles from "./snackbar.module.css";
+
 export const callSnack = async (msg: string, variant: VariantType, maxWidth?: number) => {
   enqueueSnackbar(React.createElement(Message, { message: msg, maxWidth: maxWidth, variant: variant }), {
     variant: variant || "info",
@@ -15,7 +17,7 @@ export const callSnack = async (msg: string, variant: VariantType, maxWidth?: nu
     action: (key) =>
       React.createElement(
         IconButton,
-        { onClick: () => closeSnackbar(key), className: "p-1.5", "data-testid": `btn-snackbar-close-${key}` } as any,
+        { onClick: () => closeSnackbar(key), className: styles.iconButton, "data-testid": `btn-snackbar-close-${key}` } as any,
         React.createElement(CloseIcon, {
           fontSize: "small",
           sx: { color: "var(--secondary-600)" },

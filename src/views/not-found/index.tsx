@@ -9,8 +9,9 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 
+import styles from "./not-found.module.css";
+
 export default function NotFoundPage() {
-  const theme = useTheme();
   const navigate = useStorefrontNavigate();
   const params = useParams();
   const salonSlug = params?.salonSlug as string | undefined;
@@ -26,53 +27,22 @@ export default function NotFoundPage() {
     }
   };
 
-  const primaryColor = theme.palette.primary.main;
-  const primaryContrast = theme.palette.primary.contrastText;
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderColor = theme.palette.divider;
-  const surfaceBg = theme.palette.background.paper;
-
   return (
-    <Box className="min-h-[70vh] flex items-center justify-center p-4 sm:p-6 my-auto">
-      <Box
-        className="max-w-lg w-full text-center rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-2xl transition-all duration-300"
-        style={{
-          backgroundColor: surfaceBg,
-          border: `1px solid ${borderColor}`,
-          boxShadow: `0 0 30px ${primaryColor}15`,
-        }}
-      >
-        <Box
-          className="absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl pointer-events-none transition-colors duration-300"
-          style={{ backgroundColor: `${primaryColor}20` }}
-        />
-        <Box
-          className="absolute -bottom-16 -left-16 w-44 h-44 rounded-full blur-3xl pointer-events-none transition-colors duration-300"
-          style={{ backgroundColor: `${primaryColor}15` }}
-        />
+    <Box className={styles.notFoundContainer}>
+      <Box className={styles.notFoundCard}>
+        <Box className={styles.blurCircleTop} />
+        <Box className={styles.blurCircleBottom} />
 
-        <Box className="flex justify-center mb-6">
-          <Box
-            className="w-20 h-20 rounded-2xl flex items-center justify-center border shadow-lg transition-all duration-300"
-            style={{
-              backgroundColor: `${primaryColor}18`,
-              borderColor: `${primaryColor}35`,
-              color: primaryColor,
-            }}
-          >
+        <Box className={styles.iconWrapper}>
+          <Box className={styles.iconBox}>
             <SearchOffIcon style={{ fontSize: 42 }} />
           </Box>
         </Box>
 
-        <Box className="mb-2">
+        <Box>
           <Typography
             variant="h1"
-            className="text-5xl sm:text-6xl font-bold tracking-tight font-serif"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              color: textPrimary,
-            }}
+            className={styles.errorCode}
           >
             404
           </Typography>
@@ -80,29 +50,21 @@ export default function NotFoundPage() {
 
         <Typography
           variant="h5"
-          className="text-xl sm:text-2xl font-semibold mb-3"
-          style={{ color: textPrimary }}
+          className={styles.errorTitle}
         >
           Page Not Found
         </Typography>
 
-        <Typography
-          className="text-sm mb-6 leading-relaxed"
-          style={{ color: textSecondary }}
-        >
+        <Typography className={styles.errorDescription}>
           The page or salon service you are looking for doesn&apos;t exist, was moved, or is temporarily unavailable.
         </Typography>
 
-        <Box className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Box className={styles.buttonGroup}>
           <Button
             variant="outlined"
             onClick={handleGoBack}
             startIcon={<ArrowBackIcon />}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer"
-            style={{
-              borderColor: borderColor,
-              color: textPrimary,
-            }}
+            className={styles.backBtn}
           >
             Go Back
           </Button>
@@ -113,22 +75,16 @@ export default function NotFoundPage() {
             variant="contained"
             disableElevation
             startIcon={<HomeIcon />}
-            className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
-            style={{
-              backgroundColor: primaryColor,
-              color: primaryContrast,
-              boxShadow: `0 4px 16px ${primaryColor}40`,
-            }}
+            className={styles.homeBtn}
           >
             Return to Storefront
           </Button>
         </Box>
 
-        <Box className="mt-6 pt-6 border-t" style={{ borderColor: borderColor }}>
+        <Box className={styles.footerLinkSection}>
           <Link
             href={servicesPath}
-            className="inline-flex items-center gap-1.5 text-xs font-medium hover:underline transition-all"
-            style={{ color: primaryColor }}
+            className={styles.serviceLink}
           >
             <ContentCutIcon style={{ fontSize: 16 }} />
             <span>Explore Salon Services</span>

@@ -21,6 +21,8 @@ import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate"
 import { callSnack } from "../../components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
 
+import styles from "./cart.module.css";
+
 export default function Cart() {
   const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
@@ -90,10 +92,10 @@ export default function Cart() {
 
   if (isFetchingCart || !loaded) {
     return (
-      <Box className="p-6 md:p-12 max-w-[1440px] mx-auto space-y-6">
-        <Skeleton variant="rectangular" height={140} className="rounded-[2px]" />
+      <Box className={styles.cartContainer} style={{ maxWidth: "1440px", margin: "0 auto" }}>
+        <Skeleton variant="rectangular" height={140} style={{ borderRadius: "0.75rem", marginBottom: "1rem" }} />
         {[1, 2].map((i) => (
-          <Skeleton key={i} variant="rectangular" height={100} className="rounded-[2px]" />
+          <Skeleton key={i} variant="rectangular" height={100} style={{ borderRadius: "0.75rem", marginBottom: "1rem" }} />
         ))}
       </Box>
     );
@@ -101,21 +103,21 @@ export default function Cart() {
 
   if (!items.length) {
     return (
-      <Box className="flex flex-col items-center justify-center p-12 md:p-20 text-center gap-4 bg-[#FCF9F3] min-h-[60vh]">
-        <Box className="w-16 h-16 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5] flex items-center justify-center">
-          <StorefrontIcon className="text-[28px] text-[#766A5E]" />
+      <Box className={styles.emptyContainer}>
+        <Box className={styles.emptyIconBox}>
+          <StorefrontIcon style={{ fontSize: "28px", color: "var(--app-muted)" }} />
         </Box>
         <Box>
-          <h2 className="font-serif text-2xl md:text-3xl text-[#1C1A17] font-medium">
+          <h2 className={styles.emptyTitle}>
             Your Basket is Currently Empty
           </h2>
-          <p className="font-sans text-xs text-[#766A5E] mt-2 max-w-sm mx-auto leading-relaxed">
+          <p className={styles.emptySub}>
             Explore our curated menu of hair, skin, and wellness treatments to get started.
           </p>
           <button
             type="button"
             onClick={() => navigate("/services")}
-            className="mt-6 px-6 py-3 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] bg-[#1C1A17] text-[#FCFAF7] border-0 cursor-pointer"
+            className={styles.exploreBtn}
           >
             EXPLORE SERVICE MENU
           </button>
@@ -129,32 +131,32 @@ export default function Cart() {
 
   return (
     <>
-      <Box className="bg-[#FCF9F3] min-h-screen text-[#1C1C18] p-6 md:p-12 font-sans">
-        <Box className="w-full max-w-[1440px] mx-auto">
+      <Box className={styles.cartContainer}>
+        <Box className={styles.cartWrapper}>
           {salon && (
-            <Box className="relative rounded-[2px] overflow-hidden mb-8 bg-[#FCFAF7] border border-[#E5DFD5] p-6 sm:p-8">
-              <Box className="relative flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <Box className={styles.salonBanner}>
+              <Box className={styles.bannerContent}>
                 <Avatar
                   src={salon.logo}
                   variant="square"
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-[2px] border border-[#E5DFD5] bg-[#F2EEE7] text-[#1C1A17] font-serif shrink-0 text-xl"
+                  className={styles.salonAvatar}
                 >
                   {salon.name?.[0]}
                 </Avatar>
 
-                <Box className="flex-1 min-w-0">
-                  <Box className="flex items-center gap-3 mb-1 flex-wrap">
-                    <EllipsisCell value={salon.name} className="font-serif text-2xl sm:text-3xl font-medium text-[#1C1A17] tracking-tight capitalize" maxChars={20}/>
-                    <Box className="px-2.5 py-0.5 rounded-[2px] bg-[#F2EEE7] border border-[#E5DFD5]">
-                      <Typography className="text-[#766A5E] text-[10px] font-semibold tracking-widest uppercase">
+                <Box className={styles.salonInfo}>
+                  <Box className={styles.salonTitleRow}>
+                    <EllipsisCell value={salon.name} className={styles.salonName} maxChars={20}/>
+                    <Box className={styles.salonBadge}>
+                      <Typography className={styles.salonBadgeText}>
                         {(salon.type ?? "SANCTUARY")}
                       </Typography>
                     </Box>
                   </Box>
 
-                  <Box className="flex items-center gap-2 text-xs text-[#766A5E]">
-                    <PlaceIcon className="text-sm text-[#A88B64]" />
-                    <EllipsisCell value={salon.address} className="text-xs text-[#766A5E] capitalize" maxChars={20} />
+                  <Box className={styles.salonLocation}>
+                    <PlaceIcon className={styles.locationIcon} />
+                    <EllipsisCell value={salon.address} className={styles.locationText} maxChars={20} />
                   </Box>
                 </Box>
               </Box>
@@ -163,51 +165,51 @@ export default function Cart() {
 
           {activeBooking && <ActiveBookingBanner />}
 
-          <Box className="flex items-center justify-between mb-6 border-b border-[#E5DFD5] pb-4">
+          <Box className={styles.sectionHeader}>
             <Typography
               variant="caption"
-              className="font-sans text-xs font-semibold text-[#1C1A17] tracking-[0.14em] uppercase"
+              className={styles.sectionTitle}
             >
               SELECTED CEREMONIES ({items.length})
             </Typography>
           </Box>
 
-          <Box className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
-            <Box className="space-y-4">
+          <Box className={styles.cartGrid}>
+            <Box className={styles.itemList}>
               {items.map((item: any) => (
                 <CartItem key={item.uuid ?? item.service_id} item={item} />
               ))}
             </Box>
 
-            <Box className="bg-[#FCFAF7] border border-[#E5DFD5] rounded-[2px] overflow-hidden lg:sticky lg:top-28 shadow-xs">
-              <Box className="px-6 py-5 border-b border-[#E5DFD5] bg-[#F6F3ED]">
-                <Typography className="font-serif text-xl font-medium text-[#1C1A17] tracking-wide">
+            <Box className={styles.summaryCard}>
+              <Box className={styles.summaryHeader}>
+                <Typography className={styles.summaryTitle}>
                   Reservation Investment Summary
                 </Typography>
               </Box>
 
-              <Box className="p-6 space-y-4">
-                <Box className="flex justify-between items-center text-xs text-[#766A5E]">
-                  <Box className="flex items-center gap-2">
-                    <AccessTimeIcon className="text-sm text-[#A88B64]" />
+              <Box className={styles.summaryBody}>
+                <Box className={styles.summaryRow}>
+                  <Box className={styles.rowLabel}>
+                    <AccessTimeIcon className={styles.rowIcon} />
                     <span>Estimated Total Duration</span>
                   </Box>
-                  <span className="font-semibold text-[#1C1A17]">{durationText}</span>
+                  <span className={styles.rowValue}>{durationText}</span>
                 </Box>
 
-                <Box className="flex justify-between items-center text-xs text-[#766A5E]">
-                  <Box className="flex items-center gap-2">
-                    <CalendarMonthIcon className="text-sm text-[#A88B64]" />
+                <Box className={styles.summaryRow}>
+                  <Box className={styles.rowLabel}>
+                    <CalendarMonthIcon className={styles.rowIcon} />
                     <span>Selected Treatments</span>
                   </Box>
-                  <span className="font-semibold text-[#1C1A17]">{items.length}</span>
+                  <span className={styles.rowValue}>{items.length}</span>
                 </Box>
 
-                <hr className="my-4 border-[#E5DFD5]" />
+                <hr className={styles.summaryDivider} />
 
-                <Box className="flex justify-between items-baseline mb-6">
-                  <span className="font-serif text-base font-medium text-[#1C1A17]">Total Investment</span>
-                  <span className="font-serif text-3xl font-medium text-[#1C1A17]">
+                <Box className={styles.totalRow}>
+                  <span className={styles.totalLabel}>Total Investment</span>
+                  <span className={styles.totalValue}>
                     ₹{totalPrice}
                   </span>
                 </Box>
@@ -215,12 +217,12 @@ export default function Cart() {
                 <button
                   type="button"
                   onClick={onProceedToBook}
-                  className="w-full bg-[#1C1A17] hover:bg-[#2E2A25] text-[#FCFAF7] py-3.5 rounded-[2px] font-sans text-xs font-semibold uppercase tracking-[0.1em] cursor-pointer transition-all border-0"
+                  className={styles.checkoutBtn}
                 >
                   PROCEED TO SCHEDULE & ARTISAN
                 </button>
 
-                <p className="block text-center text-[10px] text-[#766A5E] uppercase tracking-wider mt-2">
+                <p className={styles.helperText}>
                   Select your specialist & preferred timing slot
                 </p>
               </Box>

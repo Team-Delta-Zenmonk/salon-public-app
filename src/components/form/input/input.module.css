@@ -1,0 +1,14 @@
+.singleLineInput {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fullWidthCapitalize {
+  width: 100%;
+  min-width: 0;
+  display: block;
+  text-transform: capitalize;
+}

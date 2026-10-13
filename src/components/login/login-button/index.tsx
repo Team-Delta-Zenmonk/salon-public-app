@@ -17,6 +17,8 @@ interface AuthRedirectState {
   resumeBooking?: boolean;
 }
 
+import styles from "./login-button.module.css";
+
 export default function LoginButton({ collapsed = false }: Readonly<LoginButtonProps>) {
   const [loading, setLoading] = useState(false);
   const { getSignInWithPopup } = GoogleResponse();
@@ -66,11 +68,11 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
               alt="Google"
-              className="w-4 h-4"
+              className={styles.googleIcon}
             />
           )
         }
-        className="!border-(--app-border) !text-(--app-text) hover:!bg-(--app-primary-soft) hover:!border-(--app-primary) !py-3 !rounded-xl !normal-case !font-semibold !text-sm transition-all shadow-sm"
+        className={styles.googleBtn}
       >
         {!collapsed && (loading ? "Signing in..." : "Continue with Google")}
       </Button>

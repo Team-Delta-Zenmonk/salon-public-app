@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, CircularProgress } from "@mui/material";
-
+import styles from "./delete-dialog.module.css";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -30,13 +30,13 @@ export default function DeleteDialog({
         <Typography fontWeight="fontWeightBold">{title}</Typography>
       </DialogTitle>
 
-      <DialogContent className="py-2">
+      <DialogContent className={styles.dialogContent}>
         <Typography>
           Are you sure you want to delete <strong>"{itemName}"</strong>? This action cannot be undone.
         </Typography>
       </DialogContent>
 
-      <DialogActions className="gap-2 p-3">
+      <DialogActions className={styles.dialogActions}>
         <Button onClick={onClose} disabled={isLoading} variant="outlined">
           Cancel
         </Button>

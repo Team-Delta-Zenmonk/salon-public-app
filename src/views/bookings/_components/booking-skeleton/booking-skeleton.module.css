@@ -1,0 +1,68 @@
+.card {
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  background-color: var(--app-surface, #ffffff);
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--app-border, rgba(0, 0, 0, 0.08));
+  opacity: 0.5;
+}
+
+@media (min-width: 768px) {
+  .strip {
+    width: 6px;
+  }
+}
+
+.content {
+  padding: 1rem !important;
+  padding-left: 1.5rem !important;
+  padding-bottom: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: 1.5rem !important;
+    padding-left: 2rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottomLeft {
+  display: flex;
+  gap: 2rem;
+}
+
+.bottomRight {
+  display: flex;
+  gap: 1rem;
+}

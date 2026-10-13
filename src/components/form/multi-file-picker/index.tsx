@@ -129,7 +129,7 @@ const FileMultiPicker = <T extends FieldValues>({
       >
         <UploadFileIcon
           data-test-id={`upload-btn-icon-${identifier}`}
-          className="text-secondary-500"
+          className={styles.uploadIcon}
         />
       </IconButton>
     );
