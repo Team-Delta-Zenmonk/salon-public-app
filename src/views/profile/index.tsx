@@ -21,16 +21,16 @@ export default function ProfilePage() {
       <Box className={styles.unauthContainer}>
         <div className={styles.unauthCard}>
           <span className="material-symbols-outlined" style={{ fontSize: "48px", color: "var(--app-champagne)" }}>account_circle</span>
-          <h2 className={styles.unauthTitle}>Member Sanctuary Required</h2>
+          <h2 className={styles.unauthTitle}>Sign In Required</h2>
           <p className={styles.unauthSub}>
-            Please sign in or create an atelier dossier to access your personalized treatments and bookings history.
+            Please sign in to access your appointments, profile details, and booking history.
           </p>
           <button
             type="button"
             onClick={() => navigate("/signup")}
             className={styles.primaryBtn}
           >
-            SIGN IN / CREATE DOSSIER
+            SIGN IN / CREATE ACCOUNT
           </button>
         </div>
       </Box>

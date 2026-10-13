@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useMemo } from "react";
-import { Box, Typography, Button, Container, Card, Avatar, Divider } from "@mui/material";
+import React, { useEffect, useRef, useMemo, useState } from "react";
+import { Box, Typography, Button, Container, Card, Avatar, Divider, CircularProgress } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -12,6 +12,7 @@ import { clearCart } from "../../features/salon/cart/cart.slice";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
+import { callSnack } from "../../components/snackbar";
 import styles from "./success.module.scss";
 
 const BookingSuccess: React.FC = () => {
@@ -26,6 +27,8 @@ const BookingSuccess: React.FC = () => {
   const bookingUuid = searchBookingUuid || currentBooking?.uuid;
   const booking = currentBooking;
 
+  const [isLoading, setIsLoading] = useState(!booking && !!bookingUuid);
+
   const { salon: cartSalon } = useAppSelector((s) => s.cart);
   const initialSalonRef = useRef(booking?.salon || cartSalon);
   const displaySalon = booking?.salon || initialSalonRef.current;
@@ -38,9 +41,23 @@ const BookingSuccess: React.FC = () => {
 
   useEffect(() => {
     if (!booking && bookingUuid) {
-      dispatch(getBookingAction(bookingUuid));
+      setIsLoading(true);
+      dispatch(getBookingAction(bookingUuid))
+        .unwrap()
+        .catch((err: any) => {
+          const errorMessage =
+            typeof err === "string"
+              ? err
+              : (err?.payload ?? err?.message ?? "Unable to load booking details.");
+          callSnack(errorMessage, "error");
+          navigate("/cart", { replace: true });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else if (!bookingUuid && !booking) {
-      navigate("/bookings", { replace: true });
+      callSnack("No booking found. Redirecting to cart.", "error");
+      navigate("/cart", { replace: true });
     }
   }, [bookingUuid, booking, dispatch, navigate]);
 
@@ -75,7 +92,25 @@ const BookingSuccess: React.FC = () => {
     return "Time not available";
   }, [booking?.booking_start_time, booking?.booking_end_time]);
 
-  if (!booking) return null;
+  if (isLoading || !booking) {
+    return (
+      <Box className={styles.successPage}>
+        <Container maxWidth="xs" className={styles.container}>
+          <Box className={styles.loadingWrapper}>
+            <CircularProgress sx={{ color: "var(--app-primary)" }} size={44} thickness={4} />
+            <Box>
+              <Typography className={styles.loadingTitle}>
+                Confirming Your Booking...
+              </Typography>
+              <Typography className={styles.loadingSubtitle}>
+                Fetching your appointment details
+              </Typography>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Box className={styles.successPage}>
@@ -121,7 +156,7 @@ const BookingSuccess: React.FC = () => {
               </Typography>
             </Box>
 
-            <Divider sx={{ borderColor: "var(--color-hairline)", opacity: 0.3 }} />
+            <Divider sx={{ borderColor: "var(--app-border)", opacity: 0.5 }} />
 
             <Box className={styles.salonRow}>
               <Avatar
@@ -129,8 +164,10 @@ const BookingSuccess: React.FC = () => {
                 sx={{
                   width: 44,
                   height: 44,
-                  bgcolor: "var(--bg-surface-container-low)",
-                  border: "1.5px solid var(--color-hairline)",
+                  bgcolor: "var(--app-surface-alt)",
+                  border: "1.5px solid var(--app-border)",
+                  color: "var(--app-text)",
+                  fontWeight: 700,
                   flexShrink: 0,
                 }}
               >
@@ -141,7 +178,7 @@ const BookingSuccess: React.FC = () => {
                   {displaySalon?.name || "Salon App"}
                 </Typography>
                 <Box className={styles.addressRow}>
-                  <LocationOnIcon sx={{ fontSize: 13, color: "var(--color-primary)", mt: "1px" }} />
+                  <LocationOnIcon sx={{ fontSize: 13, color: "var(--app-primary)", mt: "1px" }} />
                   <Typography className={styles.addressText}>
                     {displaySalon?.address || "Address in booking history"}
                   </Typography>
@@ -150,7 +187,7 @@ const BookingSuccess: React.FC = () => {
             </Box>
 
             <Box className={styles.dividerPad}>
-              <Divider sx={{ borderColor: "var(--color-hairline)", opacity: 0.2 }} />
+              <Divider sx={{ borderColor: "var(--app-border)", opacity: 0.4 }} />
             </Box>
 
             <Box className={styles.dateTimeGrid}>
@@ -166,7 +203,7 @@ const BookingSuccess: React.FC = () => {
 
             <Box className={styles.infoPad}>
               <Box className={styles.infoBox}>
-                <InfoOutlinedIcon sx={{ fontSize: 18, color: "var(--color-primary)", mt: "2px" }} />
+                <InfoOutlinedIcon sx={{ fontSize: 18, color: "var(--app-primary)", mt: "2px" }} />
                 <Typography className={styles.infoText}>
                   Please arrive 10 mins early. Manage your booking in profile.
                 </Typography>
@@ -203,6 +240,12 @@ const BookingSuccess: React.FC = () => {
                 fontWeight: 900,
                 fontSize: 14,
                 textTransform: "none",
+                bgcolor: "var(--app-primary)",
+                color: "var(--app-primary-contrast)",
+                "&:hover": {
+                  bgcolor: "var(--app-primary-hover, var(--app-primary))",
+                  filter: "brightness(0.92)",
+                },
               }}
             >
               View My Bookings
@@ -219,11 +262,12 @@ const BookingSuccess: React.FC = () => {
                 fontSize: 14,
                 textTransform: "none",
                 borderWidth: 2,
-                borderColor: "var(--color-primary)",
-                color: "var(--color-primary)",
-                bgcolor: "var(--bg-surface)",
+                borderColor: "var(--app-border)",
+                color: "var(--app-text)",
+                bgcolor: "var(--app-surface)",
                 "&:hover": {
-                  bgcolor: "var(--bg-surface-container-low)",
+                  bgcolor: "var(--app-surface-alt)",
+                  borderColor: "var(--app-primary)",
                   transform: "translateY(-2px)",
                 },
                 transition: "all 0.2s",

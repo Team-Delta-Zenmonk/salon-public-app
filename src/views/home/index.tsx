@@ -194,17 +194,17 @@ export default function HomePage() {
             <div className={styles.heroBadge}>
               <span className={styles.dot} />
               <span className={styles.badgeText}>
-                HAUTE COIFFURE & DERMAL SANCTUARY
+                PREMIUM HAIR &amp; SKIN CARE
               </span>
             </div>
 
             <h1 className={styles.heroHeading}>
-              Tactile Quietude, <br /> Tailored Shears & Avant-Garde Beauty
+              Expert Styling, <br /> Precision Haircuts &amp; Modern Beauty
             </h1>
 
             <div className={styles.heroAboutWrapper}>
               <EllipsisCell
-                value={salon?.about || "An intimate, sanctuary-level atelier where master scissorsmiths and clinical facialists transform the sensory ritual of luxury grooming into contemporary art."}
+                value={salon?.about || "A relaxing, premium salon where expert stylists and skincare professionals provide quality beauty and grooming services tailored to you."}
                 className={styles.heroAboutText}
                 maxLines={5}
                 maxChars={200}
@@ -217,7 +217,7 @@ export default function HomePage() {
                 <span className={styles.pulseDot} />
               </span>
               <span className={styles.statusText}>
-                OPEN FOR BESPOKE APPOINTMENTS TODAY
+                OPEN FOR APPOINTMENTS TODAY
               </span>
             </div>
 
@@ -226,7 +226,7 @@ export default function HomePage() {
                 href="#services-menu"
                 className={styles.primaryCta}
               >
-                <span>EXPLORE RITUAL MENU</span>
+                <span>EXPLORE SERVICES</span>
                 <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_downward</span>
               </a>
               <button
@@ -234,7 +234,7 @@ export default function HomePage() {
                 onClick={() => navigate("/specialists")}
                 className={styles.secondaryBtn}
               >
-                <span>RESIDENT SPECIALISTS</span>
+                <span>MEET OUR SPECIALISTS</span>
                 <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>person</span>
               </button>
             </div>
@@ -247,7 +247,7 @@ export default function HomePage() {
                 return (
                   <img
                     key={`bento-1-${imgUrl}`}
-                    alt="Atelier Solstice Craft"
+                    alt="Salon Showcase"
                     src={imgUrl}
                     className={styles.bentoImage}
                     style={{ opacity: isVisible ? 1 : 0, zIndex: isVisible ? 10 : 0 }}
@@ -256,9 +256,9 @@ export default function HomePage() {
               })}
               <div className={styles.bentoOverlay} />
               <div className={styles.bentoContent}>
-                <span className={styles.bentoSub}>COUTURE ATELIER</span>
+                <span className={styles.bentoSub}>PREMIUM SALON</span>
                 <h2 className={styles.bentoTitle}>
-                  Precision Geometry & Botanical Radiance
+                  Precision Styling &amp; Healthy Hair Care
                 </h2>
               </div>
             </div>
@@ -269,24 +269,24 @@ export default function HomePage() {
       <section className={styles.pillarsSection}>
         <div className={styles.pillarsGrid}>
           <div className={styles.pillarCard}>
-            <span className={styles.pillarNum}>01. TRANQUIL AUTHORITY</span>
-            <h3 className={styles.pillarTitle}>Composed Deliberation</h3>
+            <span className={styles.pillarNum}>01. COMFORT &amp; CARE</span>
+            <h3 className={styles.pillarTitle}>Relaxing Atmosphere</h3>
             <p className={styles.pillarDesc}>
-              Replacing urgent transactional booking software with serene, personalized consultation and spacious private suites.
+              Enjoy a peaceful, personalized consultation in spacious, clean, and comfortable private styling stations.
             </p>
           </div>
           <div className={styles.pillarCard}>
-            <span className={styles.pillarNum}>02. SENSORY REFINEMENT</span>
-            <h3 className={styles.pillarTitle}>Textured Aesthetics</h3>
+            <span className={styles.pillarNum}>02. PREMIUM QUALITY</span>
+            <h3 className={styles.pillarTitle}>Modern Aesthetics</h3>
             <p className={styles.pillarDesc}>
-              Every detail channels organic linen, brushed bronze metals, and natural stone for an unhurried luxury tempo.
+              Every detail is designed to give you a calm, unhurried, and comfortable salon visit every single time.
             </p>
           </div>
           <div className={styles.pillarCard}>
-            <span className={styles.pillarNum}>03. DISCERNING CURATION</span>
-            <h3 className={styles.pillarTitle}>Bespoke Formulations</h3>
+            <span className={styles.pillarNum}>03. EXPERT STYLISTS</span>
+            <h3 className={styles.pillarTitle}>Quality Products</h3>
             <p className={styles.pillarDesc}>
-              French glazes, surgical-grade shears, and Japanese scalp trichology executed by master certified artisans.
+              Top-grade hair treatments, professional styling tools, and scalp care provided by certified hair specialists.
             </p>
           </div>
         </div>
@@ -294,16 +294,18 @@ export default function HomePage() {
 
       <section className={styles.catalogSection} id="services-menu">
         <div className={styles.catalogHeader}>
-          <div>
+          <div className={styles.catalogTitleArea}>
             <div className={styles.catalogSubBadge}>
               <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>content_cut</span>
-              BESPOKE RITUAL CATALOG
+              OUR SERVICES MENU
             </div>
-            <h2 className={styles.catalogHeading}>Curated Treatment Offerings</h2>
+            <div className={styles.catalogContentRow}>
+              <h2 className={styles.catalogHeading}>Curated Treatment Offerings</h2>
+              <p className={styles.catalogDescription}>
+                Choose from tailored treatments formulated with quality ingredients, gentle care, and professional styling.
+              </p>
+            </div>
           </div>
-          <p className={styles.pillarDesc} style={{ maxWidth: "28rem" }}>
-            Select tailored ceremonies formulated with botanical actives, French glazes, and surgical-grade styling implements.
-          </p>
         </div>
 
         <div className={styles.mobileFilterRow}>
@@ -373,7 +375,7 @@ export default function HomePage() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--app-muted)", fontSize: "0.75rem" }}>
             <span className="material-symbols-outlined" style={{ fontSize: "16px", color: "var(--app-secondary, #5A6B5C)" }}>verified</span>
-            <span>All rituals include complimentary botanical sensory rinse</span>
+            <span>All services include complimentary scalp cleanse and conditioning</span>
           </div>
         </div>
 
@@ -395,21 +397,23 @@ export default function HomePage() {
       {staff.length > 0 && (
         <section className={styles.catalogSection} style={{ borderTop: "1px solid var(--app-border)" }}>
           <div className={styles.catalogHeader}>
-            <div>
+            <div className={styles.catalogTitleArea}>
               <div className={styles.catalogSubBadge}>
                 <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>workspace_premium</span>
-                RESIDENT ARTISANS & STYLISTS
+                EXPERT STYLISTS &amp; SPECIALISTS
               </div>
-              <h2 className={styles.catalogHeading}>Meet Our Master Specialists</h2>
+              <div className={styles.catalogContentRow}>
+                <h2 className={styles.catalogHeading}>Meet Our Master Specialists</h2>
+                <button
+                  type="button"
+                  onClick={() => navigate("/specialists")}
+                  className={styles.secondaryBtn}
+                >
+                  <span>VIEW ALL SPECIALISTS</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_forward</span>
+                </button>
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={() => navigate("/specialists")}
-              className={styles.secondaryBtn}
-            >
-              <span>VIEW ALL SPECIALISTS</span>
-              <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>arrow_forward</span>
-            </button>
           </div>
 
           <div className={styles.servicesGrid}>

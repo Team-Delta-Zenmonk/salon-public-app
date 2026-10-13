@@ -87,7 +87,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className }) => {
         onClick={() => navigate(`/services?specialist=${encodeURIComponent(fullName)}`)}
         className={styles.reserveBtn}
       >
-        <span>RESERVE WITH ARTISAN</span>
+        <span>BOOK WITH SPECIALIST</span>
         <span className={`material-symbols-outlined ${styles.arrowIcon}`}>arrow_forward</span>
       </button>
 

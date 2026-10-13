@@ -14,6 +14,7 @@
   word-break: break-word;
   text-align: center;
   transform: translateX(-50%);
+  text-transform: capitalize;
   animation: fadeIn 150ms ease;
 }
 
@@ -38,6 +39,7 @@
   min-width: 0;
   max-width: 100%;
   pointer-events: auto;
+  text-transform: capitalize;
 }
 
 .cell * {
@@ -51,6 +53,7 @@
   max-width: 100%;
   pointer-events: auto;
   user-select: none;
+  text-transform: capitalize;
 }
 
 .cellTruncated * {
@@ -63,6 +66,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
 }
 
 .fullWidthCapitalize {

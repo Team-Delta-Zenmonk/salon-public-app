@@ -41,14 +41,14 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
   }
 
   const { totalPrice } = calculateTotals(cart.items);
-  const firstItemName = cart.items[0]?.name || cart.items[0]?.service?.name || "Selected Ritual";
+  const firstItemName = cart.items[0]?.name || cart.items[0]?.service?.name || "Selected Service";
 
   return (
     <aside className={`${styles.bar} ${className}`}>
       <button
         type="button"
         onClick={() => setIsDismissed(true)}
-        aria-label="Dismiss reservation bar"
+        aria-label="Dismiss booking bar"
         className={styles.dismissButton}
       >
         <span className={`material-symbols-outlined ${styles.dismissIcon}`}>close</span>
@@ -61,11 +61,11 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
         <div className={styles.details}>
           <div className={styles.badgeRow}>
             <span className={styles.badgeLabel}>
-              ACTIVE RESERVATION
+              ACTIVE BOOKING
             </span>
             <span className={styles.dot} />
             <span className={styles.countText}>
-              {cart.items.length} Treatment{cart.items.length > 1 ? "s" : ""}
+              {cart.items.length} Service{cart.items.length > 1 ? "s" : ""}
             </span>
           </div>
           <EllipsisCell value={firstItemName} maxChars={10} className={styles.serviceName} />
@@ -77,7 +77,7 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
         onClick={() => navigate("/cart")}
         className={styles.ctaButton}
       >
-        <span>PROCEED TO SCHEDULE (₹{totalPrice})</span>
+        <span>CONTINUE TO BOOKING (₹{totalPrice})</span>
         <span className={`material-symbols-outlined ${styles.arrowIcon}`}>arrow_forward</span>
       </button>
     </aside>

@@ -223,7 +223,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                   <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>
                     {isAdded ? "check" : "calendar_today"}
                   </span>
-                  <span>{isAdded ? "RESERVED" : "ADD TO BOOKING"}</span>
+                  <span>{isAdded ? "ADDED" : "ADD TO BOOKING"}</span>
                 </>
               )}
             </button>

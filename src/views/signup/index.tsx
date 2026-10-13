@@ -24,15 +24,20 @@ export default function SignUp() {
   return (
     <Box className={styles.signupPage}>
       <Box className={styles.topBar}>
-        <Box className={styles.breadcrumbs}>
-          <span className={styles.crumbGold}>MEMBER SANCTUARY</span>
-          <span className={styles.crumbSlash}>/</span>
-          <EllipsisCell value={salonName} maxChars={20} className={styles.crumbText} />
+        <Box className={styles.topBarLeft}>
+          <Box className={styles.breadcrumbs}>
+            <span className={styles.crumbGold}>CLIENT ACCOUNT</span>
+            <span className={styles.crumbSlash}>/</span>
+            <EllipsisCell value={salonName} maxChars={22} className={styles.crumbText} />
+          </Box>
         </Box>
         <Box className={styles.protocolInfo}>
-          <span className={styles.protocolLabel}>AUTHENTICATION PROTOCOL</span>
+          <span className={styles.protocolBadge}>
+            <span className={styles.protocolDot} />
+            <span className={styles.protocolLabel}>SECURE LOGIN</span>
+          </span>
           <span className={styles.dividerDot} />
-          <span className={styles.tierLabel}>TIER: PRIVATE CLIENT</span>
+          <span className={styles.tierLabel}>CLIENT ACCESS</span>
         </Box>
       </Box>
 
@@ -52,7 +57,7 @@ export default function SignUp() {
 
           <Box className={styles.headerTextGroup}>
             <span className={styles.tagline}>
-              SANCTUARY &amp; STUDIO
+              SALON &amp; SPA
             </span>
             <EllipsisCell
               value={salonName}
@@ -60,7 +65,7 @@ export default function SignUp() {
               className={styles.salonTitle}
             />
             <Typography className={styles.narrative}>
-              Sign in or create your account to reserve appointments and manage your bookings.
+              Sign in or create your account to book appointments and manage your bookings.
             </Typography>
           </Box>
 

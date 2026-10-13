@@ -13,7 +13,7 @@ export default function AboutPage() {
   const salonName = salon?.name || "CRIMSON & SHEAR";
   const displayAbout =
     salon?.about ||
-    "Where avant-garde French scissorcraft meets bespoke sensorial Japanese hair rituals in our flagship sanctuary. A temple of stillness, structural precision, and couture aesthetic transformation.";
+    "A premier salon and spa dedicated to world-class hair artistry, restorative scalp treatments, and modern aesthetic wellness. Experience dedicated care and precision styling in a calm, welcoming space.";
 
   const staffList: any[] = useMemo(() => salon?.staff || [], [salon?.staff]);
   const photosList: any[] = useMemo(() => salon?.photos || [], [salon?.photos]);
@@ -71,14 +71,14 @@ export default function AboutPage() {
           <div className={styles.breadcrumbRow}>
             <span>HOME</span>
             <span className={styles.breadcrumbDivider}>/</span>
-            <span>ATELIER</span>
+            <span>SALON</span>
             <span className={styles.breadcrumbDivider}>/</span>
-            <span className={styles.breadcrumbActive}>ABOUT & LOCATION</span>
+            <span className={styles.breadcrumbActive}>ABOUT &amp; LOCATION</span>
           </div>
 
           <div className={styles.heroHeadingWrapper}>
             <h1 className={styles.heroHeading}>
-              The Sanctuary of Architectural Coiffure & Dermal Mastery
+              Dedicated Hair Artistry &amp; Modern Skincare
             </h1>
             <EllipsisCell value={displayAbout} className={styles.heroDescription} maxChars={200} maxLines={5} />
           </div>
@@ -86,19 +86,19 @@ export default function AboutPage() {
           <div className={styles.pillsRow}>
             <div className={styles.pill}>
               <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>verified</span>
-              <span>Haute Couture Master Guild</span>
+              <span>Certified Master Stylists</span>
             </div>
             <div className={styles.pill}>
               <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>spa</span>
-              <span>Bespoke Trichological Spa</span>
+              <span>Hair &amp; Scalp Care</span>
             </div>
             <div className={styles.pill}>
               <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>distance</span>
-              <EllipsisCell value={salon?.address || "Flagship Atelier • Bandra West"} maxChars={35} maxLines={1} style={{ textTransform: "capitalize" }} />
+              <EllipsisCell value={salon?.address || "Main Branch • City Center"} maxChars={35} maxLines={1} style={{ textTransform: "capitalize" }} />
             </div>
             <div className={`${styles.pill} ${styles.pillActive}`}>
               <span className={styles.pillPulseDot} />
-              <span>Open Now Until 9:30 PM (Salon Soirée)</span>
+              <span>Open Today Until 9:30 PM</span>
             </div>
           </div>
         </section>
@@ -116,14 +116,14 @@ export default function AboutPage() {
                 </span>
               </div>
               <h2 className={styles.panelHeading}>
-                Sculpting Silhouette Beyond Convention
+                Crafting Confidence Through Precision Care
               </h2>
               <div className={styles.paragraphGroup}>
                 <p>
-                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} style={{ textTransform: "capitalize" }} />{" "} was conceived not simply as a salon, but as a sterile, acoustic refuge for intentional self-reinvention. Rooted in Parisian runway ateliers and Japanese meditative scalp baths, every service is an uncompromising ritual balancing precision geometric sectioning with high-potency bio-fermented botanical elixirs.
+                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} style={{ textTransform: "capitalize" }} />{" "} was founded with a clear purpose: to provide personalized, top-tier styling and restorative hair treatments in a calm, welcoming environment. We combine modern cutting technique with gentle, nourishing hair products.
                 </p>
                 <p>
-                  Our flagship sanctuary features six acoustically isolated suites crafted from blackened cedar, cast bronze, and Italian porphyry stone. Here, urban cacophony dissolves into bespoke aromatic misting, hand-forged Damascus shears, and millimeter-level balance calibrated to each patron’s craniometric posture.
+                  Our salon features spacious private styling stations designed for comfort and relaxation. Here, you can unwind while our experienced stylists focus entirely on giving you the look, health, and care that best fits your lifestyle.
                 </p>
               </div>
 
@@ -224,8 +224,8 @@ export default function AboutPage() {
             <div className={styles.panelCard}>
               <div className={styles.panelHeader} style={{ flexWrap: "wrap", gap: "0.5rem" }}>
                 <div>
-                  <span className={styles.badgeCaps}>Atelier Operating Hours</span>
-                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Consultation & Service Cadence</h3>
+                  <span className={styles.badgeCaps}>Salon Operating Hours</span>
+                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Opening &amp; Service Hours</h3>
                 </div>
                 <div className={styles.statusPillOpen}>
                   <span className={styles.openPulseDot} />
@@ -241,26 +241,26 @@ export default function AboutPage() {
                   if (isFri) {
                     return (
                       <div key={day} className={styles.hoursRowHighlight}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <div className={styles.hoursDayCol}>
                           <span style={{ color: "var(--app-primary)", fontWeight: 600, textTransform: "capitalize" }}>{day}</span>
                           <span className={styles.soireeBadge}>
-                            Salon Soirée
+                            Extended Hours
                           </span>
                         </div>
-                        <span style={{ color: "var(--app-text)", fontWeight: 600 }}>{hours}</span>
+                        <span className={styles.hoursTimingText} style={{ color: "var(--app-text)", fontWeight: 600 }}>{hours}</span>
                       </div>
                     );
                   }
 
                   return (
                     <div key={day} className={styles.hoursRow}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <div className={styles.hoursDayCol}>
                         <span style={{ color: "var(--app-text)", fontWeight: 500, textTransform: "capitalize" }}>{day}</span>
                         {day === "sunday" && (
-                          <span style={{ color: "var(--app-muted)", fontSize: "0.75rem" }}>(Private Rejuvenation Rituals)</span>
+                          <span style={{ color: "var(--app-muted)", fontSize: "0.75rem" }}>(Special Appointments)</span>
                         )}
                       </div>
-                      <span style={{ color: "var(--app-muted)", fontWeight: 500 }}>{hours}</span>
+                      <span className={styles.hoursTimingText} style={{ color: "var(--app-muted)", fontWeight: 500 }}>{hours}</span>
                     </div>
                   );
                 })}
@@ -269,14 +269,14 @@ export default function AboutPage() {
               <div className={styles.hoursFooterRow}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--app-primary)" }}>schedule</span>
-                  VIP Out-of-Hours Appointments upon bespoke request
+                  Special or late appointments available on request
                 </span>
                 <button
                   type="button"
                   onClick={() => navigate("/services")}
                   className={styles.linkBtn}
                 >
-                  Request Slot
+                  Book Service
                 </button>
               </div>
             </div>
@@ -286,24 +286,24 @@ export default function AboutPage() {
             <div className={styles.panelCard}>
               <div className={styles.panelHeader}>
                 <div>
-                  <span className={styles.badgeCaps}>Spatial Experience</span>
-                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Inside the Sanctuary</h3>
+                  <span className={styles.badgeCaps}>Our Spaces</span>
+                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Inside Our Salon</h3>
                 </div>
-                <span className={styles.badgeMuted} style={{ fontWeight: 700 }}>4 SPACES • FLAGSHIP</span>
+                <span className={styles.badgeMuted} style={{ fontWeight: 700 }}>4 SPACES • MAIN STUDIO</span>
               </div>
 
               <div className={styles.galleryGrid}>
                 <div className={styles.galleryMain}>
                   <img
                     className={styles.galleryImg}
-                    alt="Main Atelier Chamber"
+                    alt="Main Styling Area"
                     src={galleryImages.main}
                   />
                   <div className={styles.galleryOverlay} />
                   <div className={styles.galleryCaptionBottom}>
                     <div className={styles.galleryBadgeCard}>
                       <span className={styles.bronzeBadge}>
-                        Main Atelier Chamber
+                        Main Styling Area
                       </span>
                       <h4 className={styles.galleryTitle}>
                         Master Styling Stations
@@ -316,17 +316,17 @@ export default function AboutPage() {
                   <div className={styles.gallerySubCard}>
                     <img
                       className={styles.galleryImg}
-                      alt="Ritual Hydro-Chamber"
+                      alt="Wash & Scalp Care"
                       src={galleryImages.sub1}
                     />
                     <div className={styles.galleryOverlay} />
                     <div className={styles.galleryCaptionBottom}>
                       <div className={styles.galleryBadgeCard}>
                         <span className={styles.bronzeBadge}>
-                          Ritual Hydro-Chamber
+                          Wash &amp; Care
                         </span>
                         <h5 className={styles.galleryTitle}>
-                          Japanese Head Spa Suites
+                          Head Spa &amp; Rinse Suites
                         </h5>
                       </div>
                     </div>
@@ -335,17 +335,17 @@ export default function AboutPage() {
                   <div className={styles.gallerySubCard}>
                     <img
                       className={styles.galleryImg}
-                      alt="Acoustic Seclusion Suite"
+                      alt="Private Suite"
                       src={galleryImages.sub2}
                     />
                     <div className={styles.galleryOverlay} />
                     <div className={styles.galleryCaptionBottom}>
                       <div className={styles.galleryBadgeCard}>
                         <span className={styles.bronzeBadge}>
-                          Acoustic Seclusion
+                          Private Suites
                         </span>
                         <h5 className={styles.galleryTitle}>
-                          Private Suite • Vesper
+                          Private Styling Room
                         </h5>
                       </div>
                     </div>
@@ -444,12 +444,12 @@ export default function AboutPage() {
         <section className={styles.etiquetteSection}>
           <div className={styles.etiquetteGlow} />
           <div className={styles.etiquetteHeader}>
-            <span className={styles.badgeCaps}>The Crimson Etiquette</span>
+            <span className={styles.badgeCaps}>Salon Policies</span>
             <h3 className={styles.panelHeading} style={{ marginBottom: 0 }}>
-              Discretion, Sanctuary & Punctuality Guarantee
+              Comfort, Privacy &amp; Punctuality Guarantee
             </h3>
             <p className={styles.heroDescription}>
-              To maintain the acoustic peace of our atelier, we observe strict protocols crafted to protect the tranquility of every patron in residency.
+              To ensure a relaxing visit for all guests, our salon follows guidelines focused on comfort, punctuality, and personal care.
             </p>
           </div>
 
@@ -459,10 +459,10 @@ export default function AboutPage() {
                 <div className={styles.etiquetteIconBox}>
                   <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>volume_off</span>
                 </div>
-                <h4 className={styles.etiquetteTitle}>Silent Suite Option</h4>
+                <h4 className={styles.etiquetteTitle}>Quiet Appointment Option</h4>
               </div>
               <p className={styles.etiquetteDesc}>
-                Select “Acoustic Silence” upon reservation for an appointment conducted free of incidental conversation and personal device audio.
+                Prefer a peaceful session? Request a quiet appointment to enjoy your service in calm, relaxing silence.
               </p>
             </div>
 
@@ -471,10 +471,10 @@ export default function AboutPage() {
                 <div className={styles.etiquetteIconBox}>
                   <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>timer</span>
                 </div>
-                <h4 className={styles.etiquetteTitle}>1:1 Dedicated Residency</h4>
+                <h4 className={styles.etiquetteTitle}>1-on-1 Dedicated Stylist</h4>
               </div>
               <p className={styles.etiquetteDesc}>
-                No overlapping appointments. Your Master Stylist is locked exclusively to your suite for the entirety of the blocked duration.
+                No overlapping appointments. Your specialist focuses exclusively on your hair and service throughout your scheduled slot.
               </p>
             </div>
 
@@ -483,10 +483,10 @@ export default function AboutPage() {
                 <div className={styles.etiquetteIconBox}>
                   <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>event_repeat</span>
                 </div>
-                <h4 className={styles.etiquetteTitle}>24-Hour Courtesy Charter</h4>
+                <h4 className={styles.etiquetteTitle}>Flexible Rescheduling</h4>
               </div>
               <p className={styles.etiquetteDesc}>
-                Modifications are respectfully received up to 24 hours prior to release reserved trichological preparations and artist schedules.
+                Need to reschedule? Appointment changes are welcome up to 24 hours prior to your scheduled booking time.
               </p>
             </div>
           </div>

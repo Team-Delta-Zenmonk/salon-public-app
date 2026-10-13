@@ -187,7 +187,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 
         <Box className={styles.desktopBottomRow}>
           <Box className={styles.ceremoniesRow}>
-            <Typography className={styles.ceremoniesLabel}>Ceremonies:</Typography>
+            <Typography className={styles.ceremoniesLabel}>Services:</Typography>
             <Box className={styles.ceremoniesList}>
               {booking.booking_services?.map((bs, index) => (
                 <EllipsisCell

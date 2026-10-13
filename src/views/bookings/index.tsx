@@ -162,12 +162,12 @@ export default function Bookings() {
     return (
       <div className={styles.emptyState}>
         <p className={styles.emptyTitle}>
-          No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} reservations found
+          No {tabValue === 0 ? "" : getStatusFromTab(tabValue)?.toLowerCase()} bookings found
         </p>
         <p className={styles.emptySub}>
           {tabValue === 0
-            ? "Reserve your first haute salon ceremony!"
-            : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} dossier is empty.`}
+            ? "Book your first salon appointment today!"
+            : `Your ${getStatusFromTab(tabValue)?.toLowerCase()} list is empty.`}
         </p>
       </div>
     );
@@ -180,21 +180,21 @@ export default function Bookings() {
           <div className={styles.heroFlex}>
             <div className={styles.headerTitleGroup}>
               <div className={styles.breadcrumb}>
-                <span>CLIENT SUITE</span>
+                <span>MY ACCOUNT</span>
                 <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>chevron_right</span>
-                <span>RESERVATION DOSSIER</span>
+                <span>BOOKINGS HISTORY</span>
               </div>
               <div className={styles.titleRow}>
                 <h1 className={styles.mainTitle}>
-                  My Dossier &amp; Ceremonies
+                  My Appointments &amp; Bookings
                 </h1>
                 <span className={styles.badge}>
                   <span className="material-symbols-outlined" style={{ fontSize: "14px", color: "var(--color-bronze-accent)" }}>verified</span>
-                  MASTER GUARANTEE
+                  QUALITY GUARANTEE
                 </span>
               </div>
               <p className={styles.subtitle}>
-                Curated historical archive of your luxury salon appointments, treatments, and invoice receipts.
+                Review your salon appointments, scheduled services, and invoices.
               </p>
             </div>
 

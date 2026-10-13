@@ -184,7 +184,7 @@ export default function Cart() {
             <Box className={styles.summaryCard}>
               <Box className={styles.summaryHeader}>
                 <Typography className={styles.summaryTitle}>
-                  Reservation Investment Summary
+                  Booking Summary
                 </Typography>
               </Box>
 

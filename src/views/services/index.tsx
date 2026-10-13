@@ -218,24 +218,24 @@ export default function ServicesPage() {
             <div className={styles.sanctuaryTag}>
               <span className={styles.tagDot} />
               <span className={styles.tagLabel}>
-                Sanctuary Menu
+                Services Menu
               </span>
               <span>•</span>
               <span className={styles.tagCount}>
-                {filteredServices.length} Curated Offerings
+                {filteredServices.length} Services Available
               </span>
             </div>
             <h1 className={styles.title}>
               Treatment Catalog
             </h1>
             <p className={styles.description}>
-              Architectural forms, biodynamic formulations, and tranquil restorative therapies calibrated for holistic scalp health and precision styling.
+              Explore precision haircuts, coloring, restorative hair treatments, and relaxing skincare tailored for you.
             </p>
           </div>
 
           <div className={styles.mobileCategorySelect}>
             <CustomSelect
-              label="Sanctuary:"
+              label="Category:"
               value={selectedCategory}
               options={categoryTabs}
               onChange={(val) => setSelectedCategory(val)}
@@ -339,7 +339,7 @@ export default function ServicesPage() {
               No treatments match your current filters
             </Typography>
             <Typography className={styles.emptyDesc}>
-              Try clearing search terms or selecting another service sanctuary.
+              Try clearing search terms or selecting another service category.
             </Typography>
             <Button
               size="small"

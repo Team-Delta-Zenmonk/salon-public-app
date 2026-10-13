@@ -102,7 +102,7 @@ export default function Checkout() {
 
           <Box className={styles.rightColumn}>
             <Typography className={styles.summaryTitle}>
-              Reservation Investment Summary
+              Booking Summary
             </Typography>
             <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
             <AssistanceCard phone={displaySalon?.phone} isDesktop />
@@ -125,7 +125,7 @@ function PaymentPanel({
     <Box>
       <Typography className={styles.paymentTitle}>
         <PaymentsIcon className={styles.paymentIcon} />
-        Payment Sanctuary
+        Payment
       </Typography>
 
       <Paper

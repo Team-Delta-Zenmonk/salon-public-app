@@ -21,14 +21,14 @@ export default function SpecialistsPage() {
             <Box>
               <span className={styles.badge}>
                 <WorkspacePremiumOutlinedIcon className={styles.badgeIcon} />
-                CERTIFIED ARTISANS & STYLISTS
+                CERTIFIED STYLISTS &amp; SPECIALISTS
               </span>
             </Box>
             <Typography className={styles.mainTitle}>
-              Master Specialists <span className={styles.titleAccent}>& Staff Dossier</span>
+              Our Specialists <span className={styles.titleAccent}>&amp; Stylist Team</span>
             </Typography>
             <Typography className={styles.subtitle}>
-              Personalized consultations tailored to your cranial geometry, hair porosity, and lifestyle profile.
+              Personalized consultations tailored to your style preferences, hair type, and lifestyle.
             </Typography>
           </Box>
 
@@ -38,7 +38,7 @@ export default function SpecialistsPage() {
             endIcon={<ArrowForwardIcon style={{ fontSize: "16px" }} />}
             className={styles.reserveBtn}
           >
-            Reserve Session with Specialist
+            Book Appointment with Specialist
           </Button>
         </Box>
       </section>
@@ -48,10 +48,10 @@ export default function SpecialistsPage() {
           <Box className={styles.emptyState}>
             <WorkspacePremiumOutlinedIcon className={styles.emptyIcon} />
             <Typography className={styles.emptyTitle}>
-              Artisans Presently Conducting Consultations
+              Specialists Currently Available
             </Typography>
             <Typography className={styles.emptySub}>
-              Our resident master specialists are currently taking appointments. Explore available treatments to book your session!
+              Our specialists are currently taking appointments. Explore available services to book your session!
             </Typography>
             <Button
               size="small"

@@ -143,7 +143,7 @@ export default function StorefrontHeader() {
             onClick={() => navigate(isAuthenticated ? "/services" : "/signup")}
             className={styles.reserveButton}
           >
-            {isAuthenticated ? "RESERVE RITUAL" : "CLIENT SIGN IN"}
+            {isAuthenticated ? "BOOK SERVICE" : "SIGN IN"}
           </button>
 
           {isAuthenticated && (
@@ -277,7 +277,7 @@ export default function StorefrontHeader() {
               className={styles.signInButton}
             >
               <PersonOutlineIcon style={{ fontSize: "16px" }} />
-              <span>CLIENT SIGN IN / RESERVE</span>
+              <span>SIGN IN / BOOK NOW</span>
             </button>
           )}
         </Box>
