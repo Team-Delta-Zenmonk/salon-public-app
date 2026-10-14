@@ -2,17 +2,21 @@
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { createAppTheme, defaultThemeId, themeOptions } from "./theme";
+import { createAppTheme, defaultThemeId, getThemeOption, themeOptions } from "./theme";
 import type { AppThemeId } from "./theme";
+import { resolveLayout } from "./resolve-layout";
+import type { ThemePageLayouts } from "./layout.types";
 
 interface ThemeContextValue {
   themeId: AppThemeId;
   setThemeId: (themeId: AppThemeId) => void;
+  layout: ThemePageLayouts;
 }
 
 const AppThemeContext = createContext<ThemeContextValue>({
   themeId: defaultThemeId,
   setThemeId: () => undefined,
+  layout: resolveLayout(),
 });
 
 const STORAGE_KEY = "salon-user-app-theme";
@@ -23,8 +27,8 @@ export default function ThemeProviderWrapper({ children }: Readonly<{ children: 
   const [themeId, setThemeId] = useState<AppThemeId>(() => {
     if (typeof window === "undefined") return defaultThemeId;
     try {
-      const cached = localStorage.getItem(STORAGE_KEY) as AppThemeId | null;
-      return themeOptions.some((option) => option.id === cached) ? cached! : defaultThemeId;
+      const cached = localStorage.getItem(STORAGE_KEY) as string | null;
+      return getThemeOption(cached || "").id;
     } catch {
       return defaultThemeId;
     }
@@ -32,7 +36,15 @@ export default function ThemeProviderWrapper({ children }: Readonly<{ children: 
 
   const theme = useMemo(() => createAppTheme(themeId), [themeId]);
 
-  const themeContextValue = useMemo(() => ({ themeId, setThemeId }), [themeId, setThemeId]);
+  const layout = useMemo(() => {
+    const selected = getThemeOption(themeId);
+    return resolveLayout(selected.layout);
+  }, [themeId]);
+
+  const themeContextValue = useMemo(
+    () => ({ themeId, setThemeId, layout }),
+    [themeId, setThemeId, layout]
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -60,7 +72,7 @@ export default function ThemeProviderWrapper({ children }: Readonly<{ children: 
         theme.palette.getContrastText(selected.primary)
       );
     } catch {}
-  }, [themeId, theme]);
+  }, [themeId, theme, layout]);
 
   return (
     <AppRouterCacheProvider options={{ key: "css", prepend: true, enableCssLayer: false }}>

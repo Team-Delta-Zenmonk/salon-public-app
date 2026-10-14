@@ -294,3 +294,28 @@
   color: var(--app-primary-contrast, #ffffff) !important;
 }
 
+.confirmCheckIcon {
+  color: var(--app-primary) !important;
+  font-size: 1.25rem !important;
+}
+
+.rowAltIcon {
+  color: var(--app-muted) !important;
+  font-size: 17px !important;
+}
+
+.radioBtn {
+  padding: 0 !important;
+  color: var(--app-muted) !important;
+}
+
+.radioBtnSelected {
+  padding: 0 !important;
+  color: var(--app-primary) !important;
+}
+
+.confirmSpinner {
+  color: var(--app-primary-contrast) !important;
+}
+
+

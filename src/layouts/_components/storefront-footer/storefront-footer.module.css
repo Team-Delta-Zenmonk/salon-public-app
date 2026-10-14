@@ -68,6 +68,11 @@
   position: relative;
 }
 
+.logoImg {
+  object-fit: cover;
+  border-radius: 9999px;
+}
+
 .logoFallback {
   width: 2rem;
   height: 2rem;

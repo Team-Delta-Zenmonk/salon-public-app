@@ -4,6 +4,8 @@ import { Typography, Button } from "@mui/material";
 import EllipsisCell from "@/components/ellipse-cell";
 import CustomSelect from "@/components/custom-select";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 import { useStorefront } from "../../providers/storefront-provider";
 import ServiceCard from "@/components/service-card";
 import { useSearchParams } from "next/navigation";
@@ -269,9 +271,7 @@ export default function ServicesPage() {
         <div className={styles.filterBarContainer}>
           <div className={styles.filterGrid}>
             <div className={styles.searchBoxCol}>
-              <span className={`material-symbols-outlined ${styles.searchIcon}`}>
-                search
-              </span>
+              <SearchIcon className={styles.searchIcon} />
               <input
                 type="text"
                 value={searchQuery}
@@ -285,7 +285,7 @@ export default function ServicesPage() {
                   onClick={() => setSearchQuery("")}
                   className={styles.clearSearchBtn}
                 >
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>close</span>
+                  <CloseIcon />
                 </button>
               )}
             </div>

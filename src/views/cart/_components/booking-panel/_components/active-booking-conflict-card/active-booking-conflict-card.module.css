@@ -114,3 +114,80 @@
   font-weight: 600 !important;
   color: var(--app-muted, #71717a) !important;
 }
+
+.warningAmberIcon {
+  color: #f59e0b !important;
+  font-size: 1.25rem !important;
+}
+
+.headerTextCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeIcon {
+  font-size: 0.875rem !important;
+  color: var(--app-muted) !important;
+}
+
+.timerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.timerDotCritical {
+  background-color: #ef4444;
+  animation: countdownPulse 1.5s ease infinite;
+}
+
+.timerDotWarning {
+  background-color: #f59e0b;
+}
+
+.timerDotNormal {
+  background-color: var(--app-primary);
+}
+
+.timerText {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.expiredText {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #ef4444 !important;
+}
+
+.btnBusy {
+  opacity: 0.7 !important;
+  cursor: default !important;
+}
+
+.btnBusyCancel {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
+.completeSpinner {
+  color: var(--app-primary-contrast) !important;
+}
+
+.cancelSpinner {
+  color: var(--app-muted) !important;
+}
+
+.urgencyCritical {
+  color: #ef4444 !important;
+}
+
+.urgencyWarning {
+  color: #f59e0b !important;
+}
+
+.urgencyNormal {
+  color: var(--app-primary) !important;
+}
+

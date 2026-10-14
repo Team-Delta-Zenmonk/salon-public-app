@@ -30,3 +30,9 @@
 .arrowIcon {
   margin-right: 0.375rem;
 }
+
+.dialogSpinner {
+  color: #ffffff !important;
+  margin-right: 0.5rem !important;
+}
+

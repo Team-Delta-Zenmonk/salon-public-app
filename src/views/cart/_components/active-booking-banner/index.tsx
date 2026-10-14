@@ -67,7 +67,7 @@ function BookingActionButtons({
         className={`${styles.cancelBtn} ${isBusy ? styles.btnDisabled : ""}`}
       >
         {isCancelling ? (
-          <CircularProgress size={16} sx={{ color: "var(--app-muted)" }} />
+          <CircularProgress size={16} className={styles.cancelSpinner} />
         ) : (
           <Typography className={styles.cancelBtnText}>Cancel Booking</Typography>
         )}
@@ -75,7 +75,7 @@ function BookingActionButtons({
 
       <Box onClick={onContinue} className={`${styles.continueBtn} ${isBusy ? styles.btnDisabledCursor : ""}`}>
         {isContinuing ? (
-          <CircularProgress size={16} sx={{ color: "var(--app-primary-contrast)" }} />
+          <CircularProgress size={16} className={styles.continueSpinner} />
         ) : (
           <Typography className={styles.continueBtnText}>Continue Payment</Typography>
         )}
@@ -121,17 +121,16 @@ export default function ActiveBookingBanner() {
       >
         <Box className={styles.bannerHeader}>
           <Box
-            className={styles.iconBox}
-            sx={{ backgroundColor: isExpired ? "var(--app-surface-alt)" : "var(--app-primary-soft)" }}
+            className={`${styles.iconBox} ${isExpired ? styles.iconBoxExpired : styles.iconBoxActive}`}
           >
             {isExpired ? (
-              <ErrorOutlineIcon sx={{ fontSize: "1rem", color: "var(--app-muted)" }} />
+              <ErrorOutlineIcon className={styles.bannerIconExpired} />
             ) : (
-              <BoltIcon sx={{ fontSize: "1rem", color: "var(--app-primary)" }} />
+              <BoltIcon className={styles.bannerIconActive} />
             )}
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Box className={styles.titleCol}>
             <Typography className={styles.title}>
               {isExpired ? "Booking Expired" : "You have an active booking"}
             </Typography>
@@ -139,14 +138,10 @@ export default function ActiveBookingBanner() {
 
           {!isExpired && (
             <Box
-              className={styles.timerBadge}
-              sx={{
-                backgroundColor: urgency === ExpiryUrgency.CRITICAL ? "rgba(239,68,68,0.1)" : "var(--app-primary-soft)",
-                animation: urgency === ExpiryUrgency.CRITICAL ? "countdownPulse 1.5s ease infinite" : "none",
-              }}
+              className={`${styles.timerBadge} ${urgency === ExpiryUrgency.CRITICAL ? styles.timerBadgeCritical : styles.timerBadgeNormal}`}
             >
-              <AccessTimeIcon sx={{ fontSize: "0.75rem", color: urgencyColor }} />
-              <Typography sx={{ fontSize: 11, fontWeight: 700, fontVariantNumeric: "tabular-nums", color: urgencyColor }}>
+              <AccessTimeIcon className={`${styles.timerIcon} ${urgency === ExpiryUrgency.CRITICAL ? styles.urgencyCritical : urgency === ExpiryUrgency.WARNING ? styles.urgencyWarning : styles.urgencyNormal}`} />
+              <Typography className={`${styles.timerText} ${urgency === ExpiryUrgency.CRITICAL ? styles.urgencyCritical : urgency === ExpiryUrgency.WARNING ? styles.urgencyWarning : styles.urgencyNormal}`}>
                 {formattedTime}
               </Typography>
             </Box>
@@ -154,14 +149,14 @@ export default function ActiveBookingBanner() {
         </Box>
 
         <Box className={styles.metaRow}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-            <CalendarMonthIcon sx={{ fontSize: "0.75rem", color: "var(--app-muted)" }} />
-            <Typography sx={{ fontSize: 12, color: "var(--app-muted)" }}>{dateStr}</Typography>
+          <Box className={styles.metaGroup}>
+            <CalendarMonthIcon className={styles.metaCalendarIcon} />
+            <Typography className={styles.metaDateText}>{dateStr}</Typography>
           </Box>
-          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: "var(--app-border)" }} />
-          <Typography sx={{ fontSize: 12, color: "var(--app-muted)" }}>{timeStr}</Typography>
-          <Box sx={{ width: 4, height: 4, borderRadius: "50%", bgcolor: "var(--app-border)" }} />
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "var(--app-text)" }}>₹{activeBooking.total_price}</Typography>
+          <Box className={styles.metaDot} />
+          <Typography className={styles.metaTimeText}>{timeStr}</Typography>
+          <Box className={styles.metaDot} />
+          <Typography className={styles.metaPriceText}>₹{activeBooking.total_price}</Typography>
         </Box>
 
         {!isExpired && (
@@ -169,16 +164,7 @@ export default function ActiveBookingBanner() {
             <LinearProgress
               variant="determinate"
               value={progress}
-              sx={{
-                borderRadius: "9999px",
-                height: 6,
-                backgroundColor: "var(--app-surface-alt)",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: urgencyColor,
-                  borderRadius: "9999px",
-                  transition: "transform 1s linear",
-                },
-              }}
+              className={`${styles.linearProgressBar} ${urgency === ExpiryUrgency.CRITICAL ? styles.linearProgressCritical : urgency === ExpiryUrgency.WARNING ? styles.linearProgressWarning : styles.linearProgressNormal}`}
             />
           </Box>
         )}

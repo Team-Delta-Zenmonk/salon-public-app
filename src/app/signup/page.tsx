@@ -13,7 +13,7 @@ export default function SignUpPage() {
   return (
     <Suspense
       fallback={
-        <Box sx={{ minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box className="pageCenterLoading">
           <CircularProgress size={32} />
         </Box>
       }

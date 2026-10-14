@@ -439,3 +439,29 @@
   cursor: pointer !important;
   color: #047857 !important;
 }
+
+.subServiceDetailsCol {
+  min-width: 0;
+}
+
+.subServiceChipsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.bookSpinner {
+  margin-right: 0.25rem !important;
+}
+
+@media (min-width: 640px) {
+  .bookSpinner {
+    margin-right: 0.375rem !important;
+  }
+}
+
+.subBookSpinner {
+  margin-right: 0.25rem !important;
+}
+

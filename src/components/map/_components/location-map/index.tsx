@@ -3,6 +3,8 @@ import { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import type { LatLngExpression, LeafletMouseEvent } from "leaflet";
 
+import styles from "./location-map.module.css";
+
 export type LatLngValue = {
   lat: number;
   lng: number;
@@ -24,7 +26,7 @@ function ClickHandler({ onClick }: { onClick?: (lat: number, lng: number) => voi
   return null;
 }
 
-export default function MapPicker({ value, onChange, height = 300, disabled }: Readonly<MapPickerProps>) {
+export default function MapPicker({ value, onChange, disabled }: Readonly<MapPickerProps>) {
   const [position, setPosition] = useState<LatLngExpression | null>(
     value ? [value.lat, value.lng] : null
   );
@@ -43,7 +45,7 @@ export default function MapPicker({ value, onChange, height = 300, disabled }: R
     <MapContainer
       center={center}
       zoom={position ? 15 : 11}
-      style={{ height, width: "100%", borderRadius: 8, overflow: "hidden" }}
+      className={styles.mapContainer}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

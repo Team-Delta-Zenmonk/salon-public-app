@@ -73,7 +73,6 @@ export default function PaymentProcessing({ salonName, onComplete }: Readonly<Pa
           <Box className={styles.progressTrack}>
             <Box
               className={`${styles.progressFill} ${styles.progressBar}`}
-              style={{ "--processing-duration": `${TOTAL_DURATION_MS}ms` } as React.CSSProperties}
             />
           </Box>
 

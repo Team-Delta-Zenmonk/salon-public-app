@@ -61,6 +61,18 @@
   background-color: rgba(255, 255, 255, 0.25);
 }
 
+.closeIcon {
+  color: #ffffff !important;
+  font-size: 18px !important;
+}
+
+.emailText {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+
 .headerContent {
   display: flex;
   flex-direction: column;

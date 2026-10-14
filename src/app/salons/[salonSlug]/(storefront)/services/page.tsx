@@ -28,7 +28,7 @@ export default function SalonServicesPage() {
   return (
     <Suspense
       fallback={
-        <Box style={{ minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box className="pageCenterLoading">
           <CircularProgress size={32} />
         </Box>
       }

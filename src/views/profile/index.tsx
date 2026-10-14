@@ -1,5 +1,8 @@
 "use client";
 import { Box, Avatar } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { logout } from "../../features/auth/auth.slice";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
@@ -20,7 +23,7 @@ export default function ProfilePage() {
     return (
       <Box className={styles.unauthContainer}>
         <div className={styles.unauthCard}>
-          <span className="material-symbols-outlined" style={{ fontSize: "48px", color: "var(--app-champagne)" }}>account_circle</span>
+          <AccountCircleIcon className={styles.unauthIcon} />
           <h2 className={styles.unauthTitle}>Sign In Required</h2>
           <p className={styles.unauthSub}>
             Please sign in to access your appointments, profile details, and booking history.
@@ -50,7 +53,7 @@ export default function ProfilePage() {
         <div className={styles.clientMeta}>
           <span className={styles.metaText}>CLIENT ID #{customer?.uuid?.slice(0, 8) || "8924"}</span>
           <div className={styles.dividerDot} />
-          <span className={styles.metaText} style={{ color: "var(--app-text)" }}>PRIVATE SALON PATRON</span>
+          <span className={`${styles.metaText} ${styles.metaTextActive}`}>PRIVATE SALON PATRON</span>
         </div>
       </div>
 
@@ -73,7 +76,7 @@ export default function ProfilePage() {
             <div className={styles.statusList}>
               <div className={styles.statusRow}>
                 <span className={styles.statusLabel}>ACCOUNT STATUS</span>
-                <span className={styles.statusValue} style={{ color: "var(--app-status-confirmed, #5A6B5C)" }}>ACTIVE PATRON</span>
+                <span className={`${styles.statusValue} ${styles.statusConfirmed}`}>ACTIVE PATRON</span>
               </div>
               <div className={styles.statusRow}>
                 <span className={styles.statusLabel}>DOSSIER VERIFICATION</span>
@@ -95,7 +98,7 @@ export default function ProfilePage() {
                 onClick={handleLogout}
                 className={styles.signOutBtn}
               >
-                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>logout</span>
+                <LogoutIcon />
                 <span>SIGN OUT</span>
               </button>
             </div>
@@ -115,7 +118,7 @@ export default function ProfilePage() {
               </div>
               <div className={styles.infoBox}>
                 <span className={styles.infoLabel}>EMAIL ADDRESS</span>
-                <span className={styles.infoVal} style={{ textTransform: "none" }}>{customer?.email || "—"}</span>
+                <span className={styles.emailVal}>{customer?.email || "—"}</span>
               </div>
               <div className={styles.infoBox}>
                 <span className={styles.infoLabel}>PHONE NUMBER</span>
@@ -127,11 +130,10 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => navigate("/bookings")}
-                className={styles.primaryBtn}
-                style={{ width: "auto", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
+                className={styles.actionBtn}
               >
                 <span>VIEW BOOKINGS</span>
-                <span className="material-symbols-outlined" style={{ fontSize: "16px" }}>calendar_month</span>
+                <CalendarMonthIcon />
               </button>
             </div>
           </div>

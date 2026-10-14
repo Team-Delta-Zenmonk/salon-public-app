@@ -58,7 +58,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
           onClick={onClose}
           className={styles.closeButton}
         >
-          <CloseIcon sx={{ color: "white", fontSize: "18px" }} />
+          <CloseIcon className={styles.closeIcon} />
         </Box>
 
         <Box className={styles.headerContent}>
@@ -119,7 +119,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
 
                   <Box className={styles.contactList}>
                     {staff?.phone_number && (
-                      <Box className={styles.contactCard}>
+                       <Box className={styles.contactCard}>
                         <PhoneIcon fontSize="small" />
                         <Typography>{staff.phone_number}</Typography>
                       </Box>
@@ -128,7 +128,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
                     {staff?.email && (
                       <Box className={styles.contactCard}>
                         <EmailIcon fontSize="small" />
-                        <Typography sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{staff.email}</Typography>
+                        <Typography className={styles.emailText}>{staff.email}</Typography>
                       </Box>
                     )}
                   </Box>

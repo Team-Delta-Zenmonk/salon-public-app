@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Menu, MenuItem } from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import EllipsisCell from "@/components/ellipse-cell";
 import styles from "./custom-select.module.css";
 
@@ -85,7 +86,7 @@ export default function CustomSelect({
             <EllipsisCell value={displayLabel} maxChars={maxChars} className="capitalize" />
           </span>
         </div>
-        <span className={styles.icon}>arrow_drop_down</span>
+        <ArrowDropDownIcon className={styles.icon} />
       </button>
 
       <Menu

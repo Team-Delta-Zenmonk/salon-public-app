@@ -147,7 +147,7 @@ const FileMultiPicker = <T extends FieldValues>({
           <Stack data-test-id={identifier} spacing={1}>
             <FormControl disabled={disabled || loading} variant="outlined" className={styles.formControl} size="small">
               <InputLabel
-                sx={{ marginTop: arr.length ? 0 : "6.5px" }}
+                className={arr.length ? styles.inputLabelFilled : styles.inputLabelEmpty}
                 shrink={arr.length > 0}
                 error={Boolean(error)}
                 data-test-id={`label-${identifier}`}

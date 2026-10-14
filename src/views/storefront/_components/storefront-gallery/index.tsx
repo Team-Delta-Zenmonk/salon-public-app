@@ -90,8 +90,8 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
 
                     {showMoreOverlay && (
                       <Box className={styles.thumbnailOverlay}>
-                        <VisibilityIcon sx={{ color: "white", fontSize: "1.125rem", mb: 0.5 }} />
-                        <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1rem" }}>+{remaining}</Typography>
+                        <VisibilityIcon className={styles.thumbnailOverlayIcon} />
+                        <Typography className={styles.thumbnailOverlayText}>+{remaining}</Typography>
                       </Box>
                     )}
                   </Box>
@@ -113,7 +113,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
               />
               <Box className={styles.desktopGradientOverlay} />
               <Box className={styles.mobileLeadText}>
-                <Typography sx={{ color: "white", fontWeight: 600, fontSize: { xs: "0.875rem", sm: "1rem" } }}>Salon Gallery</Typography>
+                <Typography className={styles.galleryBadgeText}>Salon Gallery</Typography>
               </Box>
             </Box>
 
@@ -138,10 +138,10 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
                     {isLastTile && (
                       <Box className={styles.seeAllOverlay}>
                         <Box className={styles.iconBox}>
-                          <VisibilityIcon sx={{ color: "var(--app-hero-from, var(--app-primary))" }} />
+                          <VisibilityIcon className={styles.seeAllIcon} />
                         </Box>
-                        <Typography sx={{ color: "white", fontWeight: 700, fontSize: "1.125rem" }}>+{images.length - 3}</Typography>
-                        <Typography sx={{ color: "white", fontSize: { xs: "0.75rem", sm: "0.875rem" }, fontWeight: 600 }}>See all photos</Typography>
+                        <Typography className={styles.seeAllCount}>+{images.length - 3}</Typography>
+                        <Typography className={styles.seeAllText}>See all photos</Typography>
                       </Box>
                     )}
                   </Box>

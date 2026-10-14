@@ -130,3 +130,134 @@
 .btnDisabledCursor {
   cursor: default;
 }
+
+.iconBoxExpired {
+  background-color: var(--app-surface-alt);
+}
+
+.iconBoxActive {
+  background-color: var(--app-primary-soft);
+}
+
+.bannerIconExpired {
+  font-size: 1rem !important;
+  color: var(--app-muted) !important;
+}
+
+.bannerIconActive {
+  font-size: 1rem !important;
+  color: var(--app-primary) !important;
+}
+
+.titleCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.timerBadgeCritical {
+  background-color: rgba(239, 68, 68, 0.1);
+  animation: countdownPulse 1.5s ease infinite;
+}
+
+.timerBadgeNormal {
+  background-color: var(--app-primary-soft);
+}
+
+@keyframes countdownPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.timerIcon {
+  font-size: 0.75rem !important;
+}
+
+.timerText {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.metaCalendarIcon {
+  font-size: 0.75rem !important;
+  color: var(--app-muted) !important;
+}
+
+.metaDateText {
+  font-size: 12px !important;
+  color: var(--app-muted) !important;
+}
+
+.metaDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--app-border);
+}
+
+.metaTimeText {
+  font-size: 12px !important;
+  color: var(--app-muted) !important;
+}
+
+.metaPriceText {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--app-text) !important;
+}
+
+.linearProgressBar {
+  border-radius: 9999px !important;
+  height: 6px !important;
+  background-color: var(--app-surface-alt) !important;
+}
+
+.linearProgressCritical :global(.MuiLinearProgress-bar) {
+  background-color: #ef4444 !important;
+  border-radius: 9999px !important;
+  transition: transform 1s linear !important;
+}
+
+.linearProgressWarning :global(.MuiLinearProgress-bar) {
+  background-color: #f59e0b !important;
+  border-radius: 9999px !important;
+  transition: transform 1s linear !important;
+}
+
+.linearProgressNormal :global(.MuiLinearProgress-bar) {
+  background-color: var(--app-primary) !important;
+  border-radius: 9999px !important;
+  transition: transform 1s linear !important;
+}
+
+.urgencyCritical {
+  color: #ef4444 !important;
+}
+
+.urgencyWarning {
+  color: #f59e0b !important;
+}
+
+.urgencyNormal {
+  color: var(--app-primary) !important;
+}
+
+.cancelSpinner {
+  color: var(--app-muted) !important;
+}
+
+.continueSpinner {
+  color: var(--app-primary-contrast) !important;
+}
+
+

@@ -51,9 +51,9 @@ function StaffSelector({
 }: Readonly<StaffSelectorProps>) {
   if (staffLoading) {
     return (
-      <Box sx={{ display: "flex", gap: "0.75rem" }}>
+      <Box className={styles.staffSkeletonList}>
         {[1, 2, 3].map((i) => (
-          <Box key={i} sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
+          <Box key={i} className={styles.staffSkeletonItem}>
             <Skeleton variant="circular" width={44} height={44} />
             <Skeleton variant="text" width={40} height={12} />
           </Box>
@@ -64,7 +64,7 @@ function StaffSelector({
 
   if (staffList.length === 0) {
     return (
-      <Typography variant="caption" sx={{ color: "var(--app-muted)", display: "block" }}>
+      <Typography variant="caption" className={styles.noStaffText}>
         No staff assigned to this service
       </Typography>
     );
@@ -218,13 +218,13 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           <Box className={styles.itemInfo}>
             <EllipsisCell value={name} className={styles.serviceTitle} maxChars={20} />
             <Box className={styles.metaRow}>
-              <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--color-primary)", flexShrink: 0 }} />
+              <AccessTimeIcon className={styles.metaDurationIcon} />
               <Typography variant="caption" className={styles.metaDuration}>
                 {duration} MIN
                 {gender && (
                   <>
                     <Box component="span" className={styles.metaDot}>•</Box>
-                    <Box component="span" sx={{ textTransform: "capitalize" }}>{gender}</Box>
+                    <Box component="span" className={styles.metaGender}>{gender}</Box>
                   </>
                 )}
               </Typography>
@@ -242,7 +242,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           <Box className={styles.itemActions}>
             <Typography className={styles.itemPrice}>₹{price}</Typography>
             <IconButton onClick={() => setConfirmOpen(true)} className={styles.deleteBtn}>
-              <DeleteOutlineIcon sx={{ fontSize: "1.125rem" }} />
+              <DeleteOutlineIcon className={styles.deleteBtnIcon} />
             </IconButton>
           </Box>
         </Box>

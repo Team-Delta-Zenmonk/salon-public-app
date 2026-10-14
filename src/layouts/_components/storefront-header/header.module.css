@@ -24,6 +24,28 @@
   box-sizing: border-box;
 }
 
+.toolbarSplitCenter {
+  justify-content: space-between;
+}
+
+.toolbarUnifiedRight {
+  justify-content: space-between;
+}
+
+.navContainerUnifiedRight {
+  margin-left: auto;
+  margin-right: 2rem;
+}
+
+.toolbarLeftInline {
+  justify-content: space-between;
+}
+
+.navContainerLeftInline {
+  margin-left: 2.5rem;
+  margin-right: auto;
+}
+
 .logoBox {
   display: flex;
   align-items: center;
@@ -76,6 +98,7 @@
   background: transparent;
   border: none;
   padding: 0.25rem 0;
+  border-radius: 0 !important;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -111,6 +134,10 @@
   padding: 0;
 }
 
+.cartButton svg {
+  font-size: 18px !important;
+}
+
 .cartButton:hover {
   background-color: var(--app-surface-alt);
   color: var(--app-text);
@@ -140,7 +167,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.625rem 1.375rem;
-  border-radius: var(--app-radius);
+  border-radius: var(--app-btn-radius, 9999px);
   background: var(--app-primary);
   color: var(--app-primary-contrast, #ffffff);
   border: 1px solid var(--app-primary);
@@ -267,7 +294,7 @@
   gap: 0.5rem;
   background: var(--app-primary);
   color: var(--app-primary-contrast, #ffffff);
-  border-radius: var(--app-radius);
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 700;
@@ -278,6 +305,10 @@
   border: 1px solid var(--app-primary);
   box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.1);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.signInButton svg {
+  font-size: 16px !important;
 }
 
 .signInButton:hover {
@@ -306,9 +337,13 @@
   letter-spacing: 0.12em;
   cursor: pointer;
   border: 1px solid var(--app-border);
-  border-radius: var(--app-radius);
+  border-radius: var(--app-btn-radius, 9999px);
   padding: 0.8125rem 1rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.signOutButton svg {
+  font-size: 16px !important;
 }
 
 .signOutButton:hover {
@@ -336,6 +371,10 @@
 
 .closeButton {
   color: var(--app-muted);
+}
+
+.closeButton svg {
+  font-size: 18px !important;
 }
 
 .logoLink {
@@ -444,6 +483,18 @@
   transition: background-color 0.2s;
 }
 
+.menuItemIcon {
+  font-size: 16px !important;
+  color: var(--app-muted) !important;
+}
+
+.menuItemSignOut {
+  color: var(--app-error, #8F4D47) !important;
+}
+
+.menuItemSignOut svg {
+  font-size: 16px !important;
+}
 
 .menuItemHover {
   background: var(--app-surface-alt);

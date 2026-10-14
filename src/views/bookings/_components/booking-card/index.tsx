@@ -35,6 +35,25 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const isCancelableTime = isBookingCancelable(booking.booking_start_time);
   const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
 
+  const getStatusClassName = () => {
+    switch (booking.status) {
+      case BookingStatus.CONFIRMED:
+        return styles.statusConfirmed;
+      case BookingStatus.PENDING:
+        return isExpired ? styles.statusExpired : styles.statusPending;
+      case BookingStatus.COMPLETED:
+        return styles.statusCompleted;
+      case BookingStatus.CANCELLED:
+        return styles.statusCancelled;
+      case BookingStatus.EXPIRED:
+        return styles.statusExpired;
+      default:
+        return styles.statusExpired;
+    }
+  };
+
+  const statusClass = getStatusClassName();
+
   return (
     <Box className={`${styles.card} ${disabled ? styles.cardDisabled : ""}`}>
       <Box className={styles.statusStrip} />
@@ -49,7 +68,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
               >
                 {booking.salon?.name?.charAt(0)}
               </Avatar>
-              <Box sx={{ minWidth: 0 }}>
+              <Box className={styles.minWidth0}>
                 <EllipsisCell
                   value={booking.salon?.name}
                   maxChars={10}
@@ -63,20 +82,13 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 />
               </Box>
             </Box>
-            <Box
-              className={styles.statusPill}
-              style={{
-                color: statusConfig.color,
-                borderColor: `${statusConfig.color}40`,
-                backgroundColor: `${statusConfig.color}15`,
-              }}
-            >
+            <Box className={`${styles.statusPill} ${statusClass}`}>
               {statusConfig.label}
             </Box>
           </Box>
 
           <Box className={styles.detailsBox}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            <Box className={styles.detailsCol}>
               <Typography className={styles.dateTimeText}>
                 {formatDateShortUTC(booking.booking_date)} • {formatTimeUTC(booking.booking_start_time)}
               </Typography>
@@ -141,7 +153,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             >
               {booking.salon?.name?.charAt(0)}
             </Avatar>
-            <Box sx={{ minWidth: 0 }}>
+            <Box className={styles.minWidth0}>
               <EllipsisCell value={booking.salon?.name} maxChars={10} className={styles.salonNameLg} />
               <br />
               <EllipsisCell value={booking.salon?.address || "Flagship Sanctuary"} maxChars={20} className={styles.salonAddressLg} />
@@ -172,14 +184,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
           </Box>
 
           <Box>
-            <Box
-              className={styles.statusPillLg}
-              style={{
-                color: statusConfig.color,
-                borderColor: `${statusConfig.color}40`,
-                backgroundColor: `${statusConfig.color}15`,
-              }}
-            >
+            <Box className={`${styles.statusPillLg} ${statusClass}`}>
               {statusConfig.label}
             </Box>
           </Box>

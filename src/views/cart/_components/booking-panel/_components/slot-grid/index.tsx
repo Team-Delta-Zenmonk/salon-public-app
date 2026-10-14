@@ -54,8 +54,7 @@ export default function SlotGrid({
             key={item.id}
             variant="rounded"
             height={44}
-            sx={{ borderRadius: "0.5rem" }}
-            style={{ animationDelay: item.animationDelay }}
+            className={styles.skeletonItem}
           />
         ))}
       </Box>
@@ -79,14 +78,14 @@ export default function SlotGrid({
         return (
           <Box key={key} className={styles.groupBlock}>
             <Box className={styles.groupHeader}>
-              <Typography sx={{ fontSize: "0.75rem" }}>{icon}</Typography>
+              <Typography className={styles.groupIcon}>{icon}</Typography>
               <Typography className={styles.groupLabel}>{label}</Typography>
               <Box className={styles.headerLine} />
               <Typography className={styles.emptyText}>{group.length} slots</Typography>
             </Box>
 
             <Box className={styles.slotGrid}>
-              {group.map((slot, idx) => {
+              {group.map((slot) => {
                 const isSelected = selectedSlot?.start === slot.start;
                 const locked = isSlotLocked(slot.start, slot.end, activeBooking);
 
@@ -94,12 +93,11 @@ export default function SlotGrid({
                   <Box
                     key={slot.start}
                     onClick={locked ? undefined : () => onSelectSlot(slot)}
-                    style={{ animationDelay: `${idx * 0.03}s` }}
                     className={`${styles.slotCard} ${locked ? styles.slotCardLocked : ""} ${isSelected ? styles.slotCardSelected : ""}`}
                   >
                     {locked ? (
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.375rem" }}>
-                        <LockIcon sx={{ fontSize: 12, color: "var(--app-muted)" }} />
+                      <Box className={styles.lockedContent}>
+                        <LockIcon className={styles.lockIcon} />
                         <Typography className={styles.timeTextLocked}>
                           {formatTimeUTC(slot.start)}
                         </Typography>

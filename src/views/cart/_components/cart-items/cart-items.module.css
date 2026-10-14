@@ -306,3 +306,35 @@
   font-weight: 600 !important;
   font-size: 0.625rem !important;
 }
+
+.staffSkeletonList {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.staffSkeletonItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.noStaffText {
+  color: var(--app-muted) !important;
+  display: block !important;
+}
+
+.metaDurationIcon {
+  font-size: 0.875rem !important;
+  color: var(--app-primary, var(--color-primary)) !important;
+  flex-shrink: 0 !important;
+}
+
+.metaGender {
+  text-transform: capitalize;
+}
+
+.deleteBtnIcon {
+  font-size: 1.125rem !important;
+}
+

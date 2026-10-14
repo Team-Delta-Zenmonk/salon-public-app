@@ -11,7 +11,8 @@ import { getSalonService } from "../features/salon/get-salon/get-salon.service";
 import { useAppDispatch } from "../store/hook";
 import { setCartSalon } from "../features/salon/cart/cart.slice";
 import { useAppThemeMode } from "../theme/theme-provider";
-import { themeOptions, defaultThemeId } from "../theme/theme";
+import { getThemeOption } from "../theme/theme";
+import styles from "./storefront-provider.module.css";
 
 interface StorefrontContextType {
   salon: Salon | null;
@@ -47,12 +48,8 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
       salon.storefront_theme?.code ||
       (salon as any)?.storefrontTheme?.code;
 
-    const matchedTheme = themeOptions.find((t) => t.id === themeCode);
-    if (matchedTheme) {
-      setThemeId(matchedTheme.id);
-    } else {
-      setThemeId(defaultThemeId);
-    }
+    const matched = getThemeOption(themeCode);
+    setThemeId(matched.id);
   }, [salon, setThemeId]);
 
   const searchString = searchParams ? searchParams.toString() : "";
@@ -101,35 +98,24 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
   if (loading) {
     return (
-      <Box style={{ minHeight: "100vh", backgroundColor: "var(--app-bg)" }}>
-        <Box
-          style={{
-            height: "4rem",
-            borderBottom: "1px solid var(--app-border)",
-            backgroundColor: "var(--app-surface)",
-            paddingLeft: "1.5rem",
-            paddingRight: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <Skeleton variant="rounded" width={38} height={38} style={{ borderRadius: "0.75rem" }} />
+      <Box className={styles.loadingContainer}>
+        <Box className={styles.loadingHeader}>
+          <Box className={styles.loadingHeaderLeft}>
+            <Skeleton variant="rounded" width={38} height={38} className={styles.skeletonRoundedSm} />
             <Skeleton variant="text" width={140} height={24} />
           </Box>
-          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <Skeleton variant="rounded" width={80} height={36} style={{ borderRadius: "0.75rem" }} />
+          <Box className={styles.loadingHeaderRight}>
+            <Skeleton variant="rounded" width={80} height={36} className={styles.skeletonRoundedSm} />
             <Skeleton variant="circular" width={36} height={36} />
           </Box>
         </Box>
 
-        <Box style={{ maxWidth: "72rem", margin: "0 auto", padding: "2rem 1rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          <Skeleton variant="rounded" height={220} style={{ borderRadius: "0.75rem" }} />
-          <Box style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+        <Box className={styles.loadingBody}>
+          <Skeleton variant="rounded" height={220} className={styles.skeletonRoundedSm} />
+          <Box className={styles.loadingGrid}>
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
           </Box>
         </Box>
       </Box>
@@ -138,52 +124,14 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
   if (error || !salon) {
     return (
-      <Box
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "var(--app-bg)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "1.5rem",
-          textAlign: "center",
-        }}
-      >
-        <Box
-          style={{
-            width: "4.5rem",
-            height: "4.5rem",
-            borderRadius: "0.75rem",
-            backgroundColor: "var(--app-surface)",
-            border: "1px solid var(--app-border)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: "1rem",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <StorefrontIcon style={{ fontSize: "36px", color: "var(--app-muted)" }} />
+      <Box className={styles.errorContainer}>
+        <Box className={styles.errorIconBox}>
+          <StorefrontIcon />
         </Box>
-        <Typography
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 900,
-            color: "var(--app-text)",
-          }}
-        >
+        <Typography className={styles.errorTitle}>
           Salon Not Found
         </Typography>
-        <Typography
-          style={{
-            fontSize: "0.875rem",
-            color: "var(--app-muted)",
-            maxWidth: "28rem",
-            marginTop: "0.5rem",
-            marginBottom: "1.5rem",
-          }}
-        >
+        <Typography className={styles.errorDescription}>
           {error || "The salon you are looking for is inactive or does not exist."}
         </Typography>
         <Button
@@ -192,15 +140,8 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
             clearActiveSalonSlug();
             window.location.href = "/?salon=glow";
           }}
-          startIcon={<ArrowBackIcon style={{ fontSize: "16px" }} />}
-          style={{
-            borderRadius: "1rem",
-            padding: "0.625rem 1.5rem",
-            fontWeight: 700,
-            fontSize: "0.75rem",
-            backgroundColor: "var(--app-primary)",
-            color: "var(--app-surface)",
-          }}
+          startIcon={<ArrowBackIcon />}
+          className={styles.errorBackButton}
         >
           Go to Glow Salon
         </Button>

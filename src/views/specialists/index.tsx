@@ -35,7 +35,7 @@ export default function SpecialistsPage() {
           <Button
             variant="contained"
             onClick={() => navigate("/services")}
-            endIcon={<ArrowForwardIcon style={{ fontSize: "16px" }} />}
+            endIcon={<ArrowForwardIcon />}
             className={styles.reserveBtn}
           >
             Book Appointment with Specialist

@@ -25,6 +25,7 @@ import { getNormalizedStorefrontPath } from "../../../common/storefront-slug.uti
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { logout } from "../../../features/auth/auth.slice";
 import { useStorefront } from "../../../providers/storefront-provider";
+import { useAppThemeMode } from "../../../theme/theme-provider";
 import { STOREFRONT_NAV_ITEMS } from "../../navigation";
 import EllipsisCell from "@/components/ellipse-cell";
 import Image from "next/image";
@@ -34,6 +35,8 @@ export default function StorefrontHeader() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const { salon } = useStorefront();
+  const { layout } = useAppThemeMode();
+  const headerVariant = layout.header?.variant || "split-center";
 
   const cartItems = useAppSelector((state) => state.cart.items);
   const cartCount = cartItems.length;
@@ -60,13 +63,31 @@ export default function StorefrontHeader() {
     return normalizedPath.startsWith(path);
   };
 
+  const toolbarClass = [
+    styles.toolbar,
+    headerVariant === "left-inline"
+      ? styles.toolbarLeftInline
+      : headerVariant === "unified-right"
+      ? styles.toolbarUnifiedRight
+      : styles.toolbarSplitCenter,
+  ].filter(Boolean).join(" ");
+
+  const navContainerClass = [
+    styles.navContainer,
+    headerVariant === "left-inline"
+      ? styles.navContainerLeftInline
+      : headerVariant === "unified-right"
+      ? styles.navContainerUnifiedRight
+      : "",
+  ].filter(Boolean).join(" ");
+
   return (
     <AppBar
       position="sticky"
       elevation={0}
       className={styles.appBar}
     >
-      <Toolbar className={styles.toolbar}>
+      <Toolbar className={toolbarClass}>
         <Box className={styles.logoBox}>
           <IconButton
             size="small"
@@ -107,7 +128,7 @@ export default function StorefrontHeader() {
           </Box>
         </Box>
 
-        <nav aria-label="Main navigation" className={styles.navContainer}>
+        <nav aria-label="Main navigation" className={navContainerClass}>
           {STOREFRONT_NAV_ITEMS.map((item) => {
             const active = isActive(item.to);
             return (
@@ -130,7 +151,7 @@ export default function StorefrontHeader() {
             aria-label="Shopping Cart"
             className={styles.cartButton}
           >
-            <ShoppingBagOutlinedIcon style={{ fontSize: "18px" }} />
+            <ShoppingBagOutlinedIcon />
             {cartCount > 0 && (
               <span className={styles.cartBadge}>
                 {cartCount}
@@ -185,7 +206,7 @@ export default function StorefrontHeader() {
                   }}
                   className={styles.menuItem}
                 >
-                  <CalendarMonthOutlinedIcon style={{ fontSize: "16px", color: "var(--app-muted)" }} />
+                  <CalendarMonthOutlinedIcon className={styles.menuItemIcon} />
                   My Bookings
                 </MenuItem>
                 <MenuItem
@@ -195,15 +216,14 @@ export default function StorefrontHeader() {
                   }}
                   className={styles.menuItem}
                 >
-                  <PersonOutlineIcon style={{ fontSize: "16px", color: "var(--app-muted)" }} />
+                  <PersonOutlineIcon className={styles.menuItemIcon} />
                   Profile
                 </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
-                  className={styles.menuItem}
-                  style={{ color: "var(--app-hex-8f4d47, #8F4D47)" }}
+                  className={`${styles.menuItem} ${styles.menuItemSignOut}`}
                 >
-                  <LogoutOutlinedIcon style={{ fontSize: "16px" }} />
+                  <LogoutOutlinedIcon />
                   Sign Out
                 </MenuItem>
               </Menu>
@@ -231,7 +251,7 @@ export default function StorefrontHeader() {
               </Typography>
             </Box>
             <IconButton size="small" onClick={() => setMobileDrawerOpen(false)} className={styles.closeButton}>
-              <CloseIcon style={{ fontSize: "18px" }} />
+              <CloseIcon />
             </IconButton>
           </Box>
 
@@ -264,7 +284,7 @@ export default function StorefrontHeader() {
               onClick={handleLogout}
               className={styles.signOutButton}
             >
-              <LogoutOutlinedIcon style={{ fontSize: "16px" }} />
+              <LogoutOutlinedIcon />
               <span>SIGN OUT</span>
             </button>
           ) : (
@@ -276,7 +296,7 @@ export default function StorefrontHeader() {
               }}
               className={styles.signInButton}
             >
-              <PersonOutlineIcon style={{ fontSize: "16px" }} />
+              <PersonOutlineIcon />
               <span>SIGN IN / BOOK NOW</span>
             </button>
           )}

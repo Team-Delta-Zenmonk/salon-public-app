@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import styles from "../checkout-components.module.css";
 
 interface AssistanceCardProps {
   phone?: string;
@@ -9,48 +10,21 @@ interface AssistanceCardProps {
 export default function AssistanceCard({ phone, isDesktop = false }: Readonly<AssistanceCardProps>) {
   return (
     <Box
-      sx={{
-        mt: 2,
-        display: "flex",
-        alignItems: "center",
-        gap: 2,
-        p: 2,
-        borderRadius: "1rem",
-        backgroundColor: "var(--app-primary-soft)",
-        border: "1px solid var(--color-hairline)",
-        ...(isDesktop ? {} : { mb: 2, "@media (min-width: 1024px)": { display: "none" } }),
-      }}
+      className={`${styles.assistanceCard} ${
+        isDesktop ? styles.assistanceDesktop : styles.assistanceMobile
+      }`}
     >
-      <Box
-        sx={{
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          backgroundColor: "rgba(255,255,255,0.5)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <ErrorOutlineIcon sx={{ color: "var(--color-primary)", fontSize: 20 }} />
+      <Box className={styles.iconCircle}>
+        <ErrorOutlineIcon className={styles.helpIcon} />
       </Box>
       <Box>
-        <Typography sx={{ fontSize: 13, fontWeight: 900, color: "var(--color-on-surface)", lineHeight: 1, mb: "4px" }}>
+        <Typography className={styles.helpTitle}>
           Need help?
         </Typography>
         <Typography
           component="a"
           href={`tel:${phone || "+91 98765 43210"}`}
-          sx={{
-            fontSize: 11,
-            color: "var(--color-tertiary)",
-            textDecoration: "none",
-            display: "block",
-            mt: "2px",
-            "&:hover": { color: "var(--color-primary)" },
-            transition: "color 0.2s",
-          }}
+          className={styles.helpLink}
         >
           Contact salon: {phone || "+91 98765 43210"}
         </Typography>

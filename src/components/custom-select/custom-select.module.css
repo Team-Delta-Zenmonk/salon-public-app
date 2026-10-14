@@ -61,8 +61,7 @@
 }
 
 .icon {
-  font-family: "Material Symbols Outlined", sans-serif;
-  font-size: 1.125rem;
+  font-size: 1.125rem !important;
   color: var(--app-muted) !important;
   flex-shrink: 0;
   transition: color 0.2s ease;

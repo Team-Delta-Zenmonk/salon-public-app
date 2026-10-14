@@ -2,35 +2,25 @@
 
 import { createTheme, responsiveFontSizes, type PaletteMode } from "@mui/material/styles";
 
-export type AppThemeId =
-  | "crimsonShear"
-  | "obsidianFlame"
-  | "softRosePearl";
+import {
+  appThemes,
+  themeOptions,
+  defaultThemeId,
+  defaultAppTheme,
+  getThemeOption,
+  type AppThemeId,
+  type AppThemeOption,
+} from "./themes";
 
-export interface AppThemeOption {
-  id: AppThemeId;
-  label: string;
-  mode: PaletteMode;
-  fontFamily: string;
-  radius: number;
-  surface: string;
-  surfaceAlt: string;
-  primary: string;
-  primarySoft: string;
-  textMain: string;
-  textMuted: string;
-  border: string;
-  background: string;
-  heroFrom: string;
-  heroTo: string;
-  ring: string;
-  chipTone: string;
-  success: string;
-  warning: string;
-  info: string;
-  error: string;
-  shadowBase: string;
-}
+export {
+  appThemes,
+  themeOptions,
+  defaultThemeId,
+  defaultAppTheme,
+  getThemeOption,
+  type AppThemeId,
+  type AppThemeOption,
+};
 
 const mediumPalette = {
   50: "#fffde7",
@@ -44,90 +34,6 @@ const mediumPalette = {
   800: "#f9a825",
   900: "#f57f17",
 };
-
-const GLOBAL_FONT_FAMILY = "var(--app-font-family, 'Plus Jakarta Sans', sans-serif)";
-
-const appThemes: AppThemeOption[] = [
-  {
-    id: "crimsonShear",
-    label: "Atelier Solstice (Warm Alabaster Luxury)",
-    mode: "light",
-    fontFamily: GLOBAL_FONT_FAMILY,
-    radius: 4,
-    surface: "#FCFAF7",
-    surfaceAlt: "#F6F3ED",
-    primary: "#1C1A17",
-    primarySoft: "rgba(168, 139, 100, 0.12)",
-    textMain: "#1C1C18",
-    textMuted: "#766A5E",
-    border: "#E5DFD5",
-    background: "#FCF9F3",
-    heroFrom: "#FCF9F3",
-    heroTo: "#F6F3ED",
-    ring: "#A88B64",
-    chipTone: "rgba(168, 139, 100, 0.08)",
-    success: "#10b981",
-    warning: "#fbbf24",
-    info: "#3b82f6",
-    error: "#f472b6",
-    shadowBase: "rgba(0,0,0,0.18)"
-  },
-  {
-    id: "obsidianFlame",
-    label: "Obsidian Flame (Ultra Dark Gold)",
-    mode: "dark",
-    fontFamily: GLOBAL_FONT_FAMILY,
-    radius: 12,
-    surface: "#0c0a0d",
-    surfaceAlt: "#151218",
-    primary: "#f3c677",
-    primarySoft: "rgba(243, 198, 119, 0.15)",
-    textMain: "#f7f5f0",
-    textMuted: "#c4bcae",
-    border: "#3d3224",
-    background: "#09080b",
-    heroFrom: "#09080b",
-    heroTo: "#16131c",
-    ring: "#f3c677",
-    chipTone: "rgba(243, 198, 119, 0.1)",
-    success: "#10b981",
-    warning: "#fbbf24",
-    info: "#3b82f6",
-    error: "#f472b6",
-    shadowBase: "rgba(0,0,0,0.18)",
-  },
-  {
-    id: "softRosePearl",
-    label: "Soft Rose Pearl (Luxury Light)",
-    mode: "light",
-    fontFamily: GLOBAL_FONT_FAMILY,
-    radius: 12,
-    surface: "#ffffff",
-    surfaceAlt: "#fcf4f6",
-    primary: "#d6536b",
-    primarySoft: "rgba(214, 83, 107, 0.12)",
-    textMain: "#1f1719",
-    textMuted: "#6b595c",
-    border: "#f0d8de",
-    background: "#faf4f6",
-    heroFrom: "#faf4f6",
-    heroTo: "#f5e4e8",
-    ring: "#d6536b",
-    chipTone: "rgba(214, 83, 107, 0.08)",
-    success: "#10b981",
-    warning: "#fbbf24",
-    info: "#3b82f6",
-    error: "#f472b6",
-    shadowBase: "rgba(0,0,0,0.18)",
-  },
-];
-
-export const themeOptions = appThemes;
-export const defaultThemeId: AppThemeId = "crimsonShear";
-export const defaultAppTheme: AppThemeOption = appThemes[0];
-
-export const getThemeOption = (themeId: AppThemeId = defaultThemeId) =>
-  appThemes.find((theme) => theme.id === themeId) ?? defaultAppTheme;
 
 export const createAppTheme = (themeId: AppThemeId = defaultThemeId) => {
   const selected = getThemeOption(themeId);

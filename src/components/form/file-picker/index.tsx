@@ -112,7 +112,7 @@ const FilePicker = <T extends FieldValues>({
           <Stack data-test-id={identifier}>
             <FormControl disabled={disabled || loading} variant="outlined" className={styles.formControl} size="small">
               <InputLabel
-                sx={{ marginTop: value ? 0 : "6.5px" }}
+                className={value ? styles.inputLabelFilled : styles.inputLabelEmpty}
                 shrink={Boolean(value)}
                 error={Boolean(error)}
                 data-test-id={`label-${identifier}`}

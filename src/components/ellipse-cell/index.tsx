@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 import styles from "./ellipse-cell.module.css";
@@ -166,13 +166,17 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
     };
   }, []);
 
+  const setTooltipRef = useCallback((el: HTMLDivElement | null) => {
+    if (el) {
+      el.style.setProperty("--tooltip-top", `${tooltipPos.top}px`);
+      el.style.setProperty("--tooltip-left", `${tooltipPos.left}px`);
+    }
+  }, [tooltipPos.top, tooltipPos.left]);
+
   const portalContent = showTooltip && Boolean(value) && typeof window !== "undefined" && (
     <div
+      ref={setTooltipRef}
       className={styles.tooltip}
-      style={{
-        top: `${tooltipPos.top}px`,
-        left: `${tooltipPos.left}px`,
-      }}
     >
       {value}
     </div>
@@ -196,18 +200,11 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
         className={clsx(
           children ? styles.cell : styles.cellTruncated,
           maxLines === 1 && !children ? styles.singleLine : "",
+          maxLines === 2 ? styles.multiLine2 : "",
+          maxLines === 3 ? styles.multiLine3 : "",
+          maxLines >= 4 ? styles.multiLine4 : "",
           className
         )}
-        style={
-          maxLines > 1
-            ? {
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: maxLines,
-              wordBreak: "break-word",
-            }
-            : undefined
-        }
         {...props}
       >
         {children || displayValue}

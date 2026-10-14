@@ -54,12 +54,12 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
   };
 
   const amenities = [
-    { icon: <WifiIcon sx={{ fontSize: "18px" }} />, label: "High-Speed Wi-Fi" },
-    { icon: <AcUnitIcon sx={{ fontSize: "18px" }} />, label: "Climate Controlled AC" },
-    { icon: <LocalParkingIcon sx={{ fontSize: "18px" }} />, label: "Client Parking Available" },
-    { icon: <LocalCafeIcon sx={{ fontSize: "18px" }} />, label: "Complimentary Beverages" },
-    { icon: <CreditCardIcon sx={{ fontSize: "18px" }} />, label: "Cards & Digital Pay Accepted" },
-    { icon: <HealthAndSafetyOutlinedIcon sx={{ fontSize: "18px" }} />, label: "Hospital-Grade Sterilization" },
+    { icon: <WifiIcon className={styles.amenitySvgIcon} />, label: "High-Speed Wi-Fi" },
+    { icon: <AcUnitIcon className={styles.amenitySvgIcon} />, label: "Climate Controlled AC" },
+    { icon: <LocalParkingIcon className={styles.amenitySvgIcon} />, label: "Client Parking Available" },
+    { icon: <LocalCafeIcon className={styles.amenitySvgIcon} />, label: "Complimentary Beverages" },
+    { icon: <CreditCardIcon className={styles.amenitySvgIcon} />, label: "Cards & Digital Pay Accepted" },
+    { icon: <HealthAndSafetyOutlinedIcon className={styles.amenitySvgIcon} />, label: "Hospital-Grade Sterilization" },
   ];
 
   return (
@@ -191,7 +191,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
 
       <Box className={styles.card}>
         <Box className={styles.policyHeader}>
-          <PolicyOutlinedIcon sx={{ color: "var(--app-primary)", fontSize: "22px" }} />
+          <PolicyOutlinedIcon className={styles.policyIcon} />
           <Typography className={styles.cardTitle}>
             Appointment & Booking Policies
           </Typography>

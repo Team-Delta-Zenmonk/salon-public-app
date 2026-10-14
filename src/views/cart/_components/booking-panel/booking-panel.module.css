@@ -144,3 +144,37 @@
   margin-top: 0.625rem !important;
   display: block;
 }
+
+.errorStateBox {
+  padding: 2rem !important;
+  text-align: center !important;
+}
+
+.errorStateText {
+  font-size: 13px !important;
+  color: var(--color-error, #ef4444) !important;
+}
+
+.timeSectionBlock {
+  padding-top: 1.25rem;
+}
+
+.closeIcon {
+  font-size: 1rem !important;
+  color: var(--app-muted) !important;
+}
+
+.metaIcon {
+  font-size: 0.875rem !important;
+  color: var(--app-muted) !important;
+}
+
+.metaText {
+  font-size: 13px !important;
+  color: var(--app-muted) !important;
+}
+
+.arrowForwardIcon {
+  font-size: 1rem !important;
+}
+

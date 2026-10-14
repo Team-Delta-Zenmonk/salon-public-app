@@ -66,3 +66,48 @@
   display: flex;
   gap: 1rem;
 }
+
+.divider {
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  border-style: dashed !important;
+  opacity: 0.5 !important;
+}
+
+.avatarSkeleton {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 0.75rem !important;
+}
+
+.titleSkeleton {
+  width: 140px !important;
+  height: 28px !important;
+}
+
+.subtitleSkeleton {
+  width: 200px !important;
+  height: 20px !important;
+}
+
+.statusSkeleton {
+  width: 100px !important;
+  height: 32px !important;
+  border-radius: 1rem !important;
+}
+
+.metaLabelSkeleton {
+  width: 40px !important;
+  height: 16px !important;
+}
+
+.metaValueSkeleton {
+  width: 100px !important;
+  height: 24px !important;
+}
+
+.actionSkeleton {
+  width: 120px !important;
+  height: 40px !important;
+  border-radius: 0.75rem !important;
+}

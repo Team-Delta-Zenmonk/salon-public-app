@@ -40,7 +40,6 @@ export default function BookingDateSelector({ days, selectedDate, onSelectDate, 
               key={item.id}
               variant="rounded"
               className={styles.dateCard}
-              style={{ minWidth: 58, height: 76, flexShrink: 0 }}
             />
           ))
         : dateItems.map(({ date, dateStr, hasSlots }) => {

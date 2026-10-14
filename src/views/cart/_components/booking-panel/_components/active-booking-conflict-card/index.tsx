@@ -41,9 +41,9 @@ export default function ActiveBookingConflictCard() {
       <Box className={styles.card}>
         <Box className={styles.headerRow}>
           <Box className={styles.warningIconBox}>
-            <WarningAmberIcon sx={{ color: "#f59e0b", fontSize: "1.25rem" }} />
+            <WarningAmberIcon className={styles.warningAmberIcon} />
           </Box>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Box className={styles.headerTextCol}>
             <Typography className={styles.title}>
               You already have a pending booking
             </Typography>
@@ -54,7 +54,7 @@ export default function ActiveBookingConflictCard() {
         <Box className={styles.detailsBox}>
           {timeStr && (
             <Box className={styles.timeRow}>
-              <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--app-muted)" }} />
+              <AccessTimeIcon className={styles.timeIcon} />
               <Typography className={styles.timeText}>{timeStr}</Typography>
             </Box>
           )}
@@ -62,22 +62,16 @@ export default function ActiveBookingConflictCard() {
           {!isExpired && (
             <Box className={styles.timerRow}>
               <Box
-                sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  backgroundColor: urgencyColor,
-                  animation: urgency === ExpiryUrgency.CRITICAL ? "countdownPulse 1.5s ease infinite" : "none",
-                }}
+                className={`${styles.timerDot} ${urgency === ExpiryUrgency.CRITICAL ? styles.timerDotCritical : urgency === ExpiryUrgency.WARNING ? styles.timerDotWarning : styles.timerDotNormal}`}
               />
-              <Typography sx={{ fontSize: 12, fontWeight: 700, fontVariantNumeric: "tabular-nums", color: urgencyColor }}>
+              <Typography className={`${styles.timerText} ${urgency === ExpiryUrgency.CRITICAL ? styles.urgencyCritical : urgency === ExpiryUrgency.WARNING ? styles.urgencyWarning : styles.urgencyNormal}`}>
                 Expires in {formattedTime}
               </Typography>
             </Box>
           )}
 
           {isExpired && (
-            <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#ef4444" }}>
+            <Typography className={styles.expiredText}>
               Booking has expired
             </Typography>
           )}
@@ -87,14 +81,10 @@ export default function ActiveBookingConflictCard() {
           {!isExpired && (
             <Box
               onClick={handleComplete}
-              className={styles.completeBtn}
-              sx={{
-                opacity: isBusy ? 0.7 : 1,
-                cursor: isBusy ? "default" : "pointer",
-              }}
+              className={`${styles.completeBtn} ${isBusy ? styles.btnBusy : ""}`}
             >
               {isContinuing ? (
-                <CircularProgress size={16} sx={{ color: "var(--app-primary-contrast)" }} />
+                <CircularProgress size={16} className={styles.completeSpinner} />
               ) : (
                 <Typography className={styles.btnText}>
                   Complete this booking
@@ -105,14 +95,10 @@ export default function ActiveBookingConflictCard() {
 
           <Box
             onClick={isBusy ? undefined : handleCancel}
-            className={styles.cancelBtn}
-            sx={{
-              opacity: isBusy ? 0.5 : 1,
-              cursor: isBusy ? "default" : "pointer",
-            }}
+            className={`${styles.cancelBtn} ${isBusy ? styles.btnBusyCancel : ""}`}
           >
             {isCancelling ? (
-              <CircularProgress size={16} sx={{ color: "var(--app-muted)" }} />
+              <CircularProgress size={16} className={styles.cancelSpinner} />
             ) : (
               <Typography className={styles.btnTextSecondary}>
                 {isExpired ? "Dismiss & book a new slot" : "Cancel & book a new slot"}

@@ -8,10 +8,8 @@
 
 .unauthContainer {
   width: 100%;
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 5rem 1.5rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
   text-align: center;
   color: var(--app-text, #18181b);
   background-color: var(--app-bg, #fdfbf7);
@@ -28,6 +26,12 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  align-items: center;
+}
+
+.unauthIcon {
+  font-size: 48px !important;
+  color: var(--app-champagne);
 }
 
 .unauthTitle {
@@ -110,6 +114,10 @@
   color: var(--app-muted, #71717a);
   text-transform: uppercase;
   letter-spacing: 0.12em;
+}
+
+.metaTextActive {
+  color: var(--app-text);
 }
 
 .dividerDot {
@@ -289,6 +297,10 @@
   white-space: nowrap;
 }
 
+.signOutBtn svg {
+  font-size: 16px;
+}
+
 @media (min-width: 640px) {
   .signOutBtn {
     padding: 0.5rem 1rem;
@@ -338,10 +350,31 @@
   text-transform: capitalize;
 }
 
+.emailVal {
+  composes: infoVal;
+  text-transform: none;
+}
+
+.statusConfirmed {
+  color: var(--app-status-confirmed, #5A6B5C);
+}
+
 .actionRow {
   padding-top: 1rem;
   border-top: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.actionBtn {
+  composes: primaryBtn;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.actionBtn svg {
+  font-size: 16px;
 }

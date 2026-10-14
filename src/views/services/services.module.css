@@ -169,26 +169,16 @@
 }
 
 .filterBarSection {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   background-color: var(--app-surface-alt);
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-top: 1px solid var(--app-border);
-  border-bottom: 1px solid var(--app-border);
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius, 8px);
   box-sizing: border-box;
 }
 
 .filterBarContainer {
-  max-width: var(--page-max-width, 1440px);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--page-padding-x, 1.5rem);
-  padding-right: var(--page-padding-x, 1.5rem);
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -256,6 +246,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.clearSearchBtn svg {
+  font-size: 18px;
 }
 
 .clearSearchBtn:hover {

@@ -38,8 +38,8 @@ function SlotPanelContent({
 
   if (slotsError) {
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 13, color: "var(--color-error, #ef4444)" }}>{slotsError}</Typography>
+      <Box className={styles.errorStateBox}>
+        <Typography className={styles.errorStateText}>{slotsError}</Typography>
       </Box>
     );
   }
@@ -55,7 +55,7 @@ function SlotPanelContent({
           loading={slotsLoading}
         />
       </Box>
-      <Box sx={{ pt: 2.5 }}>
+      <Box className={styles.timeSectionBlock}>
         <Typography className={styles.sectionLabel}>Select Time</Typography>
         <SlotGrid
           slots={currentDaySlots}
@@ -193,7 +193,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
             <Typography className={styles.subtitle}>Choose your preferred date &amp; slot</Typography>
           </Box>
           <IconButton onClick={onClose} size="small" className={styles.closeBtn}>
-            <CloseIcon sx={{ fontSize: "1rem", color: "var(--app-muted)" }} />
+            <CloseIcon className={styles.closeIcon} />
           </IconButton>
         </Box>
 
@@ -215,10 +215,10 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
           <Box className={styles.footer}>
             <Box className={styles.footerRow}>
               <Box className={styles.metaGroup}>
-                <AccessTimeIcon sx={{ fontSize: "0.875rem", color: "var(--app-muted)" }} />
-                <Typography sx={{ fontSize: 13, color: "var(--app-muted)" }}>{durationText}</Typography>
+                <AccessTimeIcon className={styles.metaIcon} />
+                <Typography className={styles.metaText}>{durationText}</Typography>
                 <Box className={styles.dot} />
-                <Typography sx={{ fontSize: 13, color: "var(--app-muted)" }}>
+                <Typography className={styles.metaText}>
                   {items.length} service{items.length > 1 ? "s" : ""}
                 </Typography>
               </Box>
@@ -232,7 +232,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
               <Typography className={styles.btnText}>
                 {selectedSlot ? "Book Appointment" : "Select a time slot"}
               </Typography>
-              {selectedSlot && <ArrowForwardIcon sx={{ fontSize: "1rem" }} />}
+              {selectedSlot && <ArrowForwardIcon className={styles.arrowForwardIcon} />}
             </Box>
 
             <Typography className={styles.footerNote}>You&apos;ll review details before confirming</Typography>

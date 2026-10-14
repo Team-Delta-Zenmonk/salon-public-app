@@ -144,13 +144,13 @@ export default function StorefrontServices({
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "var(--app-muted)", fontSize: "20px" }} />
+                  <SearchIcon className={styles.searchIcon} />
                 </InputAdornment>
               ),
               endAdornment: searchQuery ? (
                 <InputAdornment position="end">
                   <IconButton size="small" onClick={() => setSearchQuery("")}>
-                    <ClearIcon sx={{ fontSize: "16px" }} />
+                    <ClearIcon className={styles.clearSearchIcon} />
                   </IconButton>
                 </InputAdornment>
               ) : null,

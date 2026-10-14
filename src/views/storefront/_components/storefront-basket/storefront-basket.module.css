@@ -61,6 +61,94 @@
   text-align: center;
 }
 
+.basketHeaderIcon {
+  color: var(--app-primary, var(--color-primary)) !important;
+  font-size: 20px !important;
+}
+
+.emptyTitle {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--app-text, var(--color-on-surface)) !important;
+}
+
+.emptySubtitle {
+  font-size: 0.75rem !important;
+  color: var(--app-muted, var(--color-tertiary)) !important;
+  margin-top: 4px !important;
+}
+
+.itemDetailsCol {
+  min-width: 0;
+  flex: 1;
+}
+
+.itemMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 4px;
+}
+
+.itemDurationGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.itemDurationIcon {
+  font-size: 12px !important;
+  color: var(--app-muted, var(--color-tertiary)) !important;
+}
+
+.itemDeleteIcon {
+  font-size: 16px !important;
+}
+
+.durationRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--app-muted, var(--color-tertiary));
+}
+
+.durationValue {
+  font-weight: 600;
+  color: var(--app-text, var(--color-on-surface));
+}
+
+.basketDivider {
+  border-color: var(--app-border, var(--color-hairline)) !important;
+}
+
+.policyNotice {
+  font-size: 11px;
+  color: var(--app-muted, var(--color-tertiary));
+  text-align: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--app-surface-alt, var(--bg-surface-container-low));
+}
+
+.desktopContinueBtn {
+  border-radius: 1rem !important;
+  font-weight: 700 !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.03em !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--app-primary) 20%, transparent) !important;
+  text-transform: none !important;
+}
+
+.desktopContinueBtn:hover {
+  filter: brightness(1.1) !important;
+}
+
 .itemCard {
   display: flex;
   align-items: flex-start;
@@ -179,3 +267,97 @@
   justify-content: space-between;
   gap: 1rem;
 }
+
+.floatingContainer {
+  display: block;
+  position: fixed;
+  bottom: 20px;
+  left: 12px;
+  right: 12px;
+  z-index: 40;
+}
+
+@media (min-width: 1024px) {
+  .floatingContainer {
+    display: none;
+  }
+}
+
+.floatingBox {
+  padding: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.floatingInfoCol {
+  min-width: 0;
+  padding-left: 4px;
+}
+
+.floatingHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.floatingPulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #34d399;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+.floatingTreatmentCount {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.floatingPriceText {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  margin-top: 2px !important;
+}
+
+.floatingDurationSpan {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.floatingBookBtn {
+  border-radius: 0.75rem !important;
+  font-weight: 700 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  padding-top: 0.625rem !important;
+  padding-bottom: 0.625rem !important;
+  font-size: 0.75rem !important;
+  text-transform: none !important;
+  flex-shrink: 0 !important;
+}
+
+.floatingBtnIcon {
+  font-size: 16px !important;
+}
+

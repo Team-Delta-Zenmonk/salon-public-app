@@ -47,7 +47,7 @@ export default function StorefrontOverview({
           <Box className={styles.heroTextCol}>
             <Box className={styles.chipsRow}>
               <Chip
-                icon={<StarRoundedIcon sx={{ color: "#fbbf24", fontSize: "15px !important" }} />}
+                icon={<StarRoundedIcon className={styles.starIcon} />}
                 label={`${ratingText} Rating`}
                 className={styles.heroChip}
               />
@@ -56,7 +56,7 @@ export default function StorefrontOverview({
                 className={`${styles.heroChip} ${styles.heroChipCapitalize}`}
               />
               <Chip
-                icon={<VerifiedOutlinedIcon sx={{ color: "#6ee7b7", fontSize: "15px !important" }} />}
+                icon={<VerifiedOutlinedIcon className={styles.verifiedIcon} />}
                 label="Verified Venue"
                 className={styles.heroChip}
               />
@@ -86,7 +86,7 @@ export default function StorefrontOverview({
                 variant="contained"
                 size="large"
                 onClick={() => onNavigateTab("services")}
-                endIcon={<ArrowForwardIcon sx={{ fontSize: "16px" }} />}
+                endIcon={<ArrowForwardIcon className={styles.arrowForwardIcon} />}
                 className={styles.primaryHeroBtn}
               >
                 Explore Services & Book
@@ -146,7 +146,7 @@ export default function StorefrontOverview({
         <Box className={styles.sectionHeader}>
           <Box>
             <Box className={styles.sectionTitleGroup}>
-              <SparklesIcon sx={{ color: "var(--app-primary)", fontSize: "20px" }} />
+              <SparklesIcon className={styles.sparklesIcon} />
               <Typography className={styles.sectionTitle}>
                 Popular Treatments
               </Typography>
@@ -159,7 +159,7 @@ export default function StorefrontOverview({
           <Button
             variant="text"
             onClick={() => onNavigateTab("services")}
-            endIcon={<ArrowForwardIcon sx={{ fontSize: "14px" }} />}
+            endIcon={<ArrowForwardIcon className={styles.arrowForwardSmallIcon} />}
             className={styles.viewAllBtn}
           >
             View All ({services.length}) Services
@@ -208,7 +208,7 @@ export default function StorefrontOverview({
       <Box className={styles.scheduleBanner}>
         <Box className={styles.scheduleInfoGroup}>
           <Box className={styles.scheduleIconBox}>
-            <AccessTimeIcon sx={{ fontSize: "22px" }} />
+            <AccessTimeIcon className={styles.scheduleSvgIcon} />
           </Box>
           <Box>
             <Typography className={styles.scheduleTitle}>

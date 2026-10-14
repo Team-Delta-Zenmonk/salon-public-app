@@ -60,7 +60,7 @@ export default function StorefrontBasket({
     <Box className={styles.desktopCard}>
       <Box className={styles.header}>
         <Box className={styles.titleGroup}>
-          <ShoppingBagOutlinedIcon sx={{ color: "var(--color-primary)", fontSize: 20 }} />
+          <ShoppingBagOutlinedIcon className={styles.basketHeaderIcon} />
           <Typography className={styles.title}>Selected Treatments</Typography>
         </Box>
         <Box className={styles.itemBadge}>
@@ -71,10 +71,10 @@ export default function StorefrontBasket({
       <Box className={styles.itemList}>
         {items.length === 0 ? (
           <Box className={styles.emptyBox}>
-            <Typography sx={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--color-on-surface)" }}>
+            <Typography className={styles.emptyTitle}>
               Your basket is empty
             </Typography>
-            <Typography sx={{ fontSize: "0.75rem", color: "var(--color-tertiary)", mt: "4px" }}>
+            <Typography className={styles.emptySubtitle}>
               Select any treatment to begin booking your appointment.
             </Typography>
           </Box>
@@ -87,12 +87,12 @@ export default function StorefrontBasket({
 
             return (
               <Box key={itemId} className={styles.itemCard}>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box className={styles.itemDetailsCol}>
                   <Typography className={styles.itemTitle}>{name}</Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", mt: "4px" }}>
+                  <Box className={styles.itemMetaRow}>
                     {duration && (
-                      <Box sx={{ display: "flex", alignItems: "center", gap: "2px" }}>
-                        <AccessTimeIcon sx={{ fontSize: 12, color: "var(--color-tertiary)" }} />
+                      <Box className={styles.itemDurationGroup}>
+                        <AccessTimeIcon className={styles.itemDurationIcon} />
                         <Typography className={styles.metaText}>{duration} min</Typography>
                       </Box>
                     )}
@@ -101,7 +101,7 @@ export default function StorefrontBasket({
                   </Box>
                 </Box>
                 <IconButton size="small" onClick={() => handleRemove(item)} className={styles.removeBtn}>
-                  <DeleteOutlineIcon sx={{ fontSize: 16 }} />
+                  <DeleteOutlineIcon className={styles.itemDeleteIcon} />
                 </IconButton>
               </Box>
             );
@@ -111,12 +111,12 @@ export default function StorefrontBasket({
 
       {items.length > 0 && (
         <Box className={styles.footer}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, color: "var(--color-tertiary)" }}>
+          <Box className={styles.durationRow}>
             <span>Estimated Duration</span>
-            <span style={{ fontWeight: 600, color: "var(--color-on-surface)" }}>{durationText}</span>
+            <span className={styles.durationValue}>{durationText}</span>
           </Box>
 
-          <Divider sx={{ borderColor: "var(--color-hairline)" }} />
+          <Divider className={styles.basketDivider} />
 
           <Box className={styles.totalRow}>
             <Typography className={styles.totalLabel}>Total Estimated</Typography>
@@ -124,7 +124,7 @@ export default function StorefrontBasket({
           </Box>
 
           {salon?.payment_policy && (
-            <Box sx={{ fontSize: 11, color: "var(--color-tertiary)", textAlign: "center", py: "4px", px: 1, borderRadius: "0.5rem", backgroundColor: "var(--bg-surface-container-low)" }}>
+            <Box className={styles.policyNotice}>
               {salon.payment_policy === "pay_at_venue"
                 ? "✓ Pay at venue after your appointment"
                 : salon.payment_policy === "partial_deposit"
@@ -138,17 +138,8 @@ export default function StorefrontBasket({
             variant="contained"
             size="large"
             onClick={handleProceed}
-            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-            sx={{
-              borderRadius: "1rem",
-              fontWeight: 700,
-              py: 1.5,
-              fontSize: "0.875rem",
-              letterSpacing: "0.03em",
-              boxShadow: "0 4px 12px color-mix(in srgb, var(--color-primary) 20%, transparent)",
-              "&:hover": { filter: "brightness(1.1)" },
-              textTransform: "none",
-            }}
+            endIcon={<ArrowForwardIcon className={styles.floatingBtnIcon} />}
+            className={styles.desktopContinueBtn}
           >
             Continue to Book
           </Button>
@@ -161,39 +152,17 @@ export default function StorefrontBasket({
     if (items.length === 0) return null;
 
     return (
-      <Box
-        sx={{
-          display: { xs: "block", lg: "none" },
-          position: "fixed",
-          bottom: 20,
-          left: 12,
-          right: 12,
-          zIndex: 40,
-        }}
-      >
-        <Box
-          sx={{
-            p: 1.5,
-            borderRadius: "1rem",
-            border: "1px solid rgba(255,255,255,0.2)",
-            backgroundColor: "rgba(0,0,0,0.9)",
-            backdropFilter: "blur(20px)",
-            boxShadow: "0 18px 36px rgba(0,0,0,0.35)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 1.5,
-          }}
-        >
-          <Box sx={{ minWidth: 0, pl: "4px" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Box sx={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#34d399", animation: "pulse 2s ease infinite" }} />
-              <Typography sx={{ fontSize: 12, fontWeight: 700, color: "white" }}>
+      <Box className={styles.floatingContainer}>
+        <Box className={styles.floatingBox}>
+          <Box className={styles.floatingInfoCol}>
+            <Box className={styles.floatingHeaderRow}>
+              <Box className={styles.floatingPulseDot} />
+              <Typography className={styles.floatingTreatmentCount}>
                 {items.length} {items.length === 1 ? "Treatment" : "Treatments"}
               </Typography>
             </Box>
-            <Typography sx={{ fontSize: 16, fontWeight: 800, color: "white", mt: "2px" }}>
-              ₹{totalPrice} <span style={{ fontSize: 10, fontWeight: 400, color: "rgba(255,255,255,0.7)" }}>({durationText})</span>
+            <Typography className={styles.floatingPriceText}>
+              ₹{totalPrice} <span className={styles.floatingDurationSpan}>({durationText})</span>
             </Typography>
           </Box>
 
@@ -201,16 +170,8 @@ export default function StorefrontBasket({
             variant="contained"
             size="medium"
             onClick={handleProceed}
-            endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
-            sx={{
-              borderRadius: "0.75rem",
-              fontWeight: 700,
-              px: 2,
-              py: 1.25,
-              fontSize: "0.75rem",
-              textTransform: "none",
-              flexShrink: 0,
-            }}
+            endIcon={<ArrowForwardIcon className={styles.floatingBtnIcon} />}
+            className={styles.floatingBookBtn}
           >
             Book Now
           </Button>

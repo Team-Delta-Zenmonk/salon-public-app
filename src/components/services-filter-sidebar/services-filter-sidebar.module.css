@@ -35,6 +35,10 @@
   margin-bottom: 0.5rem;
 }
 
+.labelCapsNoMargin {
+  margin-bottom: 0;
+}
+
 .searchWrapper {
   position: relative;
 }
@@ -83,6 +87,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.clearBtn svg {
+  font-size: 18px !important;
 }
 
 .clearBtn:hover {
@@ -224,6 +232,10 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.promoTitle svg {
+  font-size: 18px !important;
 }
 
 .promoText {

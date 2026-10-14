@@ -449,3 +449,31 @@
 .scheduleBtn:hover {
   background-color: var(--app-surface-alt) !important;
 }
+
+.starIcon {
+  color: #fbbf24 !important;
+  font-size: 15px !important;
+}
+
+.verifiedIcon {
+  color: #6ee7b7 !important;
+  font-size: 15px !important;
+}
+
+.arrowForwardIcon {
+  font-size: 16px !important;
+}
+
+.arrowForwardSmallIcon {
+  font-size: 14px !important;
+}
+
+.sparklesIcon {
+  color: var(--app-primary) !important;
+  font-size: 20px !important;
+}
+
+.scheduleSvgIcon {
+  font-size: 22px !important;
+}
+

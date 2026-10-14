@@ -7,7 +7,7 @@ const SnackbarProviderWrapper = ({ children }: Readonly<{ children: React.ReactN
       maxSnack={2}
       hideIconVariant
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      style={{ zIndex: 9999 }}
+      className="snackbarContainer"
     >
       {children}
     </SnackbarProvider>

@@ -3,6 +3,9 @@ import { useStorefrontNavigate } from "@/common/hooks/useStorefrontNavigate";
 import { useAppSelector } from "@/store/hook";
 import { calculateTotals } from "@/common/cart.utils";
 import type { RootState } from "@/store/store";
+import CloseIcon from "@mui/icons-material/Close";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EllipsisCell from "../ellipse-cell";
 import styles from "./reservation-floating-bar.module.css";
 
@@ -51,12 +54,12 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
         aria-label="Dismiss booking bar"
         className={styles.dismissButton}
       >
-        <span className={`material-symbols-outlined ${styles.dismissIcon}`}>close</span>
+        <CloseIcon className={styles.dismissIcon} />
       </button>
 
       <div className={styles.infoContainer}>
         <div className={styles.bagIconContainer}>
-          <span className={`material-symbols-outlined ${styles.bagIcon}`}>shopping_bag</span>
+          <ShoppingBagOutlinedIcon className={styles.bagIcon} />
         </div>
         <div className={styles.details}>
           <div className={styles.badgeRow}>
@@ -78,7 +81,7 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
         className={styles.ctaButton}
       >
         <span>CONTINUE TO BOOKING (₹{totalPrice})</span>
-        <span className={`material-symbols-outlined ${styles.arrowIcon}`}>arrow_forward</span>
+        <ArrowForwardIcon className={styles.arrowIcon} />
       </button>
     </aside>
   );

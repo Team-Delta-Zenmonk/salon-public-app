@@ -173,8 +173,8 @@ export default function StorefrontHeader({
                   }}
                   className={styles.themeMenuItem}
                 >
-                  <span style={{ color: "var(--app-text)" }}>{option.label}</span>
-                  {selected && <CheckIcon sx={{ color: "var(--app-primary)", fontSize: "15px" }} />}
+                  <span className={styles.themeOptionLabel}>{option.label}</span>
+                  {selected && <CheckIcon className={styles.themeCheckIcon} />}
                 </MenuItem>
               );
             })}
@@ -206,10 +206,10 @@ export default function StorefrontHeader({
                 }}
               >
                 <Box className={styles.userMenuHeader}>
-                  <Typography sx={{ fontSize: "12px", fontWeight: 700, color: "var(--app-text)" }}>
+                  <Typography className={styles.userMenuName}>
                     {customer?.first_name || customer?.name || "Customer"}
                   </Typography>
-                  <Typography sx={{ fontSize: "10px", color: "var(--app-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <Typography className={styles.userMenuEmail}>
                     {customer?.email || ""}
                   </Typography>
                 </Box>
@@ -220,7 +220,7 @@ export default function StorefrontHeader({
                   }}
                   className={styles.userMenuItem}
                 >
-                  <CalendarMonthOutlinedIcon sx={{ fontSize: "16px", color: "var(--app-muted)" }} />
+                  <CalendarMonthOutlinedIcon className={styles.userMenuItemIcon} />
                   My Bookings
                 </MenuItem>
                 <MenuItem
@@ -230,14 +230,14 @@ export default function StorefrontHeader({
                   }}
                   className={styles.userMenuItem}
                 >
-                  <PersonOutlineIcon sx={{ fontSize: "16px", color: "var(--app-muted)" }} />
+                  <PersonOutlineIcon className={styles.userMenuItemIcon} />
                   My Profile
                 </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
                   className={`${styles.userMenuItem} ${styles.userMenuItemDanger}`}
                 >
-                  <LogoutOutlinedIcon sx={{ fontSize: "16px" }} />
+                  <LogoutOutlinedIcon className={styles.userMenuSignoutIcon} />
                   Sign Out
                 </MenuItem>
               </Menu>
@@ -265,18 +265,18 @@ export default function StorefrontHeader({
       >
         <Box>
           <Box className={styles.drawerHeader}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
+            <Box className={styles.drawerSalonInfo}>
               <Avatar
                 src={salon?.logo}
                 variant="rounded"
-                sx={{ width: 36, height: 36, borderRadius: "0.75rem", bgcolor: "var(--app-primary)", color: "var(--app-primary-contrast)", fontWeight: 700, fontSize: "0.75rem" }}
+                className={styles.drawerSalonAvatar}
               >
                 {salonName[0]}
               </Avatar>
-              <Typography sx={{ fontWeight: 700, fontSize: "0.875rem", color: "var(--app-text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{salonName}</Typography>
+              <Typography className={styles.drawerSalonName}>{salonName}</Typography>
             </Box>
             <IconButton size="small" onClick={() => setMobileDrawerOpen(false)}>
-              <CloseIcon sx={{ fontSize: "18px" }} />
+              <CloseIcon className={styles.drawerCloseIcon} />
             </IconButton>
           </Box>
 
@@ -310,7 +310,7 @@ export default function StorefrontHeader({
                   navigate("/bookings");
                   setMobileDrawerOpen(false);
                 }}
-                sx={{ borderRadius: "0.75rem", fontSize: "0.75rem", fontWeight: 700 }}
+                className={styles.drawerBookingsBtn}
               >
                 My Bookings
               </Button>
@@ -318,7 +318,7 @@ export default function StorefrontHeader({
                 fullWidth
                 variant="text"
                 onClick={handleLogout}
-                sx={{ borderRadius: "0.75rem", color: "#ef4444", fontWeight: 700 }}
+                className={styles.drawerSignoutBtn}
               >
                 Sign Out
               </Button>

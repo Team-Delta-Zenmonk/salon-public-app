@@ -8,6 +8,7 @@ import HistoryEduOutlinedIcon from "@mui/icons-material/HistoryEduOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import SpaOutlinedIcon from "@mui/icons-material/SpaOutlined";
 import LoginButton from "../../components/login/login-button";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
@@ -48,9 +49,7 @@ export default function SignUp() {
               {salon?.logo ? (
                 <img src={salon.logo} alt={salonName} className={styles.monogramImg} />
               ) : (
-                <span className="material-symbols-outlined" style={{ fontSize: "24px", color: "var(--app-champagne, #d4af37)" }}>
-                  spa
-                </span>
+                <SpaOutlinedIcon className={styles.monogramFallbackIcon} />
               )}
             </Box>
           </Box>
@@ -92,7 +91,7 @@ export default function SignUp() {
               onClick={() => navigate("/")}
               className={styles.returnLink}
             >
-              <ArrowBackIcon sx={{ fontSize: "1rem" }} />
+              <ArrowBackIcon />
               <span>Return to Salon</span>
             </button>
           </Box>
@@ -121,9 +120,9 @@ export default function SignUp() {
             <ul className={styles.privilegeList}>
               <li className={styles.privilegeItem}>
                 <Box className={styles.iconSquare}>
-                  <MeetingRoomOutlinedIcon style={{ fontSize: "15px" }} />
+                  <MeetingRoomOutlinedIcon />
                 </Box>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box className={styles.privilegeTextCol}>
                   <Typography className={styles.itemHeading}>Private Suite Priority</Typography>
                   <Typography className={styles.itemSub}>
                     Guaranteed solitary studio booking with acoustic noise mitigation and personal stylist consultation.
@@ -132,9 +131,9 @@ export default function SignUp() {
               </li>
               <li className={styles.privilegeItem}>
                 <Box className={styles.iconSquare}>
-                  <LocalBarOutlinedIcon style={{ fontSize: "15px" }} />
+                  <LocalBarOutlinedIcon />
                 </Box>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box className={styles.privilegeTextCol}>
                   <Typography className={styles.itemHeading}>Botanical Sensory Bar</Typography>
                   <Typography className={styles.itemSub}>
                     Rare botanical infusions, artisan sparkling waters, or chilled vintage refreshments during sessions.
@@ -143,9 +142,9 @@ export default function SignUp() {
               </li>
               <li className={styles.privilegeItem}>
                 <Box className={styles.iconSquare}>
-                  <HistoryEduOutlinedIcon style={{ fontSize: "15px" }} />
+                  <HistoryEduOutlinedIcon />
                 </Box>
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box className={styles.privilegeTextCol}>
                   <Typography className={styles.itemHeading}>Formulations Archive</Typography>
                   <Typography className={styles.itemSub}>
                     Encrypted record of your custom hair pigment mixtures, pH treatments, and sensory preferences.

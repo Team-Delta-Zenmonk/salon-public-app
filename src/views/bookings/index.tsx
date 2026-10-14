@@ -12,6 +12,8 @@ import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
 import CustomSelect from "@/components/custom-select";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { useDownloadInvoice } from "../../features/customer-booking/hooks/use-download-invoice";
 import styles from "./bookings.module.css";
@@ -51,8 +53,9 @@ export default function Bookings() {
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      setIsLoading(true);
-      dispatch(resetCustomerBookings());
+      if (!bookings.length) {
+        setIsLoading(true);
+      }
 
       if (paymentJustDone.current) {
         paymentJustDone.current = false;
@@ -134,7 +137,7 @@ export default function Bookings() {
   const renderBookingList = () => {
     if (isLoading) {
       return (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box className={styles.listSkeletonLoaderInitial}>
           <BookingSkeleton />
           <BookingSkeleton />
           <BookingSkeleton />
@@ -143,8 +146,8 @@ export default function Bookings() {
     }
 
     if (bookings.length > 0) {
-      return bookings.map((booking, index) => (
-        <Fade in key={booking.uuid} style={{ transitionDelay: `${(index % 10) * 30}ms` }} timeout={400}>
+      return bookings.map((booking) => (
+        <Fade in key={booking.uuid} timeout={400}>
           <Box>
             <BookingCard
               booking={booking}
@@ -181,7 +184,7 @@ export default function Bookings() {
             <div className={styles.headerTitleGroup}>
               <div className={styles.breadcrumb}>
                 <span>MY ACCOUNT</span>
-                <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>chevron_right</span>
+                <ChevronRightIcon />
                 <span>BOOKINGS HISTORY</span>
               </div>
               <div className={styles.titleRow}>
@@ -189,7 +192,7 @@ export default function Bookings() {
                   My Appointments &amp; Bookings
                 </h1>
                 <span className={styles.badge}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "14px", color: "var(--color-bronze-accent)" }}>verified</span>
+                  <VerifiedIcon />
                   QUALITY GUARANTEE
                 </span>
               </div>
@@ -244,7 +247,7 @@ export default function Bookings() {
             next={fetchMoreData}
             hasMore={total > 0 && bookings.length < total}
             loader={
-              <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box className={styles.listSkeletonLoader}>
                 <BookingSkeleton />
                 <BookingSkeleton />
               </Box>
@@ -260,7 +263,7 @@ export default function Bookings() {
             }
           >
             {renderBookingList()}
-            {!isLoading && bookings.length > 0 && bookings.length < total && <Box sx={{ height: 24, width: "100%" }} />}
+            {!isLoading && bookings.length > 0 && bookings.length < total && <Box className={styles.listEndSpacer} />}
           </InfiniteScroll>
 
           <ConfirmationDialog

@@ -33,7 +33,7 @@ export default function Cart() {
   const { bookingPhase, activeBooking, paymentJustCompleted } = useAppSelector((s) => s.booking);
   const resumeBooking = searchParams?.get("resumeBooking") === "true";
 
-  const [isFetchingCart, setIsFetchingCart] = useState(isAuthenticated && !!customer?.uuid);
+  const [isFetchingCart, setIsFetchingCart] = useState(!loaded && isAuthenticated && !!customer?.uuid);
   const didPaymentJustComplete = useRef(paymentJustCompleted || getPaymentCompleted());
 
   useEffect(() => {
@@ -42,7 +42,9 @@ export default function Cart() {
       return;
     }
     if (isAuthenticated && customer?.uuid) {
-      setIsFetchingCart(true);
+      if (!loaded) {
+        setIsFetchingCart(true);
+      }
       dispatch(getCartAction(customer.uuid))
         .unwrap()
         .catch(() => { })
@@ -50,7 +52,7 @@ export default function Cart() {
     } else {
       setIsFetchingCart(false);
     }
-  }, [dispatch, isAuthenticated, customer?.uuid]);
+  }, [dispatch, isAuthenticated, customer?.uuid, loaded]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -92,10 +94,10 @@ export default function Cart() {
 
   if (isFetchingCart || !loaded) {
     return (
-      <Box className={styles.cartContainer} style={{ maxWidth: "1440px", margin: "0 auto" }}>
-        <Skeleton variant="rectangular" height={140} style={{ borderRadius: "0.75rem", marginBottom: "1rem" }} />
+      <Box className={styles.cartContainer}>
+        <Skeleton variant="rectangular" height={140} className={styles.cartSkeletonBanner} />
         {[1, 2].map((i) => (
-          <Skeleton key={i} variant="rectangular" height={100} style={{ borderRadius: "0.75rem", marginBottom: "1rem" }} />
+          <Skeleton key={i} variant="rectangular" height={100} className={styles.cartSkeletonItem} />
         ))}
       </Box>
     );
@@ -105,7 +107,7 @@ export default function Cart() {
     return (
       <Box className={styles.emptyContainer}>
         <Box className={styles.emptyIconBox}>
-          <StorefrontIcon style={{ fontSize: "28px", color: "var(--app-muted)" }} />
+          <StorefrontIcon className={styles.emptyStorefrontIcon} />
         </Box>
         <Box>
           <h2 className={styles.emptyTitle}>

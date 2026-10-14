@@ -35,14 +35,6 @@ export default function MobileBottomNav() {
       onChange={(_, next) => navigate(next)}
       showLabels
       className={styles.bottomNav}
-      sx={{
-        "& .MuiBottomNavigationAction-root": {
-          minWidth: 0,
-          maxWidth: "none",
-          flex: 1,
-          padding: "6px 0",
-        },
-      }}
     >
       <BottomNavigationAction
         label="Home"

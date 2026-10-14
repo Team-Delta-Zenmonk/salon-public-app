@@ -146,7 +146,7 @@
   background-color: var(--app-primary);
   color: var(--app-surface);
   padding: 0.875rem 1.75rem;
-  border-radius: 2px;
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -168,7 +168,7 @@
   color: var(--app-text);
   border: 1px solid var(--app-text);
   padding: 0.875rem 1.75rem;
-  border-radius: 2px;
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -219,6 +219,17 @@
   height: 100%;
   object-fit: cover;
   transition: opacity 1000ms ease-in-out;
+  opacity: 0;
+  z-index: 0;
+}
+
+.bentoImageVisible {
+  opacity: 1;
+  z-index: 10;
+}
+
+.btnIcon {
+  font-size: 16px !important;
 }
 
 .bentoOverlay {
@@ -258,30 +269,20 @@
 }
 
 .pillarsSection {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  border-top: 1px solid var(--app-border);
-  border-bottom: 1px solid var(--app-border);
+  width: 100%;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius, 8px);
   background-color: var(--app-surface-alt);
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding: 3rem 2rem;
   box-sizing: border-box;
 }
 
 .pillarsGrid {
-  max-width: var(--page-max-width, 1440px);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--page-padding-x, 1.5rem);
-  padding-right: var(--page-padding-x, 1.5rem);
+  width: 100%;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
+  gap: 2.5rem;
   text-align: center;
 }
 
@@ -326,6 +327,10 @@
   width: 100%;
   padding-top: 1rem;
   padding-bottom: 2rem;
+}
+
+.catalogSectionBorderTop {
+  border-top: 1px solid var(--app-border);
 }
 
 .catalogHeader {
@@ -378,6 +383,10 @@
   width: fit-content;
 }
 
+.catalogSubBadge svg {
+  font-size: 16px;
+}
+
 .catalogHeading {
   font-family: var(--app-font-family);
   font-size: 1.875rem !important;
@@ -422,7 +431,7 @@
 
 .catBtnSelected {
   padding: 0.625rem 1.25rem;
-  border-radius: 2px;
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -437,7 +446,7 @@
 
 .catBtnDefault {
   padding: 0.625rem 1.25rem;
-  border-radius: 2px;
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -515,6 +524,47 @@
   background-color: var(--app-surface-alt);
 }
 
+.serviceComplimentaryNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--app-muted);
+  font-size: 0.75rem;
+}
+
+.serviceComplimentaryIcon {
+  font-size: 16px !important;
+  color: var(--app-secondary, #5A6B5C);
+}
+
+.twoColCategoryBar {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.twoColCatBtn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--app-radius, 4px);
+  background: var(--app-surface-alt);
+  color: var(--app-muted);
+  border: 1px solid var(--app-border);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.twoColCatBtnActive {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast, #ffffff);
+}
+
 .servicesGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -547,7 +597,7 @@
   width: calc(100% - 2rem);
   max-width: 48rem;
   background-color: var(--app-surface);
-  border-radius: 2px;
+  border-radius: var(--app-radius, 12px);
   border: 1px solid var(--app-primary);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(12px);
@@ -577,7 +627,7 @@
 .bagIconBox {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 2px;
+  border-radius: 9999px;
   background-color: var(--app-primary);
   display: flex;
   align-items: center;
@@ -591,7 +641,7 @@
   background-color: var(--app-primary);
   color: var(--app-surface);
   padding: 0.75rem 1.5rem;
-  border-radius: 2px;
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family);
   font-size: 0.75rem;
   font-weight: 600;
@@ -682,4 +732,375 @@
   .desktopGenderGroup {
     display: flex;
   }
+}
+
+.archHeroSection {
+  composes: heroSection;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+}
+
+.archHeroGrid {
+  composes: heroGrid;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.archHeroLeft {
+  composes: heroLeft;
+  gap: 1.25rem;
+}
+
+.archMonogramBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.35rem 0.875rem;
+  border-radius: 4px;
+  background: rgba(243, 198, 119, 0.08);
+  border: 1px solid rgba(243, 198, 119, 0.25);
+  width: fit-content;
+}
+
+.archMonogramSymbol {
+  font-family: serif;
+  font-size: 0.875rem;
+  color: var(--app-primary);
+  font-weight: 700;
+}
+
+.archMonogramText {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--app-primary);
+}
+
+.archHeading {
+  font-size: clamp(2.25rem, 4.5vw + 1rem, 3.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--app-text);
+  font-weight: 700;
+  width: 100%;
+}
+
+.archHeadingBreak {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .archHeadingBreak {
+    display: inline;
+  }
+}
+
+.archHeadingAccent {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--app-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(243, 198, 119, 0.4);
+  text-underline-offset: 6px;
+}
+
+.archAboutWrapper {
+  border-left: 2px solid var(--app-primary);
+  padding-left: 1.25rem;
+  margin-top: 0.25rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.archActionsWrapper {
+  composes: heroActions;
+  padding-top: 0.25rem;
+}
+
+.archPrimaryCta {
+  composes: primaryCta;
+  box-shadow: 0 4px 20px rgba(243, 198, 119, 0.25);
+}
+
+.archSecondaryBtn {
+  composes: secondaryBtn;
+  border-color: rgba(243, 198, 119, 0.4);
+}
+
+.archWindowContainer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .archWindowContainer {
+    grid-column: span 5;
+  }
+}
+
+.archAmbientGlow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(243, 198, 119, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.archWindowFrame {
+  position: relative;
+  width: 100%;
+  maxWidth: 340px;
+  height: 470px;
+  border-radius: 170px 170px 16px 16px;
+  overflow: hidden;
+  border: 2px solid var(--app-primary);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(243, 198, 119, 0.25);
+  z-index: 1;
+}
+
+.archWindowImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.archWindowOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(12, 10, 13, 0.9) 0%, rgba(12, 10, 13, 0.3) 50%, transparent 100%);
+}
+
+.archWindowCaption {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  text-align: center;
+}
+
+.archCaptionTitle {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  color: var(--app-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.archCaptionSub {
+  font-size: 0.625rem;
+  color: rgba(247, 245, 240, 0.7);
+  margin-top: 0.25rem;
+  letter-spacing: 0.08em;
+}
+
+.gothicHeroCard {
+  composes: heroSection;
+  background-color: var(--bg-card, #FFFFFF);
+  border: 1px solid var(--border-color, rgba(122, 28, 40, 0.18));
+  border-radius: var(--radius-card, 0.75rem);
+  box-shadow: var(--card-shadow, 0 12px 30px -5px rgba(26, 21, 24, 0.06));
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gothicHeroGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+  gap: var(--grid-gap, 2rem);
+}
+
+.gothicHeroLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.gothicHeroBadge {
+  composes: heroBadge;
+  background-color: var(--accent-soft, #EFE6E8);
+  border-color: var(--border-color, rgba(122, 28, 40, 0.18));
+  color: var(--accent-primary, #7A1C28);
+  width: fit-content;
+}
+
+.gothicBadgeDot {
+  composes: dot;
+  background-color: var(--accent-primary, #7A1C28);
+}
+
+.gothicBadgeText {
+  composes: badgeText;
+  color: var(--accent-primary, #7A1C28);
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.gothicHeroHeading {
+  composes: heroHeading;
+  font-family: var(--font-family-heading, 'Cinzel', serif);
+  color: var(--text-primary, #1A1518);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.gothicAboutText {
+  composes: heroAboutText;
+  color: var(--text-muted, #665E62);
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  line-height: 1.6;
+}
+
+.gothicHeroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.gothicPrimaryCta {
+  background-color: var(--accent-primary, #7A1C28);
+  color: #FFFFFF;
+  border-radius: var(--radius-button, 9999px);
+  padding: 0.8rem 1.75rem;
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(122, 28, 40, 0.25);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.gothicPrimaryCta:hover {
+  background-color: var(--accent-hover, #5B121C);
+  transform: translateY(-1px);
+}
+
+.gothicSecondaryBtn {
+  background-color: transparent;
+  border: 1px solid var(--accent-gold, #C5A059);
+  color: var(--text-primary, #1A1518);
+  border-radius: var(--radius-button, 9999px);
+  padding: 0.8rem 1.75rem;
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.gothicSecondaryBtn:hover {
+  background-color: var(--accent-soft, #EFE6E8);
+  transform: translateY(-1px);
+}
+
+.gothicIconGold {
+  font-size: 16px;
+  color: var(--accent-gold, #C5A059);
+}
+
+.gothicHeroRight {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  border-radius: var(--radius-card, 0.75rem);
+  overflow: hidden;
+  border: 1px solid var(--border-gold, rgba(197, 160, 89, 0.4));
+}
+
+.gothicHeroImage {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  max-height: 440px;
+  object-fit: cover;
+  display: block;
+}
+
+.gothicFloatingBadge {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--accent-gold, #C5A059);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.125rem;
+  box-shadow: 0 8px 24px rgba(26, 21, 24, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  z-index: 10;
+}
+
+.gothicBadgeIconCircle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background-color: var(--accent-soft, #EFE6E8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary, #7A1C28);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.gothicBadgeHeading {
+  font-family: var(--font-family-heading, 'Cinzel', serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary, #1A1518);
+  line-height: 1.2;
+}
+
+.gothicBadgeSubtext {
+  font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-size: 0.7rem;
+  color: var(--text-muted, #665E62);
+  margin-top: 2px;
+}
+
+.categoryPillsContainer {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.categoryPillButton {
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--app-muted);
+  border: 1px solid var(--app-border);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.categoryPillButtonActive {
+  background: var(--app-primary);
+  color: var(--app-primary-contrast, #ffffff);
 }

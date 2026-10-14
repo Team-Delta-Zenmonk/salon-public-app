@@ -4,6 +4,25 @@ import { Box } from "@mui/material";
 import { useStorefront } from "../../providers/storefront-provider";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import EllipsisCell from "../../components/ellipse-cell";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import SpaIcon from "@mui/icons-material/Spa";
+import NearMeIcon from "@mui/icons-material/NearMe";
+import RoomServiceIcon from "@mui/icons-material/RoomService";
+import WifiIcon from "@mui/icons-material/Wifi";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import LocalBarIcon from "@mui/icons-material/LocalBar";
+import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import CleanHandsIcon from "@mui/icons-material/CleanHands";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
+import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import TimerIcon from "@mui/icons-material/Timer";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import styles from "./about.module.css";
 
 export default function AboutPage() {
@@ -85,16 +104,16 @@ export default function AboutPage() {
 
           <div className={styles.pillsRow}>
             <div className={styles.pill}>
-              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>verified</span>
+              <VerifiedIcon />
               <span>Certified Master Stylists</span>
             </div>
             <div className={styles.pill}>
-              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>spa</span>
+              <SpaIcon />
               <span>Hair &amp; Scalp Care</span>
             </div>
             <div className={styles.pill}>
-              <span className="material-symbols-outlined" style={{ color: "var(--app-primary)", fontSize: "18px" }}>distance</span>
-              <EllipsisCell value={salon?.address || "Main Branch • City Center"} maxChars={35} maxLines={1} style={{ textTransform: "capitalize" }} />
+              <NearMeIcon />
+              <EllipsisCell value={salon?.address || "Main Branch • City Center"} maxChars={35} maxLines={1} className={styles.pillAddressText} />
             </div>
             <div className={`${styles.pill} ${styles.pillActive}`}>
               <span className={styles.pillPulseDot} />
@@ -120,7 +139,7 @@ export default function AboutPage() {
               </h2>
               <div className={styles.paragraphGroup}>
                 <p>
-                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} style={{ textTransform: "capitalize" }} />{" "} was founded with a clear purpose: to provide personalized, top-tier styling and restorative hair treatments in a calm, welcoming environment. We combine modern cutting technique with gentle, nourishing hair products.
+                  <EllipsisCell value={salonName} maxChars={100} maxLines={5} className={styles.pillAddressText} />{" "} was founded with a clear purpose: to provide personalized, top-tier styling and restorative hair treatments in a calm, welcoming environment. We combine modern cutting technique with gentle, nourishing hair products.
                 </p>
                 <p>
                   Our salon features spacious private styling stations designed for comfort and relaxation. Here, you can unwind while our experienced stylists focus entirely on giving you the look, health, and care that best fits your lifestyle.
@@ -154,14 +173,14 @@ export default function AboutPage() {
               <div className={styles.panelHeader}>
                 <div>
                   <span className={styles.badgeCaps}>Hospitality Standard</span>
-                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Bespoke Guest Privileges</h3>
+                  <h3 className={styles.panelHeadingTight}>Bespoke Guest Privileges</h3>
                 </div>
-                <span className="material-symbols-outlined" style={{ color: "var(--app-muted)", fontSize: "28px" }}>room_service</span>
+                <RoomServiceIcon className={styles.hospitalityIcon} />
               </div>
               <div className={styles.privilegesGrid}>
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>wifi</span>
+                    <WifiIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>High-Speed Encrypted Wi-Fi</p>
@@ -171,7 +190,7 @@ export default function AboutPage() {
 
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>ac_unit</span>
+                    <AcUnitIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>Clean Air Filtration</p>
@@ -181,7 +200,7 @@ export default function AboutPage() {
 
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>local_bar</span>
+                    <LocalBarIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>Botanical Sensory Bar</p>
@@ -191,7 +210,7 @@ export default function AboutPage() {
 
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>local_parking</span>
+                    <LocalParkingIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>White-Glove Valet</p>
@@ -201,7 +220,7 @@ export default function AboutPage() {
 
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>meeting_room</span>
+                    <MeetingRoomIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>Private Soundproof Suites</p>
@@ -211,7 +230,7 @@ export default function AboutPage() {
 
                 <div className={styles.privilegeCard}>
                   <div className={styles.privilegeIconSquare}>
-                    <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>clean_hands</span>
+                    <CleanHandsIcon />
                   </div>
                   <div>
                     <p className={styles.privilegeTitle}>Sterilized Instruments</p>
@@ -222,14 +241,14 @@ export default function AboutPage() {
             </div>
 
             <div className={styles.panelCard}>
-              <div className={styles.panelHeader} style={{ flexWrap: "wrap", gap: "0.5rem" }}>
+              <div className={styles.panelHeader}>
                 <div>
                   <span className={styles.badgeCaps}>Salon Operating Hours</span>
-                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Opening &amp; Service Hours</h3>
+                  <h3 className={styles.panelHeadingTight}>Opening &amp; Service Hours</h3>
                 </div>
                 <div className={styles.statusPillOpen}>
                   <span className={styles.openPulseDot} />
-                  <span style={{ fontWeight: 700 }}>OPEN NOW</span>
+                  <span className={styles.statusPillOpenText}>OPEN NOW</span>
                 </div>
               </div>
 
@@ -242,12 +261,12 @@ export default function AboutPage() {
                     return (
                       <div key={day} className={styles.hoursRowHighlight}>
                         <div className={styles.hoursDayCol}>
-                          <span style={{ color: "var(--app-primary)", fontWeight: 600, textTransform: "capitalize" }}>{day}</span>
+                          <span className={styles.hoursDayHighlight}>{day}</span>
                           <span className={styles.soireeBadge}>
                             Extended Hours
                           </span>
                         </div>
-                        <span className={styles.hoursTimingText} style={{ color: "var(--app-text)", fontWeight: 600 }}>{hours}</span>
+                        <span className={styles.hoursTimingHighlight}>{hours}</span>
                       </div>
                     );
                   }
@@ -255,20 +274,20 @@ export default function AboutPage() {
                   return (
                     <div key={day} className={styles.hoursRow}>
                       <div className={styles.hoursDayCol}>
-                        <span style={{ color: "var(--app-text)", fontWeight: 500, textTransform: "capitalize" }}>{day}</span>
+                        <span className={styles.hoursDayName}>{day}</span>
                         {day === "sunday" && (
-                          <span style={{ color: "var(--app-muted)", fontSize: "0.75rem" }}>(Special Appointments)</span>
+                          <span className={styles.hoursSpecialNote}>(Special Appointments)</span>
                         )}
                       </div>
-                      <span className={styles.hoursTimingText} style={{ color: "var(--app-muted)", fontWeight: 500 }}>{hours}</span>
+                      <span className={styles.hoursTimingText}>{hours}</span>
                     </div>
                   );
                 })}
               </div>
 
               <div className={styles.hoursFooterRow}>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--app-primary)" }}>schedule</span>
+                <span className={styles.hoursFooterText}>
+                  <ScheduleIcon />
                   Special or late appointments available on request
                 </span>
                 <button
@@ -287,9 +306,9 @@ export default function AboutPage() {
               <div className={styles.panelHeader}>
                 <div>
                   <span className={styles.badgeCaps}>Our Spaces</span>
-                  <h3 className={styles.panelHeading} style={{ marginTop: "0.25rem", marginBottom: 0 }}>Inside Our Salon</h3>
+                  <h3 className={styles.panelHeadingTight}>Inside Our Salon</h3>
                 </div>
-                <span className={styles.badgeMuted} style={{ fontWeight: 700 }}>4 SPACES • MAIN STUDIO</span>
+                <span className={styles.badgeMutedBold}>4 SPACES • MAIN STUDIO</span>
               </div>
 
               <div className={styles.galleryGrid}>
@@ -355,13 +374,13 @@ export default function AboutPage() {
             </div>
 
             <div className={styles.panelCard}>
-              <div className={styles.panelHeader} style={{ flexWrap: "wrap", gap: "0.5rem" }}>
+              <div className={styles.panelHeader}>
                 <div className={styles.coordinatesHeaderGroup}>
                   <span className={styles.badgeCaps}>Flagship Coordinates</span>
-                  <EllipsisCell value={salonName} className={styles.panelHeading} style={{ margin: 0, textTransform: "capitalize" }} maxChars={200} maxLines={5} />
+                  <EllipsisCell value={salonName} className={styles.panelHeadingNoMargin} maxChars={200} maxLines={5} />
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <span style={{ fontSize: "0.75rem", color: "var(--app-muted)", fontFamily: "monospace" }}>19.0600° N, 72.8335° E</span>
+                <div className={styles.coordinatesRight}>
+                  <span className={styles.coordinatesText}>19.0600° N, 72.8335° E</span>
                 </div>
               </div>
 
@@ -378,31 +397,29 @@ export default function AboutPage() {
                     <span className={styles.pinPing} />
                     <span className={styles.pinOuter} />
                     <div className={styles.pinCenter}>
-                      <span className="material-symbols-outlined" style={{ color: "#A88B64", fontSize: "20px", fontVariationSettings: "'FILL' 1" }}>
-                        content_cut
-                      </span>
+                      <ContentCutIcon />
                     </div>
                   </div>
                   <div className={styles.pinCallout}>
-                    <EllipsisCell value={salon?.name ?? "Salon Name"} style={{ color: "#A88B64", fontSize: "10px", letterSpacing: "0.05em", textAlign: "center", textTransform: "uppercase", fontWeight: 700 }} maxChars={20} />
-                    <EllipsisCell value={salon?.address ?? "Salon Address"} style={{ fontSize: "11px", color: "var(--app-muted)", textAlign: "center", textTransform: "capitalize" }} maxChars={20} />
+                    <EllipsisCell value={salon?.name ?? "Salon Name"} className={styles.pinCalloutName} maxChars={20} />
+                    <EllipsisCell value={salon?.address ?? "Salon Address"} className={styles.pinCalloutAddress} maxChars={20} />
                   </div>
                 </div>
 
                 <div className={styles.mapBadgeTop}>
-                  <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#A88B64" }} />
+                  <span className={styles.mapBadgeDot} />
                   <span>N 42° E</span>
                 </div>
 
                 <div className={styles.mapBadgeBottom}>
-                  <span className="material-symbols-outlined" style={{ color: "#A88B64", fontSize: "16px" }}>local_taxi</span>
+                  <LocalTaxiIcon />
                   <span>Valet Court: Gate B</span>
                 </div>
               </div>
 
               <div className={styles.addressList}>
                 <div className={styles.addressItem}>
-                  <span className={`material-symbols-outlined ${styles.addressIcon}`}>location_on</span>
+                  <LocationOnIcon className={styles.addressIcon} />
                   <div className={styles.addressContent}>
                     <p className={styles.addressTitle}>Flagship Atelier • Heritage Suite III</p>
                     <EllipsisCell value={salon?.address || "Nargis Dutt Road, Bandra West, Mumbai, Maharashtra 400050"} className={styles.addressSubtitle} />
@@ -410,7 +427,7 @@ export default function AboutPage() {
                 </div>
                 {salon?.phone && (
                   <div className={styles.addressItem}>
-                    <span className={`material-symbols-outlined ${styles.addressIcon}`}>phone_in_talk</span>
+                    <PhoneInTalkIcon className={styles.addressIcon} />
                     <div className={styles.addressContent}>
                       <p className={styles.addressTitle}>Dedicated Atelier Concierge</p>
                       <p className={styles.addressContact}>{salon.phone} • concierge@crimsonandshear.com</p>
@@ -426,14 +443,14 @@ export default function AboutPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>near_me</span>
+                  <NearMeIcon />
                   <span>Get GPS Directions</span>
                 </a>
                 <a
                   className={styles.btnSecondaryValet}
                   href={`tel:${salon?.phone || "+912289204400"}`}
                 >
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--app-primary)" }}>directions_car</span>
+                  <DirectionsCarIcon />
                   <span>Call Valet Concierge</span>
                 </a>
               </div>
@@ -445,7 +462,7 @@ export default function AboutPage() {
           <div className={styles.etiquetteGlow} />
           <div className={styles.etiquetteHeader}>
             <span className={styles.badgeCaps}>Salon Policies</span>
-            <h3 className={styles.panelHeading} style={{ marginBottom: 0 }}>
+            <h3 className={styles.panelHeadingBottomZero}>
               Comfort, Privacy &amp; Punctuality Guarantee
             </h3>
             <p className={styles.heroDescription}>
@@ -457,7 +474,7 @@ export default function AboutPage() {
             <div className={styles.etiquetteItem}>
               <div className={styles.etiquetteItemHeader}>
                 <div className={styles.etiquetteIconBox}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>volume_off</span>
+                  <VolumeOffIcon />
                 </div>
                 <h4 className={styles.etiquetteTitle}>Quiet Appointment Option</h4>
               </div>
@@ -469,7 +486,7 @@ export default function AboutPage() {
             <div className={styles.etiquetteItem}>
               <div className={styles.etiquetteItemHeader}>
                 <div className={styles.etiquetteIconBox}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>timer</span>
+                  <TimerIcon />
                 </div>
                 <h4 className={styles.etiquetteTitle}>1-on-1 Dedicated Stylist</h4>
               </div>
@@ -481,7 +498,7 @@ export default function AboutPage() {
             <div className={styles.etiquetteItem}>
               <div className={styles.etiquetteItemHeader}>
                 <div className={styles.etiquetteIconBox}>
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>event_repeat</span>
+                  <EventRepeatIcon />
                 </div>
                 <h4 className={styles.etiquetteTitle}>Flexible Rescheduling</h4>
               </div>

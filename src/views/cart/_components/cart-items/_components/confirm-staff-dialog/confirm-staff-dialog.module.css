@@ -1,21 +1,25 @@
 .dialogPaper {
-  border-radius: 1rem !important;
+  border-radius: var(--app-radius, 1rem) !important;
   max-width: 380px !important;
   width: 100% !important;
   margin-left: 0.5rem !important;
   margin-right: 0.5rem !important;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  border: 1px solid var(--app-border) !important;
 }
 
 .content {
   padding: 0 !important;
   overflow: hidden !important;
+  background-color: var(--app-surface) !important;
 }
 
 .header {
-  background-color: var(--app-surface-alt, #faf8f5);
+  background-color: var(--app-surface-alt);
   padding: 1rem 1.25rem;
   text-align: center;
-  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  border-bottom: 1px solid var(--app-border);
 }
 
 .iconRow {
@@ -24,20 +28,43 @@
   margin-bottom: 0.5rem;
 }
 
+.headerIcon {
+  color: var(--app-primary);
+  font-size: 28px !important;
+}
+
+.swapIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.swapIndicatorIcon {
+  font-size: 22px !important;
+  color: var(--app-muted);
+}
+
+.loadingProgress {
+  color: white !important;
+  margin-right: 0.5rem;
+}
+
 .title {
-  color: var(--app-text, #18181b) !important;
-  font-family: var(--font-bodoni-moda), serif !important;
+  color: var(--app-text) !important;
+  font-family: var(--app-font-serif, var(--app-font-family)) !important;
   font-size: 1rem !important;
   font-weight: 600 !important;
 }
 
 .subtitle {
   font-size: 0.6875rem !important;
-  color: var(--app-muted, #71717a) !important;
+  color: var(--app-muted) !important;
+  font-family: var(--app-font-family) !important;
 }
 
 .body {
   padding: 1.25rem 1.25rem 1rem 1.25rem;
+  background-color: var(--app-surface);
 }
 
 .changeRow {
@@ -56,27 +83,32 @@
 }
 
 .label {
-  color: var(--app-muted, #71717a) !important;
+  color: var(--app-muted) !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.625rem !important;
   font-weight: 600 !important;
+  font-family: var(--app-font-family) !important;
 }
 
 .avatar {
   width: 3.25rem !important;
   height: 3.25rem !important;
-  border: 2px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
+  border: 2px solid var(--app-border) !important;
+  background-color: var(--app-surface-alt) !important;
+  color: var(--app-text) !important;
 }
 
 .avatarNew {
   width: 3.25rem !important;
   height: 3.25rem !important;
-  border: 2px solid var(--app-primary, #18181b) !important;
+  border: 2px solid var(--app-primary) !important;
+  background-color: var(--app-primary-soft, var(--app-surface-alt)) !important;
+  color: var(--app-primary) !important;
 }
 
 .nameText {
-  color: var(--app-text, #18181b) !important;
+  color: var(--app-text) !important;
   font-size: 0.75rem !important;
   font-weight: 600 !important;
   text-align: center;
@@ -85,6 +117,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
+  font-family: var(--app-font-family) !important;
 }
 
 .singleStaffBox {
@@ -104,47 +137,67 @@
 
 .metaCard {
   flex: 1;
-  background-color: var(--app-surface-alt, #faf8f5);
-  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
-  border-radius: 0.75rem;
+  background-color: var(--app-surface-alt);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius, 0.75rem);
   padding: 0.75rem;
   text-align: center;
 }
 
 .metaLabel {
-  color: var(--app-muted, #71717a) !important;
+  color: var(--app-muted) !important;
   display: block;
   font-size: 0.625rem !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-family: var(--app-font-family) !important;
 }
 
 .metaVal {
-  color: var(--app-text, #18181b) !important;
+  color: var(--app-text) !important;
   font-size: 0.875rem !important;
   font-weight: 700 !important;
+  font-family: var(--app-font-family) !important;
 }
 
 .footer {
   display: flex;
   gap: 0.5rem;
   padding: 0 1.25rem 1.25rem 1.25rem;
+  background-color: var(--app-surface);
 }
 
 .cancelBtn {
-  border-radius: 0.75rem !important;
+  border-radius: var(--app-btn-radius, 9999px) !important;
   font-weight: 600 !important;
-  border-color: var(--app-border, rgba(0, 0, 0, 0.12)) !important;
-  color: var(--app-muted, #71717a) !important;
+  border: 1px solid var(--app-border) !important;
+  color: var(--app-muted) !important;
   text-transform: none !important;
+  font-family: var(--app-font-family) !important;
   flex: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+.cancelBtn:hover {
+  background-color: var(--app-surface-alt) !important;
+  color: var(--app-text) !important;
+  border-color: var(--app-primary) !important;
 }
 
 .confirmBtn {
-  border-radius: 0.75rem !important;
+  border-radius: var(--app-btn-radius, 9999px) !important;
   font-weight: 700 !important;
   text-transform: none !important;
-  background-color: var(--app-primary, #18181b) !important;
+  background-color: var(--app-primary) !important;
   color: var(--app-primary-contrast, #ffffff) !important;
+  border: 1px solid var(--app-primary) !important;
+  font-family: var(--app-font-family) !important;
   flex: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+.confirmBtn:hover {
+  background-color: var(--app-primary-hover, var(--app-primary)) !important;
+  border-color: var(--app-primary-hover, var(--app-primary)) !important;
+  opacity: 0.95;
 }

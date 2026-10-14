@@ -78,7 +78,7 @@ export default function BookingConfirmDialog({
       <DialogContent className={styles.content}>
         <Box className={styles.header}>
           <Box className={styles.iconSquare}>
-            <CheckCircleOutlineIcon sx={{ color: "var(--app-primary)", fontSize: "1.25rem" }} />
+            <CheckCircleOutlineIcon className={styles.confirmCheckIcon} />
           </Box>
           <Box>
             <Typography className={styles.title}>
@@ -91,7 +91,7 @@ export default function BookingConfirmDialog({
         <Box className={styles.body}>
           <Box className={styles.row}>
             <Box className={styles.altIconSquare}>
-              <CalendarMonthIcon sx={{ color: "var(--app-muted)", fontSize: "17px" }} />
+              <CalendarMonthIcon className={styles.rowAltIcon} />
             </Box>
             <Box>
               <Typography className={styles.rowLabel}>
@@ -107,7 +107,7 @@ export default function BookingConfirmDialog({
 
           <Box className={styles.row}>
             <Box className={styles.altIconSquare}>
-              <AccessTimeIcon sx={{ color: "var(--app-muted)", fontSize: "17px" }} />
+              <AccessTimeIcon className={styles.rowAltIcon} />
             </Box>
             <Box>
               <Typography className={styles.rowLabel}>
@@ -135,7 +135,7 @@ export default function BookingConfirmDialog({
                 checked={selectedPayment === "pay_at_venue"} 
                 disabled={isPayAtVenueDisabled}
                 size="small" 
-                sx={{ p: 0, color: selectedPayment === "pay_at_venue" ? "var(--app-primary)" : "var(--app-muted)" }}
+                className={selectedPayment === "pay_at_venue" ? styles.radioBtnSelected : styles.radioBtn}
               />
               <Box className={styles.planContent}>
                 <Box className={styles.planTopRow}>
@@ -160,7 +160,7 @@ export default function BookingConfirmDialog({
                 checked={selectedPayment === "partial_deposit"} 
                 disabled={isPartialDepositDisabled}
                 size="small" 
-                sx={{ p: 0, color: selectedPayment === "partial_deposit" ? "var(--app-primary)" : "var(--app-muted)" }}
+                className={selectedPayment === "partial_deposit" ? styles.radioBtnSelected : styles.radioBtn}
               />
               <Box className={styles.planContent}>
                 <Box className={styles.planTopRow}>
@@ -185,7 +185,7 @@ export default function BookingConfirmDialog({
                 checked={selectedPayment === "full_upfront"} 
                 disabled={isFullUpfrontDisabled}
                 size="small" 
-                sx={{ p: 0, color: selectedPayment === "full_upfront" ? "var(--app-primary)" : "var(--app-muted)" }}
+                className={selectedPayment === "full_upfront" ? styles.radioBtnSelected : styles.radioBtn}
               />
               <Box className={styles.planContent}>
                 <Box className={styles.planTopRow}>
@@ -236,7 +236,7 @@ export default function BookingConfirmDialog({
             onClick={confirming ? undefined : () => onConfirm(selectedPayment)}
             className={`${styles.confirmBtn} ${confirming ? styles.confirmBtnDisabled : ""}`}
           >
-            {confirming && <CircularProgress size={15} sx={{ color: "var(--app-primary-contrast)" }} />}
+            {confirming && <CircularProgress size={15} className={styles.confirmSpinner} />}
             <Typography className={styles.confirmBtnText}>
               {confirming ? "Booking..." : selectedPayment === "pay_at_venue" ? "Book Appointment" : `Pay ₹${currentDepositAmount} & Book`}
             </Typography>

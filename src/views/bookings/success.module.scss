@@ -448,3 +448,249 @@
   }
 }
 
+.loadingSpinner {
+  color: var(--app-primary) !important;
+}
+
+.confetti0 {
+  left: 0%;
+  animation-delay: 0s;
+  background-color: #10b981;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.confetti1 {
+  left: 5%;
+  animation-delay: 1.3s;
+  background-color: #fbbf24;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.confetti2 {
+  left: 10%;
+  animation-delay: 2.6s;
+  background-color: #3b82f6;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.confetti3 {
+  left: 15%;
+  animation-delay: 3.9s;
+  background-color: #f472b6;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+}
+.confetti4 {
+  left: 20%;
+  animation-delay: 0.2s;
+  background-color: #10b981;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+.confetti5 {
+  left: 25%;
+  animation-delay: 1.5s;
+  background-color: #fbbf24;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.confetti6 {
+  left: 30%;
+  animation-delay: 2.8s;
+  background-color: #3b82f6;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.confetti7 {
+  left: 35%;
+  animation-delay: 4.1s;
+  background-color: #f472b6;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+}
+.confetti8 {
+  left: 40%;
+  animation-delay: 0.4s;
+  background-color: #10b981;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.confetti9 {
+  left: 45%;
+  animation-delay: 1.7s;
+  background-color: #fbbf24;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+.confetti10 {
+  left: 50%;
+  animation-delay: 3s;
+  background-color: #3b82f6;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.confetti11 {
+  left: 55%;
+  animation-delay: 4.3s;
+  background-color: #f472b6;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.confetti12 {
+  left: 60%;
+  animation-delay: 0.6s;
+  background-color: #10b981;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.confetti13 {
+  left: 65%;
+  animation-delay: 1.9s;
+  background-color: #fbbf24;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+}
+.confetti14 {
+  left: 70%;
+  animation-delay: 3.2s;
+  background-color: #3b82f6;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+.confetti15 {
+  left: 75%;
+  animation-delay: 4.5s;
+  background-color: #f472b6;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.confetti16 {
+  left: 80%;
+  animation-delay: 0.8s;
+  background-color: #10b981;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.confetti17 {
+  left: 85%;
+  animation-delay: 2.1s;
+  background-color: #fbbf24;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+}
+.confetti18 {
+  left: 90%;
+  animation-delay: 3.4s;
+  background-color: #3b82f6;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.confetti19 {
+  left: 95%;
+  animation-delay: 4.7s;
+  background-color: #f472b6;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.ringAbsDelayed {
+  animation-delay: 0.7s !important;
+}
+
+.cardDivider {
+  border-color: var(--app-border) !important;
+  opacity: 0.5 !important;
+}
+
+.cardDividerLight {
+  border-color: var(--app-border) !important;
+  opacity: 0.4 !important;
+}
+
+.salonAvatar {
+  width: 44px !important;
+  height: 44px !important;
+  background-color: var(--app-surface-alt) !important;
+  border: 1.5px solid var(--app-border) !important;
+  color: var(--app-text) !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+.locationIcon {
+  font-size: 13px !important;
+  color: var(--app-primary) !important;
+  margin-top: 1px !important;
+}
+
+.timingCol {
+  text-align: right;
+}
+
+.infoIcon {
+  font-size: 18px !important;
+  color: var(--app-primary) !important;
+  margin-top: 2px !important;
+}
+
+.rupeeIcon {
+  font-size: 14px !important;
+  margin-right: -2px !important;
+}
+
+.viewBookingsBtn {
+  border-radius: 1rem !important;
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast) !important;
+}
+
+.viewBookingsBtn:hover {
+  background-color: var(--app-primary-hover, var(--app-primary)) !important;
+  filter: brightness(0.92);
+}
+
+.backStorefrontBtn {
+  border-radius: 1rem !important;
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  border-width: 2px !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text) !important;
+  background-color: var(--app-surface) !important;
+  transition: all 0.2s !important;
+}
+
+.backStorefrontBtn:hover {
+  background-color: var(--app-surface-alt) !important;
+  border-color: var(--app-primary) !important;
+  transform: translateY(-2px);
+}
+

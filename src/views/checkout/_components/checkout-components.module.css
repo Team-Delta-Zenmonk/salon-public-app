@@ -35,6 +35,12 @@
   flex-shrink: 0;
 }
 
+.helpIcon {
+  color: var(--app-primary) !important;
+  font-size: 20px !important;
+}
+
+
 .helpTitle {
   font-size: 0.8125rem !important;
   font-weight: 700 !important;
@@ -69,6 +75,18 @@
   height: 0.75rem;
   width: 4rem;
 }
+
+.stripeLogo {
+  object-fit: contain;
+  filter: grayscale(1) brightness(0);
+}
+
+.securityDivider {
+  height: 12px !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
 
 .expiryCard {
   padding: 2.5rem;
@@ -109,14 +127,36 @@
   margin-right: auto;
 }
 
+.expiryViewContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.expiryErrorIcon {
+  font-size: 32px !important;
+}
+
 .returnBtn {
   border-radius: 0.75rem !important;
   padding: 0.75rem 2.5rem !important;
-  font-weight: 700 !important;
+  font-weight: 900 !important;
   text-transform: none !important;
   background-color: var(--app-primary, #18181b) !important;
   color: var(--app-primary-contrast, #ffffff) !important;
+  box-shadow: 0 4px 12px var(--app-primary-soft) !important;
 }
+
+.returnBtn:active {
+  transform: scale(0.95);
+}
+
 
 .headerBar {
   position: fixed;
@@ -143,12 +183,34 @@
   border-radius: 0.5rem !important;
 }
 
+.backArrowIcon {
+  font-size: 18px !important;
+  color: var(--app-text) !important;
+}
+
 .titleMain {
   font-family: var(--font-bodoni-moda), serif !important;
   font-size: 1rem !important;
   font-weight: 600 !important;
   color: var(--app-text, #18181b) !important;
   letter-spacing: -0.01em !important;
+}
+
+.secureBadgeStack {
+  margin-top: 4px;
+}
+
+.verifiedIcon {
+  font-size: 10px !important;
+  color: #22c55e !important;
+}
+
+.secureBadgeText {
+  font-size: 9px !important;
+  color: var(--app-muted) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
 }
 
 .timerPaper {
@@ -162,11 +224,29 @@
   color: var(--app-text, #18181b) !important;
 }
 
+.timerNormal {
+  background-color: var(--app-primary-soft) !important;
+  border-color: var(--app-primary) !important;
+  color: var(--app-primary) !important;
+}
+
 .timerCritical {
   background-color: #ef4444 !important;
   border-color: #ef4444 !important;
   color: #ffffff !important;
+  animation: countdownPulse 1.5s ease infinite;
 }
+
+.timerIconSmall {
+  font-size: 12px !important;
+}
+
+.timerTextSmall {
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
 
 .mobileBar {
   display: block;
@@ -192,7 +272,44 @@
   text-transform: none !important;
 }
 
+.mobileStorefrontIcon {
+  font-size: 18px !important;
+  color: var(--app-primary) !important;
+}
+
+.mobileSummaryText {
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text) !important;
+}
+
+.mobileArrowIcon {
+  font-size: 18px !important;
+  color: var(--app-muted) !important;
+}
+
+.mobileToPayLabel {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: var(--app-muted) !important;
+  text-transform: uppercase !important;
+  margin-top: 2px !important;
+}
+
+.mobileToPayAmount {
+  font-size: 0.875rem !important;
+  font-weight: 900 !important;
+  color: var(--app-primary) !important;
+}
+
+.mobileSummaryCollapse {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1.25rem;
+}
+
 .form {
+
   width: 100%;
 }
 
@@ -226,13 +343,111 @@
 
 .submitBtnDesktop {
   border-radius: 0.75rem !important;
-  font-weight: 700 !important;
+  font-weight: 900 !important;
   padding: 1rem !important;
   font-size: 0.875rem !important;
   text-transform: none !important;
   background-color: var(--app-primary, #18181b) !important;
   color: var(--app-primary-contrast, #ffffff) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 8px 16px -4px var(--app-primary-soft) !important;
+}
+
+.submitBtnDesktop:hover {
+  box-shadow: 0 12px 20px -4px var(--app-primary-soft) !important;
+}
+
+.submitBtnDesktop:disabled {
+  opacity: 0.5 !important;
+}
+
+.paymentErrorIcon {
+  color: #ef4444 !important;
+  font-size: 18px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+}
+
+.paymentErrorTitle {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #dc2626 !important;
+  line-height: 1.4 !important;
+}
+
+.paymentErrorSub {
+  font-size: 10px !important;
+  color: #f87171 !important;
+  margin-top: 4px !important;
+}
+
+.secureIcon {
+  color: var(--app-primary) !important;
+  font-size: 18px !important;
+}
+
+.secureTitle {
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  color: var(--app-text) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.secureSub {
+  font-size: 10px !important;
+  color: var(--app-muted) !important;
+}
+
+.desktopBtnWrapper {
+  margin-top: 2rem;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .desktopBtnWrapper {
+    display: block;
+  }
+}
+
+.securityNoteStack {
+  margin-top: 0.75rem !important;
+  opacity: 0.6 !important;
+}
+
+.lockSmallIcon {
+  font-size: 10px !important;
+  color: var(--app-muted) !important;
+}
+
+.lockSmallText {
+  font-size: 10px !important;
+  color: var(--app-muted) !important;
+  font-weight: 500 !important;
+}
+
+.mobileTotalLabel {
+  font-size: 9px !important;
+  color: var(--app-muted) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+.mobileTotalPrice {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: var(--app-primary) !important;
+  line-height: 1 !important;
+  margin-top: 4px !important;
+}
+
+.mobileSubmitBtn {
+  border-radius: 9999px !important;
+  font-weight: 900 !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  height: 44px !important;
+  text-transform: none !important;
+  box-shadow: 0 4px 12px var(--app-primary-soft) !important;
 }
 
 .mobileStickyFooter {
@@ -251,8 +466,9 @@
   gap: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .mobileStickyFooter {
     display: none;
   }
 }
+

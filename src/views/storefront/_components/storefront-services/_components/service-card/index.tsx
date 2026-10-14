@@ -252,7 +252,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
               }}
             >
               {addingItemIds.includes(service.uuid) && (
-                <CircularProgress size={12} color="inherit" sx={{ mr: { xs: 0.5, sm: 0.75 } }} />
+                <CircularProgress size={12} color="inherit" className={styles.bookSpinner} />
               )}
               {addingItemIds.includes(service.uuid)
                 ? (parentAdded ? "Removing..." : "Adding...")
@@ -296,12 +296,12 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                       </Avatar>
                     )}
 
-                    <Box sx={{ minWidth: 0 }}>
+                    <Box className={styles.subServiceDetailsCol}>
                       <Box className={styles.subServiceTitle}>{sub.name}</Box>
                       <Box className={styles.subServiceDesc}>
                         {sub.description}
                       </Box>
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 0.5 }}>
+                      <Box className={styles.subServiceChipsRow}>
                         {subGender && (
                           <Chip
                             size="small"
@@ -325,14 +325,14 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                       className={`${styles.subBookButton} ${subAdded ? styles.subBookButtonAdded : ""}`}
                       onClick={() => {
                         if (subAdded) {
-                          handleRemove(sub.uuid);
+                           handleRemove(sub.uuid);
                         } else {
                           onBook(sub);
                         }
                       }}
                     >
                       {addingItemIds.includes(sub.uuid) && (
-                        <CircularProgress size={10} color="inherit" sx={{ mr: 0.5 }} />
+                        <CircularProgress size={10} color="inherit" className={styles.subBookSpinner} />
                       )}
                       {addingItemIds.includes(sub.uuid)
                         ? (subAdded ? "Removing..." : "Adding...")

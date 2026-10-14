@@ -92,24 +92,24 @@ export default function StorefrontPage() {
     return (
       <Box className={styles.pageContainer}>
         <Box className={styles.loadingHeader}>
-          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <Skeleton variant="rounded" width={40} height={40} style={{ borderRadius: "0.75rem" }} />
+          <Box className={styles.loadingHeaderGroup}>
+            <Skeleton variant="rounded" width={40} height={40} className={styles.skeletonRoundedSm} />
             <Skeleton variant="text" width={140} height={24} />
           </Box>
-          <Box style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <Skeleton variant="rounded" width={80} height={36} style={{ borderRadius: "0.75rem" }} />
+          <Box className={styles.loadingHeaderGroup}>
+            <Skeleton variant="rounded" width={80} height={36} className={styles.skeletonRoundedSm} />
             <Skeleton variant="circular" width={36} height={36} />
           </Box>
         </Box>
 
         <Box className={styles.loadingMain}>
-          <Skeleton variant="rounded" height={220} style={{ borderRadius: "0.75rem" }} />
+          <Skeleton variant="rounded" height={220} className={styles.skeletonRoundedSm} />
           <Box className={styles.loadingCardsGrid}>
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
-            <Skeleton variant="rounded" height={140} style={{ borderRadius: "1rem" }} />
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
+            <Skeleton variant="rounded" height={140} className={styles.skeletonRoundedLg} />
           </Box>
-          <Skeleton variant="rounded" height={360} style={{ borderRadius: "0.75rem" }} />
+          <Skeleton variant="rounded" height={360} className={styles.skeletonRoundedSm} />
         </Box>
       </Box>
     );
@@ -119,7 +119,7 @@ export default function StorefrontPage() {
     return (
       <Box className={styles.errorContainer}>
         <Box className={styles.errorIconBox}>
-          <StorefrontIcon style={{ fontSize: "36px", color: "var(--app-muted)" }} />
+          <StorefrontIcon className={styles.errorIcon} />
         </Box>
         <Typography className={styles.errorTitle}>
           Salon Not Found
@@ -132,7 +132,7 @@ export default function StorefrontPage() {
           onClick={() => {
             window.location.href = "/?salon=glow";
           }}
-          startIcon={<ArrowBackIcon style={{ fontSize: "16px" }} />}
+          startIcon={<ArrowBackIcon />}
           className={styles.errorBtn}
         >
           Go to Glow Salon
@@ -158,7 +158,7 @@ export default function StorefrontPage() {
         )}
 
         {activeTab === "specialists" && (
-          <Box style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <Box className={styles.specialistsContainer}>
             <Box className={styles.specialistsCard}>
               <StorefrontStaff staff={salon?.staff || []} salonId={salon?.uuid} />
             </Box>

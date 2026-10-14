@@ -35,7 +35,7 @@ export default function LogoutButton({ collapsed = false }: Readonly<LogoutButto
 
   return (
     <Button
-      startIcon={<LogoutOutlinedIcon sx={{ color: "error.main" }} />}
+      startIcon={<LogoutOutlinedIcon />}
       onClick={handleLogout}
       variant="outlined"
       color="error"

@@ -21,7 +21,7 @@ export default function StorefrontFooter() {
               {salon?.logo ? (
                 <div className={styles.logoWrapper}>
                   <Image
-                    style={{ objectFit: "cover", borderRadius: "9999px" }}
+                    className={styles.logoImg}
                     src={salon.logo}
                     alt={salonName}
                     fill

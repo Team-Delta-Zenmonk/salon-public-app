@@ -71,19 +71,6 @@ const BookingSuccess: React.FC = () => {
     [booking?.booking_date],
   );
 
-  const CONFETTI_ITEMS = useMemo(
-    () =>
-      Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        left: `${(i / 20) * 100}%`,
-        animationDelay: `${((i * 13) % 50) / 10}s`,
-        backgroundColor: ["#10b981", "#fbbf24", "#3b82f6", "#f472b6"][i % 4],
-        width: `${((i * 7) % 10) + 5}px`,
-        height: `${((i * 7) % 10) + 5}px`,
-        borderRadius: i % 2 === 0 ? "50%" : "2px",
-      })),
-    []
-  );
 
   const timeStr = useMemo(() => {
     if (booking?.booking_start_time && booking?.booking_end_time) {
@@ -97,7 +84,7 @@ const BookingSuccess: React.FC = () => {
       <Box className={styles.successPage}>
         <Container maxWidth="xs" className={styles.container}>
           <Box className={styles.loadingWrapper}>
-            <CircularProgress sx={{ color: "var(--app-primary)" }} size={44} thickness={4} />
+            <CircularProgress className={styles.loadingSpinner} size={44} thickness={4} />
             <Box>
               <Typography className={styles.loadingTitle}>
                 Confirming Your Booking...
@@ -115,18 +102,10 @@ const BookingSuccess: React.FC = () => {
   return (
     <Box className={styles.successPage}>
       <Box className={styles.confettiOverlay}>
-        {CONFETTI_ITEMS.map((item) => (
+        {Array.from({ length: 20 }, (_, i) => (
           <div
-            key={item.id}
-            className={styles.confetti}
-            style={{
-              left: item.left,
-              animationDelay: item.animationDelay,
-              backgroundColor: item.backgroundColor,
-              width: item.width,
-              height: item.height,
-              borderRadius: item.borderRadius,
-            }}
+            key={i}
+            className={`${styles.confetti} ${styles[`confetti${i}` as keyof typeof styles]}`}
           />
         ))}
       </Box>
@@ -143,8 +122,7 @@ const BookingSuccess: React.FC = () => {
                 </Box>
                 <Box className={`${styles.animateSuccessRing} ${styles.ringAbs}`} />
                 <Box
-                  className={`${styles.animateSuccessRing} ${styles.ringAbs}`}
-                  style={{ animationDelay: "0.7s" }}
+                  className={`${styles.animateSuccessRing} ${styles.ringAbs} ${styles.ringAbsDelayed}`}
                 />
               </Box>
 
@@ -156,20 +134,12 @@ const BookingSuccess: React.FC = () => {
               </Typography>
             </Box>
 
-            <Divider sx={{ borderColor: "var(--app-border)", opacity: 0.5 }} />
+            <Divider className={styles.cardDivider} />
 
             <Box className={styles.salonRow}>
               <Avatar
                 src={displaySalon?.logo}
-                sx={{
-                  width: 44,
-                  height: 44,
-                  bgcolor: "var(--app-surface-alt)",
-                  border: "1.5px solid var(--app-border)",
-                  color: "var(--app-text)",
-                  fontWeight: 700,
-                  flexShrink: 0,
-                }}
+                className={styles.salonAvatar}
               >
                 {displaySalon?.name?.charAt(0) || "S"}
               </Avatar>
@@ -178,7 +148,7 @@ const BookingSuccess: React.FC = () => {
                   {displaySalon?.name || "Salon App"}
                 </Typography>
                 <Box className={styles.addressRow}>
-                  <LocationOnIcon sx={{ fontSize: 13, color: "var(--app-primary)", mt: "1px" }} />
+                  <LocationOnIcon className={styles.locationIcon} />
                   <Typography className={styles.addressText}>
                     {displaySalon?.address || "Address in booking history"}
                   </Typography>
@@ -187,7 +157,7 @@ const BookingSuccess: React.FC = () => {
             </Box>
 
             <Box className={styles.dividerPad}>
-              <Divider sx={{ borderColor: "var(--app-border)", opacity: 0.4 }} />
+              <Divider className={styles.cardDividerLight} />
             </Box>
 
             <Box className={styles.dateTimeGrid}>
@@ -195,7 +165,7 @@ const BookingSuccess: React.FC = () => {
                 <Typography className={styles.gridLabel}>Appointment</Typography>
                 <Typography className={styles.gridValue}>{dateStr}</Typography>
               </Box>
-              <Box sx={{ textAlign: "right" }}>
+              <Box className={styles.timingCol}>
                 <Typography className={styles.gridLabel}>Timing</Typography>
                 <Typography className={styles.gridValue}>{timeStr}</Typography>
               </Box>
@@ -203,7 +173,7 @@ const BookingSuccess: React.FC = () => {
 
             <Box className={styles.infoPad}>
               <Box className={styles.infoBox}>
-                <InfoOutlinedIcon sx={{ fontSize: 18, color: "var(--app-primary)", mt: "2px" }} />
+                <InfoOutlinedIcon className={styles.infoIcon} />
                 <Typography className={styles.infoText}>
                   Please arrive 10 mins early. Manage your booking in profile.
                 </Typography>
@@ -214,14 +184,14 @@ const BookingSuccess: React.FC = () => {
               <Box className={styles.paymentRow}>
                 <Typography className={styles.paymentLabel}>Amount Paid Online</Typography>
                 <Typography className={styles.paymentAmountOnline}>
-                  <CurrencyRupeeIcon sx={{ fontSize: 14, marginRight: "-2px" }} />
+                  <CurrencyRupeeIcon className={styles.rupeeIcon} />
                   {booking.amount_paid_online ?? booking.deposit_amount ?? 0}
                 </Typography>
               </Box>
               <Box className={styles.paymentRow}>
                 <Typography className={styles.paymentLabel}>To Pay at Venue</Typography>
                 <Typography className={styles.paymentAmountVenue}>
-                  <CurrencyRupeeIcon sx={{ fontSize: 14, marginRight: "-2px" }} />
+                  <CurrencyRupeeIcon className={styles.rupeeIcon} />
                   {booking.total_price - (booking.amount_paid_online ?? booking.deposit_amount ?? 0)}
                 </Typography>
               </Box>
@@ -234,19 +204,7 @@ const BookingSuccess: React.FC = () => {
               variant="contained"
               size="large"
               onClick={() => handleNavigateAway("/bookings")}
-              sx={{
-                borderRadius: "1rem",
-                py: 1.75,
-                fontWeight: 900,
-                fontSize: 14,
-                textTransform: "none",
-                bgcolor: "var(--app-primary)",
-                color: "var(--app-primary-contrast)",
-                "&:hover": {
-                  bgcolor: "var(--app-primary-hover, var(--app-primary))",
-                  filter: "brightness(0.92)",
-                },
-              }}
+              className={styles.viewBookingsBtn}
             >
               View My Bookings
             </Button>
@@ -255,23 +213,7 @@ const BookingSuccess: React.FC = () => {
               variant="outlined"
               size="large"
               onClick={() => handleNavigateAway("/")}
-              sx={{
-                borderRadius: "1rem",
-                py: 1.75,
-                fontWeight: 800,
-                fontSize: 14,
-                textTransform: "none",
-                borderWidth: 2,
-                borderColor: "var(--app-border)",
-                color: "var(--app-text)",
-                bgcolor: "var(--app-surface)",
-                "&:hover": {
-                  bgcolor: "var(--app-surface-alt)",
-                  borderColor: "var(--app-primary)",
-                  transform: "translateY(-2px)",
-                },
-                transition: "all 0.2s",
-              }}
+              className={styles.backStorefrontBtn}
             >
               Back to Salon Storefront
             </Button>

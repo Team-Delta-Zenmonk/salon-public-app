@@ -13,6 +13,13 @@
   padding: 0;
 }
 
+.bottomNav :global(.MuiBottomNavigationAction-root) {
+  min-width: 0 !important;
+  max-width: none !important;
+  flex: 1 !important;
+  padding: 6px 0 !important;
+}
+
 .actionItem {
   display: flex;
   flex-direction: column;

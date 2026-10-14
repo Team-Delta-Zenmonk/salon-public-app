@@ -10,6 +10,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ShieldMoonIcon from "@mui/icons-material/ShieldMoon";
 import LockIcon from "@mui/icons-material/Lock";
 import { buildStorefrontUrl } from "../../../../common/storefront-slug.utils";
+import styles from "../checkout-components.module.css";
 
 interface PaymentFormProps {
   booking: any;
@@ -92,114 +93,65 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-      <Box sx={{ py: 1 }}>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <Box className={styles.elementWrapper}>
         <PaymentElement
           options={{ layout: "tabs", paymentMethodOrder: ["upi", "card"] }}
         />
       </Box>
 
       {paymentError && (
-        <Box
-          sx={{
-            mt: 2,
-            p: 2,
-            borderRadius: "0.75rem",
-            backgroundColor: isDark ? "rgba(239,68,68,0.1)" : "rgba(254,242,242,1)",
-            border: `1px solid ${isDark ? "rgba(239,68,68,0.2)" : "rgba(254,202,202,1)"}`,
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 1.5,
-          }}
-        >
-          <ErrorOutlineIcon sx={{ color: "#ef4444", fontSize: 18, flexShrink: 0, mt: "2px" }} />
+        <Box className={styles.errorBox}>
+          <ErrorOutlineIcon className={styles.paymentErrorIcon} />
           <Box>
-            <Typography sx={{ fontSize: 12, fontWeight: 700, color: isDark ? "#f87171" : "#dc2626", lineHeight: 1.4 }}>
+            <Typography className={styles.paymentErrorTitle}>
               {paymentError}
             </Typography>
-            <Typography sx={{ fontSize: 10, color: isDark ? "rgba(248,113,113,0.7)" : "#f87171", mt: "4px" }}>
+            <Typography className={styles.paymentErrorSub}>
               Your booking is still reserved. Try again.
             </Typography>
           </Box>
         </Box>
       )}
 
-      <Box
-        sx={{
-          mt: 2,
-          p: 2,
-          borderRadius: "0.75rem",
-          border: "1px dashed var(--color-hairline)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 1.5,
-          backgroundColor: isDark ? "rgba(255,255,255,0.03)" : "rgba(249,250,251,0.5)",
-        }}
-      >
-        <ShieldMoonIcon sx={{ color: "var(--color-primary)", fontSize: 18 }} />
+      <Box className={styles.secureNotice}>
+        <ShieldMoonIcon className={styles.secureIcon} />
         <Box>
-          <Typography sx={{ fontSize: 11, fontWeight: 900, color: "var(--color-on-surface)", letterSpacing: "-0.01em" }}>
+          <Typography className={styles.secureTitle}>
             100% Secure Transaction
           </Typography>
-          <Typography sx={{ fontSize: 10, color: "var(--color-tertiary)" }}>
+          <Typography className={styles.secureSub}>
             End-to-end encrypted • Stripe
           </Typography>
         </Box>
       </Box>
 
-      <Box sx={{ mt: 4, display: { xs: "none", md: "block" } }}>
+      <Box className={styles.desktopBtnWrapper}>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           disabled={!stripe || processing || isExpired}
-          sx={{
-            borderRadius: "0.75rem",
-            fontWeight: 900,
-            py: 2,
-            fontSize: "0.875rem",
-            textTransform: "none",
-            boxShadow: "0 8px 16px -4px var(--app-primary-soft)",
-            "&:hover": { boxShadow: "0 12px 20px -4px var(--app-primary-soft)" },
-            "&:disabled": { opacity: 0.5 },
-          }}
+          className={styles.submitBtnDesktop}
         >
           <DesktopButtonLabel processing={processing} isExpired={isExpired} totalPrice={totalPrice} />
         </Button>
         {!isExpired && !processing && (
-          <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center" sx={{ mt: 1.5, opacity: 0.6 }}>
-            <LockIcon sx={{ fontSize: 10, color: "var(--color-tertiary)" }} />
-            <Typography sx={{ fontSize: 10, color: "var(--color-tertiary)", fontWeight: 500 }}>
+          <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center" className={styles.securityNoteStack}>
+            <LockIcon className={styles.lockSmallIcon} />
+            <Typography className={styles.lockSmallText}>
               Payments are processed securely
             </Typography>
           </Stack>
         )}
       </Box>
 
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: "rgba(var(--bg-surface-rgb, 255,255,255), 0.8)",
-          backdropFilter: "blur(20px)",
-          p: 2,
-          px: 3,
-          borderTop: "1px solid var(--color-hairline)",
-          zIndex: 1000,
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
+      <Box className={styles.mobileStickyFooter}>
         <Box>
-          <Typography sx={{ fontSize: 9, color: "var(--color-tertiary)", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+          <Typography className={styles.mobileTotalLabel}>
             Total Amount
           </Typography>
-          <Typography sx={{ fontSize: 18, fontWeight: 900, color: "var(--color-primary)", lineHeight: 1, mt: "4px" }}>
+          <Typography className={styles.mobileTotalPrice}>
             ₹{totalPrice}
           </Typography>
         </Box>
@@ -207,14 +159,7 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
           type="submit"
           variant="contained"
           disabled={!stripe || processing || isExpired}
-          sx={{
-            borderRadius: "9999px",
-            fontWeight: 900,
-            px: 4,
-            height: 44,
-            textTransform: "none",
-            boxShadow: "0 4px 12px var(--app-primary-soft)",
-          }}
+          className={styles.mobileSubmitBtn}
         >
           <MobileButtonLabel processing={processing} isExpired={isExpired} />
         </Button>

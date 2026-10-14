@@ -3,10 +3,14 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--app-surface);
-  border-radius: var(--app-radius, 4px);
+  border-radius: var(--card-border-radius, 22px);
   overflow: hidden;
   transition: all 300ms ease;
   border: 1px solid var(--app-border);
+  width: 100%;
+  max-width: var(--card-max-width, 420px);
+  max-height: var(--service-card-max-height, 720px);
+  box-sizing: border-box;
 }
 
 .card:hover {
@@ -109,11 +113,18 @@
 }
 
 .bodyContent {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 0.5rem 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.cardActionsContainer {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .headerInfo {
@@ -393,6 +404,10 @@
   color: var(--app-text);
 }
 
+.footerOptionsBtn svg {
+  font-size: 16px !important;
+}
+
 @media (min-width: 640px) {
   .footerOptionsBtn {
     width: auto;
@@ -414,7 +429,7 @@
 .footerOptionsCount {
   margin-left: 0.25rem;
   padding: 0.125rem 0.375rem;
-  border-radius: 2px;
+  border-radius: 9999px;
   background-color: var(--app-primary);
   color: var(--app-primary-contrast, var(--app-surface));
   font-size: 10px;
@@ -427,7 +442,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  border-radius: var(--app-radius, 4px);
+  border-radius: var(--app-btn-radius, 9999px);
   font-family: var(--app-font-family, sans-serif);
   font-size: 0.75rem;
   font-weight: 600;
@@ -438,6 +453,10 @@
   border: 0;
   width: 100%;
   flex-shrink: 0;
+}
+
+.footerReserveBtn svg {
+  font-size: 18px !important;
 }
 
 @media (min-width: 640px) {
@@ -504,3 +523,352 @@
     transform: rotate(360deg);
   }
 }
+
+.designPickerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--app-surface-alt);
+  border-bottom: 1px solid var(--app-border);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  z-index: 20;
+}
+
+.designPickerLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--app-primary);
+  text-transform: uppercase;
+}
+
+.designPickerBtns {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.designBtn {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--app-radius, 4px);
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  color: var(--app-muted);
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.designBtn:hover {
+  color: var(--app-text);
+  border-color: var(--app-primary);
+}
+
+.designBtnActive {
+  background: var(--app-primary) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+  border-color: var(--app-primary) !important;
+}
+
+.editorialCard {
+  border-radius: var(--card-border-radius, 22px);
+  background: var(--app-surface);
+}
+
+.editorialServiceWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.editorialHeaderArea {
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.editorialBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.editorialMonogram {
+  font-family: var(--app-font-serif, serif);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  color: var(--app-primary);
+  text-transform: uppercase;
+}
+
+.editorialTitlePriceRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.editorialTitle {
+  font-family: var(--app-font-serif, serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--app-text);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.editorialPriceTag {
+  font-family: var(--app-font-serif, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--app-primary);
+  white-space: nowrap;
+}
+
+.editorialPhotoStrip {
+  position: relative;
+  width: calc(100% - 3rem);
+  height: 9rem;
+  margin: 0 auto;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+}
+
+.editorialGenderTag {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.genderChipHighlight {
+  background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
+  border-color: var(--app-primary) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+}
+
+.editorialMetaTags {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.archVaultCard {
+  border-radius: var(--card-border-radius, 22px);
+  padding: 0.85rem 0.85rem 0.85rem 0.85rem;
+  height: auto;
+}
+
+.archVaultCard .cardActionsContainer {
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+  gap: 0.5rem;
+}
+
+.archVaultServiceWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.archVaultWindowFrame {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  height: 11.5rem;
+  border-radius: 125px 125px 10px 10px;
+  overflow: hidden;
+  border: 2px solid var(--app-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+}
+
+.archVaultImageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.archVaultPricePill {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--app-primary);
+  color: var(--app-primary-contrast, #ffffff);
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  font-family: var(--app-font-serif, serif);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.archVaultServiceDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.archVaultServiceTitle {
+  font-family: var(--app-font-serif, serif);
+  font-size: 1.15rem;
+  color: var(--app-text);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  text-transform: capitalize;
+  margin: 0.15rem 0 0 0;
+  text-align: center;
+}
+
+.archVaultDescriptionBox {
+  margin-top: 0.1rem;
+  max-width: 90%;
+  text-align: center;
+}
+
+.archVaultBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.floatingGlassCard {
+  border-radius: var(--card-border-radius, 22px);
+  padding: 0.85rem;
+}
+
+.floatingGlassServiceWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.floatingGlassSplitHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem;
+}
+
+.floatingGlassThumbnail {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1.5px solid var(--app-primary);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.floatingGlassDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.glassBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.glassPricePill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--app-primary);
+  color: var(--app-primary-contrast, #ffffff);
+  font-family: var(--app-font-serif, serif);
+  font-size: 0.875rem;
+  font-weight: 700;
+  width: fit-content;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.floatingGlassCard .chipTag {
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.floatingGlassCard .badgeBottomRight {
+  border-radius: 9999px;
+  bottom: 0.75rem;
+  right: 0.75rem;
+}
+
+.themeCrimsonShear {
+  border: 1px solid var(--app-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.themeCrimsonShear:hover {
+  transform: translateY(-4px);
+  border-color: var(--app-primary);
+  box-shadow: 0 16px 36px rgba(28, 26, 23, 0.1);
+}
+
+.themeObsidianFlame {
+  border: 1px solid rgba(243, 198, 119, 0.35);
+  background: linear-gradient(180deg, #141018 0%, #0c0a0d 100%);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(243, 198, 119, 0.15);
+}
+
+.themeObsidianFlame:hover {
+  transform: translateY(-4px);
+  border-color: var(--app-primary);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 24px rgba(243, 198, 119, 0.3);
+}
+
+.themeObsidianFlame .serviceTitle {
+  color: #f7f5f0;
+}
+
+.themeLightGothic {
+  border: 1px solid rgba(122, 28, 40, 0.18);
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(122, 28, 40, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.themeLightGothic:hover {
+  transform: translateY(-4px);
+  border-color: var(--app-primary);
+  box-shadow: 0 20px 42px rgba(122, 28, 40, 0.14);
+}
+
+

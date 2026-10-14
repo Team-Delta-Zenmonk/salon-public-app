@@ -35,7 +35,7 @@ const CheckboxGroup = <T extends FieldValues>({
         return (
           <FormGroup
             row={row ?? undefined}
-            style={{ gap: optionGap ?? 1 }}
+            className={styles.formGroupGap}
             onChange={(e) => handleChange(e, onChange, storedValue)}
           >
             {options.map(({ label, value, disabled }) => (

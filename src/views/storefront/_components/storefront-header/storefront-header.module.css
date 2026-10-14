@@ -359,3 +359,78 @@
   flex-direction: column;
   gap: 0.625rem;
 }
+
+.themeOptionLabel {
+  color: var(--app-text);
+}
+
+.themeCheckIcon {
+  color: var(--app-primary) !important;
+  font-size: 15px !important;
+}
+
+.userMenuName {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: var(--app-text) !important;
+}
+
+.userMenuEmail {
+  font-size: 10px !important;
+  color: var(--app-muted) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.userMenuItemIcon {
+  font-size: 16px !important;
+  color: var(--app-muted) !important;
+}
+
+.userMenuSignoutIcon {
+  font-size: 16px !important;
+}
+
+.drawerSalonInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.drawerSalonAvatar {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  border-radius: 0.75rem !important;
+  background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast) !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+}
+
+.drawerSalonName {
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  color: var(--app-text) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.drawerCloseIcon {
+  font-size: 18px !important;
+}
+
+.drawerBookingsBtn {
+  border-radius: 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+}
+
+.drawerSignoutBtn {
+  border-radius: 0.75rem !important;
+  color: #ef4444 !important;
+  font-weight: 700 !important;
+}
+

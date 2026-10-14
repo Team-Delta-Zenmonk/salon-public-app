@@ -67,7 +67,7 @@ export default function SwitchCartDialog({
           Cancel
         </Button>
         <Button onClick={onConfirm} variant="contained" color="primary" disabled={loading}>
-          {loading ? <CircularProgress size={16} sx={{ color: "white", mr: 1 }} /> : <span className={styles.arrowIcon}>➜</span>}
+          {loading ? <CircularProgress size={16} className={styles.dialogSpinner} /> : <span className={styles.arrowIcon}>➜</span>}
           {loading ? "Switching..." : "Switch & Add Service"}
         </Button>
       </DialogActions>

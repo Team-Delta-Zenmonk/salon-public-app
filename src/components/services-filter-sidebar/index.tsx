@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import clsx from "clsx";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import styles from "./services-filter-sidebar.module.css";
 
 export interface CategorySanctuary {
@@ -47,9 +50,7 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
             SEARCH RITUALS
           </label>
           <div className={styles.searchWrapper}>
-            <span className={`material-symbols-outlined ${styles.searchIcon}`}>
-              search
-            </span>
+            <SearchIcon className={styles.searchIcon} />
             <input
               id="service-search-input"
               type="text"
@@ -65,7 +66,7 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
                 className={styles.clearBtn}
                 aria-label="Clear search"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>close</span>
+                <CloseIcon />
               </button>
             )}
           </div>
@@ -73,7 +74,7 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
 
         <div>
           <div className={styles.headerRow}>
-            <span className={styles.labelCaps} style={{ marginBottom: 0 }}>
+            <span className={clsx(styles.labelCaps, styles.labelCapsNoMargin)}>
               SERVICE SANCTUARIES
             </span>
             {(selectedCategory !== "all" || searchQuery || selectedGender !== "all") && (
@@ -146,7 +147,7 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
 
       <div className={styles.promoCard}>
         <div className={styles.promoTitle}>
-          <span className="material-symbols-outlined" style={{ fontSize: "18px" }}>auto_awesome</span>
+          <AutoAwesomeIcon />
           <span>BESPOKE CONSULTATION</span>
         </div>
         <p className={styles.promoText}>

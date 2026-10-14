@@ -37,9 +37,9 @@ export default function ConfirmStaffDialog({
         <Box className={styles.header}>
           <Box className={styles.iconRow}>
             {isChange ? (
-              <SwapHorizIcon sx={{ color: "var(--color-primary)", fontSize: 28 }} />
+              <SwapHorizIcon className={styles.headerIcon} />
             ) : (
-              <PersonAddAltIcon sx={{ color: "var(--color-primary)", fontSize: 28 }} />
+              <PersonAddAltIcon className={styles.headerIcon} />
             )}
           </Box>
           <Typography className={styles.title}>
@@ -62,8 +62,8 @@ export default function ConfirmStaffDialog({
                 </Avatar>
                 <EllipsisCell value={currentStaff?.name} className={styles.nameText} maxChars={10} />
               </Box>
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <SwapHorizIcon sx={{ fontSize: 22, color: "var(--app-muted)" }} />
+              <Box className={styles.swapIndicator}>
+                <SwapHorizIcon className={styles.swapIndicatorIcon} />
               </Box>
               <Box className={styles.staffCol}>
                 <Typography className={styles.label}>New</Typography>
@@ -120,7 +120,7 @@ export default function ConfirmStaffDialog({
             disabled={loading}
             className={styles.confirmBtn}
           >
-            {loading ? <CircularProgress size={16} sx={{ color: "white", mr: 1 }} /> : null}
+            {loading ? <CircularProgress size={16} className={styles.loadingProgress} /> : null}
             {loading
               ? isChange ? "Changing..." : "Assigning..."
               : isChange ? "Change" : "Assign"}

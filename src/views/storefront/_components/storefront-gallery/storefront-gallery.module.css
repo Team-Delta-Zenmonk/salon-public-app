@@ -246,3 +246,50 @@
   justify-content: center;
   margin-bottom: 0.5rem;
 }
+
+.thumbnailOverlayIcon {
+  color: #ffffff !important;
+  font-size: 1.125rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.thumbnailOverlayText {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+}
+
+.galleryBadgeText {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+@media (min-width: 640px) {
+  .galleryBadgeText {
+    font-size: 1rem !important;
+  }
+}
+
+.seeAllIcon {
+  color: var(--app-hero-from, var(--app-primary)) !important;
+}
+
+.seeAllCount {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.125rem !important;
+}
+
+.seeAllText {
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+@media (min-width: 640px) {
+  .seeAllText {
+    font-size: 0.875rem !important;
+  }
+}
+

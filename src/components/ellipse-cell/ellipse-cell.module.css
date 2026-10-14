@@ -1,5 +1,7 @@
 .tooltip {
   position: fixed;
+  top: var(--tooltip-top, 0);
+  left: var(--tooltip-left, 0);
   z-index: 99999;
   padding: 0.375rem 0.75rem;
   background-color: #171717;
@@ -79,3 +81,25 @@
 .capitalize {
   text-transform: capitalize;
 }
+
+.multiLine2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-word;
+}
+
+.multiLine3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  word-break: break-word;
+}
+
+.multiLine4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  word-break: break-word;
+}
+

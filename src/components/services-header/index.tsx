@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 import EllipsisCell from "@/components/ellipse-cell";
 import styles from "./services-header.module.css";
 
@@ -54,12 +55,12 @@ export const ServicesHeader: React.FC<ServicesHeaderProps> = ({
           <div className={styles.cardLeft}>
             <div className={styles.logoBox}>
               {salon?.logo ? (
-                <img src={salon.logo} alt={salonName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img src={salon.logo} alt={salonName} className={styles.logoImg} />
               ) : (
-                <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>storefront</span>
+                <StorefrontIcon className={styles.logoIcon} />
               )}
             </div>
-            <div style={{ minWidth: 0 }}>
+            <div className={styles.cardText}>
               <div className={styles.activeLabel}>
                 ACTIVE SANCTUARY
               </div>

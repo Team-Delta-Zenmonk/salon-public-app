@@ -42,7 +42,7 @@ export default function NotFoundPage() {
 
         <Box className={styles.iconWrapper}>
           <Box className={styles.iconBox}>
-            <SearchOffIcon style={{ fontSize: 42 }} />
+            <SearchOffIcon />
           </Box>
         </Box>
 
@@ -93,7 +93,7 @@ export default function NotFoundPage() {
             href={servicesPath}
             className={styles.serviceLink}
           >
-            <ContentCutIcon style={{ fontSize: 16 }} />
+            <ContentCutIcon />
             <span>Explore Salon Services</span>
           </Link>
         </Box>

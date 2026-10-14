@@ -53,6 +53,10 @@
   min-width: 0;
 }
 
+.minWidth0 {
+  min-width: 0;
+}
+
 .salonAvatar {
   width: 3rem !important;
   height: 3rem !important;
@@ -90,6 +94,42 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border: 1px solid transparent;
+}
+
+.statusConfirmed {
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.statusPending {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.statusCompleted {
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.25);
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.statusCancelled {
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.25);
+  background-color: rgba(244, 63, 94, 0.1);
+}
+
+.statusExpired {
+  color: #71717a;
+  border-color: rgba(113, 113, 122, 0.25);
+  background-color: rgba(113, 113, 122, 0.1);
+}
+
+.detailsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .detailsBox {
@@ -258,7 +298,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border: 1px solid;
+  border: 1px solid transparent;
 }
 
 .desktopBottomRow {

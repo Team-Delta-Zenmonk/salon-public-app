@@ -101,6 +101,10 @@
   transition: all 0.2s ease;
 }
 
+.reserveBtn svg {
+  font-size: 16px !important;
+}
+
 @media (min-width: 768px) {
   .reserveBtn {
     align-self: auto;

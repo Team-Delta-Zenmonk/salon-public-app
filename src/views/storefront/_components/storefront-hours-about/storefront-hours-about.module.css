@@ -324,6 +324,15 @@
   margin-bottom: 0.75rem;
 }
 
+.policyIcon {
+  color: var(--app-primary) !important;
+  font-size: 22px !important;
+}
+
+.amenitySvgIcon {
+  font-size: 18px !important;
+}
+
 .policyList {
   display: flex;
   flex-direction: column;
@@ -344,3 +353,4 @@
   color: var(--app-text);
   flex-shrink: 0;
 }
+
