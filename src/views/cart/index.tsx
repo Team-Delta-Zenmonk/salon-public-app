@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { Box, Typography, Avatar, Skeleton } from "@mui/material";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { Box, Typography, Avatar, Skeleton, CircularProgress } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlaceIcon from "@mui/icons-material/Place";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useAppSelector, useAppDispatch } from "../../store/hook";
 import { formatDuration } from "../../common/date.utils";
 import { calculateTotals } from "../../common/cart.utils";
@@ -34,6 +35,7 @@ export default function Cart() {
   const resumeBooking = searchParams?.get("resumeBooking") === "true";
 
   const [isFetchingCart, setIsFetchingCart] = useState(!loaded && isAuthenticated && !!customer?.uuid);
+  const [visibleItemsCount, setVisibleItemsCount] = useState(10);
   const didPaymentJustComplete = useRef(paymentJustCompleted || getPaymentCompleted());
 
   useEffect(() => {
@@ -178,9 +180,22 @@ export default function Cart() {
 
           <Box className={styles.cartGrid}>
             <Box className={styles.itemList}>
-              {items.map((item: any) => (
-                <CartItem key={item.uuid ?? item.service_id} item={item} />
-              ))}
+              <InfiniteScroll
+                dataLength={items.slice(0, visibleItemsCount).length}
+                next={() => setVisibleItemsCount((prev) => prev + 10)}
+                hasMore={visibleItemsCount < items.length}
+                loader={
+                  <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                    <CircularProgress size={24} />
+                  </Box>
+                }
+              >
+                <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  {items.slice(0, visibleItemsCount).map((item: any) => (
+                    <CartItem key={item.uuid ?? item.service_id} item={item} />
+                  ))}
+                </Box>
+              </InfiniteScroll>
             </Box>
 
             <Box className={styles.summaryCard}>

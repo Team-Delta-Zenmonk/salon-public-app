@@ -77,6 +77,9 @@ export interface CustomerBooking {
   salon: BookingSalon;
   booking_services: BookingService[];
   created_at: string;
+  reschedule_count?: number;
+  remaining_reschedule_count?: number;
+  max_reschedule_attempts?: number;
 }
 
 export interface CustomerBookingsPage {

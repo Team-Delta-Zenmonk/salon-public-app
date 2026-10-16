@@ -1,6 +1,16 @@
 import { axiosInstance } from "../../../config/axios";
 
-export const getStorefrontStaffService = async (slug: string) => {
-  const response = await axiosInstance.get(`/storefront/${slug}/staff`);
+export interface GetStorefrontStaffParams {
+  slug: string;
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export const getStorefrontStaffService = async ({
+  slug,
+  ...params
+}: GetStorefrontStaffParams) => {
+  const response = await axiosInstance.get(`/storefront/${slug}/staff`, { params });
   return response.data;
 };

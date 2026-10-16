@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { BookingStatus } from "../../common/booking.enums";
 import type { CustomerBooking } from "../../common/booking.types";
 import { ConfirmationDialog } from "../../components/dialogs";
+import { RescheduleModal } from "./_components/reschedule-modal";
 import CustomSelect from "@/components/custom-select";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import VerifiedIcon from "@mui/icons-material/Verified";
@@ -30,6 +31,8 @@ export default function Bookings() {
   const [tabValue, setTabValue] = useState(0);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<CustomerBooking | null>(null);
+  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [rescheduleTarget, setRescheduleTarget] = useState<CustomerBooking | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -108,6 +111,29 @@ export default function Bookings() {
     setCancelDialogOpen(true);
   };
 
+  const handleOpenReschedule = (booking: CustomerBooking) => {
+    setRescheduleTarget(booking);
+    setRescheduleModalOpen(true);
+  };
+
+  const handleRescheduleSuccess = async () => {
+    setIsLoading(true);
+    dispatch(resetCustomerBookings());
+    try {
+      await dispatch(
+        getCustomerBookingsAction({
+          page: 1,
+          limit: 10,
+          status: getStatusFromTab(tabValue),
+        })
+      ).unwrap();
+    } catch (err) {
+      console.error("Failed to refresh bookings after reschedule:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleConfirmCancel = async () => {
     if (!selectedBooking) return;
     await handleCancelActiveBooking(selectedBooking.uuid);
@@ -153,6 +179,7 @@ export default function Bookings() {
               booking={booking}
               onPayNow={handlePayNow}
               onCancel={handleOpenCancelDialog}
+              onReschedule={handleOpenReschedule}
               onDownloadInvoice={handleDownloadInvoice}
               downloadingUuid={downloadingUuid}
               disabled={isProcessing}
@@ -276,6 +303,16 @@ export default function Bookings() {
             loading={isCancelling}
             onConfirm={handleConfirmCancel}
             onClose={() => setCancelDialogOpen(false)}
+          />
+
+          <RescheduleModal
+            open={rescheduleModalOpen}
+            booking={rescheduleTarget}
+            onClose={() => {
+              setRescheduleModalOpen(false);
+              setRescheduleTarget(null);
+            }}
+            onSuccess={handleRescheduleSuccess}
           />
         </div>
       </main>

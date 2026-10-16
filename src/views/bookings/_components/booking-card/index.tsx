@@ -13,6 +13,7 @@ interface BookingCardProps {
   booking: CustomerBooking;
   onPayNow: (booking: CustomerBooking) => void;
   onCancel?: (booking: CustomerBooking) => void;
+  onReschedule?: (booking: CustomerBooking) => void;
   onDownloadInvoice?: (booking: CustomerBooking) => void;
   downloadingUuid?: string | null;
   disabled?: boolean;
@@ -22,6 +23,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   booking,
   onPayNow,
   onCancel,
+  onReschedule,
   onDownloadInvoice,
   downloadingUuid,
   disabled,
@@ -34,6 +36,15 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 
   const isCancelableTime = isBookingCancelable(booking.booking_start_time);
   const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
+  const maxAttempts = booking.max_reschedule_attempts ?? 2;
+  const rescheduleCount = booking.reschedule_count ?? 0;
+  const remainingReschedules = booking.remaining_reschedule_count ?? Math.max(0, maxAttempts - rescheduleCount);
+  const showReschedule = Boolean(
+    onReschedule &&
+      ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) &&
+      !isBookingPast(booking.booking_start_time) &&
+      remainingReschedules > 0
+  );
 
   const getStatusClassName = () => {
     switch (booking.status) {
@@ -101,7 +112,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             <Typography className={styles.priceText}>₹{booking.total_price}</Typography>
           </Box>
 
-          {(canPay || showCancel || (onDownloadInvoice && booking.status === BookingStatus.CONFIRMED)) && (
+          {(canPay || showCancel || showReschedule || (onDownloadInvoice && booking.status === BookingStatus.CONFIRMED)) && (
             <Box className={styles.actionsRow}>
               {canPay && (
                 <Button
@@ -112,6 +123,17 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                   className={styles.actionBtnItem}
                 >
                   {disabled ? <CircularProgress size={16} color="inherit" /> : "Complete Payment"}
+                </Button>
+              )}
+              {showReschedule && (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={() => onReschedule?.(booking)}
+                  disabled={disabled || !isCancelableTime}
+                  className={styles.actionBtnItem}
+                >
+                  Reschedule
                 </Button>
               )}
               {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
@@ -209,6 +231,15 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             {canPay && (
               <Button variant="contained" onClick={() => onPayNow(booking)} disabled={disabled}>
                 {disabled ? <CircularProgress size={16} color="inherit" /> : "Complete Payment"}
+              </Button>
+            )}
+            {showReschedule && (
+              <Button
+                variant="outlined"
+                onClick={() => onReschedule?.(booking)}
+                disabled={disabled || !isCancelableTime}
+              >
+                Reschedule
               </Button>
             )}
             {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (

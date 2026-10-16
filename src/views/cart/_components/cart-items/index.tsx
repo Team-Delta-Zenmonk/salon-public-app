@@ -10,8 +10,10 @@ import { deleteCartAction } from "../../../../features/salon/cart/delete-cart/de
 import ConfirmRemoveItemDialog from "../remove-item-dialog";
 import { getServiceStaffsAction } from "../../../../features/salon/staff/get-service-staffs/get-service-staffs.action";
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
+import StaffModal from "./_components/staff-modal";
 import { useStorefront } from "../../../../providers/storefront-provider";
 import EllipsisCell from "@/components/ellipse-cell";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./cart-items.module.css";
 
 interface CartItemProps {
@@ -21,9 +23,11 @@ interface CartItemProps {
 interface StaffSelectorProps {
   staffLoading: boolean;
   staffList: any[];
+  totalStaffCount: number;
   selectedStaffId: string | null;
   updating: boolean;
   onStaffClick: (entry: any) => void;
+  onSeeMoreClick: () => void;
 }
 
 const getStaffInfo = (staffEntry?: any, staff?: any) => {
@@ -45,9 +49,11 @@ const getStaffInfo = (staffEntry?: any, staff?: any) => {
 function StaffSelector({
   staffLoading,
   staffList,
+  totalStaffCount,
   selectedStaffId,
   updating,
   onStaffClick,
+  onSeeMoreClick,
 }: Readonly<StaffSelectorProps>) {
   if (staffLoading) {
     return (
@@ -70,16 +76,25 @@ function StaffSelector({
     );
   }
 
+  let displayedStaff = staffList.slice(0, 5);
+  if (selectedStaffId && !displayedStaff.some((entry: any) => entry.staff?.uuid === selectedStaffId)) {
+    const selectedEntry = staffList.find((entry: any) => entry.staff?.uuid === selectedStaffId);
+    if (selectedEntry) {
+      displayedStaff = [selectedEntry, ...displayedStaff.slice(0, 4)];
+    }
+  }
+  const remainingCount = Math.max(0, (totalStaffCount || staffList.length) - displayedStaff.length);
+
   return (
     <Box className={styles.staffGrid}>
-      {staffList.map((entry: any) => {
+      {displayedStaff.map((entry: any, index: number) => {
         const staff = entry.staff;
         const isSelected = selectedStaffId === staff?.uuid;
         const staffName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();
 
         return (
           <Box
-            key={staff?.uuid ?? entry.staff_id}
+            key={entry.uuid || staff?.uuid || `${entry.staff_id}-${index}`}
             onClick={() => !updating && onStaffClick(entry)}
             className={`${styles.staffCard} ${isSelected ? styles.staffCardSelected : ""}`}
           >
@@ -100,6 +115,23 @@ function StaffSelector({
           </Box>
         );
       })}
+
+      {remainingCount > 0 && (
+        <Box
+          onClick={onSeeMoreClick}
+          className={`${styles.staffCard} ${styles.seeMoreCard}`}
+        >
+          <Avatar className={`${styles.staffAvatar} ${styles.seeMoreAvatar}`}>
+            <MoreHorizIcon fontSize="small" />
+          </Avatar>
+          <Typography className={styles.seeMoreText}>
+            +{remainingCount} More
+          </Typography>
+          <Typography className={styles.priceTag}>
+            See all
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }
@@ -115,6 +147,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   const [removing, setRemoving] = useState(false);
   const [pendingStaffEntry, setPendingStaffEntry] = useState<any>(null);
   const [staffDialogOpen, setStaffDialogOpen] = useState(false);
+  const [staffModalOpen, setStaffModalOpen] = useState(false);
 
   const service = item.service;
   const name = service?.name ?? "Ceremony";
@@ -125,24 +158,71 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   const selectedStaffId = item.staff?.uuid ?? item.staff_uuid ?? null;
   const effectiveSalonId = salonId || salon?.uuid || service?.salon_id || item?.salon_id;
 
+  const [staffTotal, setStaffTotal] = useState(0);
+  const [modalStaffList, setModalStaffList] = useState<any[]>([]);
+  const [staffPage, setStaffPage] = useState(1);
+  const [loadingMoreStaff, setLoadingMoreStaff] = useState(false);
+
   useEffect(() => {
     if (!service?.uuid || !effectiveSalonId) return;
     const fetchStaff = async () => {
       setStaffLoading(true);
       try {
-        const data = await dispatch(getServiceStaffsAction({ serviceUuid: service.uuid, salonId: effectiveSalonId })).unwrap();
+        const res = await dispatch(
+          getServiceStaffsAction({
+            serviceUuid: service.uuid,
+            salonId: effectiveSalonId,
+            page: 1,
+            limit: 10,
+          }),
+        ).unwrap();
+        const data = Array.isArray(res) ? res : (res?.data ?? res?.rows ?? []);
+        const total = typeof res?.total === "number" ? res.total : (Array.isArray(data) ? data.length : 0);
+        setStaffTotal(total);
+
         if (Array.isArray(data) && data.length > 0) {
-          setStaffList(data);
+          const seen = new Set();
+          const uniqueData = data.filter((entry: any) => {
+            const id = entry?.staff?.uuid || entry?.staff_id;
+            if (!id || seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          });
+          setStaffList(uniqueData);
+          setModalStaffList(uniqueData);
+          setStaffPage(1);
         } else if (salon?.staff && salon.staff.length > 0) {
-          setStaffList(salon.staff.map((st: any) => ({ staff: st, staff_id: st.uuid || st.id, price, duration: duration || service?.duration })));
+          const fallbackData = salon.staff.map((st: any) => ({
+            staff: st,
+            staff_id: st.uuid || st.id,
+            price,
+            duration: duration || service?.duration,
+          }));
+          setStaffList(fallbackData.slice(0, 10));
+          setModalStaffList(fallbackData.slice(0, 10));
+          setStaffTotal(salon.staff.length);
+          setStaffPage(1);
         } else {
           setStaffList([]);
+          setModalStaffList([]);
+          setStaffTotal(0);
         }
       } catch {
         if (salon?.staff && salon.staff.length > 0) {
-          setStaffList(salon.staff.map((st: any) => ({ staff: st, staff_id: st.uuid || st.id, price, duration: duration || service?.duration })));
+          const fallbackData = salon.staff.map((st: any) => ({
+            staff: st,
+            staff_id: st.uuid || st.id,
+            price,
+            duration: duration || service?.duration,
+          }));
+          setStaffList(fallbackData.slice(0, 10));
+          setModalStaffList(fallbackData.slice(0, 10));
+          setStaffTotal(salon.staff.length);
+          setStaffPage(1);
         } else {
           setStaffList([]);
+          setModalStaffList([]);
+          setStaffTotal(0);
         }
       } finally {
         setStaffLoading(false);
@@ -150,6 +230,60 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     };
     fetchStaff();
   }, [service?.uuid, effectiveSalonId, salon?.staff, dispatch, price, duration, service?.duration]);
+
+  const fetchMoreStaff = async () => {
+    if (loadingMoreStaff || !service?.uuid || !effectiveSalonId) return;
+    const nextPage = staffPage + 1;
+    setLoadingMoreStaff(true);
+    try {
+      const res = await dispatch(
+        getServiceStaffsAction({
+          serviceUuid: service.uuid,
+          salonId: effectiveSalonId,
+          page: nextPage,
+          limit: 10,
+        }),
+      ).unwrap();
+      const data = Array.isArray(res) ? res : (res?.data ?? res?.rows ?? []);
+      if (Array.isArray(data) && data.length > 0) {
+        setModalStaffList((prev) => {
+          const seen = new Set(prev.map((e) => e?.staff?.uuid || e?.staff_id));
+          const additions = data.filter((entry: any) => {
+            const id = entry?.staff?.uuid || entry?.staff_id;
+            return id && !seen.has(id);
+          });
+          return [...prev, ...additions];
+        });
+        setStaffPage(nextPage);
+      } else if (salon?.staff && salon.staff.length > modalStaffList.length) {
+        const nextSlice = salon.staff
+          .slice(modalStaffList.length, modalStaffList.length + 10)
+          .map((st: any) => ({
+            staff: st,
+            staff_id: st.uuid || st.id,
+            price,
+            duration: duration || service?.duration,
+          }));
+        setModalStaffList((prev) => [...prev, ...nextSlice]);
+        setStaffPage(nextPage);
+      }
+    } catch {
+      if (salon?.staff && salon.staff.length > modalStaffList.length) {
+        const nextSlice = salon.staff
+          .slice(modalStaffList.length, modalStaffList.length + 10)
+          .map((st: any) => ({
+            staff: st,
+            staff_id: st.uuid || st.id,
+            price,
+            duration: duration || service?.duration,
+          }));
+        setModalStaffList((prev) => [...prev, ...nextSlice]);
+        setStaffPage(nextPage);
+      }
+    } finally {
+      setLoadingMoreStaff(false);
+    }
+  };
 
   const onStaffClick = (entry: any) => {
     if (updating) return;
@@ -160,15 +294,25 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
 
   const onConfirmStaff = async () => {
     if (!pendingStaffEntry) return;
+    const staffToSet = pendingStaffEntry;
     setStaffDialogOpen(false);
+
+    setStaffList((prev) => {
+      const exists = prev.some((e) => (e.staff?.uuid || e.staff_id) === (staffToSet.staff?.uuid || staffToSet.staff_id));
+      if (!exists) {
+        return [staffToSet, ...prev];
+      }
+      return prev;
+    });
+
     if (isGuest) {
-      dispatch(updateItemLocalStaff({ service_id: item.service_id, staff: pendingStaffEntry.staff, staff_uuid: pendingStaffEntry.staff.uuid, price: pendingStaffEntry.price, duration: pendingStaffEntry.duration }));
+      dispatch(updateItemLocalStaff({ service_id: item.service_id, staff: staffToSet.staff, staff_uuid: staffToSet.staff.uuid, price: staffToSet.price, duration: staffToSet.duration }));
       setPendingStaffEntry(null);
       return;
     }
     setUpdating(true);
     try {
-      await dispatch(updateCartItemAction({ itemUuid: item.uuid, staffUuid: pendingStaffEntry.staff.uuid })).unwrap();
+      await dispatch(updateCartItemAction({ itemUuid: item.uuid, staffUuid: staffToSet.staff.uuid })).unwrap();
     } finally {
       setUpdating(false);
       setPendingStaffEntry(null);
@@ -261,9 +405,11 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           <StaffSelector
             staffLoading={staffLoading}
             staffList={staffList}
+            totalStaffCount={staffTotal}
             selectedStaffId={selectedStaffId}
             updating={updating}
             onStaffClick={onStaffClick}
+            onSeeMoreClick={() => setStaffModalOpen(true)}
           />
         </Box>
       </Box>
@@ -285,6 +431,18 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
         loading={updating}
         onConfirm={onConfirmStaff}
         onCancel={onCancelStaff}
+      />
+
+      <StaffModal
+        open={staffModalOpen}
+        onClose={() => setStaffModalOpen(false)}
+        staffList={modalStaffList}
+        selectedStaffId={selectedStaffId}
+        onSelectStaff={onStaffClick}
+        serviceName={name}
+        hasMore={modalStaffList.length < staffTotal}
+        onFetchMore={fetchMoreStaff}
+        loadingMore={loadingMoreStaff}
       />
     </>
   );

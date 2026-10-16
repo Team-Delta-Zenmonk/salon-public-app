@@ -1,17 +1,67 @@
 "use client";
-import { Box, Typography, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
+import { useAppDispatch } from "../../store/hook";
+import { getStorefrontStaffAction } from "../../features/salon/get-storefront-staff/get-storefront-staff.action";
 import StaffCard from "@/components/staff-card";
 
 import styles from "./specialists.module.css";
 
 export default function SpecialistsPage() {
+  const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
   const { salon } = useStorefront();
-  const staff = salon?.staff || [];
+
+  const [staffList, setStaffList] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(true);
+
+  const fetchStaffData = async (pageNum: number, isInitial: boolean = false) => {
+    if (!salon?.slug) return;
+    if (isInitial) setIsLoadingInitial(true);
+
+    try {
+      const res = await dispatch(
+        getStorefrontStaffAction({
+          slug: salon.slug,
+          page: pageNum,
+          limit: 10,
+        })
+      ).unwrap();
+
+      const newStaff = res.staff || [];
+      if (pageNum === 1) {
+        setStaffList(newStaff);
+      } else {
+        setStaffList((prev) => {
+          const existingIds = new Set(prev.map((m: any) => m.uuid || m.id));
+          return [...prev, ...newStaff.filter((m: any) => !existingIds.has(m.uuid || m.id))];
+        });
+      }
+
+      setPage(pageNum);
+      setHasMore(res.pagination?.hasMore ?? (newStaff.length === 10));
+    } catch (err: any) {
+      console.error("Failed to fetch storefront staff:", err);
+    } finally {
+      if (isInitial) setIsLoadingInitial(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStaffData(1, true);
+  }, [salon?.slug]);
+
+  const loadMoreStaff = () => {
+    if (!hasMore) return;
+    fetchStaffData(page + 1, false);
+  };
 
   return (
     <Box className={styles.specialistsPage}>
@@ -44,7 +94,11 @@ export default function SpecialistsPage() {
       </section>
 
       <main className={styles.mainContent}>
-        {staff.length === 0 ? (
+        {isLoadingInitial ? (
+          <Box className={styles.loadingBox}>
+            <CircularProgress size={36} />
+          </Box>
+        ) : staffList.length === 0 ? (
           <Box className={styles.emptyState}>
             <WorkspacePremiumOutlinedIcon className={styles.emptyIcon} />
             <Typography className={styles.emptyTitle}>
@@ -63,11 +117,24 @@ export default function SpecialistsPage() {
             </Button>
           </Box>
         ) : (
-          <Box className={styles.staffGrid}>
-            {staff.map((member: any) => (
-              <StaffCard key={member.uuid || member.id} member={member} />
-            ))}
-          </Box>
+          <InfiniteScroll
+            dataLength={staffList.length}
+            next={loadMoreStaff}
+            hasMore={hasMore}
+            loader={
+              <Box className={styles.scrollLoaderBox}>
+                <CircularProgress size={28} />
+              </Box>
+            }
+            scrollThreshold={0.8}
+            style={{ overflow: "visible" }}
+          >
+            <Box className={styles.staffGrid}>
+              {staffList.map((member: any) => (
+                <StaffCard key={member.uuid || member.id} member={member} />
+              ))}
+            </Box>
+          </InfiniteScroll>
         )}
       </main>
     </Box>

@@ -337,3 +337,20 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.loadingBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+  width: 100%;
+}
+
+.scrollLoaderBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+

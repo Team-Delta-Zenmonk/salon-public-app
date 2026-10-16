@@ -1,15 +1,17 @@
 "use client";
 import { useState, useMemo, useEffect } from "react";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, CircularProgress, Box } from "@mui/material";
 import EllipsisCell from "@/components/ellipse-cell";
 import CustomSelect from "@/components/custom-select";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useStorefront } from "../../providers/storefront-provider";
 import ServiceCard from "@/components/service-card";
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { getStorefrontServicesAction } from "../../features/salon/get-storefront-services/get-storefront-services.action";
 import { addItemLocal, removeItemLocal } from "../../features/salon/cart/cart.slice";
 import { addCartItemAction } from "../../features/salon/cart/add-item/add-item.action";
 import { removeCartItemAction } from "../../features/salon/cart/remove-item/remove-item.action";
@@ -35,6 +37,12 @@ export default function ServicesPage() {
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("curated");
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
+
+  const [servicesList, setServicesList] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(true);
+  const [totalCount, setTotalCount] = useState<number>(0);
 
   const isAdded = (serviceId: string) =>
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
@@ -126,20 +134,72 @@ export default function ServicesPage() {
     if (q !== null && q !== undefined) setSearchQuery(q);
   }, [searchParams]);
 
-  const services: any[] = useMemo(() => salon?.services || [], [salon?.services]);
   const salonCategories: any[] = useMemo(() => salon?.categories || [], [salon?.categories]);
 
-  const rootServices = useMemo(() => services.filter((s) => s.parent_id === null), [services]);
+  const fetchServicesData = async (pageNum: number, isInitial: boolean = false) => {
+    if (!salon?.slug) return;
+    if (isInitial) setIsLoadingInitial(true);
+
+    try {
+      const categoryParam =
+        selectedCategory && selectedCategory !== "all"
+          ? salonCategories.find(
+              (c: any) =>
+                String(c.id).toLowerCase() === selectedCategory.toLowerCase() ||
+                String(c.uuid).toLowerCase() === selectedCategory.toLowerCase() ||
+                c.name?.toLowerCase() === selectedCategory.toLowerCase()
+            )?.id
+          : undefined;
+
+      const res = await dispatch(
+        getStorefrontServicesAction({
+          slug: salon.slug,
+          page: pageNum,
+          limit: 10,
+          search: searchQuery.trim() || undefined,
+          category_id: categoryParam,
+          gender: selectedGender !== "all" ? selectedGender : undefined,
+        })
+      ).unwrap();
+
+      const newServices = res.services || [];
+      if (pageNum === 1) {
+        setServicesList(newServices);
+      } else {
+        setServicesList((prev) => {
+          const existingIds = new Set(prev.map((s: any) => s.uuid || s.id));
+          return [...prev, ...newServices.filter((s: any) => !existingIds.has(s.uuid || s.id))];
+        });
+      }
+
+      setPage(pageNum);
+      setTotalCount(res.pagination?.total ?? newServices.length);
+      setHasMore(res.pagination?.hasMore ?? (newServices.length === 10));
+    } catch (err: any) {
+      console.error("Failed to fetch storefront services:", err);
+    } finally {
+      if (isInitial) setIsLoadingInitial(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchServicesData(1, true);
+  }, [salon?.slug, searchQuery, selectedCategory, selectedGender]);
+
+  const loadMoreServices = () => {
+    if (!hasMore) return;
+    fetchServicesData(page + 1, false);
+  };
 
   const subServicesMap = useMemo(() => {
-    return services.reduce<Record<number, any[]>>((acc, s) => {
-      if (s.parent_id) {
-        acc[s.parent_id] = acc[s.parent_id] || [];
-        acc[s.parent_id].push(s);
+    return servicesList.reduce<Record<string | number, any[]>>((acc, s) => {
+      if (s.children && s.children.length > 0) {
+        acc[s.id] = s.children;
+        acc[s.uuid] = s.children;
       }
       return acc;
     }, {});
-  }, [services]);
+  }, [servicesList]);
 
   const categoryTabs = useMemo(() => {
     const list: { id: string; label: string }[] = [
@@ -154,63 +214,20 @@ export default function ServicesPage() {
       }
     });
 
-    services.forEach((s) => {
-      if (s.category?.name && !seen.has(s.category.name.toLowerCase())) {
-        seen.add(s.category.name.toLowerCase());
-        list.push({ id: s.category.name.toLowerCase(), label: s.category.name });
-      }
-    });
-
     return list;
-  }, [salonCategories, services]);
+  }, [salonCategories]);
 
-  const filteredServices = useMemo(() => {
-    let result = rootServices.filter((service) => {
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchesName = service.name?.toLowerCase().includes(q);
-        const matchesDesc = service.description?.toLowerCase().includes(q);
-        const subs = subServicesMap[service.id] || subServicesMap[service.uuid] || [];
-        const matchesSub = subs.some(
-          (sub) => sub.name?.toLowerCase().includes(q) || sub.description?.toLowerCase().includes(q)
-        );
-        if (!matchesName && !matchesDesc && !matchesSub) return false;
-      }
-
-      if (selectedGender !== "all") {
-        const sg = (service.gender || "unisex").toLowerCase();
-        const target = selectedGender.toLowerCase();
-        if (target === "women") {
-          if (sg !== "women" && sg !== "female" && sg !== "unisex" && sg !== "gender-neutral") return false;
-        } else if (target === "men") {
-          if (sg !== "men" && sg !== "male" && sg !== "unisex" && sg !== "gender-neutral") return false;
-        } else if (target === "gender-neutral") {
-          if (sg !== "unisex" && sg !== "gender-neutral") return false;
-        }
-      }
-
-      if (selectedCategory !== "all") {
-        const serviceCatName = service.category?.name?.toLowerCase() || "";
-        const serviceCatId = String(service.category?.id || service.category_id || "").toLowerCase();
-        const target = selectedCategory.toLowerCase();
-        const matchesDirect = serviceCatName.includes(target) || serviceCatId.includes(target);
-        const matchesFuzzy = service.name?.toLowerCase().includes(target);
-        if (!matchesDirect && !matchesFuzzy) return false;
-      }
-
-      return true;
-    });
-
+  const sortedServices = useMemo(() => {
+    let result = [...servicesList];
     if (sortBy === "price-asc") {
-      result = [...result].sort((a, b) => (a.price || 0) - (b.price || 0));
+      result.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (sortBy === "price-desc") {
-      result = [...result].sort((a, b) => (b.price || 0) - (a.price || 0));
+      result.sort((a, b) => (b.price || 0) - (a.price || 0));
     } else if (sortBy === "duration") {
-      result = [...result].sort((a, b) => (a.duration || 0) - (b.duration || 0));
+      result.sort((a, b) => (a.duration || 0) - (b.duration || 0));
     }
-
     return result;
-  }, [rootServices, searchQuery, selectedGender, selectedCategory, sortBy, subServicesMap]);
+  }, [servicesList, sortBy]);
 
   return (
     <div className={styles.pageContainer}>
@@ -224,7 +241,7 @@ export default function ServicesPage() {
               </span>
               <span>•</span>
               <span className={styles.tagCount}>
-                {filteredServices.length} Services Available
+                {totalCount} Services Available
               </span>
             </div>
             <h1 className={styles.title}>
@@ -332,7 +349,11 @@ export default function ServicesPage() {
       </section>
 
       <section className={styles.catalogSection}>
-        {filteredServices.length === 0 ? (
+        {isLoadingInitial ? (
+          <Box className={styles.loadingBox}>
+            <CircularProgress size={36} />
+          </Box>
+        ) : sortedServices.length === 0 ? (
           <div className={styles.emptyState}>
             <ContentCutOutlinedIcon className={styles.emptyIcon} />
             <Typography className={styles.emptyTitle}>
@@ -354,19 +375,32 @@ export default function ServicesPage() {
             </Button>
           </div>
         ) : (
-          <div className={styles.servicesGrid}>
-            {filteredServices.map((service) => (
-              <ServiceCard
-                key={service.uuid || service.id}
-                service={service}
-                subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
-                isAdded={isAdded(service.uuid || service.id)}
-                isSubAdded={(subId) => isAdded(subId)}
-                onToggleCart={toggleCart}
-                loadingIds={loadingIds}
-              />
-            ))}
-          </div>
+          <InfiniteScroll
+            dataLength={sortedServices.length}
+            next={loadMoreServices}
+            hasMore={hasMore}
+            loader={
+              <Box className={styles.scrollLoaderBox}>
+                <CircularProgress size={28} />
+              </Box>
+            }
+            scrollThreshold={0.8}
+            style={{ overflow: "visible" }}
+          >
+            <div className={styles.servicesGrid}>
+              {sortedServices.map((service) => (
+                <ServiceCard
+                  key={service.uuid || service.id}
+                  service={service}
+                  subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+                  isAdded={isAdded(service.uuid || service.id)}
+                  isSubAdded={(subId) => isAdded(subId)}
+                  onToggleCart={toggleCart}
+                  loadingIds={loadingIds}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
         )}
       </section>
 

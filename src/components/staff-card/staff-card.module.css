@@ -645,4 +645,64 @@
   color: var(--app-primary);
 }
 
+.themeLightGothic .glassCoverTag {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--app-primary);
+  border-color: var(--app-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.themeLightGothic .glassCoverScheduleBtn {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: var(--app-primary) !important;
+  border-color: var(--app-primary) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.themeLightGothic .glassCoverOverlay {
+  background: linear-gradient(
+    to top,
+    rgba(26, 21, 24, 0.9) 0%,
+    rgba(26, 21, 24, 0.45) 45%,
+    transparent 100%
+  );
+}
+
+.themeLightGothic .glassCoverRole {
+  color: #f3c677;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.themeLightGothic .glassCoverName {
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.themeLightGothic .glassCoverBio {
+  color: var(--app-text);
+  font-weight: 500;
+}
+
+.themeLightGothic .availableTag {
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+.themeLightGothic .timingsBtn {
+  color: var(--app-primary);
+  font-weight: 700;
+}
+
+.themeLightGothic .reserveBtn {
+  background-color: var(--app-primary) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(122, 28, 40, 0.25);
+}
+
+.themeLightGothic .reserveBtn:hover {
+  background-color: #5c131d !important;
+}
+
+
 
