@@ -123,6 +123,34 @@
   font-weight: 400;
 }
 
+.staffTagsWrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0.25rem 0;
+}
+
+.staffTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background-color: var(--app-surface-alt, rgba(0, 0, 0, 0.04));
+  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  color: var(--app-text);
+  max-width: 100%;
+}
+
+.staffTagGender {
+  color: var(--app-muted);
+  text-transform: capitalize;
+}
+
 .bio {
   font-family: var(--app-font-family, sans-serif);
   font-size: 0.75rem;
@@ -624,6 +652,16 @@
   color: #f3c677;
 }
 
+.themeObsidianFlame .staffTag {
+  background-color: rgba(243, 198, 119, 0.08);
+  border-color: rgba(243, 198, 119, 0.2);
+  color: #f3c677;
+}
+
+.themeObsidianFlame .staffTagGender {
+  color: #d1cfc7;
+}
+
 .themeObsidianFlame .availableTag {
   background-color: rgba(243, 198, 119, 0.1);
   border-color: rgba(243, 198, 119, 0.25);
@@ -643,6 +681,16 @@
 
 .themeLightGothic .roleTitle {
   color: var(--app-primary);
+}
+
+.themeLightGothic .staffTag {
+  background-color: rgba(122, 28, 40, 0.05);
+  border-color: rgba(122, 28, 40, 0.15);
+  color: var(--app-primary);
+}
+
+.themeLightGothic .staffTagGender {
+  color: var(--app-muted);
 }
 
 .themeLightGothic .glassCoverTag {

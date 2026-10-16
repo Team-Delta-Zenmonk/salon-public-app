@@ -218,6 +218,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: opacity 1000ms ease-in-out;
   opacity: 0;
   z-index: 0;
@@ -867,15 +868,28 @@
 }
 
 .archWindowImage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transition: opacity 1000ms ease-in-out;
+  opacity: 0;
+  z-index: 0;
+}
+
+.archWindowImageVisible {
+  opacity: 1;
+  z-index: 1;
 }
 
 .archWindowOverlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(12, 10, 13, 0.9) 0%, rgba(12, 10, 13, 0.3) 50%, transparent 100%);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .archWindowCaption {
@@ -884,6 +898,8 @@
   left: 1.5rem;
   right: 1.5rem;
   text-align: center;
+  z-index: 20;
+  pointer-events: none;
 }
 
 .archCaptionTitle {
@@ -1018,19 +1034,28 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 360px;
+  min-height: 380px;
   border-radius: var(--radius-card, 0.75rem);
   overflow: hidden;
   border: 1px solid var(--border-gold, rgba(197, 160, 89, 0.4));
+  background-color: var(--app-surface-alt);
 }
 
 .gothicHeroImage {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  min-height: 360px;
-  max-height: 440px;
   object-fit: cover;
-  display: block;
+  object-position: center;
+  transition: opacity 1000ms ease-in-out;
+  opacity: 0;
+  z-index: 0;
+}
+
+.gothicHeroImageVisible {
+  opacity: 1;
+  z-index: 1;
 }
 
 .gothicFloatingBadge {

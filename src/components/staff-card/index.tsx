@@ -32,6 +32,24 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
   const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim() || "Master Specialist";
   const photo = member.photos?.secure_url ?? member.photos?.url;
 
+  const titleText = member.title || member.role || "Specialist";
+  const genderText = member.gender ? `${member.gender.charAt(0).toUpperCase() + member.gender.slice(1).toLowerCase()} Specialist` : "";
+
+  const renderStaffBadges = () => (
+    <div className={styles.staffTagsWrapper}>
+      {titleText && (
+        <span className={styles.staffTag}>
+          <EllipsisCell value={titleText} maxChars={22} />
+        </span>
+      )}
+      {genderText && (
+        <span className={clsx(styles.staffTag, styles.staffTagGender)}>
+          {genderText}
+        </span>
+      )}
+    </div>
+  );
+
   const designClass =
     activeDesign === "archVault"
       ? styles.archVaultCard
@@ -76,7 +94,6 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
             </div>
 
             <div className={styles.archVaultDetails}>
-              <EllipsisCell value={member.title || member.role || "ARTISTIC DIRECTOR"} className={styles.roleTitle} maxChars={24} />
               <EllipsisCell value={fullName} className={styles.nameTitle} maxChars={16} />
               {member.rating && (
                 <div className={styles.ratingRow}>
@@ -86,10 +103,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
               )}
             </div>
 
-            <p className={styles.bio}>
-              {member.bio ||
-                "Specialized in precision dry shears, organic balayage glazes, and scalp revitalization protocols trained at European academies."}
-            </p>
+            {renderStaffBadges()}
 
             <div className={styles.availabilityRow}>
               <div className={styles.availableTag}>
@@ -140,7 +154,6 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
               </div>
 
               <div className={styles.glassCoverBottomInfo}>
-                <span className={styles.glassCoverRole}>{member.title || member.role || "ARTISTIC DIRECTOR"}</span>
                 <h3 className={styles.glassCoverName}>{fullName}</h3>
                 {member.rating && (
                   <div className={styles.glassCoverRating}>
@@ -151,10 +164,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
               </div>
             </div>
 
-            <p className={styles.glassCoverBio}>
-              {member.bio ||
-                "Specialized in precision dry shears, organic balayage glazes, and scalp revitalization protocols."}
-            </p>
+            {renderStaffBadges()}
 
             <div className={styles.availabilityRow}>
               <div className={styles.availableTag}>
@@ -176,7 +186,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
             <div className={styles.editorialStaffHeader}>
               <div className={styles.editorialRoleBadge}>
                 <span className={styles.editorialMonogramDot}>✦</span>
-                <EllipsisCell value={member.title || member.role || "ARTISTIC DIRECTOR"} className={styles.roleTitle} maxChars={22} />
+                <EllipsisCell value={titleText} className={styles.roleTitle} maxChars={22} />
               </div>
               <Tooltip title="View Weekly Working Schedule" arrow>
                 <IconButton
@@ -217,12 +227,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
                     {member.reviews_count && <span className={styles.reviewsCount}>({member.reviews_count} reviews)</span>}
                   </div>
                 )}
-                <div className={styles.editorialBioSnippet}>
-                  <p className={styles.bio}>
-                    {member.bio ||
-                      "Specialized in precision dry shears, organic balayage glazes, and scalp revitalization protocols."}
-                  </p>
-                </div>
+                {renderStaffBadges()}
               </div>
             </div>
 

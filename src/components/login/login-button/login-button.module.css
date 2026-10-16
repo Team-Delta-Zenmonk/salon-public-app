@@ -1,9 +1,9 @@
 .googleBtn {
   height: 3rem !important;
-  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
-  background-color: var(--app-surface, #ffffff) !important;
-  color: var(--app-text, #18181b) !important;
-  border-radius: 0.5rem !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  border-radius: var(--app-radius, 0.5rem) !important;
   text-transform: none !important;
   font-weight: 600 !important;
   font-size: 0.875rem !important;
@@ -16,8 +16,9 @@
 }
 
 .googleBtn:hover {
-  background-color: var(--app-surface-alt, #faf8f5) !important;
-  border-color: var(--app-primary, #18181b) !important;
+  background-color: var(--app-surface-alt) !important;
+  border-color: var(--app-primary) !important;
+  color: var(--app-primary) !important;
 }
 
 .googleIcon {

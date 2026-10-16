@@ -43,7 +43,7 @@ export default function StorefrontFooter() {
             <EllipsisCell
               value={
                 salon?.about ||
-                "The epicenter of luxury coiffure and bespoke dermal treatments."
+                "Your destination for premium hair styling, beauty care, and relaxation."
               }
               maxChars={100}
               maxLines={2}
@@ -53,16 +53,16 @@ export default function StorefrontFooter() {
 
           <div className={styles.columnNarrow}>
             <span className={styles.sectionBadge}>
-              Etiquette Charter
+              Salon Guidelines
             </span>
             <p className={styles.aboutText}>
-              Mobile devices on silent mode. 24-hour advance cancellation requested for private appointments.
+              Please keep phones on silent. We kindly request 24 hours notice for any appointment cancellations.
             </p>
           </div>
 
           <div className={styles.columnNarrow}>
             <span className={styles.sectionBadge}>
-              Flagship Atelier
+              Our Location
             </span>
             <div className={styles.addressBlock}>
               <EllipsisCell
@@ -72,8 +72,8 @@ export default function StorefrontFooter() {
               <EllipsisCell
                 value={
                   salon?.phone
-                    ? `Concierge: ${salon.phone}`
-                    : "Concierge: concierge@ateliersolstice.com"
+                    ? `Contact: ${salon.phone}`
+                    : "Contact: contact@ateliersolstice.com"
                 }
                 className={styles.phoneText}
               />
@@ -102,13 +102,13 @@ export default function StorefrontFooter() {
               href="/specialists"
               className={styles.footerLink}
             >
-              Artisans
+              Specialists
             </Link>
             <Link
               href="/cart"
               className={styles.footerLink}
             >
-              Concierge Bag
+              Cart
             </Link>
           </nav>
         </div>

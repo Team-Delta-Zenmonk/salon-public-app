@@ -186,6 +186,8 @@
   --app-text: #1C1C18;
   --app-muted: #766A5E;
   --app-champagne: #A88B64;
+  --app-radius: 8px;
+  --card-border-radius: 20px;
   --app-hero-showcase-overlay: linear-gradient(to top, rgba(28, 26, 23, 0.88) 0%, rgba(28, 26, 23, 0.4) 50%, transparent 100%);
   --app-hero-showcase-sub: #A88B64;
   --app-hero-showcase-title: #FFFFFF;
@@ -203,6 +205,8 @@
   --app-text: #f7f5f0;
   --app-muted: #c4bcae;
   --app-champagne: #f3c677;
+  --app-radius: 16px;
+  --card-border-radius: 24px;
   --app-hero-showcase-overlay: linear-gradient(to top, rgba(9, 8, 11, 0.92) 0%, rgba(9, 8, 11, 0.5) 50%, transparent 100%);
   --app-hero-showcase-sub: #f3c677;
   --app-hero-showcase-title: #f7f5f0;

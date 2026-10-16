@@ -113,7 +113,15 @@ function ArchitecturalArchHero({
   onExploreServices,
   onMeetSpecialists,
 }: Omit<HeroSectionProps, "variant">) {
-  const mainImage = galleryImages[0];
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  useEffect(() => {
+    if (galleryImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [galleryImages.length]);
 
   return (
     <section className={styles.archHeroSection}>
@@ -122,14 +130,14 @@ function ArchitecturalArchHero({
           <div className={styles.archMonogramBadge}>
             <span className={styles.archMonogramSymbol}>✦</span>
             <span className={styles.archMonogramText}>
-              HAUTE ATELIER DE BEAUTÉ
+              PREMIUM SALON &amp; SPA
             </span>
           </div>
 
           <h1 className={styles.archHeading}>
-            Where Artistry Meets <br className={styles.archHeadingBreak} />{" "}
+            Look Your Best, <br className={styles.archHeadingBreak} />{" "}
             <span className={styles.archHeadingAccent}>
-              Pure Sanctuary.
+              Feel Your Best.
             </span>
           </h1>
 
@@ -137,7 +145,7 @@ function ArchitecturalArchHero({
             <EllipsisCell
               value={
                 salon?.about ||
-                "Step into an enclave of dark opulence. Master colorists and bespoke stylists deliver tailor-crafted cuts, luminous hair treatments, and private rituals designed around your signature look."
+                "Welcome to a warm and relaxing salon experience. Our expert hair stylists and beauty specialists deliver personalized haircuts, color, and treatments crafted for you."
               }
               className={styles.heroAboutText}
               maxLines={4}
@@ -151,7 +159,7 @@ function ArchitecturalArchHero({
               onClick={onExploreServices}
               className={styles.archPrimaryCta}
             >
-              <span>RESERVE TREATMENT</span>
+              <span>BOOK APPOINTMENT</span>
               <ArrowDownwardIcon className={styles.btnIcon} />
             </a>
             <button
@@ -159,7 +167,7 @@ function ArchitecturalArchHero({
               onClick={onMeetSpecialists}
               className={styles.archSecondaryBtn}
             >
-              <span>VIEW MASTER ARTISTS</span>
+              <span>MEET OUR TEAM</span>
               <WorkspacePremiumOutlinedIcon className={styles.btnIcon} />
             </button>
           </div>
@@ -169,18 +177,24 @@ function ArchitecturalArchHero({
           <div className={styles.archAmbientGlow} />
 
           <div className={styles.archWindowFrame}>
-            <img
-              src={mainImage}
-              alt="Salon Sanctuary"
-              className={styles.archWindowImage}
-            />
+            {galleryImages.map((imgUrl: string, idx: number) => {
+              const isVisible = idx === carouselIndex % galleryImages.length;
+              return (
+                <img
+                  key={`arch-${imgUrl}-${idx}`}
+                  src={imgUrl}
+                  alt={salon?.name || "Salon Space"}
+                  className={`${styles.archWindowImage} ${isVisible ? styles.archWindowImageVisible : ""}`}
+                />
+              );
+            })}
             <div className={styles.archWindowOverlay} />
             <div className={styles.archWindowCaption}>
               <div className={styles.archCaptionTitle}>
-                SANCTUARY ATELIER
+                WELCOME TO OUR SALON
               </div>
               <div className={styles.archCaptionSub}>
-                BY PRIVATE APPOINTMENT
+                BOOK ONLINE ANYTIME
               </div>
             </div>
           </div>
@@ -215,19 +229,19 @@ function FullBleedShowcaseHero({
           <div className={styles.gothicHeroBadge}>
             <span className={styles.gothicBadgeDot} />
             <span className={styles.gothicBadgeText}>
-              LUXURY LIGHT SANCTUARY
+              LUXURY SALON &amp; SPA
             </span>
           </div>
 
           <h1 className={styles.gothicHeroHeading}>
-            Bespoke Artistry &amp; Timeless Radiance
+            Modern Styling &amp; Personal Care
           </h1>
 
           <div className={styles.heroAboutWrapper}>
             <EllipsisCell
               value={
                 salon?.about ||
-                "A sanctuary of restorative indulgence and bespoke hair and skincare rituals, elevating timeless beauty with Victorian alabaster serenity and attentive care."
+                "A comfortable, friendly salon offering professional haircuts, coloring, and refreshing skin care treatments designed to help you look and feel great."
               }
               className={styles.gothicAboutText}
               maxLines={4}
@@ -241,7 +255,7 @@ function FullBleedShowcaseHero({
               onClick={onExploreServices}
               className={styles.gothicPrimaryCta}
             >
-              <span>BOOK SERVICE</span>
+              <span>BOOK APPOINTMENT</span>
               <ArrowDownwardIcon className={styles.btnIcon} />
             </a>
             <button
@@ -249,18 +263,24 @@ function FullBleedShowcaseHero({
               onClick={onMeetSpecialists}
               className={styles.gothicSecondaryBtn}
             >
-              <span>OUR ARTISTS</span>
+              <span>MEET OUR TEAM</span>
               <SpaOutlinedIcon className={styles.gothicIconGold} />
             </button>
           </div>
         </div>
 
         <div className={styles.gothicHeroRight}>
-          <img
-            src={activeImg}
-            alt={salon?.name || "Luxury Sanctuary"}
-            className={styles.gothicHeroImage}
-          />
+          {galleryImages.map((imgUrl: string, idx: number) => {
+            const isVisible = idx === carouselIndex % galleryImages.length;
+            return (
+              <img
+                key={`gothic-${imgUrl}-${idx}`}
+                src={imgUrl}
+                alt={salon?.name || "Salon Space"}
+                className={`${styles.gothicHeroImage} ${isVisible ? styles.gothicHeroImageVisible : ""}`}
+              />
+            );
+          })}
 
           <div className={styles.gothicFloatingBadge}>
             <div className={styles.gothicBadgeIconCircle}>
@@ -268,10 +288,10 @@ function FullBleedShowcaseHero({
             </div>
             <div>
               <div className={styles.gothicBadgeHeading}>
-                #1 Ranked Sanctuary
+                Top Rated Salon
               </div>
               <div className={styles.gothicBadgeSubtext}>
-                Victorian Alabaster Serenity
+                Professional &amp; Friendly Care
               </div>
             </div>
           </div>
