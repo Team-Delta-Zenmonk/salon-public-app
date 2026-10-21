@@ -76,6 +76,10 @@
   --app-info: var(--color-info);
   --app-error: var(--color-error);
   --app-shadow-base: var(--shadow-base);
+  --app-signout-text: var(--app-text);
+  --app-signout-border: var(--app-border);
+  --app-signout-bg-hover: var(--app-surface-alt);
+  --app-signout-border-hover: var(--app-primary);
   --mobile-bottom-nav-height: 4rem;
 
   --page-max-width: 1440px;
@@ -186,6 +190,10 @@
   --app-text: #1C1C18;
   --app-muted: #766A5E;
   --app-champagne: #A88B64;
+  --app-signout-text: #1C1A17;
+  --app-signout-border: #E5DFD5;
+  --app-signout-bg-hover: #F6F3ED;
+  --app-signout-border-hover: #1C1A17;
   --app-radius: 8px;
   --card-border-radius: 20px;
   --app-hero-showcase-overlay: linear-gradient(to top, rgba(28, 26, 23, 0.88) 0%, rgba(28, 26, 23, 0.4) 50%, transparent 100%);
@@ -205,6 +213,10 @@
   --app-text: #f7f5f0;
   --app-muted: #c4bcae;
   --app-champagne: #f3c677;
+  --app-signout-text: #f3c677;
+  --app-signout-border: #3d3224;
+  --app-signout-bg-hover: rgba(243, 198, 119, 0.12);
+  --app-signout-border-hover: #f3c677;
   --app-radius: 16px;
   --card-border-radius: 24px;
   --app-hero-showcase-overlay: linear-gradient(to top, rgba(9, 8, 11, 0.92) 0%, rgba(9, 8, 11, 0.5) 50%, transparent 100%);
@@ -250,6 +262,10 @@
   --app-text: #1A1518;
   --app-muted: #665E62;
   --app-champagne: #C5A059;
+  --app-signout-text: #7A1C28;
+  --app-signout-border: rgba(122, 28, 40, 0.25);
+  --app-signout-bg-hover: #EFE6E8;
+  --app-signout-border-hover: #7A1C28;
   --app-radius: 12px;
   --app-font-family: 'Outfit', sans-serif;
   --app-font-serif: 'Cinzel', 'Playfair Display', serif;
@@ -409,6 +425,7 @@ html {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--app-border) var(--app-surface-alt);
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -429,12 +446,22 @@ html {
   background: var(--app-primary);
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, svg, canvas, picture {
+  max-width: 100%;
+  height: auto;
+}
+
 html,
 body {
   min-height: 100%;
   background-color: var(--app-bg);
   color: var(--app-text);
   font-family: var(--app-font-family);
+  overflow-x: hidden;
 }
 
 body {

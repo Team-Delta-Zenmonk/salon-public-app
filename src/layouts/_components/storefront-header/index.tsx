@@ -244,11 +244,20 @@ export default function StorefrontHeader() {
           <Box className={styles.drawerHeader}>
             <Box className={styles.drawerUserBox}>
               <Box className={styles.drawerHeaderIcon}>
-                {salonName[0]}
+                {salon?.logo ? (
+                  <Image
+                    src={salon.logo}
+                    alt={salonName}
+                    fill
+                    sizes="36px"
+                    className={styles.objectCover}
+                    unoptimized
+                  />
+                ) : (
+                  <span>{salonName[0]}</span>
+                )}
               </Box>
-              <Typography className={styles.drawerHeaderTitle}>
-                {salonName}
-              </Typography>
+              <EllipsisCell value={salonName} className={styles.drawerHeaderTitle} maxChars={20} />
             </Box>
             <IconButton size="small" onClick={() => setMobileDrawerOpen(false)} className={styles.closeButton}>
               <CloseIcon />

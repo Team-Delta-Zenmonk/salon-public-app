@@ -25,6 +25,15 @@ export async function fetchSalonBySlug(slug: string): Promise<Salon | null> {
   }
 }
 
+export function formatTitleCase(str: string): string {
+  if (!str) return "";
+  return str
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 export function formatSalonSlugTitle(slug: string): string {
   if (!slug) return defaultAppName;
   return slug
@@ -45,6 +54,93 @@ export function getSalonImage(salon: Salon | null): string | null {
   return null;
 }
 
+export interface RouteMetadataConfig {
+  title: string;
+  description: string;
+  noIndex?: boolean;
+}
+
+export const STOREFRONT_ROUTE_METADATA: Record<string, RouteMetadataConfig> = {
+  "/": {
+    title: "Book Online",
+    description: "Discover and book bespoke luxury salon treatments, master scissorsmiths, and clinical rituals.",
+  },
+  "/services": {
+    title: "Bespoke Services & Treatments",
+    description: "Explore our luxury salon treatments, styling rituals, hair coloring, facials, and grooming therapies.",
+  },
+  "/specialists": {
+    title: "Artisans & Master Stylists",
+    description: "Meet our master scissorsmiths, colorists, and dermal therapy artisans dedicated to your personal transformation.",
+  },
+  "/about": {
+    title: "About Our Sanctuary",
+    description: "Discover our heritage, philosophy of intentional care, and commitment to luxury coiffure and bespoke dermal therapies.",
+  },
+  "/cart": {
+    title: "Concierge Bag",
+    description: "Review your selected luxury salon treatments and reserve your appointment slot.",
+    noIndex: true,
+  },
+  "/checkout": {
+    title: "Secure Checkout",
+    description: "Complete your appointment booking with secure payment processing.",
+    noIndex: true,
+  },
+  "/bookings": {
+    title: "My Appointments & Bookings",
+    description: "View and manage your upcoming and past luxury salon appointments.",
+    noIndex: true,
+  },
+  "/bookings/success": {
+    title: "Booking Confirmed",
+    description: "Your appointment has been successfully booked.",
+    noIndex: true,
+  },
+  "/profile": {
+    title: "Client Profile",
+    description: "Manage your client account, preferences, and personal details.",
+    noIndex: true,
+  },
+  "/signup": {
+    title: "Client Sign In & Registration",
+    description: "Sign in or create an account to book your luxury salon appointments seamlessly.",
+  },
+};
+
+export function getRouteStaticMetadata(pathname: string): Metadata {
+  const config = STOREFRONT_ROUTE_METADATA[pathname] || {
+    title: defaultAppName,
+    description: "Discover and book bespoke luxury salon treatments and services.",
+  };
+
+  return {
+    title: config.title,
+    description: config.description,
+    ...(config.noIndex
+      ? {
+          robots: {
+            index: false,
+            follow: false,
+          },
+        }
+      : {}),
+  };
+}
+
+export function buildRouteSalonMetadata(pathname: string, slug: string, salon: Salon | null): Metadata {
+  const config = STOREFRONT_ROUTE_METADATA[pathname];
+  const subTitle = pathname === "/" ? undefined : config?.title;
+  return buildSalonMetadata({
+    slug,
+    salon,
+    subTitle,
+    descriptionSuffix: config?.description,
+    subPath: pathname === "/" ? "" : pathname,
+    noIndex: config?.noIndex,
+  });
+}
+
 interface BuildMetadataParams {
   slug: string;
   salon: Salon | null;
@@ -62,7 +158,8 @@ export function buildSalonMetadata({
   subPath = "",
   noIndex = false,
 }: BuildMetadataParams): Metadata {
-  const salonName = salon?.name || formatSalonSlugTitle(slug);
+  const rawSalonName = salon?.name || formatSalonSlugTitle(slug);
+  const salonName = formatTitleCase(rawSalonName);
   const title = subTitle ? `${subTitle} — ${salonName}` : `${salonName} — Luxury Salon & Spa Sanctuary`;
 
   const defaultDesc =
@@ -72,10 +169,16 @@ export function buildSalonMetadata({
   const description = descriptionSuffix ? `${descriptionSuffix} at ${salonName}.` : defaultDesc;
   const canonicalUrl = `${siteUrl}/salons/${slug}${subPath}`;
   const imageUrl = getSalonImage(salon);
+  const faviconUrl = salon?.logo || "/favicon.ico";
 
   return {
     title,
     description,
+    icons: {
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
+    },
     keywords: [
       salonName,
       `book appointment at ${salonName}`,

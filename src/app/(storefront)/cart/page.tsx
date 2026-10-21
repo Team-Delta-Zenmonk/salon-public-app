@@ -2,15 +2,9 @@ import { Suspense } from "react";
 import Cart from "@/views/cart";
 import { Box, CircularProgress } from "@mui/material";
 import type { Metadata } from "next";
+import { getRouteStaticMetadata } from "@/components/seo/salon-seo.utils";
 
-export const metadata: Metadata = {
-  title: "Concierge Bag",
-  description: "Review your selected luxury salon treatments and reserve your appointment slot.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export const metadata: Metadata = getRouteStaticMetadata("/cart");
 
 export default function CartPage() {
   return (

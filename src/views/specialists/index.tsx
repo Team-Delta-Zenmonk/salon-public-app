@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
@@ -22,7 +22,7 @@ export default function SpecialistsPage() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(true);
 
-  const fetchStaffData = async (pageNum: number, isInitial: boolean = false) => {
+  const fetchStaffData = useCallback(async (pageNum: number, isInitial: boolean = false) => {
     if (!salon?.slug) return;
     if (isInitial) setIsLoadingInitial(true);
 
@@ -52,11 +52,11 @@ export default function SpecialistsPage() {
     } finally {
       if (isInitial) setIsLoadingInitial(false);
     }
-  };
+  }, [dispatch, salon?.slug]);
 
   useEffect(() => {
     fetchStaffData(1, true);
-  }, [salon?.slug]);
+  }, [fetchStaffData]);
 
   const loadMoreStaff = () => {
     if (!hasMore) return;

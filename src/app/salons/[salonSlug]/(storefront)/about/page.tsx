@@ -1,7 +1,7 @@
 import AboutPage from "@/views/about";
 import {
   fetchSalonBySlug,
-  buildSalonMetadata,
+  buildRouteSalonMetadata,
 } from "@/components/seo/salon-seo.utils";
 import type { Metadata } from "next";
 
@@ -12,14 +12,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { salonSlug } = await params;
   const salon = await fetchSalonBySlug(salonSlug);
-  return buildSalonMetadata({
-    slug: salonSlug,
-    salon,
-    subTitle: "About Our Sanctuary",
-    descriptionSuffix:
-      "Discover our sanctuary heritage, ethos of intentional care, and commitment to luxury coiffure",
-    subPath: "/about",
-  });
+  return buildRouteSalonMetadata("/about", salonSlug, salon);
 }
 
 export default function SalonAboutPage() {

@@ -1,15 +1,9 @@
 import Checkout from "@/views/checkout";
 import ProtectedGuard from "@/components/guards/protected-guard";
 import type { Metadata } from "next";
+import { getRouteStaticMetadata } from "@/components/seo/salon-seo.utils";
 
-export const metadata: Metadata = {
-  title: "Secure Checkout",
-  description: "Complete your appointment booking with secure payment processing.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export const metadata: Metadata = getRouteStaticMetadata("/checkout");
 
 export default function CheckoutPage() {
   return (

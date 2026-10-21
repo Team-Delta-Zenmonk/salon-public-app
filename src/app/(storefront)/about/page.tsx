@@ -1,11 +1,8 @@
 import AboutPage from "@/views/about";
 import type { Metadata } from "next";
+import { getRouteStaticMetadata } from "@/components/seo/salon-seo.utils";
 
-export const metadata: Metadata = {
-  title: "About Our Flagship Sanctuary",
-  description:
-    "Discover our heritage, philosophy of intentional care, and commitment to luxury coiffure and bespoke dermal therapies.",
-};
+export const metadata: Metadata = getRouteStaticMetadata("/about");
 
 export default function About() {
   return <AboutPage />;

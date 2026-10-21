@@ -328,7 +328,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: var(--app-error, #8f4d47);
+  color: var(--app-signout-text, var(--app-primary));
   background: transparent;
   font-family: var(--app-font-family);
   font-size: 0.75rem;
@@ -336,7 +336,7 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   cursor: pointer;
-  border: 1px solid var(--app-border);
+  border: 1px solid var(--app-signout-border, var(--app-border));
   border-radius: var(--app-btn-radius, 9999px);
   padding: 0.8125rem 1rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -347,8 +347,9 @@
 }
 
 .signOutButton:hover {
-  background: var(--app-surface-alt);
-  border-color: var(--app-error, #8f4d47);
+  background: var(--app-signout-bg-hover, var(--app-surface-alt));
+  border-color: var(--app-signout-border-hover, var(--app-primary));
+  color: var(--app-signout-border-hover, var(--app-primary));
   transform: translateY(-1px);
 }
 
@@ -489,7 +490,11 @@
 }
 
 .menuItemSignOut {
-  color: var(--app-error, #8F4D47) !important;
+  color: var(--app-signout-text, var(--app-primary)) !important;
+}
+
+.menuItemSignOut:hover {
+  background: var(--app-signout-bg-hover, var(--app-surface-alt)) !important;
 }
 
 .menuItemSignOut svg {
@@ -520,16 +525,20 @@
 }
 
 .drawerHeaderIcon {
-  width: 2rem;
-  height: 2rem;
+  position: relative;
+  width: 2.25rem;
+  height: 2.25rem;
   border: 1px solid var(--app-border);
   background: var(--app-surface-alt);
   border-radius: var(--app-radius);
+  overflow: hidden;
+  padding: 0.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--app-font-serif);
   font-size: 0.875rem;
+  flex-shrink: 0;
 }
 
 .drawerHeaderTitle {

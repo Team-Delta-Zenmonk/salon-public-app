@@ -1,5 +1,5 @@
 .layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--app-bg);
   display: flex;
   flex-direction: column;

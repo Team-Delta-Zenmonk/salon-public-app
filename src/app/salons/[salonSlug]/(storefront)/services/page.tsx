@@ -3,7 +3,7 @@ import ServicesPage from "@/views/services";
 import { Box, CircularProgress } from "@mui/material";
 import {
   fetchSalonBySlug,
-  buildSalonMetadata,
+  buildRouteSalonMetadata,
 } from "@/components/seo/salon-seo.utils";
 import type { Metadata } from "next";
 
@@ -14,14 +14,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { salonSlug } = await params;
   const salon = await fetchSalonBySlug(salonSlug);
-  return buildSalonMetadata({
-    slug: salonSlug,
-    salon,
-    subTitle: "Bespoke Services & Treatments",
-    descriptionSuffix:
-      "Explore luxury hair therapies, bespoke cuts, styling rituals, coloring, facials, and grooming therapies",
-    subPath: "/services",
-  });
+  return buildRouteSalonMetadata("/services", salonSlug, salon);
 }
 
 export default function SalonServicesPage() {

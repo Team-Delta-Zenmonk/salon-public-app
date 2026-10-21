@@ -64,9 +64,6 @@ export default function StorefrontPage() {
 
         if (active) {
           setSalon(salonData);
-          if (salonData?.name) {
-            document.title = `${salonData.name} | Book Online`;
-          }
         }
       } catch (err: any) {
         if (active) {

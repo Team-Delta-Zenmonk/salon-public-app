@@ -3,11 +3,20 @@ import SignUp from "@/views/signup";
 import GuestGuard from "@/components/guards/guest-guard";
 import { Box, CircularProgress } from "@mui/material";
 import type { Metadata } from "next";
+import {
+  fetchSalonBySlug,
+  buildRouteSalonMetadata,
+} from "@/components/seo/salon-seo.utils";
 
-export const metadata: Metadata = {
-  title: "Client Sign In & Registration",
-  description: "Sign in or create an account to book your luxury salon appointments seamlessly.",
-};
+interface Props {
+  params: Promise<{ salonSlug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { salonSlug } = await params;
+  const salon = await fetchSalonBySlug(salonSlug);
+  return buildRouteSalonMetadata("/signup", salonSlug, salon);
+}
 
 export default function SalonSignUpPage() {
   return (

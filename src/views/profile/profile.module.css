@@ -285,12 +285,12 @@
   padding: 0.45rem 0.85rem;
   border-radius: var(--app-radius, 0.5rem);
   background-color: transparent;
-  color: #ef4444;
+  color: var(--app-signout-text, var(--app-primary));
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  border: 1px solid var(--app-border, rgba(0, 0, 0, 0.15));
+  border: 1px solid var(--app-signout-border, var(--app-border));
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
@@ -310,8 +310,8 @@
 }
 
 .signOutBtn:hover {
-  background-color: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.3);
+  background-color: var(--app-signout-bg-hover, var(--app-surface-alt));
+  border-color: var(--app-signout-border-hover, var(--app-primary));
 }
 
 .infoGrid {

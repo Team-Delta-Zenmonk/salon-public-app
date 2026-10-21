@@ -5,7 +5,8 @@ import { Box, Typography, Button, Skeleton } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import type { Salon } from "../common/salon.type";
-import { getSalonSlug, clearActiveSalonSlug } from "../common/storefront-slug.utils";
+import { getSalonSlug, clearActiveSalonSlug, getNormalizedStorefrontPath } from "../common/storefront-slug.utils";
+import { STOREFRONT_ROUTE_METADATA, formatTitleCase } from "../components/seo/salon-seo.utils";
 import { getStorefrontProfileService } from "../features/salon/get-storefront-profile/get-storefront-profile.service";
 import { getSalonService } from "../features/salon/get-salon/get-salon.service";
 import { useAppDispatch } from "../store/hook";
@@ -13,6 +14,7 @@ import { setCartSalon } from "../features/salon/cart/cart.slice";
 import { useAppThemeMode } from "../theme/theme-provider";
 import { getThemeOption } from "../theme/theme";
 import styles from "./storefront-provider.module.css";
+
 
 interface StorefrontContextType {
   salon: Salon | null;
@@ -77,10 +79,6 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
       setSalon(salonData);
       dispatch(setCartSalon(salonData));
-
-      if (typeof document !== "undefined" && salonData?.name) {
-        document.title = `${salonData.name} | Book Online`;
-      }
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
@@ -95,6 +93,67 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
+
+  useEffect(() => {
+    if (!salon || typeof document === "undefined") return;
+
+    const normalizedPath = getNormalizedStorefrontPath(pathname || "");
+    const pageSubTitle = STOREFRONT_ROUTE_METADATA[normalizedPath]?.title || "";
+    const formattedSalonName = formatTitleCase(salon.name || "");
+    const expectedTitle = pageSubTitle && normalizedPath !== "/"
+      ? `${pageSubTitle} | ${formattedSalonName}`
+      : `${formattedSalonName} | Book Online`;
+
+    const applyBranding = () => {
+      if (formattedSalonName && document.title !== expectedTitle) {
+        document.title = expectedTitle;
+      }
+
+      if (salon.logo) {
+        const iconSelectors = [
+          "link[rel='icon']",
+          "link[rel='shortcut icon']",
+          "link[rel='apple-touch-icon']",
+        ];
+
+        let foundAny = false;
+        iconSelectors.forEach((selector) => {
+          const links = document.querySelectorAll<HTMLLinkElement>(selector);
+          if (links.length > 0) {
+            links.forEach((link) => {
+              if (link.href !== salon.logo) {
+                link.href = salon.logo!;
+              }
+            });
+            foundAny = true;
+          }
+        });
+
+        if (!foundAny) {
+          const iconLink = document.createElement("link");
+          iconLink.rel = "icon";
+          iconLink.href = salon.logo;
+          document.head.appendChild(iconLink);
+        }
+      }
+    };
+
+    applyBranding();
+
+    const observer = new MutationObserver(() => {
+      applyBranding();
+    });
+
+    observer.observe(document.head, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [salon, pathname]);
 
   if (loading) {
     return (

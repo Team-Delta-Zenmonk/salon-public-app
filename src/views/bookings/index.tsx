@@ -54,9 +54,11 @@ export default function Bookings() {
     }
   };
 
+  const bookingsLength = bookings.length;
+
   useEffect(() => {
     const fetchInitialData = async () => {
-      if (!bookings.length) {
+      if (!bookingsLength) {
         setIsLoading(true);
       }
 
@@ -81,7 +83,7 @@ export default function Bookings() {
       }
     };
     fetchInitialData();
-  }, [dispatch, tabValue]);
+  }, [dispatch, tabValue, bookingsLength]);
 
   const fetchMoreData = async () => {
     if (!isFetchingMore && total > 0 && bookings.length < total) {

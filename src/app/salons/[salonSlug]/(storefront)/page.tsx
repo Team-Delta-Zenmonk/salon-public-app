@@ -2,7 +2,7 @@ import HomePage from "@/views/home";
 import StructuredData from "@/components/seo/structured-data";
 import {
   fetchSalonBySlug,
-  buildSalonMetadata,
+  buildRouteSalonMetadata,
 } from "@/components/seo/salon-seo.utils";
 import type { Metadata } from "next";
 
@@ -13,7 +13,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { salonSlug } = await params;
   const salon = await fetchSalonBySlug(salonSlug);
-  return buildSalonMetadata({ slug: salonSlug, salon });
+  return buildRouteSalonMetadata("/", salonSlug, salon);
 }
 
 export default async function SalonHomePage({ params }: Props) {

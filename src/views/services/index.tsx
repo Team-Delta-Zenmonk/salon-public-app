@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Typography, Button, CircularProgress, Box } from "@mui/material";
 import EllipsisCell from "@/components/ellipse-cell";
 import CustomSelect from "@/components/custom-select";
@@ -136,7 +136,7 @@ export default function ServicesPage() {
 
   const salonCategories: any[] = useMemo(() => salon?.categories || [], [salon?.categories]);
 
-  const fetchServicesData = async (pageNum: number, isInitial: boolean = false) => {
+  const fetchServicesData = useCallback(async (pageNum: number, isInitial: boolean = false) => {
     if (!salon?.slug) return;
     if (isInitial) setIsLoadingInitial(true);
 
@@ -180,11 +180,11 @@ export default function ServicesPage() {
     } finally {
       if (isInitial) setIsLoadingInitial(false);
     }
-  };
+  }, [dispatch, salon?.slug, selectedCategory, salonCategories, searchQuery, selectedGender]);
 
   useEffect(() => {
     fetchServicesData(1, true);
-  }, [salon?.slug, searchQuery, selectedCategory, selectedGender]);
+  }, [fetchServicesData]);
 
   const loadMoreServices = () => {
     if (!hasMore) return;

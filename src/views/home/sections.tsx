@@ -42,22 +42,27 @@ export const HOME_SECTIONS: Record<HomeSectionKey, SectionRenderer> = {
     />
   ),
   pillars: () => <PillarsSection />,
-  services: (layout, data) => (
-    <ServicesSection
-      variant={layout.servicesVariant}
-      services={data.services}
-      filteredServices={data.filteredServices}
-      subServicesMap={data.subServicesMap}
-      categorySanctuaries={data.categorySanctuaries}
-      selectedCategory={data.selectedCategory}
-      onSelectCategory={data.onSelectCategory}
-      selectedGender={data.selectedGender}
-      onSelectGender={data.onSelectGender}
-      toggleCart={data.toggleCart}
-      isAdded={data.isAdded}
-      loadingIds={data.loadingIds}
-    />
-  ),
+  services: (layout, data) => {
+    if (!data.services || data.services.length === 0) {
+      return null;
+    }
+    return (
+      <ServicesSection
+        variant={layout.servicesVariant}
+        services={data.services}
+        filteredServices={data.filteredServices}
+        subServicesMap={data.subServicesMap}
+        categorySanctuaries={data.categorySanctuaries}
+        selectedCategory={data.selectedCategory}
+        onSelectCategory={data.onSelectCategory}
+        selectedGender={data.selectedGender}
+        onSelectGender={data.onSelectGender}
+        toggleCart={data.toggleCart}
+        isAdded={data.isAdded}
+        loadingIds={data.loadingIds}
+      />
+    );
+  },
   specialists: (_layout, data) => (
     <SpecialistsSection
       staff={data.staff}

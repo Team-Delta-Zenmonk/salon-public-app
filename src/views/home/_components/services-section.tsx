@@ -226,6 +226,10 @@ const SERVICES_VARIANTS: Record<
 };
 
 export default function ServicesSection({ variant, ...props }: ServicesSectionProps) {
+  if (!props.services || props.services.length === 0) {
+    return null;
+  }
+
   const Component = SERVICES_VARIANTS[variant] ?? SERVICES_VARIANTS.grid;
 
   return (

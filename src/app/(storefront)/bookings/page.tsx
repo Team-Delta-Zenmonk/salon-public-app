@@ -1,15 +1,9 @@
 import Bookings from "@/views/bookings";
 import ProtectedGuard from "@/components/guards/protected-guard";
 import type { Metadata } from "next";
+import { getRouteStaticMetadata } from "@/components/seo/salon-seo.utils";
 
-export const metadata: Metadata = {
-  title: "My Appointments & Bookings",
-  description: "View and manage your upcoming and past luxury salon appointments.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export const metadata: Metadata = getRouteStaticMetadata("/bookings");
 
 export default function BookingsPage() {
   return (

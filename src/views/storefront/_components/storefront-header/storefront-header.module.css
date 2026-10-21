@@ -267,11 +267,11 @@
 }
 
 .userMenuItemDanger {
-  color: #ef4444 !important;
+  color: var(--app-signout-text, var(--app-primary)) !important;
 }
 
 .userMenuItemDanger:hover {
-  background-color: #fef2f2 !important;
+  background-color: var(--app-signout-bg-hover, var(--app-surface-alt)) !important;
 }
 
 .signInBtn {
@@ -430,7 +430,13 @@
 
 .drawerSignoutBtn {
   border-radius: 0.75rem !important;
-  color: #ef4444 !important;
+  color: var(--app-signout-text, var(--app-primary)) !important;
   font-weight: 700 !important;
+  border-color: var(--app-signout-border, var(--app-border)) !important;
+}
+
+.drawerSignoutBtn:hover {
+  background-color: var(--app-signout-bg-hover, var(--app-surface-alt)) !important;
+  border-color: var(--app-signout-border-hover, var(--app-primary)) !important;
 }
 
