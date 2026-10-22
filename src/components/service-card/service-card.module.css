@@ -332,9 +332,17 @@
   cursor: not-allowed;
 }
 
+.subServiceBtnRemove,
 .subServiceBtnBooked {
-  background-color: var(--app-primary);
-  color: var(--app-primary-contrast, var(--app-surface));
+  background-color: transparent;
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary);
+}
+
+.subServiceBtnRemove:hover,
+.subServiceBtnBooked:hover {
+  background-color: color-mix(in srgb, var(--app-primary) 10%, transparent);
+  border-color: var(--app-primary);
 }
 
 .subServiceBtnAdd {
@@ -477,9 +485,14 @@
 }
 
 .footerReserveBtnReserved {
-  background-color: var(--app-primary);
-  color: var(--app-primary-contrast, var(--app-surface));
+  background-color: transparent;
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.footerReserveBtnReserved:hover {
+  background-color: color-mix(in srgb, var(--app-primary) 10%, transparent);
 }
 
 .footerReserveBtnAdd {

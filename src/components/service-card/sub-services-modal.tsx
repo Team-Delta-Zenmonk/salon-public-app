@@ -13,7 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
-import CheckIcon from "@mui/icons-material/Check";
+import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import EllipsisCell from "@/components/ellipse-cell";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -167,7 +167,7 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
                         className={clsx(
                           styles.subServiceBtn,
                           isSubLoading && styles.subServiceBtnDisabled,
-                          subAdded ? styles.subServiceBtnBooked : styles.subServiceBtnAdd
+                          subAdded ? styles.subServiceBtnRemove : styles.subServiceBtnAdd
                         )}
                       >
                         {isSubLoading ? (
@@ -178,11 +178,11 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
                         ) : (
                           <>
                             {subAdded ? (
-                              <CheckIcon className={styles.subServiceBtnIcon} />
+                              <RemoveIcon className={styles.subServiceBtnIcon} />
                             ) : (
                               <AddIcon className={styles.subServiceBtnIcon} />
                             )}
-                            <span>{subAdded ? "BOOKED" : "ADD"}</span>
+                            <span>{subAdded ? "REMOVE" : "ADD"}</span>
                           </>
                         )}
                       </button>

@@ -249,9 +249,17 @@
   cursor: not-allowed;
 }
 
+.subServiceBtnRemove,
 .subServiceBtnBooked {
-  background-color: var(--app-primary);
-  color: var(--app-primary-contrast, var(--app-surface));
+  background-color: transparent;
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary);
+}
+
+.subServiceBtnRemove:hover,
+.subServiceBtnBooked:hover {
+  background-color: color-mix(in srgb, var(--app-primary) 10%, transparent);
+  border-color: var(--app-primary);
 }
 
 .subServiceBtnAdd {

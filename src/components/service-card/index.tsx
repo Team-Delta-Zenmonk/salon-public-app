@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import EllipsisCell from "@/components/ellipse-cell";
-import CheckIcon from "@mui/icons-material/Check";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useAppThemeMode } from "@/theme/theme-provider";
 import SubServicesModal from "./sub-services-modal";
@@ -48,8 +49,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   const hasSubServices = subServices.length > 0;
 
   const checkSubAdded = (sub: any) => {
-    const subId = sub.uuid || sub.id;
-    if (isSubAdded) return isSubAdded(subId);
+    const subId = typeof sub === "object" && sub !== null ? sub.uuid || sub.id : sub;
+    if (isSubAdded && subId) return isSubAdded(subId);
     return false;
   };
 
@@ -276,11 +277,11 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                 ) : (
                   <>
                     {isAdded ? (
-                      <CheckIcon />
+                      <RemoveIcon />
                     ) : (
-                      <CalendarTodayIcon />
+                      <AddIcon />
                     )}
-                    <span>{isAdded ? "ADDED" : "ADD TO BOOKING"}</span>
+                    <span>{isAdded ? "REMOVE" : "ADD"}</span>
                   </>
                 )}
               </button>
