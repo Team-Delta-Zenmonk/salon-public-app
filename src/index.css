@@ -58,6 +58,7 @@
   --app-muted: var(--color-tertiary);
   --app-champagne: var(--color-bronze-accent);
   --app-radius: 8px;
+  --staff-card-reserve-btn-margin-top: 1.25rem;
   --app-btn-radius: 9999px;
   --app-navbar-bg: var(--app-surface);
   --app-navbar-border: 1px solid var(--app-border);
@@ -86,12 +87,14 @@
   --page-padding-x: 1.5rem;
   --page-padding-top: 2rem;
   --page-padding-bottom: 2.5rem;
-  --home-hero-image-max-width: 480px;
-  --home-hero-image-max-height: 580px;
+  --home-hero-image-max-width: 440px;
+  --home-hero-image-max-height: 460px;
 
   --card-max-width: 420px;
   --card-border-radius: 22px;
   --service-card-max-height: 720px;
+  --service-card-compact-max-height: 520px;
+  --sub-services-modal-max-height: 80vh;
   --staff-card-max-height: 520px;
   --app-hex-060c1c: #060c1c;
   --app-hex-09080b: #09080b;

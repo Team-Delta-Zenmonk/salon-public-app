@@ -22,6 +22,7 @@ export interface ServicesSectionProps {
   toggleCart: (service: any) => Promise<void>;
   isAdded: (serviceId: string) => boolean;
   loadingIds: string[];
+  onBookService?: (service: Service) => void;
 }
 
 function GridServicesLayout({
@@ -35,6 +36,7 @@ function GridServicesLayout({
   toggleCart,
   isAdded,
   loadingIds,
+  onBookService,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <>
@@ -119,6 +121,8 @@ function GridServicesLayout({
             isSubAdded={(subId) => isAdded(subId)}
             onToggleCart={toggleCart}
             loadingIds={loadingIds}
+            showSubServices={false}
+            onBookNow={onBookService}
           />
         ))}
       </div>
@@ -135,6 +139,7 @@ function TwoColumnListLayout({
   toggleCart,
   isAdded,
   loadingIds,
+  onBookService,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <>
@@ -164,6 +169,8 @@ function TwoColumnListLayout({
             isSubAdded={(subId) => isAdded(subId)}
             onToggleCart={toggleCart}
             loadingIds={loadingIds}
+            showSubServices={false}
+            onBookNow={onBookService}
           />
         ))}
       </div>
@@ -180,6 +187,7 @@ function CompactAccordionLayout({
   toggleCart,
   isAdded,
   loadingIds,
+  onBookService,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <div>
@@ -209,6 +217,8 @@ function CompactAccordionLayout({
             isSubAdded={(subId) => isAdded(subId)}
             onToggleCart={toggleCart}
             loadingIds={loadingIds}
+            showSubServices={false}
+            onBookNow={onBookService}
           />
         ))}
       </div>

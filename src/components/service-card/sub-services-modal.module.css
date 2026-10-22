@@ -1,0 +1,305 @@
+.dialogPaper {
+  border-radius: var(--card-border-radius, 20px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--app-border) !important;
+  background-color: var(--app-surface) !important;
+  color: var(--app-text) !important;
+  box-shadow: 0 25px 50px -12px var(--app-shadow-base, rgba(0, 0, 0, 0.25)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: var(--sub-services-modal-max-height, 85vh) !important;
+  margin: 1rem !important;
+  width: calc(100% - 2rem) !important;
+  max-width: 540px !important;
+}
+
+@media (max-width: 480px) {
+  .dialogPaper {
+    margin: 0.75rem !important;
+    width: calc(100% - 1.5rem) !important;
+    max-height: 90vh !important;
+    border-radius: var(--card-border-radius, 16px) !important;
+  }
+}
+
+.backdrop {
+  backdrop-filter: blur(4px) !important;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.dialogTitle {
+  padding: 1.25rem 1.25rem 0.875rem 1.25rem !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid var(--app-border) !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+  .dialogTitle {
+    padding: 1rem 1rem 0.75rem 1rem !important;
+  }
+}
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.iconCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--app-primary) 10%, transparent);
+  color: var(--app-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.titleIcon {
+  font-size: 20px !important;
+}
+
+.titleHeading {
+  font-family: var(--app-font-serif, serif) !important;
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text) !important;
+  line-height: 1.25 !important;
+  text-transform: capitalize;
+}
+
+.subtitle {
+  font-family: var(--app-font-family, sans-serif) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+  color: var(--app-muted) !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  margin-top: 0.125rem !important;
+}
+
+.closeButton {
+  color: var(--app-muted) !important;
+  padding: 0.375rem !important;
+  margin: -0.375rem -0.375rem 0 0 !important;
+  transition: all 150ms ease !important;
+}
+
+.closeButton:hover {
+  color: var(--app-text) !important;
+  background-color: var(--app-surface-alt) !important;
+}
+
+.closeIcon {
+  font-size: 20px !important;
+}
+
+.dialogContent {
+  padding: 1.25rem !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+  .dialogContent {
+    padding: 0.875rem 0.875rem 1rem 0.875rem !important;
+  }
+}
+
+.subServicesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.subServiceItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--app-radius, 8px);
+  border: 1px solid;
+  transition: all 200ms ease;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .subServiceItem {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.subServiceItemActive {
+  background-color: var(--app-surface);
+  border-color: var(--app-primary);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+}
+
+.subServiceItemDefault {
+  background-color: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+.subServiceItemDefault:hover {
+  background-color: var(--app-surface-alt);
+}
+
+.subServiceInfo {
+  min-width: 0;
+  flex: 1;
+}
+
+@media (min-width: 640px) {
+  .subServiceInfo {
+    margin-right: 0.75rem;
+  }
+}
+
+.subServiceNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subServiceName {
+  font-family: var(--app-font-family, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--app-text);
+  text-transform: capitalize;
+}
+
+.subServiceDuration {
+  font-size: 10px;
+  font-family: var(--app-font-family, sans-serif);
+  color: var(--app-muted);
+  background-color: color-mix(in srgb, var(--app-text) 8%, transparent);
+  padding: 0.125rem 0.375rem;
+  border-radius: 2px;
+}
+
+.subServiceDesc {
+  font-size: 11px;
+  color: var(--app-muted);
+  font-family: var(--app-font-family, sans-serif);
+  margin-top: 0.25rem;
+  text-transform: capitalize;
+}
+
+.subServiceActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  padding-top: 0.375rem;
+  border-top: 1px solid var(--app-border);
+}
+
+@media (min-width: 640px) {
+  .subServiceActions {
+    justify-content: flex-end;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.subServicePrice {
+  font-family: var(--app-font-family, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--app-primary);
+}
+
+.subServiceBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--app-btn-radius, 9999px);
+  font-family: var(--app-font-family, sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 150ms ease;
+  cursor: pointer;
+  border: 0;
+}
+
+.subServiceBtnDisabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.subServiceBtnBooked {
+  background-color: var(--app-primary);
+  color: var(--app-primary-contrast, var(--app-surface));
+}
+
+.subServiceBtnAdd {
+  background-color: var(--app-primary);
+  color: var(--app-primary-contrast, var(--app-surface));
+}
+
+.subServiceBtnAdd:hover {
+  background-color: var(--app-ring);
+  color: var(--app-primary-contrast, var(--app-surface));
+}
+
+.subServiceBtnIcon {
+  font-size: 14px;
+}
+
+.emptyState {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--app-muted);
+  font-family: var(--app-font-family, sans-serif);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.scrollLoaderBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.spinner {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 9999px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

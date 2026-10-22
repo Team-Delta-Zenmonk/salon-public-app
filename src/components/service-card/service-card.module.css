@@ -9,8 +9,12 @@
   border: 1px solid var(--app-border);
   width: 100%;
   max-width: var(--card-max-width, 420px);
-  max-height: var(--service-card-max-height, 720px);
+  max-height: var(--service-card-compact-max-height, 520px);
   box-sizing: border-box;
+}
+
+.cardCompact {
+  max-height: var(--service-card-compact-max-height, 520px);
 }
 
 .card:hover {
@@ -420,6 +424,8 @@
 
 .footerOptionsBtnSelected {
   border-color: var(--app-primary);
+  background-color: var(--app-primary);
+  color: var(--app-primary-contrast, var(--app-surface));
 }
 
 .footerOptionsBtnDefault {

@@ -83,15 +83,22 @@
 
 .heroHeading {
   font-family: var(--app-font-family);
-  font-size: clamp(1.75rem, 4vw + 0.75rem, 4.5rem);
+  font-size: clamp(1.6rem, 3.2vw + 0.5rem, 3.25rem);
   font-weight: 400;
   color: var(--app-text);
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.025em;
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
   margin: 0;
+}
+
+@media (max-width: 639px) {
+  .heroHeading {
+    font-size: clamp(1.4rem, 5vw, 1.85rem);
+    line-height: 1.2;
+  }
 }
 
 .heroAboutWrapper {
@@ -203,13 +210,20 @@
   overflow: hidden;
   border: 1px solid var(--app-border);
   background-color: var(--app-surface-alt);
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 4.5;
   grid-column: span 2;
   transition: all 300ms ease;
   max-width: var(--home-hero-image-max-width);
   max-height: var(--home-hero-image-max-height);
   width: 100%;
   margin: 0 auto;
+}
+
+@media (max-width: 639px) {
+  .bentoCard {
+    aspect-ratio: 16 / 11;
+    max-height: 320px;
+  }
 }
 
 .bentoImage {
@@ -243,30 +257,46 @@
 
 .bentoContent {
   position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
   z-index: 20;
   pointer-events: none;
 }
 
+@media (max-width: 639px) {
+  .bentoContent {
+    bottom: 0.875rem;
+    left: 0.875rem;
+    right: 0.875rem;
+  }
+}
+
 .bentoSub {
   font-family: var(--app-font-family);
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 600;
   color: var(--app-hero-showcase-sub);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   display: block;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .bentoTitle {
   font-family: var(--app-font-family);
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2vw + 0.5rem, 1.25rem);
   color: var(--app-hero-showcase-title);
   font-weight: 400;
-  line-height: 1.375;
+  line-height: 1.3;
+  margin: 0;
+}
+
+@media (max-width: 639px) {
+  .bentoTitle {
+    font-size: 0.95rem;
+    line-height: 1.25;
+  }
 }
 
 .pillarsSection {
@@ -858,13 +888,31 @@
 .archWindowFrame {
   position: relative;
   width: 100%;
-  maxWidth: 340px;
-  height: 470px;
-  border-radius: 170px 170px 16px 16px;
+  max-width: 300px;
+  height: 380px;
+  border-radius: 150px 150px 16px 16px;
   overflow: hidden;
   border: 2px solid var(--app-primary);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(243, 198, 119, 0.25);
   z-index: 1;
+}
+
+@media (max-width: 639px) {
+  .archWindowFrame {
+    max-width: 280px;
+    width: 100%;
+    height: 320px;
+    border-radius: 140px 140px 16px 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(243, 198, 119, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .archWindowFrame {
+    max-width: 320px;
+    height: 410px;
+    border-radius: 160px 160px 16px 16px;
+  }
 }
 
 .archWindowImage {
@@ -923,22 +971,29 @@
   border: 1px solid var(--border-color, rgba(122, 28, 40, 0.18));
   border-radius: var(--radius-card, 0.75rem);
   box-shadow: var(--card-shadow, 0 12px 30px -5px rgba(26, 21, 24, 0.06));
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1rem, 3.5vw, 2.5rem);
   box-sizing: border-box;
   overflow: hidden;
 }
 
 .gothicHeroGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   align-items: center;
-  gap: var(--grid-gap, 2rem);
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .gothicHeroGrid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(1.75rem, 3vw, 3rem);
+  }
 }
 
 .gothicHeroLeft {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .gothicHeroBadge {
@@ -967,6 +1022,7 @@
   color: var(--text-primary, #1A1518);
   letter-spacing: -0.01em;
   line-height: 1.15;
+  font-size: clamp(1.5rem, 5vw, 2.75rem);
 }
 
 .gothicAboutText {
@@ -974,30 +1030,41 @@
   color: var(--text-muted, #665E62);
   font-family: var(--font-family-body, 'Outfit', sans-serif);
   line-height: 1.6;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
 }
 
 .gothicHeroActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.875rem;
+  gap: 0.75rem;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .gothicPrimaryCta {
   background-color: var(--accent-primary, #7A1C28);
   color: #FFFFFF;
   border-radius: var(--radius-button, 9999px);
-  padding: 0.8rem 1.75rem;
+  padding: 0.75rem 1.4rem;
   font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   box-shadow: 0 4px 14px rgba(122, 28, 40, 0.25);
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 639px) {
+  .gothicPrimaryCta {
+    flex: 1 1 100%;
+  }
 }
 
 .gothicPrimaryCta:hover {
@@ -1010,14 +1077,23 @@
   border: 1px solid var(--accent-gold, #C5A059);
   color: var(--text-primary, #1A1518);
   border-radius: var(--radius-button, 9999px);
-  padding: 0.8rem 1.75rem;
+  padding: 0.75rem 1.4rem;
   font-family: var(--font-family-body, 'Outfit', sans-serif);
+  font-size: 0.8125rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 639px) {
+  .gothicSecondaryBtn {
+    flex: 1 1 100%;
+  }
 }
 
 .gothicSecondaryBtn:hover {
@@ -1033,12 +1109,21 @@
 .gothicHeroRight {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 380px;
+  aspect-ratio: 16 / 11;
+  min-height: 250px;
+  max-height: 440px;
   border-radius: var(--radius-card, 0.75rem);
   overflow: hidden;
   border: 1px solid var(--border-gold, rgba(197, 160, 89, 0.4));
   background-color: var(--app-surface-alt);
+}
+
+@media (min-width: 900px) {
+  .gothicHeroRight {
+    aspect-ratio: 4 / 3.2;
+    height: 100%;
+    min-height: 420px;
+  }
 }
 
 .gothicHeroImage {
@@ -1060,37 +1145,47 @@
 
 .gothicFloatingBadge {
   position: absolute;
-  bottom: 1.25rem;
-  right: 1.25rem;
+  bottom: 0.875rem;
+  right: 0.875rem;
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--accent-gold, #C5A059);
   border-radius: 0.5rem;
-  padding: 0.75rem 1.125rem;
+  padding: 0.5rem 0.85rem;
   box-shadow: 0 8px 24px rgba(26, 21, 24, 0.12);
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0.5rem;
   z-index: 10;
+  max-width: calc(100% - 1.75rem);
+}
+
+@media (max-width: 480px) {
+  .gothicFloatingBadge {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.4rem 0.65rem;
+  }
 }
 
 .gothicBadgeIconCircle {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.85rem;
+  height: 1.85rem;
   border-radius: 9999px;
   background-color: var(--accent-soft, #EFE6E8);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent-primary, #7A1C28);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .gothicBadgeHeading {
   font-family: var(--font-family-heading, 'Cinzel', serif);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-primary, #1A1518);
   line-height: 1.2;
@@ -1098,9 +1193,9 @@
 
 .gothicBadgeSubtext {
   font-family: var(--font-family-body, 'Outfit', sans-serif);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-muted, #665E62);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .categoryPillsContainer {

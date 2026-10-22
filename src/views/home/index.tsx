@@ -202,6 +202,14 @@ export default function HomePage() {
       const el = document.getElementById("services-menu");
       if (el) el.scrollIntoView({ behavior: "smooth" });
     },
+    onBookService: (service: any) => {
+      const catParam =
+        service.category?.id ||
+        service.category_id ||
+        service.category?.name ||
+        "all";
+      navigate(`/services?category=${encodeURIComponent(String(catParam).toLowerCase())}`);
+    },
   };
 
   return (

@@ -24,6 +24,7 @@ export interface HomeSectionsContextData {
   loadingIds: string[];
   onNavigateSpecialists: () => void;
   onExploreServices: () => void;
+  onBookService?: (service: Service) => void;
 }
 
 export type SectionRenderer = (
@@ -60,6 +61,7 @@ export const HOME_SECTIONS: Record<HomeSectionKey, SectionRenderer> = {
         toggleCart={data.toggleCart}
         isAdded={data.isAdded}
         loadingIds={data.loadingIds}
+        onBookService={data.onBookService}
       />
     );
   },

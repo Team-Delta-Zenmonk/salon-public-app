@@ -4,11 +4,9 @@ import clsx from "clsx";
 import Image from "next/image";
 import EllipsisCell from "@/components/ellipse-cell";
 import CheckIcon from "@mui/icons-material/Check";
-import AddIcon from "@mui/icons-material/Add";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useAppThemeMode } from "@/theme/theme-provider";
+import SubServicesModal from "./sub-services-modal";
 import styles from "./service-card.module.css";
 
 export interface ServiceCardProps {
@@ -21,6 +19,8 @@ export interface ServiceCardProps {
   loadingIds?: string[];
   className?: string;
   designVariant?: "editorial" | "archVault" | "floatingGlass";
+  showSubServices?: boolean;
+  onBookNow?: (service: any) => void;
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -33,9 +33,11 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   loadingIds = [],
   className,
   designVariant,
+  showSubServices = true,
+  onBookNow,
 }) => {
   const { themeId } = useAppThemeMode();
-  const [expanded, setExpanded] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const activeDesign: "editorial" | "archVault" | "floatingGlass" =
     designVariant ||
     (themeId === "obsidianFlame"
@@ -73,6 +75,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     <article
       className={clsx(
         styles.card,
+        !showSubServices && styles.cardCompact,
         themeClass,
         designClass,
         selectedSubCount > 0 ? styles.cardWithSelected : styles.cardDefaultHover,
@@ -232,153 +235,89 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       )}
 
       <div className={styles.cardActionsContainer}>
-
-        {hasSubServices ? (
-          <div className={styles.subServicesSection}>
-            <div className={styles.subServicesHeader}>
-              <div>
-                <span className={styles.subServicesTitle}>
-                  BOOKABLE SUB-SERVICES ({subServices.length})
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setExpanded(!expanded)}
-                className={styles.toggleExpandBtn}
-              >
-                {expanded ? "Hide" : "Show All"}
-              </button>
+        {showSubServices ? (
+          <div className={styles.footerBar}>
+            <div className={styles.guaranteeText}>
+              <strong className={styles.guaranteeStrong}>Atelier Guarantee:</strong> Full consultation included
             </div>
 
-            {expanded && (
-              <div className={styles.subServicesList}>
-                {subServices.map((sub: any) => {
-                  const subAdded = checkSubAdded(sub);
-                  const subId = sub.uuid || sub.id;
-                  const isSubLoading = loadingIds.includes(subId);
-                  return (
-                    <div
-                      key={subId}
-                      className={clsx(
-                        styles.subServiceItem,
-                        subAdded ? styles.subServiceItemActive : styles.subServiceItemDefault
-                      )}
-                    >
-                      <div className={styles.subServiceInfo}>
-                        <div className={styles.subServiceNameRow}>
-                          <EllipsisCell value={sub.name} maxChars={10} className={styles.subServiceName} />
-                          {sub.duration && (
-                            <EllipsisCell value={`${sub.duration} min`} maxChars={10} className={styles.subServiceDuration} />
-                          )}
-                        </div>
-                        {sub.description && (
-                          <EllipsisCell value={sub.description} maxChars={10} className={styles.subServiceDesc} />
-                        )}
-                      </div>
-
-                      <div className={styles.subServiceActions}>
-                        <span className={styles.subServicePrice}>
-                          ₹{sub.price}
-                        </span>
-                        <button
-                          type="button"
-                          disabled={isSubLoading}
-                          onClick={() => onToggleCart?.(sub)}
-                          className={clsx(
-                            styles.subServiceBtn,
-                            isSubLoading && styles.subServiceBtnDisabled,
-                            subAdded ? styles.subServiceBtnBooked : styles.subServiceBtnAdd
-                          )}
-                        >
-                          {isSubLoading ? (
-                            <>
-                              <span className={styles.spinner} />
-                              <span>{subAdded ? "REMOVING..." : "ADDING..."}</span>
-                            </>
-                          ) : (
-                            <>
-                              {subAdded ? (
-                                <CheckIcon className={styles.subServiceBtnIcon} />
-                              ) : (
-                                <AddIcon className={styles.subServiceBtnIcon} />
-                              )}
-                              <span>{subAdded ? "BOOKED" : "ADD"}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            {hasSubServices ? (
+              <button
+                type="button"
+                onClick={() => setModalOpen(true)}
+                className={clsx(
+                  styles.footerOptionsBtn,
+                  selectedSubCount > 0 ? styles.footerOptionsBtnSelected : styles.footerOptionsBtnDefault
+                )}
+              >
+                <span>OPTIONS ({subServices.length})</span>
+                {selectedSubCount > 0 && (
+                  <span className={styles.footerOptionsCount}>
+                    {selectedSubCount} SELECTED
+                  </span>
+                )}
+              </button>
+            ) : service.parent_id !== null ? (
+              <button
+                type="button"
+                disabled={loadingIds.includes(service.uuid || service.id)}
+                onClick={() => onToggleCart?.(service)}
+                className={clsx(
+                  styles.footerReserveBtn,
+                  loadingIds.includes(service.uuid || service.id) && styles.footerReserveBtnDisabled,
+                  isAdded ? styles.footerReserveBtnReserved : styles.footerReserveBtnAdd
+                )}
+              >
+                {loadingIds.includes(service.uuid || service.id) ? (
+                  <>
+                    <span className={`${styles.spinner} ${styles.spinnerLg}`} />
+                    <span>{isAdded ? "REMOVING..." : "ADDING..."}</span>
+                  </>
+                ) : (
+                  <>
+                    {isAdded ? (
+                      <CheckIcon />
+                    ) : (
+                      <CalendarTodayIcon />
+                    )}
+                    <span>{isAdded ? "ADDED" : "ADD TO BOOKING"}</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <span className={styles.selectSubPrompt}>
+                SELECT A SUB-SERVICE ABOVE
+              </span>
             )}
           </div>
         ) : (
-          <div className={styles.emptySubServices}>
-            No sub-services available for this category.
+          <div className={styles.footerBar}>
+            <div className={styles.guaranteeText}>
+              <strong className={styles.guaranteeStrong}>Atelier Guarantee:</strong> Full consultation included
+            </div>
+            <button
+              type="button"
+              onClick={() => onBookNow?.(service)}
+              className={clsx(styles.footerReserveBtn, styles.footerReserveBtnAdd)}
+            >
+              <CalendarTodayIcon />
+              <span>BOOK NOW</span>
+            </button>
           </div>
         )}
-
-        <div className={styles.footerBar}>
-          <div className={styles.guaranteeText}>
-            <strong className={styles.guaranteeStrong}>Atelier Guarantee:</strong> Full consultation included
-          </div>
-
-          {hasSubServices ? (
-            <button
-              type="button"
-              onClick={() => setExpanded(!expanded)}
-              className={clsx(
-                styles.footerOptionsBtn,
-                selectedSubCount > 0 ? styles.footerOptionsBtnSelected : styles.footerOptionsBtnDefault
-              )}
-            >
-              {expanded ? (
-                <ExpandLessIcon />
-              ) : (
-                <ExpandMoreIcon />
-              )}
-              <span>{expanded ? "HIDE OPTIONS" : "SHOW OPTIONS"}</span>
-              {selectedSubCount > 0 && (
-                <span className={styles.footerOptionsCount}>
-                  {selectedSubCount}
-                </span>
-              )}
-            </button>
-          ) : service.parent_id !== null ? (
-            <button
-              type="button"
-              disabled={loadingIds.includes(service.uuid || service.id)}
-              onClick={() => onToggleCart?.(service)}
-              className={clsx(
-                styles.footerReserveBtn,
-                loadingIds.includes(service.uuid || service.id) && styles.footerReserveBtnDisabled,
-                isAdded ? styles.footerReserveBtnReserved : styles.footerReserveBtnAdd
-              )}
-            >
-              {loadingIds.includes(service.uuid || service.id) ? (
-                <>
-                  <span className={`${styles.spinner} ${styles.spinnerLg}`} />
-                  <span>{isAdded ? "REMOVING..." : "ADDING..."}</span>
-                </>
-              ) : (
-                <>
-                  {isAdded ? (
-                    <CheckIcon />
-                  ) : (
-                    <CalendarTodayIcon />
-                  )}
-                  <span>{isAdded ? "ADDED" : "ADD TO BOOKING"}</span>
-                </>
-              )}
-            </button>
-          ) : (
-            <span className={styles.selectSubPrompt}>
-              SELECT A SUB-SERVICE ABOVE
-            </span>
-          )}
-        </div>
       </div>
+
+      {hasSubServices && (
+        <SubServicesModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          serviceName={service.name || "Service Treatment"}
+          subServices={subServices}
+          isSubAdded={checkSubAdded}
+          onToggleCart={onToggleCart}
+          loadingIds={loadingIds}
+        />
+      )}
     </article>
   );
 };
