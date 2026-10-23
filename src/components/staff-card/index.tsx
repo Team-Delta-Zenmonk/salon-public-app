@@ -249,15 +249,6 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={() => navigate(`/services?specialist=${encodeURIComponent(fullName)}`)}
-        className={styles.reserveBtn}
-      >
-        <span>BOOK WITH SPECIALIST</span>
-        <ArrowForwardIcon className={styles.arrowIcon} />
-      </button>
-
       <ScheduleTimingDialog
         open={openSchedule}
         onClose={() => setOpenSchedule(false)}

@@ -15,6 +15,7 @@ import ExpiryView from "./_components/expiry-view";
 import PaymentProcessing from "./_components/payment-processing";
 import { getPaymentCompleted, clearGuestCart } from "../../features/salon/cart/cart.utils";
 import { clearCart } from "../../features/salon/cart/cart.slice";
+import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { useAppDispatch } from "../../store/hook";
 import { useCheckoutData } from "./hooks/useCheckoutData";
 import { useStripeAppearance } from "./hooks/useStripeAppearance";
@@ -41,7 +42,10 @@ export default function Checkout() {
 
   const handlePaymentSuccess = useCallback(() => {
     setIsProcessing(true);
-  }, []);
+    if (currentBooking?.uuid) {
+      dispatch(getBookingAction(currentBooking.uuid));
+    }
+  }, [dispatch, currentBooking?.uuid]);
 
   const handleProcessingComplete = useCallback(() => {
     dispatch(clearCart());

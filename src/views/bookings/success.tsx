@@ -27,7 +27,7 @@ const BookingSuccess: React.FC = () => {
   const bookingUuid = searchBookingUuid || currentBooking?.uuid;
   const booking = currentBooking;
 
-  const [isLoading, setIsLoading] = useState(!booking && !!bookingUuid);
+  const [isLoading, setIsLoading] = useState((!booking || booking.status === "pending") && !!bookingUuid);
 
   const { salon: cartSalon } = useAppSelector((s) => s.cart);
   const initialSalonRef = useRef(booking?.salon || cartSalon);
@@ -40,16 +40,8 @@ const BookingSuccess: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!bookingUuid && !booking) {
-      callSnack("No booking found. Redirecting to cart.", "error");
-      navigate("/cart", { replace: true });
-      return;
-    }
-
-    if (bookingUuid) {
-      if (!booking) {
-        setIsLoading(true);
-      }
+    if (bookingUuid && (!booking || booking.status === "pending")) {
+      setIsLoading(true);
       dispatch(getBookingAction(bookingUuid))
         .unwrap()
         .catch((err: any) => {
@@ -84,40 +76,6 @@ const BookingSuccess: React.FC = () => {
     }
     return "Time not available";
   }, [booking?.booking_start_time, booking?.booking_end_time]);
-
-  const { paymentTitle, amountPaidOnline, toPayAtVenue } = useMemo(() => {
-    const totalPrice = Number(booking?.total_price || 0);
-    const policy = booking?.payment_policy;
-    const isFullUpfront = policy === "full_upfront";
-    const isPayAtVenue = policy === "pay_at_venue";
-
-    let paidOnline = 0;
-    if (typeof booking?.amount_paid_online === "number" && booking.amount_paid_online > 0) {
-      paidOnline = booking.amount_paid_online;
-    } else if (isFullUpfront) {
-      paidOnline = totalPrice;
-    } else if (!isPayAtVenue && typeof booking?.deposit_amount === "number") {
-      paidOnline = booking.deposit_amount;
-    }
-
-    const remainingVenue = Math.max(0, totalPrice - paidOnline);
-
-    let title = "Full Payment";
-    if (isPayAtVenue) {
-      title = "Pay at Venue";
-    } else if (policy === "partial_deposit") {
-      title = "Partial Deposit";
-    } else if (isFullUpfront) {
-      title = "Full Payment";
-    }
-
-    return {
-      paymentTitle: title,
-      amountPaidOnline: paidOnline,
-      toPayAtVenue: remainingVenue,
-    };
-  }, [booking?.total_price, booking?.payment_policy, booking?.amount_paid_online, booking?.deposit_amount]);
-
   if (isLoading || !booking) {
     return (
       <Box className={styles.successPage}>
@@ -137,6 +95,11 @@ const BookingSuccess: React.FC = () => {
       </Box>
     );
   }
+
+  const amountPaidOnline = Number(
+    booking.amount_paid_online || (booking.payment_policy !== "pay_at_venue" ? booking.deposit_amount : 0) || 0,
+  );
+  const toPayAtVenue = Math.max(0, Number(booking.total_price || 0) - amountPaidOnline);
 
   return (
     <Box className={styles.successPage}>

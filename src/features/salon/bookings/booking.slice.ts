@@ -102,6 +102,10 @@ export const bookingSlice = createSlice({
       state.paymentId = payload?.paymentId ?? null;
       state.bookingPhase = BookingPhase.PAYMENT;
     });
+
+    builder.addCase(getBookingAction.fulfilled, (state, { payload }) => {
+      state.currentBooking = payload?.data ?? payload ?? null;
+    });
   },
 });
 
