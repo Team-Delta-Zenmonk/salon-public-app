@@ -58,7 +58,7 @@ const BookingSuccess: React.FC = () => {
           setIsLoading(false);
         });
     }
-  }, [bookingUuid, dispatch, navigate]);
+  }, [bookingUuid, booking, dispatch, navigate]);
 
   const handleNavigateAway = (path: string) => {
     dispatch(clearBookingSession());
@@ -100,6 +100,13 @@ const BookingSuccess: React.FC = () => {
     booking.amount_paid_online || (booking.payment_policy !== "pay_at_venue" ? booking.deposit_amount : 0) || 0,
   );
   const toPayAtVenue = Math.max(0, Number(booking.total_price || 0) - amountPaidOnline);
+
+  const paymentTitle =
+    booking.payment_policy === "pay_at_venue"
+      ? "Pay at Venue"
+      : booking.payment_policy === "partial_deposit"
+        ? "Partial Deposit"
+        : "Full Payment";
 
   return (
     <Box className={styles.successPage}>
