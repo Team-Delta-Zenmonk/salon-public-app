@@ -146,6 +146,10 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
             logo: salon.logo,
             address: salon.address,
             type: salon.type,
+            allowed_payment_policies: salon.allowed_payment_policies,
+            deposit_percentage: salon.deposit_percentage,
+            has_stripe_account: salon.has_stripe_account ?? Boolean(salon.stripe_account_id),
+            stripe_account_id: salon.stripe_account_id,
           },
         }),
       );

@@ -17,6 +17,7 @@ interface BookingConfirmDialogProps {
   salonPaymentPolicy: string;
   salonAllowedPaymentPolicies?: string[];
   salonDepositPercentage?: number | null;
+  hasStripeAccount: boolean;
   totalDuration: number;
   confirming: boolean;
 }
@@ -31,19 +32,27 @@ export default function BookingConfirmDialog({
   salonPaymentPolicy,
   salonAllowedPaymentPolicies,
   salonDepositPercentage,
+  hasStripeAccount,
   totalDuration,
   confirming,
 }: Readonly<BookingConfirmDialogProps>) {
   const durationText = formatDuration(totalDuration);
   const dateObj = date ? new Date(date) : null;
 
-  const allowed = salonAllowedPaymentPolicies?.length
+  const rawAllowed = salonAllowedPaymentPolicies?.length
     ? salonAllowedPaymentPolicies
     : [salonPaymentPolicy || "pay_at_venue"];
 
+  const stripeAccount = hasStripeAccount ?? true;
+  const allowed = stripeAccount
+    ? rawAllowed
+    : rawAllowed.filter((p) => p === "pay_at_venue");
+
+  const effectiveAllowed = allowed.length > 0 ? allowed : ["pay_at_venue"];
+
   const defaultSelection =
-    allowed.includes("full_upfront") ? "full_upfront" :
-    allowed.includes("partial_deposit") ? "partial_deposit" :
+    effectiveAllowed.includes("full_upfront") ? "full_upfront" :
+    effectiveAllowed.includes("partial_deposit") ? "partial_deposit" :
     "pay_at_venue";
 
   const [selectedPayment, setSelectedPayment] = useState<"pay_at_venue" | "partial_deposit" | "full_upfront">(defaultSelection);
@@ -58,9 +67,9 @@ export default function BookingConfirmDialog({
   if (selectedPayment === "partial_deposit") currentDepositAmount = partialDepositAmount;
   else if (selectedPayment === "full_upfront") currentDepositAmount = totalPrice;
 
-  const isPayAtVenueDisabled = !allowed.includes("pay_at_venue");
-  const isPartialDepositDisabled = !allowed.includes("partial_deposit");
-  const isFullUpfrontDisabled = !allowed.includes("full_upfront");
+  const isPayAtVenueDisabled = !effectiveAllowed.includes("pay_at_venue");
+  const isPartialDepositDisabled = !effectiveAllowed.includes("partial_deposit") || !hasStripeAccount;
+  const isFullUpfrontDisabled = !effectiveAllowed.includes("full_upfront") || !hasStripeAccount;
 
   return (
     <Dialog
@@ -172,6 +181,11 @@ export default function BookingConfirmDialog({
                 <Typography className={styles.planDesc}>
                   Secure slot immediately for ₹{partialDepositAmount}
                 </Typography>
+                {!hasStripeAccount && (
+                  <Typography className={styles.disabledReason}>
+                    Online payments temporarily unavailable for this salon
+                  </Typography>
+                )}
               </Box>
             </Box>
 
@@ -197,6 +211,11 @@ export default function BookingConfirmDialog({
                 <Typography className={styles.planDesc}>
                   Pay entire amount securely now for a quick check-out later
                 </Typography>
+                {!hasStripeAccount && (
+                  <Typography className={styles.disabledReason}>
+                    Online payments temporarily unavailable for this salon
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Box>

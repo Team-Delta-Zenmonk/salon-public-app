@@ -54,13 +54,9 @@ export default function Bookings() {
     }
   };
 
-  const bookingsLength = bookings.length;
-
   useEffect(() => {
     const fetchInitialData = async () => {
-      if (!bookingsLength) {
-        setIsLoading(true);
-      }
+      setIsLoading(true);
 
       if (paymentJustDone.current) {
         paymentJustDone.current = false;
@@ -83,7 +79,7 @@ export default function Bookings() {
       }
     };
     fetchInitialData();
-  }, [dispatch, tabValue, bookingsLength]);
+  }, [dispatch, tabValue]);
 
   const fetchMoreData = async () => {
     if (!isFetchingMore && total > 0 && bookings.length < total) {

@@ -107,24 +107,29 @@ export default function Cart() {
 
   if (!items.length) {
     return (
-      <Box className={styles.emptyContainer}>
-        <Box className={styles.emptyIconBox}>
-          <StorefrontIcon className={styles.emptyStorefrontIcon} />
-        </Box>
-        <Box>
-          <h2 className={styles.emptyTitle}>
-            Your Basket is Currently Empty
-          </h2>
-          <p className={styles.emptySub}>
-            Explore our curated menu of hair, skin, and wellness treatments to get started.
-          </p>
-          <button
-            type="button"
-            onClick={() => navigate("/services")}
-            className={styles.exploreBtn}
-          >
-            EXPLORE SERVICE MENU
-          </button>
+      <Box className={styles.cartContainer}>
+        <Box className={styles.cartWrapper}>
+          {activeBooking && <ActiveBookingBanner />}
+          <Box className={styles.emptyContainer}>
+            <Box className={styles.emptyIconBox}>
+              <StorefrontIcon className={styles.emptyStorefrontIcon} />
+            </Box>
+            <Box>
+              <h2 className={styles.emptyTitle}>
+                Your Basket is Currently Empty
+              </h2>
+              <p className={styles.emptySub}>
+                Explore our curated menu of hair, skin, and wellness treatments to get started.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate("/services")}
+                className={styles.exploreBtn}
+              >
+                EXPLORE SERVICE MENU
+              </button>
+            </Box>
+          </Box>
         </Box>
       </Box>
     );

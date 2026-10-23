@@ -149,6 +149,13 @@
   cursor: not-allowed;
 }
 
+.disabledReason {
+  font-size: 11px !important;
+  color: var(--app-error, #ef4444) !important;
+  margin-top: 0.25rem !important;
+  font-weight: 500 !important;
+}
+
 .planContent {
   flex: 1;
 }

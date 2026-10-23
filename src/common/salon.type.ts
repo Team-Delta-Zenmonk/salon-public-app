@@ -46,6 +46,8 @@ export interface Salon {
   allowed_payment_policies?: string[];
   payment_policy?: PaymentPolicy;
   deposit_percentage?: number | null;
+  has_stripe_account?: boolean;
+  stripe_account_id?: string | null;
   is_accepting_bookings?: boolean;
   categories?: SalonCategory[];
   services?: Service[];

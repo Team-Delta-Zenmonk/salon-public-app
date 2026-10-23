@@ -12,6 +12,7 @@ import { useStorefrontNavigate } from "../../../../common/hooks/useStorefrontNav
 import { callSnack } from "../../../../components/snackbar";
 import { calculateTotals } from "../../../../common/cart.utils";
 import { formatDuration } from "../../../../common/date.utils";
+import { clearCart } from "../../../../features/salon/cart/cart.slice";
 import BookingConfirmDialog from "./_components/booking-confirm-dialog";
 import SlotGrid from "./_components/slot-grid";
 import BookingDateSelector from "./_components/booking-date-selector";
@@ -153,6 +154,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       setIsPaying(true);
       const paymentResult = await dispatch(createPaymentAction(booking.uuid)).unwrap();
       if (paymentResult.clientSecret) {
+        dispatch(clearCart());
         setConfirmOpen(false);
         onClose();
         navigate("/checkout");
@@ -250,6 +252,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         salonPaymentPolicy={salon?.payment_policy || "pay_at_venue"}
         salonAllowedPaymentPolicies={salon?.allowed_payment_policies}
         salonDepositPercentage={salon?.deposit_percentage}
+        hasStripeAccount={!!(salon?.has_stripe_account ?? salon?.stripe_account_id)}
         totalDuration={totalDuration}
         confirming={isCreating || isPaying}
       />
