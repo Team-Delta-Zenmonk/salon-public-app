@@ -40,26 +40,33 @@ const BookingSuccess: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!booking && bookingUuid) {
-      setIsLoading(true);
+    if (!bookingUuid && !booking) {
+      callSnack("No booking found. Redirecting to cart.", "error");
+      navigate("/cart", { replace: true });
+      return;
+    }
+
+    if (bookingUuid) {
+      if (!booking) {
+        setIsLoading(true);
+      }
       dispatch(getBookingAction(bookingUuid))
         .unwrap()
         .catch((err: any) => {
-          const errorMessage =
-            typeof err === "string"
-              ? err
-              : (err?.payload ?? err?.message ?? "Unable to load booking details.");
-          callSnack(errorMessage, "error");
-          navigate("/cart", { replace: true });
+          if (!booking) {
+            const errorMessage =
+              typeof err === "string"
+                ? err
+                : (err?.payload ?? err?.message ?? "Unable to load booking details.");
+            callSnack(errorMessage, "error");
+            navigate("/cart", { replace: true });
+          }
         })
         .finally(() => {
           setIsLoading(false);
         });
-    } else if (!bookingUuid && !booking) {
-      callSnack("No booking found. Redirecting to cart.", "error");
-      navigate("/cart", { replace: true });
     }
-  }, [bookingUuid, booking, dispatch, navigate]);
+  }, [bookingUuid, dispatch, navigate]);
 
   const handleNavigateAway = (path: string) => {
     dispatch(clearBookingSession());
@@ -71,13 +78,45 @@ const BookingSuccess: React.FC = () => {
     [booking?.booking_date],
   );
 
-
   const timeStr = useMemo(() => {
     if (booking?.booking_start_time && booking?.booking_end_time) {
       return `${formatTimeUTC(booking.booking_start_time)} - ${formatTimeUTC(booking.booking_end_time)}`;
     }
     return "Time not available";
   }, [booking?.booking_start_time, booking?.booking_end_time]);
+
+  const { paymentTitle, amountPaidOnline, toPayAtVenue } = useMemo(() => {
+    const totalPrice = Number(booking?.total_price || 0);
+    const policy = booking?.payment_policy;
+    const isFullUpfront = policy === "full_upfront";
+    const isPayAtVenue = policy === "pay_at_venue";
+
+    let paidOnline = 0;
+    if (typeof booking?.amount_paid_online === "number" && booking.amount_paid_online > 0) {
+      paidOnline = booking.amount_paid_online;
+    } else if (isFullUpfront) {
+      paidOnline = totalPrice;
+    } else if (!isPayAtVenue && typeof booking?.deposit_amount === "number") {
+      paidOnline = booking.deposit_amount;
+    }
+
+    const remainingVenue = Math.max(0, totalPrice - paidOnline);
+
+    let title = "Full Payment";
+    if (isPayAtVenue) {
+      title = "Pay at Venue";
+    } else if (policy === "partial_deposit") {
+      title = "Partial Deposit";
+    } else if (isFullUpfront) {
+      title = "Full Payment";
+    }
+
+    return {
+      paymentTitle: title,
+      amountPaidOnline: paidOnline,
+      toPayAtVenue: remainingVenue,
+    };
+  }, [booking?.total_price, booking?.payment_policy, booking?.amount_paid_online, booking?.deposit_amount]);
 
   if (isLoading || !booking) {
     return (
@@ -181,18 +220,26 @@ const BookingSuccess: React.FC = () => {
             </Box>
 
             <Box className={styles.paymentSummary}>
+              <Box className={styles.paymentHeader}>
+                <Typography className={styles.paymentPlanTitle}>
+                  {paymentTitle}
+                </Typography>
+                <Typography className={styles.paymentPlanBadge}>
+                  Payment Summary
+                </Typography>
+              </Box>
               <Box className={styles.paymentRow}>
                 <Typography className={styles.paymentLabel}>Amount Paid Online</Typography>
                 <Typography className={styles.paymentAmountOnline}>
                   <CurrencyRupeeIcon className={styles.rupeeIcon} />
-                  {booking.amount_paid_online ?? booking.deposit_amount ?? 0}
+                  {amountPaidOnline}
                 </Typography>
               </Box>
               <Box className={styles.paymentRow}>
                 <Typography className={styles.paymentLabel}>To Pay at Venue</Typography>
                 <Typography className={styles.paymentAmountVenue}>
                   <CurrencyRupeeIcon className={styles.rupeeIcon} />
-                  {booking.total_price - (booking.amount_paid_online ?? booking.deposit_amount ?? 0)}
+                  {toPayAtVenue}
                 </Typography>
               </Box>
             </Box>

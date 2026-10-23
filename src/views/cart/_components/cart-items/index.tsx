@@ -12,6 +12,7 @@ import { getServiceStaffsAction } from "../../../../features/salon/staff/get-ser
 import ConfirmStaffDialog from "./_components/confirm-staff-dialog";
 import StaffModal from "./_components/staff-modal";
 import { useStorefront } from "../../../../providers/storefront-provider";
+import { callSnack } from "@/components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styles from "./cart-items.module.css";
@@ -139,6 +140,7 @@ function StaffSelector({
 export default function CartItem({ item }: Readonly<CartItemProps>) {
   const dispatch = useAppDispatch();
   const { isGuest, salonId, items, cartUuid } = useAppSelector((s) => s.cart);
+  const { isAuthenticated } = useAppSelector((s) => s.auth);
   const { salon } = useStorefront();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [staffList, setStaffList] = useState<any[]>([]);
@@ -305,7 +307,9 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
       return prev;
     });
 
-    if (isGuest) {
+    const isLocalGuestItem = !isAuthenticated || isGuest || !item.uuid;
+
+    if (isLocalGuestItem) {
       dispatch(updateItemLocalStaff({ service_id: item.service_id, staff: staffToSet.staff, staff_uuid: staffToSet.staff.uuid, price: staffToSet.price, duration: staffToSet.duration }));
       setPendingStaffEntry(null);
       return;
@@ -313,6 +317,9 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     setUpdating(true);
     try {
       await dispatch(updateCartItemAction({ itemUuid: item.uuid, staffUuid: staffToSet.staff.uuid })).unwrap();
+    } catch (error: any) {
+      console.error("Failed to update staff:", error);
+      callSnack(error?.message || "Failed to update specialist", "error");
     } finally {
       setUpdating(false);
       setPendingStaffEntry(null);
@@ -325,7 +332,9 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   };
 
   const onConfirmRemove = async () => {
-    if (isGuest) {
+    const isLocalGuestItem = !isAuthenticated || isGuest || !item.uuid;
+
+    if (isLocalGuestItem) {
       dispatch(removeItemLocal(item.service_id));
       setConfirmOpen(false);
     } else {
@@ -336,8 +345,9 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
         } else {
           await dispatch(removeCartItemAction(item.uuid)).unwrap();
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to remove item:", error);
+        callSnack(error?.message || "Failed to remove item", "error");
       } finally {
         setRemoving(false);
         setConfirmOpen(false);

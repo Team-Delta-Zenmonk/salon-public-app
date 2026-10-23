@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { BookingAction, BookingPhase } from "../../../common/booking.enums";
 import type { ActiveBooking, CurrentBooking } from "../../../common/booking.types";
 import { getActiveBookingAction } from "./get-active-booking/get-active-booking.action";
+import { getBookingAction } from "./get-booking/get-booking.action";
 import { createBookingAction } from "./create-booking/create-booking.action";
 import { cancelBookingAction } from "./cancel-booking/cancel-booking.action";
 import { createPaymentAction } from "../../payments/create-payment/create-payment.action";
@@ -66,6 +67,14 @@ export const bookingSlice = createSlice({
 
     builder.addCase(getActiveBookingAction.rejected, (state) => {
       state.activeBooking = null;
+    });
+
+    builder.addCase(getBookingAction.fulfilled, (state, { payload }) => {
+      if (payload?.data) {
+        state.currentBooking = payload.data;
+      } else if (payload) {
+        state.currentBooking = payload;
+      }
     });
 
     builder.addCase(createBookingAction.fulfilled, (state, { payload }) => {

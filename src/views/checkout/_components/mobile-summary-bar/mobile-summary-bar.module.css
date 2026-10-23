@@ -1,0 +1,123 @@
+.mobileBar {
+  display: block;
+  background-color: var(--app-surface, #ffffff);
+  border-bottom: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
+  position: relative;
+  z-index: 40;
+}
+
+@media (min-width: 1024px) {
+  .mobileBar {
+    display: none;
+  }
+}
+
+.mobileToggleBtn {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0.875rem 1rem !important;
+  gap: 0.5rem !important;
+  color: var(--app-text, #18181b) !important;
+  border-radius: 0 !important;
+  text-transform: none !important;
+  width: 100% !important;
+}
+
+.mobileLeftSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mobileStorefrontIcon {
+  font-size: 18px !important;
+  color: var(--app-primary) !important;
+  flex-shrink: 0 !important;
+}
+
+.mobileSummaryText {
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  color: var(--app-text) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.mobileArrowIcon {
+  font-size: 18px !important;
+  color: var(--app-muted) !important;
+  flex-shrink: 0 !important;
+}
+
+.mobileRightSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.mobileToPayLabel {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  color: var(--app-muted) !important;
+  text-transform: uppercase !important;
+  margin-top: 1px !important;
+  white-space: nowrap !important;
+}
+
+.mobileToPayAmount {
+  font-size: 0.875rem !important;
+  font-weight: 900 !important;
+  color: var(--app-primary) !important;
+  white-space: nowrap !important;
+}
+
+.mobileSummaryCollapse {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1.25rem;
+}
+
+@media (max-width: 480px) {
+  .mobileLeftSection {
+    gap: 0.5rem;
+  }
+
+  .mobileRightSection {
+    gap: 0.375rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .mobileToggleBtn {
+    padding: 0.75rem 0.625rem !important;
+    gap: 0.375rem !important;
+  }
+
+  .mobileLeftSection {
+    gap: 0.375rem;
+  }
+
+  .mobileRightSection {
+    gap: 0.25rem;
+  }
+
+  .mobileSummaryText {
+    font-size: 0.75rem !important;
+  }
+
+  .mobileToPayLabel {
+    font-size: 8px !important;
+  }
+
+  .mobileToPayAmount {
+    font-size: 0.8125rem !important;
+  }
+}

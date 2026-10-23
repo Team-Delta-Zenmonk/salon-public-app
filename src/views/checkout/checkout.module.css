@@ -1,5 +1,5 @@
 .checkoutPage {
-  min-height: 100%;
+  min-height: 100vh;
   width: 100%;
   background-color: var(--app-bg, #fdfbf7);
   color: var(--app-text, #18181b);
@@ -7,6 +7,7 @@
   flex-direction: column;
   position: relative;
   font-family: inherit;
+  padding-top: 3.5rem;
 }
 
 .container {
@@ -16,12 +17,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding-top: 1.5rem;
+  padding-bottom: 7rem;
 }
 
 @media (min-width: 1024px) {
   .container {
-    margin-top: 3rem;
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
   }
 }
 

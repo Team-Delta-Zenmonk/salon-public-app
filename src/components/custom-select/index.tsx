@@ -93,12 +93,15 @@ export default function CustomSelect({
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        disableScrollLock
+        transitionDuration={0}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
         slotProps={{
           paper: {
             className: styles.menuPaper,
             style: {
+              width: anchorEl ? `${anchorEl.offsetWidth}px` : undefined,
               minWidth: anchorEl ? `${anchorEl.offsetWidth}px` : (typeof menuWidth === "number" ? `${menuWidth}px` : menuWidth),
             },
           },
@@ -110,7 +113,7 @@ export default function CustomSelect({
             <MenuItem
               key={option.id}
               onClick={() => handleSelect(option.id)}
-              className={`${styles.menuItem} ${align === "right" ? styles.menuItemRight : ""} ${isSelected ? styles.menuItemSelected : styles.menuItemHover}`}
+              className={`${styles.menuItem} ${isSelected ? styles.menuItemSelected : styles.menuItemHover}`}
             >
               <EllipsisCell value={option.label} maxChars={menuMaxChars} className="capitalize" />
             </MenuItem>

@@ -98,12 +98,13 @@
 
 .menuItemSelected {
   background-color: var(--app-primary) !important;
-  color: var(--app-surface) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
   font-weight: 600 !important;
 }
 
 .menuItemSelected:hover {
   background-color: var(--app-primary) !important;
+  color: var(--app-primary-contrast, #ffffff) !important;
   opacity: 0.95 !important;
 }
 

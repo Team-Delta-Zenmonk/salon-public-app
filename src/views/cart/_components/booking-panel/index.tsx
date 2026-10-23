@@ -247,7 +247,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         date={selectedDate}
         slot={selectedSlot}
         totalPrice={totalPrice}
-        salonPaymentPolicy={"pay_at_venue"}
+        salonPaymentPolicy={salon?.payment_policy || "pay_at_venue"}
         salonAllowedPaymentPolicies={salon?.allowed_payment_policies}
         salonDepositPercentage={salon?.deposit_percentage}
         totalDuration={totalDuration}

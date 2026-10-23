@@ -21,7 +21,7 @@ export interface CartItem {
 export interface CartState {
   cartUuid: string | null;
   salonId: string | null;
-  salon: Pick<Salon, "uuid" | "name" | "logo" | "address" | "type" | "payment_policy" | "deposit_percentage"> | null;
+  salon: Pick<Salon, "uuid" | "name" | "logo" | "address" | "type" | "payment_policy" | "allowed_payment_policies" | "deposit_percentage"> | null;
   items: CartItem[];
   isGuest: boolean;
   loaded: boolean;

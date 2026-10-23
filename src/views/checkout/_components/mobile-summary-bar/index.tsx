@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Box, Button, Stack, Typography, Collapse } from "@mui/material";
+import { Box, Button, Typography, Collapse } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import OrderSummary from "../order-summary";
-import styles from "../checkout-components.module.css";
+import styles from "./mobile-summary-bar.module.css";
 
 interface MobileSummaryBarProps {
   salon: any;
@@ -22,24 +22,24 @@ export default function MobileSummaryBar({ salon, booking, dateStr }: Readonly<M
         onClick={() => setExpanded(!expanded)}
         className={styles.mobileToggleBtn}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
+        <div className={styles.mobileLeftSection}>
           <StorefrontIcon className={styles.mobileStorefrontIcon} />
-          <Typography className={styles.mobileSummaryText}>
+          <Typography component="span" className={styles.mobileSummaryText}>
             {expanded ? "Hide Details" : "Show Order Summary"}
           </Typography>
           {expanded
             ? <KeyboardArrowUpIcon className={styles.mobileArrowIcon} />
             : <KeyboardArrowDownIcon className={styles.mobileArrowIcon} />
           }
-        </Stack>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography className={styles.mobileToPayLabel}>
+        </div>
+        <div className={styles.mobileRightSection}>
+          <Typography component="span" className={styles.mobileToPayLabel}>
             To Pay Now
           </Typography>
-          <Typography className={styles.mobileToPayAmount}>
+          <Typography component="span" className={styles.mobileToPayAmount}>
             ₹{booking?.deposit_amount ?? 0}
           </Typography>
-        </Stack>
+        </div>
       </Button>
 
       <Collapse in={expanded}>
