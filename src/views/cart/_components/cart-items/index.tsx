@@ -193,45 +193,21 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           setStaffList(uniqueData);
           setModalStaffList(uniqueData);
           setStaffPage(1);
-        } else if (salon?.staff && salon.staff.length > 0) {
-          const fallbackData = salon.staff.map((st: any) => ({
-            staff: st,
-            staff_id: st.uuid || st.id,
-            price,
-            duration: duration || service?.duration,
-          }));
-          setStaffList(fallbackData.slice(0, 10));
-          setModalStaffList(fallbackData.slice(0, 10));
-          setStaffTotal(salon.staff.length);
-          setStaffPage(1);
         } else {
           setStaffList([]);
           setModalStaffList([]);
           setStaffTotal(0);
         }
       } catch {
-        if (salon?.staff && salon.staff.length > 0) {
-          const fallbackData = salon.staff.map((st: any) => ({
-            staff: st,
-            staff_id: st.uuid || st.id,
-            price,
-            duration: duration || service?.duration,
-          }));
-          setStaffList(fallbackData.slice(0, 10));
-          setModalStaffList(fallbackData.slice(0, 10));
-          setStaffTotal(salon.staff.length);
-          setStaffPage(1);
-        } else {
-          setStaffList([]);
-          setModalStaffList([]);
-          setStaffTotal(0);
-        }
+        setStaffList([]);
+        setModalStaffList([]);
+        setStaffTotal(0);
       } finally {
         setStaffLoading(false);
       }
     };
     fetchStaff();
-  }, [service?.uuid, effectiveSalonId, salon?.staff, dispatch, price, duration, service?.duration]);
+  }, [service?.uuid, effectiveSalonId, dispatch, price, duration, service?.duration]);
 
   const fetchMoreStaff = async () => {
     if (loadingMoreStaff || !service?.uuid || !effectiveSalonId) return;
@@ -257,31 +233,9 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           return [...prev, ...additions];
         });
         setStaffPage(nextPage);
-      } else if (salon?.staff && salon.staff.length > modalStaffList.length) {
-        const nextSlice = salon.staff
-          .slice(modalStaffList.length, modalStaffList.length + 10)
-          .map((st: any) => ({
-            staff: st,
-            staff_id: st.uuid || st.id,
-            price,
-            duration: duration || service?.duration,
-          }));
-        setModalStaffList((prev) => [...prev, ...nextSlice]);
-        setStaffPage(nextPage);
       }
     } catch {
-      if (salon?.staff && salon.staff.length > modalStaffList.length) {
-        const nextSlice = salon.staff
-          .slice(modalStaffList.length, modalStaffList.length + 10)
-          .map((st: any) => ({
-            staff: st,
-            staff_id: st.uuid || st.id,
-            price,
-            duration: duration || service?.duration,
-          }));
-        setModalStaffList((prev) => [...prev, ...nextSlice]);
-        setStaffPage(nextPage);
-      }
+      // no more staff
     } finally {
       setLoadingMoreStaff(false);
     }

@@ -13,11 +13,25 @@ interface SlotGridProps {
   selectedDate: string | null;
 }
 
-const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any): boolean => {
-  const sStart = new Date(slotStart).getTime();
+const isSlotLocked = (slotStart: string, slotEnd: string, activeBooking: any, selectedDate?: string | null): boolean => {
   const now = new Date();
-  if (sStart < now.getTime()) return true;
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
+  const slotDate = new Date(slotStart);
+  const slotDateStr = `${slotDate.getUTCFullYear()}-${String(slotDate.getUTCMonth() + 1).padStart(2, "0")}-${String(slotDate.getUTCDate()).padStart(2, "0")}`;
+  const targetDateStr = selectedDate || slotDateStr;
+
+  if (targetDateStr < todayStr) return true;
+  if (targetDateStr === todayStr) {
+    const slotMinutes = slotDate.getUTCHours() * 60 + slotDate.getUTCMinutes();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    if (slotMinutes <= currentMinutes) return true;
+  }
+
+  if (slotDate.getTime() < now.getTime()) return true;
+
   if (!activeBooking?.booking_start_time || !activeBooking?.booking_end_time) return false;
+  const sStart = slotDate.getTime();
   const sEnd = new Date(slotEnd).getTime();
   const bStart = new Date(activeBooking.booking_start_time).getTime();
   const bEnd = new Date(activeBooking.booking_end_time).getTime();
@@ -87,7 +101,7 @@ export default function SlotGrid({
             <Box className={styles.slotGrid}>
               {group.map((slot) => {
                 const isSelected = selectedSlot?.start === slot.start;
-                const locked = isSlotLocked(slot.start, slot.end, activeBooking);
+                const locked = isSlotLocked(slot.start, slot.end, activeBooking, selectedDate);
 
                 return (
                   <Box
