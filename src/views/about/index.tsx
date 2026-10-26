@@ -61,21 +61,88 @@ export default function AboutPage() {
     };
   }, [photosList]);
 
-  const daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+  const daysOfWeek = [
+    { key: "monday", label: "Monday", num: 1 },
+    { key: "tuesday", label: "Tuesday", num: 2 },
+    { key: "wednesday", label: "Wednesday", num: 3 },
+    { key: "thursday", label: "Thursday", num: 4 },
+    { key: "friday", label: "Friday", num: 5 },
+    { key: "saturday", label: "Saturday", num: 6 },
+    { key: "sunday", label: "Sunday", num: 0 },
+  ];
 
-  const formatHours = (day: string) => {
-    const raw = salon?.business_hours?.[day] ?? salon?.business_hours?.[day.slice(0, 3)];
-    if (!raw) {
-      if (day === "friday" || day === "saturday") return "9:00 AM – 9:30 PM";
-      if (day === "sunday") return "11:00 AM – 6:00 PM";
-      return "10:00 AM – 8:30 PM";
-    }
-    if (typeof raw === "string") return raw;
-    if (raw.is_closed) return "Closed";
-    const start = raw.start_time || raw.open || "10:00 AM";
-    const end = raw.end_time || raw.close || "8:30 PM";
-    return `${start} – ${end}`;
+  const formatTime12 = (timeStr?: string): string => {
+    if (!timeStr) return "";
+    const match = String(timeStr).trim().match(/^(\d{1,2}):(\d{2})/);
+    if (!match) return String(timeStr);
+    const [_, h, m] = match;
+    let hours = parseInt(h, 10);
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${m} ${ampm}`;
   };
+
+  const getDaySchedule = (dayKey: string, dayNum: number) => {
+    if (!salon?.business_hours) return null;
+    return (
+      salon.business_hours[dayKey] ??
+      salon.business_hours[dayKey.slice(0, 3)] ??
+      salon.business_hours[String(dayNum)] ??
+      salon.business_hours[dayNum] ??
+      null
+    );
+  };
+
+  const formatHours = (dayKey: string, dayNum: number) => {
+    const raw = getDaySchedule(dayKey, dayNum);
+    if (!raw) return "Closed";
+    if (typeof raw === "string") {
+      if (raw.toLowerCase() === "closed") return "Closed";
+      return raw.replace("-", " – ");
+    }
+    if (raw.is_closed) return "Closed";
+    const start = raw.start_time || raw.open;
+    const end = raw.end_time || raw.close;
+    if (!start || !end) return "Closed";
+    return `${formatTime12(start)} – ${formatTime12(end)}`;
+  };
+
+  const currentDayIndex = new Date().getDay();
+  const todayItem = daysOfWeek.find((d) => d.num === currentDayIndex);
+  const todaySchedule = todayItem ? getDaySchedule(todayItem.key, todayItem.num) : null;
+
+  const isOpenNow = useMemo(() => {
+    if (!todaySchedule) return false;
+    if (typeof todaySchedule === "string") {
+      return todaySchedule.toLowerCase() !== "closed";
+    }
+    if (todaySchedule.is_closed) return false;
+    const start = todaySchedule.start_time || todaySchedule.open;
+    const end = todaySchedule.end_time || todaySchedule.close;
+    if (!start || !end) return false;
+    const parseMinutes = (t: string) => {
+      const match = String(t).trim().match(/^(\d{1,2}):(\d{2})/);
+      if (!match) return null;
+      return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+    };
+    const startMin = parseMinutes(start);
+    const endMin = parseMinutes(end);
+    if (startMin === null || endMin === null) return false;
+    const now = new Date();
+    const currentMin = now.getHours() * 60 + now.getMinutes();
+    return currentMin >= startMin && currentMin < endMin;
+  }, [todaySchedule]);
+
+  const todayStatusText = useMemo(() => {
+    if (!todaySchedule || todaySchedule === "closed" || todaySchedule?.is_closed) {
+      return "Closed Today";
+    }
+    const end = todaySchedule.end_time || todaySchedule.close;
+    if (end) {
+      return isOpenNow ? `Open Today Until ${formatTime12(end)}` : `Closed (Closes at ${formatTime12(end)})`;
+    }
+    return isOpenNow ? "Open Today" : "Closed Today";
+  }, [todaySchedule, isOpenNow]);
 
   const mapUrl =
     salon?.map_link ||
@@ -115,9 +182,9 @@ export default function AboutPage() {
               <NearMeIcon />
               <EllipsisCell value={salon?.address || "Main Branch • City Center"} maxChars={35} maxLines={1} className={styles.pillAddressText} />
             </div>
-            <div className={`${styles.pill} ${styles.pillActive}`}>
-              <span className={styles.pillPulseDot} />
-              <span>Open Today Until 9:30 PM</span>
+            <div className={`${styles.pill} ${isOpenNow ? styles.pillActive : ""}`}>
+              {isOpenNow && <span className={styles.pillPulseDot} />}
+              <span>{todayStatusText}</span>
             </div>
           </div>
         </section>
@@ -246,24 +313,24 @@ export default function AboutPage() {
                   <span className={styles.badgeCaps}>Salon Operating Hours</span>
                   <h3 className={styles.panelHeadingTight}>Opening &amp; Service Hours</h3>
                 </div>
-                <div className={styles.statusPillOpen}>
-                  <span className={styles.openPulseDot} />
-                  <span className={styles.statusPillOpenText}>OPEN NOW</span>
+                <div className={isOpenNow ? styles.statusPillOpen : styles.statusPillClosed}>
+                  <span className={isOpenNow ? styles.openPulseDot : styles.closedDot} />
+                  <span className={styles.statusPillOpenText}>{isOpenNow ? "OPEN NOW" : "CLOSED NOW"}</span>
                 </div>
               </div>
 
               <div className={styles.hoursList}>
-                {daysOfWeek.map((day) => {
-                  const hours = formatHours(day);
-                  const isFri = day === "friday";
+                {daysOfWeek.map((dayItem) => {
+                  const hours = formatHours(dayItem.key, dayItem.num);
+                  const isToday = dayItem.num === currentDayIndex;
 
-                  if (isFri) {
+                  if (isToday) {
                     return (
-                      <div key={day} className={styles.hoursRowHighlight}>
+                      <div key={dayItem.key} className={styles.hoursRowHighlight}>
                         <div className={styles.hoursDayCol}>
-                          <span className={styles.hoursDayHighlight}>{day}</span>
+                          <span className={styles.hoursDayHighlight}>{dayItem.label}</span>
                           <span className={styles.soireeBadge}>
-                            Extended Hours
+                            Today
                           </span>
                         </div>
                         <span className={styles.hoursTimingHighlight}>{hours}</span>
@@ -272,12 +339,9 @@ export default function AboutPage() {
                   }
 
                   return (
-                    <div key={day} className={styles.hoursRow}>
+                    <div key={dayItem.key} className={styles.hoursRow}>
                       <div className={styles.hoursDayCol}>
-                        <span className={styles.hoursDayName}>{day}</span>
-                        {day === "sunday" && (
-                          <span className={styles.hoursSpecialNote}>(Special Appointments)</span>
-                        )}
+                        <span className={styles.hoursDayName}>{dayItem.label}</span>
                       </div>
                       <span className={styles.hoursTimingText}>{hours}</span>
                     </div>
@@ -421,16 +485,16 @@ export default function AboutPage() {
                 <div className={styles.addressItem}>
                   <LocationOnIcon className={styles.addressIcon} />
                   <div className={styles.addressContent}>
-                    <p className={styles.addressTitle}>Flagship Atelier • Heritage Suite III</p>
-                    <EllipsisCell value={salon?.address || "Nargis Dutt Road, Bandra West, Mumbai, Maharashtra 400050"} className={styles.addressSubtitle} />
+                    <p className={styles.addressTitle}>Address</p>
+                    <EllipsisCell value={salon?.address || "Address not provided"} className={styles.addressSubtitle} />
                   </div>
                 </div>
                 {salon?.phone && (
                   <div className={styles.addressItem}>
                     <PhoneInTalkIcon className={styles.addressIcon} />
                     <div className={styles.addressContent}>
-                      <p className={styles.addressTitle}>Dedicated Atelier Concierge</p>
-                      <p className={styles.addressContact}>{salon.phone} • concierge@crimsonandshear.com</p>
+                      <p className={styles.addressTitle}>Contact</p>
+                      <p className={styles.addressContact}>{salon.phone} {salon?.email ? `• ${salon.email}` : ""}</p>
                     </div>
                   </div>
                 )}

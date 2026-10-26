@@ -35,6 +35,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const canPay = isPending && !isExpired;
 
   const isCancelableTime = isBookingCancelable(booking.booking_start_time);
+  const isPaymentCompleted =
+    Number(booking.amount_paid_online || 0) >= Number(booking.total_price || 0) ||
+    booking.status === BookingStatus.COMPLETED;
+  const showInvoice = Boolean(onDownloadInvoice && isPaymentCompleted && booking.status !== BookingStatus.CANCELLED && booking.status !== BookingStatus.EXPIRED);
   const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
   const maxAttempts = booking.max_reschedule_attempts ?? 2;
   const rescheduleCount = booking.reschedule_count ?? 0;
@@ -112,7 +116,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             <Typography className={styles.priceText}>₹{booking.total_price}</Typography>
           </Box>
 
-          {(canPay || showCancel || showReschedule || (onDownloadInvoice && booking.status === BookingStatus.CONFIRMED)) && (
+          {(canPay || showCancel || showReschedule || showInvoice) && (
             <Box className={styles.actionsRow}>
               {canPay && (
                 <Button
@@ -136,11 +140,11 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                   Reschedule
                 </Button>
               )}
-              {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
+              {showInvoice && (
                 <Button
                   fullWidth
                   variant="contained"
-                  onClick={() => onDownloadInvoice(booking)}
+                  onClick={() => onDownloadInvoice?.(booking)}
                   disabled={disabled || downloadingUuid === booking.uuid}
                   startIcon={downloadingUuid === booking.uuid ? <CircularProgress size={14} color="inherit" /> : <Download fontSize="small" />}
                   className={styles.actionBtnItem}
@@ -242,10 +246,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 Reschedule
               </Button>
             )}
-            {onDownloadInvoice && booking.status === BookingStatus.CONFIRMED && (
+            {showInvoice && (
               <Button
                 variant="contained"
-                onClick={() => onDownloadInvoice(booking)}
+                onClick={() => onDownloadInvoice?.(booking)}
                 disabled={disabled || downloadingUuid === booking.uuid}
                 startIcon={downloadingUuid === booking.uuid ? <CircularProgress size={14} color="inherit" /> : <Download fontSize="small" />}
               >
