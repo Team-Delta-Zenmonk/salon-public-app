@@ -3,7 +3,9 @@ import { useAppDispatch } from "../../store/hook";
 import { useStorefrontNavigate } from "./useStorefrontNavigate";
 import { cancelBookingAction } from "../../features/salon/bookings/cancel-booking/cancel-booking.action";
 import { createPaymentAction } from "../../features/payments/create-payment/create-payment.action";
-import { continueExistingBooking, clearBookingSession } from "../../features/salon/bookings/booking.slice";
+import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
+import { continueExistingBooking, clearBookingSession, setBookingPhase } from "../../features/salon/bookings/booking.slice";
+import { BookingPhase } from "../booking.enums";
 import { callSnack } from "../../components/snackbar";
 import type { ActiveBooking } from "../booking.types";
 
@@ -36,6 +38,17 @@ export function useActiveBookingActions() {
     setError(null);
     try {
       dispatch(continueExistingBooking(activeBooking));
+      dispatch(setBookingPhase(BookingPhase.IDLE));
+
+      if (activeBooking.payment_policy === "pay_at_venue") {
+        navigate("/bookings/success", {
+          state: { bookingUuid: activeBooking.uuid, booking: activeBooking },
+          replace: true,
+        });
+        return;
+      }
+
+      await dispatch(getBookingAction(activeBooking.uuid)).unwrap();
       const result = await dispatch(createPaymentAction(activeBooking.uuid)).unwrap();
 
       if (result.clientSecret) {

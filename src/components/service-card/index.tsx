@@ -8,6 +8,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useAppThemeMode } from "@/theme/theme-provider";
 import SubServicesModal from "./sub-services-modal";
+import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./service-card.module.css";
 
 export interface ServiceCardProps {
@@ -103,12 +104,34 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             )}
             <div className={styles.archVaultImageOverlay} />
             <div className={styles.archVaultPricePill}>
-              {service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`}
+              {(() => {
+                const discountInfo = getDiscountedPrice(service);
+                return discountInfo.hasDiscount ? (
+                  <>
+                    <span className={styles.originalPriceCrossed}>
+                      ₹{discountInfo.originalPrice}
+                    </span>
+                    <span>
+                      {service.price_type === "from" ? `From ₹${discountInfo.finalPrice}` : `₹${discountInfo.finalPrice}`}
+                    </span>
+                  </>
+                ) : (
+                  service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`
+                );
+              })()}
             </div>
           </div>
 
           <div className={styles.archVaultServiceDetails}>
             <div className={styles.archVaultBadgeRow}>
+              {(() => {
+                const discountInfo = getDiscountedPrice(service);
+                return discountInfo.hasDiscount && discountInfo.discountBadge ? (
+                  <span className={styles.discountBadge}>
+                    {discountInfo.discountBadge}
+                  </span>
+                ) : null;
+              })()}
               <span className={clsx(styles.chipTag, styles.genderChipHighlight)}>
                 {service.gender ? `${service.gender.toUpperCase()}` : "GENDER NEUTRAL"}
               </span>
@@ -153,6 +176,14 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
             <div className={styles.floatingGlassDetails}>
               <div className={styles.glassBadgeRow}>
+                {(() => {
+                  const discountInfo = getDiscountedPrice(service);
+                  return discountInfo.hasDiscount && discountInfo.discountBadge ? (
+                    <span className={styles.discountBadge}>
+                      {discountInfo.discountBadge}
+                    </span>
+                  ) : null;
+                })()}
                 <span className={clsx(styles.chipTag, styles.genderChipHighlight)}>
                   {service.gender ? service.gender.toUpperCase() : "GENDER NEUTRAL"}
                 </span>
@@ -162,7 +193,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                 <EllipsisCell value={service.name} maxLines={2} maxChars={22} className="capitalize" />
               </h2>
               <div className={styles.glassPricePill}>
-                {service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`}
+                {(() => {
+                  const discountInfo = getDiscountedPrice(service);
+                  return discountInfo.hasDiscount ? (
+                    <>
+                      <span className={styles.originalPriceCrossed}>
+                        ₹{discountInfo.originalPrice}
+                      </span>
+                      <span>
+                        {service.price_type === "from" ? `From ₹${discountInfo.finalPrice}` : `₹${discountInfo.finalPrice}`}
+                      </span>
+                    </>
+                  ) : (
+                    service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -185,6 +230,14 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             <div className={styles.editorialBadgeRow}>
               <span className={styles.editorialMonogram}>✦ ATELIER SELECTION</span>
               <div className={styles.editorialMetaTags}>
+                {(() => {
+                  const discountInfo = getDiscountedPrice(service);
+                  return discountInfo.hasDiscount && discountInfo.discountBadge ? (
+                    <span className={styles.discountBadge}>
+                      {discountInfo.discountBadge}
+                    </span>
+                  ) : null;
+                })()}
                 <span className={clsx(styles.chipTag, styles.genderChipHighlight)}>
                   {service.gender ? service.gender.toUpperCase() : "GENDER NEUTRAL"}
                 </span>
@@ -197,7 +250,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                 <EllipsisCell value={service.name} maxLines={2} maxChars={28} className="capitalize" />
               </h2>
               <div className={styles.editorialPriceTag}>
-                {service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`}
+                {(() => {
+                  const discountInfo = getDiscountedPrice(service);
+                  return discountInfo.hasDiscount ? (
+                    <>
+                      <span className={styles.originalPriceCrossed}>
+                        ₹{discountInfo.originalPrice}
+                      </span>
+                      <span>
+                        {service.price_type === "from" ? `From ₹${discountInfo.finalPrice}` : `₹${discountInfo.finalPrice}`}
+                      </span>
+                    </>
+                  ) : (
+                    service.price_type === "from" ? `From ₹${service.price}` : `₹${service.price}`
+                  );
+                })()}
               </div>
             </div>
 

@@ -8,7 +8,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSearchParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { clearCart } from "../../features/salon/cart/cart.slice";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
@@ -19,7 +18,6 @@ const BookingSuccess: React.FC = () => {
   const navigate = useStorefrontNavigate();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
-  const hasClearedRef = useRef(false);
 
   const searchBookingUuid = searchParams?.get("bookingUuid");
   const { currentBooking } = useAppSelector((s) => s.booking);
@@ -32,12 +30,6 @@ const BookingSuccess: React.FC = () => {
   const { salon: cartSalon } = useAppSelector((s) => s.cart);
   const initialSalonRef = useRef(booking?.salon || cartSalon);
   const displaySalon = booking?.salon || initialSalonRef.current;
-
-  useEffect(() => {
-    if (hasClearedRef.current) return;
-    hasClearedRef.current = true;
-    dispatch(clearCart());
-  }, [dispatch]);
 
   useEffect(() => {
     if (bookingUuid && (!booking || booking.status === "pending")) {

@@ -24,9 +24,20 @@
 
 .serviceTitle {
   font-family: var(--font-bodoni-moda), serif !important;
-  font-size: 1.25rem !important;
-  font-weight: 500 !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
   color: var(--app-text, #18181b) !important;
+  line-height: 1.25 !important;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .serviceTitle {
+    font-size: 1.15rem !important;
+  }
 }
 
 .metaRow {
@@ -199,9 +210,9 @@
 
 .itemTop {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1rem;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -210,30 +221,49 @@
 
 @media (min-width: 640px) {
   .itemTop {
-    gap: 1.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+}
+
+.itemMainGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .itemMainGroup {
+    gap: 1rem;
+    width: auto;
   }
 }
 
 .serviceAvatar {
   border-radius: 0.75rem !important;
   flex-shrink: 0;
-  width: 4rem !important;
-  height: 4rem !important;
+  width: 3.25rem !important;
+  height: 3.25rem !important;
   border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08)) !important;
   background-color: var(--app-surface-alt, #faf8f5) !important;
 }
 
 @media (min-width: 640px) {
   .serviceAvatar {
-    width: 5rem !important;
-    height: 5rem !important;
+    width: 4.5rem !important;
+    height: 4.5rem !important;
   }
 }
 
 .itemInfo {
   flex: 1;
   min-width: 0;
-  max-width: 100%;
   overflow: hidden;
 }
 
@@ -291,17 +321,58 @@
 .itemActions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 0.625rem;
+  border-top: 1px dashed var(--app-border, rgba(0, 0, 0, 0.08));
   gap: 0.75rem;
   flex-shrink: 0;
 }
 
+@media (min-width: 640px) {
+  .itemActions {
+    width: auto;
+    padding-top: 0;
+    border-top: 0;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .priceContainer {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+  }
+}
+
 .itemPrice {
   font-family: var(--app-font-serif, serif);
-  font-size: 1.25rem !important;
+  font-size: 1.1rem !important;
   font-weight: 600 !important;
   color: var(--app-text, #18181b) !important;
   line-height: 1 !important;
   white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .itemPrice {
+    font-size: 1.25rem !important;
+  }
 }
 
 .staffSection {
@@ -368,4 +439,27 @@
 .deleteBtnIcon {
   font-size: 1.125rem !important;
 }
+
+.originalPriceCrossed {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 0.8em;
+  margin-right: 0.35rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.discountBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.35rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  white-space: nowrap;
+}
+
 

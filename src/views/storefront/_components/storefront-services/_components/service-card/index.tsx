@@ -15,6 +15,7 @@ import { callSnack } from "../../../../../../components/snackbar";
 import SwitchCartDialog from "./_components/switch-cart-dialog";
 import { getGenderChipConfig } from "./_components/utils/gender-chip-config";
 import { getCartAction } from "../../../../../../features/salon/cart/get-cart/get-cart.action";
+import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./storefront-service-card.module.css";
 
 export default function ServiceCard({ service, subServices, salon }: Readonly<{ service: any; subServices: any[]; salon: any }>) {
@@ -35,7 +36,13 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
     cart.items.some((i: any) => i.service?.uuid === serviceId || i.service_id === serviceId);
   const currentCartItemsCount = (cart.items ?? []).length;
 
-  const formatPrice = (s: any) => (s.price_type === "from" ? `From ₹${s.price}` : `₹${s.price}`);
+  const formatPrice = (s: any) => {
+    const { hasDiscount, originalPrice, finalPrice } = getDiscountedPrice(s);
+    if (hasDiscount) {
+      return s.price_type === "from" ? `From ₹${finalPrice}` : `₹${finalPrice}`;
+    }
+    return s.price_type === "from" ? `From ₹${s.price}` : `₹${s.price}`;
+  };
 
   const effectiveSalonId = salonId || salon?.uuid;
 
@@ -217,6 +224,16 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                 label={formatPrice(service)}
                 className={styles.priceChip}
               />
+              {(() => {
+                const discountInfo = getDiscountedPrice(service);
+                return discountInfo.hasDiscount && discountInfo.discountBadge ? (
+                  <Chip
+                    size="small"
+                    label={discountInfo.discountBadge}
+                    className={styles.discountBadge}
+                  />
+                ) : null;
+              })()}
               {service.duration && (
                 <Chip
                   size="small"
@@ -237,8 +254,24 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
         </Box>
 
         <Box className={styles.actionCol}>
-          <Box className={styles.priceLabel}>
-            {formatPrice(service).replace("From ", "")}
+          <Box className={styles.priceCol}>
+            {(() => {
+              const discountInfo = getDiscountedPrice(service);
+              return discountInfo.hasDiscount ? (
+                <>
+                  <span className={styles.originalPriceCrossed}>
+                    ₹{discountInfo.originalPrice}
+                  </span>
+                  <span className={styles.priceLabel}>
+                    ₹{discountInfo.finalPrice}
+                  </span>
+                </>
+              ) : (
+                <span className={styles.priceLabel}>
+                  {formatPrice(service).replace("From ", "")}
+                </span>
+              );
+            })()}
           </Box>
           {!hasSubServices && (
             <Button
@@ -306,6 +339,16 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                         {sub.description}
                       </Box>
                       <Box className={styles.subServiceChipsRow}>
+                        {(() => {
+                          const subDiscountInfo = getDiscountedPrice(sub);
+                          return subDiscountInfo.hasDiscount && subDiscountInfo.discountBadge ? (
+                            <Chip
+                              size="small"
+                              label={subDiscountInfo.discountBadge}
+                              className={styles.discountBadge}
+                            />
+                          ) : null;
+                        })()}
                         {subGender && (
                           <Chip
                             size="small"
@@ -318,7 +361,23 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                   </Box>
 
                   <Box className={styles.subServiceAction}>
-                    <Box className={styles.subPrice}>{formatPrice(sub)}</Box>
+                    <Box className={styles.priceCol}>
+                      {(() => {
+                        const subDiscountInfo = getDiscountedPrice(sub);
+                        return subDiscountInfo.hasDiscount ? (
+                          <>
+                            <span className={styles.originalPriceCrossed}>
+                              ₹{subDiscountInfo.originalPrice}
+                            </span>
+                            <span className={styles.subPrice}>
+                              ₹{subDiscountInfo.finalPrice}
+                            </span>
+                          </>
+                        ) : (
+                          <Box className={styles.subPrice}>{formatPrice(sub)}</Box>
+                        );
+                      })()}
+                    </Box>
                     {sub.duration && (
                       <Box className={styles.subDuration}>{sub.duration} min</Box>
                     )}

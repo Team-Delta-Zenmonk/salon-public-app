@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useAppSelector, useAppDispatch } from "../../store/hook";
 import { formatDuration } from "../../common/date.utils";
 import { calculateTotals } from "../../common/cart.utils";
+import { getDiscountedPrice } from "../../common/discount.utils";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
 import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { getActiveBookingAction } from "../../features/salon/bookings/get-active-booking/get-active-booking.action";
@@ -138,6 +139,12 @@ export default function Cart() {
   const { totalPrice, totalDuration } = calculateTotals(items);
   const durationText = formatDuration(totalDuration);
 
+  const totalOriginalPrice = items.reduce((acc, item) => {
+    const { originalPrice } = getDiscountedPrice(item);
+    return acc + originalPrice;
+  }, 0);
+  const totalSavings = Math.max(0, totalOriginalPrice - totalPrice);
+
   return (
     <>
       <Box className={styles.cartContainer}>
@@ -229,11 +236,27 @@ export default function Cart() {
 
                 <hr className={styles.summaryDivider} />
 
+                {totalSavings > 0 && (
+                  <Box className={styles.discountRow}>
+                    <span className={styles.discountSavingsLabel}>Discount Savings</span>
+                    <span className={styles.discountSavingsValue}>
+                      -₹{totalSavings}
+                    </span>
+                  </Box>
+                )}
+
                 <Box className={styles.totalRow}>
                   <span className={styles.totalLabel}>Total Investment</span>
-                  <span className={styles.totalValue}>
-                    ₹{totalPrice}
-                  </span>
+                  <Box className={styles.totalPriceGroup}>
+                    {totalSavings > 0 && (
+                      <span className={styles.totalOriginalCrossed}>
+                        ₹{totalOriginalPrice}
+                      </span>
+                    )}
+                    <span className={styles.totalValue}>
+                      ₹{totalPrice}
+                    </span>
+                  </Box>
                 </Box>
 
                 <button
@@ -241,7 +264,7 @@ export default function Cart() {
                   onClick={onProceedToBook}
                   className={styles.checkoutBtn}
                 >
-                  PROCEED TO SCHEDULE & ARTISAN
+                  PROCEED TO SCHEDULE
                 </button>
 
                 <p className={styles.helperText}>

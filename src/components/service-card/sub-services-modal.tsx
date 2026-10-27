@@ -18,6 +18,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EllipsisCell from "@/components/ellipse-cell";
 import InfiniteScroll from "react-infinite-scroll-component";
 import clsx from "clsx";
+import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./sub-services-modal.module.css";
 
 const PAGE_SIZE = 10;
@@ -159,7 +160,26 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
                     </div>
 
                     <div className={styles.subServiceActions}>
-                      <span className={styles.subServicePrice}>₹{sub.price}</span>
+                      {(() => {
+                        const discountInfo = getDiscountedPrice(sub);
+                        return discountInfo.hasDiscount ? (
+                          <div className={styles.discountPriceRow}>
+                            <span className={styles.originalPriceCrossed}>
+                              ₹{discountInfo.originalPrice}
+                            </span>
+                            <span className={styles.subServicePrice}>
+                              ₹{discountInfo.finalPrice}
+                            </span>
+                            {discountInfo.discountBadge && (
+                              <span className={styles.discountBadge}>
+                                {discountInfo.discountBadge}
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className={styles.subServicePrice}>₹{sub.price}</span>
+                        );
+                      })()}
                       <button
                         type="button"
                         disabled={isSubLoading}

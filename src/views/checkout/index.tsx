@@ -13,8 +13,7 @@ import AssistanceCard from "./_components/assistance-card";
 import SecurityFooter from "./_components/security-footer";
 import ExpiryView from "./_components/expiry-view";
 import PaymentProcessing from "./_components/payment-processing";
-import { getPaymentCompleted, clearGuestCart } from "../../features/salon/cart/cart.utils";
-import { clearCart } from "../../features/salon/cart/cart.slice";
+import { getPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { useAppDispatch } from "../../store/hook";
 import { useCheckoutData } from "./hooks/useCheckoutData";
@@ -48,13 +47,11 @@ export default function Checkout() {
   }, [dispatch, currentBooking?.uuid]);
 
   const handleProcessingComplete = useCallback(() => {
-    dispatch(clearCart());
-    clearGuestCart();
     navigate("/bookings/success", {
       state: { bookingUuid: currentBooking?.uuid, booking: currentBooking },
       replace: true,
     });
-  }, [dispatch, navigate, currentBooking]);
+  }, [navigate, currentBooking]);
 
   useEffect(() => {
     if (!currentBooking && getPaymentCompleted()) {

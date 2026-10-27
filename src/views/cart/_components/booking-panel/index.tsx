@@ -145,6 +145,7 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
 
       const booking = createResult.booking;
       if (booking.payment_policy === "pay_at_venue") {
+        dispatch(clearCart());
         setConfirmOpen(false);
         onClose();
         navigate("/bookings/success", { state: { bookingUuid: booking.uuid, booking }, replace: true });

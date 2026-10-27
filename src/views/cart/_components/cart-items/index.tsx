@@ -15,6 +15,7 @@ import { useStorefront } from "../../../../providers/storefront-provider";
 import { callSnack } from "@/components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./cart-items.module.css";
 
 interface CartItemProps {
@@ -317,39 +318,67 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     <>
       <Box className={styles.itemCard}>
         <Box className={styles.itemTop}>
-          <Avatar
-            src={image}
-            variant="rounded"
-            className={styles.serviceAvatar}
-          />
+          <Box className={styles.itemMainGroup}>
+            <Avatar
+              src={image}
+              variant="rounded"
+              className={styles.serviceAvatar}
+            />
 
-          <Box className={styles.itemInfo}>
-            <EllipsisCell value={name} className={styles.serviceTitle} maxChars={20} />
-            <Box className={styles.metaRow}>
-              <AccessTimeIcon className={styles.metaDurationIcon} />
-              <Typography variant="caption" className={styles.metaDuration}>
-                {duration} MIN
-                {gender && (
-                  <>
-                    <Box component="span" className={styles.metaDot}>•</Box>
-                    <Box component="span" className={styles.metaGender}>{gender}</Box>
-                  </>
-                )}
-              </Typography>
-            </Box>
-            {selectedStaffId && currentStaffInfo && (
-              <Box className={styles.assignedStaffChip}>
-                <Avatar src={currentStaffInfo.photo} className={styles.assignedStaffAvatar}>
-                  {currentStaffInfo.name?.[0]}
-                </Avatar>
-                <EllipsisCell value={currentStaffInfo.name} className={styles.assignedStaffName} maxChars={20} />
+            <Box className={styles.itemInfo}>
+              <EllipsisCell value={name} className={styles.serviceTitle} maxLines={1} />
+              <Box className={styles.metaRow}>
+                <AccessTimeIcon className={styles.metaDurationIcon} />
+                <Typography variant="caption" className={styles.metaDuration}>
+                  {duration} MIN
+                  {gender && (
+                    <>
+                      <Box component="span" className={styles.metaDot}>•</Box>
+                      <Box component="span" className={styles.metaGender}>{gender}</Box>
+                    </>
+                  )}
+                </Typography>
               </Box>
-            )}
+              {selectedStaffId && currentStaffInfo && (
+                <Box className={styles.assignedStaffChip}>
+                  <Avatar src={currentStaffInfo.photo} className={styles.assignedStaffAvatar}>
+                    {currentStaffInfo.name?.[0]}
+                  </Avatar>
+                  <EllipsisCell value={currentStaffInfo.name} className={styles.assignedStaffName} maxChars={20} />
+                </Box>
+              )}
+            </Box>
           </Box>
 
           <Box className={styles.itemActions}>
-            <Typography className={styles.itemPrice}>₹{price}</Typography>
-            <IconButton onClick={() => setConfirmOpen(true)} className={styles.deleteBtn}>
+            <Box className={styles.priceContainer}>
+              <Box className={styles.priceWrapper}>
+                {(() => {
+                  const discountInfo = getDiscountedPrice(item);
+                  return discountInfo.hasDiscount ? (
+                    <>
+                      <span className={styles.originalPriceCrossed}>
+                        ₹{discountInfo.originalPrice}
+                      </span>
+                      <Typography className={styles.itemPrice}>
+                        ₹{discountInfo.finalPrice}
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography className={styles.itemPrice}>₹{price}</Typography>
+                  );
+                })()}
+              </Box>
+              {(() => {
+                const discountInfo = getDiscountedPrice(item);
+                return discountInfo.hasDiscount && discountInfo.discountBadge ? (
+                  <span className={styles.discountBadge}>
+                    {discountInfo.discountBadge}
+                  </span>
+                ) : null;
+              })()}
+            </Box>
+            <IconButton onClick={() => setConfirmOpen(true)} className={styles.deleteBtn} aria-label="Remove item">
               <DeleteOutlineIcon className={styles.deleteBtnIcon} />
             </IconButton>
           </Box>
