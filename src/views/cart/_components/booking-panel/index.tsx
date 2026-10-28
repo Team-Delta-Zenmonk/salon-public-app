@@ -152,6 +152,14 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
         return;
       }
 
+      if (createResult.clientSecret) {
+        dispatch(clearCart());
+        setConfirmOpen(false);
+        onClose();
+        navigate("/checkout");
+        return;
+      }
+
       setIsPaying(true);
       const paymentResult = await dispatch(createPaymentAction(booking.uuid)).unwrap();
       if (paymentResult.clientSecret) {

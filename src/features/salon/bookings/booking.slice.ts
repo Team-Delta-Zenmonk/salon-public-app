@@ -86,6 +86,11 @@ export const bookingSlice = createSlice({
 
       if (payload?.action === BookingAction.BOOKING_CREATED) {
         state.currentBooking = payload.booking;
+        if (payload.clientSecret) {
+          state.clientSecret = payload.clientSecret;
+          state.paymentId = payload.paymentId ?? null;
+          state.bookingPhase = BookingPhase.PAYMENT;
+        }
       }
     });
 

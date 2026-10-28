@@ -142,7 +142,14 @@ export const cartSlice = createSlice({
 
     builder.addCase(getCartAction.fulfilled, (state, { payload }) => {
       state.loaded = true;
-      if (!payload) return;
+      if (!payload) {
+        state.cartUuid = null;
+        state.salonId = null;
+        state.salon = null;
+        state.items = [];
+        clearGuestCart();
+        return;
+      }
 
       state.cartUuid = payload.uuid;
       state.items = sortItems(payload.cart_items ?? []);
