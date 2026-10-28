@@ -325,7 +325,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                   </span>
                 )}
               </button>
-            ) : service.parent_id !== null ? (
+            ) : (
               <button
                 type="button"
                 disabled={loadingIds.includes(service.uuid || service.id)}
@@ -352,10 +352,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                   </>
                 )}
               </button>
-            ) : (
-              <span className={styles.selectSubPrompt}>
-                SELECT A SUB-SERVICE ABOVE
-              </span>
             )}
           </div>
         ) : (
