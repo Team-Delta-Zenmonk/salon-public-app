@@ -24,7 +24,9 @@ const WEBHOOK_SETTLE_DELAY_MS = 3000;
 export default function Bookings() {
   const dispatch = useAppDispatch();
 
-  const { bookings, total, page } = useAppSelector((state) => state.customerBooking);
+  const { bookings, total, page, isLoading, isFetchingMore } = useAppSelector(
+    (state) => state.customerBooking
+  );
   const { handleCancelActiveBooking, handleContinueActiveBooking, isCancelling, isContinuing } =
     useActiveBookingActions();
 
@@ -33,9 +35,6 @@ export default function Bookings() {
   const [selectedBooking, setSelectedBooking] = useState<CustomerBooking | null>(null);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
   const [rescheduleTarget, setRescheduleTarget] = useState<CustomerBooking | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const paymentJustDone = useRef(getPaymentCompleted());
 
@@ -55,9 +54,9 @@ export default function Bookings() {
   };
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setIsLoading(true);
+    dispatch(resetCustomerBookings());
 
+    const fetchInitialData = async () => {
       if (paymentJustDone.current) {
         paymentJustDone.current = false;
         clearPaymentCompleted();
@@ -74,16 +73,13 @@ export default function Bookings() {
         ).unwrap();
       } catch (err) {
         console.error("Failed to fetch bookings:", err);
-      } finally {
-        setIsLoading(false);
       }
     };
     fetchInitialData();
   }, [dispatch, tabValue]);
 
   const fetchMoreData = async () => {
-    if (!isFetchingMore && total > 0 && bookings.length < total) {
-      setIsFetchingMore(true);
+    if (!isLoading && !isFetchingMore && total > 0 && bookings.length < total) {
       try {
         await dispatch(
           getCustomerBookingsAction({
@@ -94,8 +90,6 @@ export default function Bookings() {
         ).unwrap();
       } catch (err) {
         console.error("Failed to fetch more bookings:", err);
-      } finally {
-        setIsFetchingMore(false);
       }
     }
   };
@@ -115,7 +109,6 @@ export default function Bookings() {
   };
 
   const handleRescheduleSuccess = async () => {
-    setIsLoading(true);
     dispatch(resetCustomerBookings());
     try {
       await dispatch(
@@ -127,8 +120,6 @@ export default function Bookings() {
       ).unwrap();
     } catch (err) {
       console.error("Failed to refresh bookings after reschedule:", err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -138,7 +129,6 @@ export default function Bookings() {
     setCancelDialogOpen(false);
     setSelectedBooking(null);
 
-    setIsLoading(true);
     dispatch(resetCustomerBookings());
     try {
       await dispatch(
@@ -150,8 +140,6 @@ export default function Bookings() {
       ).unwrap();
     } catch (err) {
       console.error("Failed to refresh bookings:", err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -270,7 +258,7 @@ export default function Bookings() {
           <InfiniteScroll
             dataLength={bookings.length}
             next={fetchMoreData}
-            hasMore={total > 0 && bookings.length < total}
+            hasMore={!isLoading && total > 0 && bookings.length < total}
             loader={
               <Box className={styles.listSkeletonLoader}>
                 <BookingSkeleton />

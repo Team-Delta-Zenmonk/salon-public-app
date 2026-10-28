@@ -7,6 +7,8 @@ interface CustomerBookingState {
   total: number;
   page: number;
   limit: number;
+  isLoading: boolean;
+  isFetchingMore: boolean;
 }
 
 const initialState: CustomerBookingState = {
@@ -14,6 +16,8 @@ const initialState: CustomerBookingState = {
   total: 0,
   page: 1,
   limit: 10,
+  isLoading: false,
+  isFetchingMore: false,
 };
 
 export const customerBookingSlice = createSlice({
@@ -24,21 +28,38 @@ export const customerBookingSlice = createSlice({
       state.bookings = [];
       state.total = 0;
       state.page = 1;
+      state.isLoading = false;
+      state.isFetchingMore = false;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getCustomerBookingsAction.fulfilled, (state, { payload }) => {
-      const currentPage = Number(payload.pagination.page);
-      if (currentPage === 1) {
-        state.bookings = payload.bookings;
-      } else {
-        const newBookings = payload.bookings.filter((nb) => !state.bookings.some((b) => b.uuid === nb.uuid));
-        state.bookings = [...state.bookings, ...newBookings];
-      }
-      state.total = Number(payload.pagination.total);
-      state.page = currentPage;
-      state.limit = Number(payload.pagination.limit);
-    });
+    builder
+      .addCase(getCustomerBookingsAction.pending, (state, { meta }) => {
+        const page = meta.arg?.page ?? 1;
+        if (page === 1) {
+          state.isLoading = true;
+        } else {
+          state.isFetchingMore = true;
+        }
+      })
+      .addCase(getCustomerBookingsAction.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.isFetchingMore = false;
+        const currentPage = Number(payload.pagination.page);
+        if (currentPage === 1) {
+          state.bookings = payload.bookings;
+        } else {
+          const newBookings = payload.bookings.filter((nb) => !state.bookings.some((b) => b.uuid === nb.uuid));
+          state.bookings = [...state.bookings, ...newBookings];
+        }
+        state.total = Number(payload.pagination.total);
+        state.page = currentPage;
+        state.limit = Number(payload.pagination.limit);
+      })
+      .addCase(getCustomerBookingsAction.rejected, (state) => {
+        state.isLoading = false;
+        state.isFetchingMore = false;
+      });
   },
 });
 
