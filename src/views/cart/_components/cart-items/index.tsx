@@ -37,15 +37,15 @@ interface StaffSelectorProps {
 }
 
 const getStaffInfo = (staffEntry?: any, staff?: any) => {
-  if (staffEntry) {
+  if (staffEntry?.staff) {
     return {
-      name: `${staffEntry.staff.first_name} ${staffEntry.staff.last_name ?? ""}`.trim(),
+      name: `${staffEntry.staff.first_name || ""} ${staffEntry.staff.last_name || ""}`.trim(),
       photo: staffEntry.staff.photos?.secure_url ?? staffEntry.staff.photos?.url,
     };
   }
   if (staff) {
     return {
-      name: `${staff.first_name} ${staff.last_name ?? ""}`.trim(),
+      name: `${staff.first_name || ""} ${staff.last_name || ""}`.trim(),
       photo: staff.photos?.secure_url ?? staff.photos?.url,
     };
   }
