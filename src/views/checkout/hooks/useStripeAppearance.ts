@@ -1,78 +1,136 @@
 "use client";
-import { useTheme } from "@mui/material";
+import { useAppThemeMode } from "../../../theme/theme-provider";
+import { getThemeOption } from "../../../theme/themes";
 
 export function useStripeAppearance() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+  const { themeId } = useAppThemeMode();
+  const theme = getThemeOption(themeId);
+  const isDark = theme.mode === "dark";
+  const iconColor = theme.textMain;
 
   return {
     theme: isDark ? ("night" as const) : ("stripe" as const),
     variables: {
-      colorPrimary: "var(--app-primary)",
-      colorBackground: "var(--app-surface)",
-      colorText: "var(--app-text)",
-      colorDanger: "#ef4444",
-      colorTextSecondary: "var(--app-muted)",
-      colorBorder: "var(--app-border)",
+      colorPrimary: theme.primary,
+      colorBackground: theme.surface,
+      colorText: theme.textMain,
+      colorDanger: theme.error,
+      colorTextSecondary: theme.textMuted,
+      colorBorder: theme.border,
+      colorIcon: iconColor,
+      colorIconTab: iconColor,
+      colorIconTabSelected: iconColor,
+      colorIconTabHover: iconColor,
+      colorIconCard: iconColor,
+      colorBackgroundTab: theme.surfaceAlt,
+      colorBackgroundTabSelected: theme.primarySoft,
+      colorBorderTab: theme.border,
+      colorBorderTabSelected: theme.primary,
+      colorTextTab: theme.textMain,
+      colorTextTabSelected: theme.textMain,
       fontFamily: "Plus Jakarta Sans, sans-serif",
       spacingUnit: "4px",
-      borderRadius: "12px",
+      borderRadius: `${theme.radius}px`,
     },
     rules: {
       ".Input": {
-        backgroundColor: "var(--app-surface-alt)",
-        borderColor: "var(--app-border)",
+        backgroundColor: theme.surfaceAlt,
+        borderColor: theme.border,
         borderWidth: "1px",
         borderStyle: "solid",
         padding: "12px 14px",
         fontSize: "14px",
-        color: "var(--app-text)",
+        color: theme.textMain,
         boxShadow: "none",
       },
       ".Input:focus": {
-        borderColor: "var(--app-primary)",
-        boxShadow: "0 0 0 1px var(--app-primary)",
+        borderColor: theme.primary,
+        boxShadow: `0 0 0 1px ${theme.primary}`,
       },
       ".Label": {
         fontSize: "11px",
         fontWeight: "700",
-        color: "var(--app-text)",
+        color: theme.textMain,
         marginBottom: "6px",
         textTransform: "uppercase",
         letterSpacing: "0.05em",
       },
       ".Tab": {
-        backgroundColor: "var(--app-surface-alt)",
+        backgroundColor: theme.surfaceAlt,
         padding: "12px 16px",
-        borderColor: "var(--app-border)",
+        borderColor: theme.border,
         borderWidth: "1px",
         borderStyle: "solid",
         fontSize: "13px",
         fontWeight: "700",
-        color: "var(--app-muted)",
+        color: theme.textMain,
         boxShadow: "none",
         outline: "none",
+        transition: "none",
+      },
+      ".Tab:hover": {
+        backgroundColor: theme.surfaceAlt,
+        borderColor: theme.border,
+        color: theme.textMain,
+        boxShadow: "none",
+        outline: "none",
+        transform: "none",
       },
       ".Tab--selected": {
-        backgroundColor: "var(--app-primary-soft)",
-        borderColor: "var(--app-primary)",
-        color: "var(--app-text)",
-        boxShadow: "0 0 0 1px var(--app-primary)",
+        backgroundColor: theme.primarySoft,
+        borderColor: theme.primary,
+        borderWidth: "1px",
+        borderStyle: "solid",
+        color: theme.textMain,
+        boxShadow: `0 0 0 1px ${theme.primary}`,
         outline: "none",
+        transition: "none",
+      },
+      ".Tab--selected:hover": {
+        backgroundColor: theme.primarySoft,
+        borderColor: theme.primary,
+        color: theme.textMain,
+        boxShadow: `0 0 0 1px ${theme.primary}`,
+        outline: "none",
+        transform: "none",
       },
       ".Tab:focus": {
-        borderColor: "var(--app-primary)",
-        boxShadow: "0 0 0 1px var(--app-primary)",
+        borderColor: theme.primary,
+        boxShadow: `0 0 0 1px ${theme.primary}`,
         outline: "none",
       },
       ".Tab:focus-visible": {
-        borderColor: "var(--app-primary)",
-        boxShadow: "0 0 0 1px var(--app-primary)",
+        borderColor: theme.primary,
+        boxShadow: `0 0 0 1px ${theme.primary}`,
         outline: "none",
       },
-      ".Tab:hover": {
-        color: "var(--app-text)",
-        borderColor: "var(--app-primary)",
+      ".TabIcon": {
+        color: iconColor,
+        fill: iconColor,
+        opacity: "1",
+        transition: "none",
+      },
+      ".TabIcon--selected": {
+        color: iconColor,
+        fill: iconColor,
+        opacity: "1",
+      },
+      ".TabIcon:hover": {
+        color: iconColor,
+        fill: iconColor,
+        opacity: "1",
+      },
+      ".TabLabel": {
+        color: theme.textMain,
+        fontWeight: "700",
+        transition: "none",
+      },
+      ".TabLabel--selected": {
+        color: theme.textMain,
+        fontWeight: "700",
+      },
+      ".TabLabel:hover": {
+        color: theme.textMain,
       },
     },
   };

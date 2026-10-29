@@ -11,6 +11,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import TuneIcon from "@mui/icons-material/Tune";
+import { sanitizeSearchInput } from "@/common/search.utils";
 import ServiceCard from "./_components/service-card";
 import StorefrontBasket from "../storefront-basket";
 import styles from "./storefront-services.module.css";
@@ -138,7 +139,7 @@ export default function StorefrontServices({
           fullWidth
           placeholder="Search treatments by name, haircut, balayage, facial..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(sanitizeSearchInput(e.target.value))}
           size="small"
           slotProps={{
             input: {

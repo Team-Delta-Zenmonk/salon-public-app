@@ -4,6 +4,7 @@ import clsx from "clsx";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import { sanitizeSearchInput } from "../../common/search.utils";
 import styles from "./services-filter-sidebar.module.css";
 
 export interface CategorySanctuary {
@@ -55,7 +56,7 @@ export const ServicesFilterSidebar: React.FC<ServicesFilterSidebarProps> = ({
               id="service-search-input"
               type="text"
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => onSearchChange(sanitizeSearchInput(e.target.value))}
               placeholder="Search by name, active, or ritual..."
               className={styles.searchInput}
             />

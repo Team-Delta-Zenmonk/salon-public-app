@@ -1,4 +1,5 @@
 import { axiosInstance } from "../../../config/axios";
+import type { ServiceGender } from "../../../common/enums/gender.enum";
 
 export interface GetStorefrontServicesParams {
   slug: string;
@@ -6,7 +7,7 @@ export interface GetStorefrontServicesParams {
   limit?: number;
   category_id?: number | string;
   search?: string;
-  gender?: string;
+  gender?: ServiceGender | string;
 }
 
 export const getStorefrontServicesService = async ({

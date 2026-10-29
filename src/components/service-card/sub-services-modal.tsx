@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Box,
   useMediaQuery,
+  Avatar,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,6 +23,39 @@ import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./sub-services-modal.module.css";
 
 const PAGE_SIZE = 10;
+
+const SubServiceAvatar: React.FC<{ logo?: string | null; name: string }> = ({ logo, name }) => {
+  const [loading, setLoading] = useState(Boolean(logo));
+  const initial = name?.charAt(0).toUpperCase() || "S";
+
+  useEffect(() => {
+    setLoading(Boolean(logo));
+  }, [logo]);
+
+  return (
+    <Box className={styles.avatarWrapper}>
+      <Avatar
+        src={logo || undefined}
+        alt={name}
+        variant="rounded"
+        className={styles.subServiceAvatar}
+        slotProps={{
+          img: {
+            onLoad: () => setLoading(false),
+            onError: () => setLoading(false),
+          },
+        }}
+      >
+        {initial}
+      </Avatar>
+      {loading && (
+        <Box className={styles.avatarLoader}>
+          <CircularProgress size={18} thickness={4} className={styles.avatarSpinner} />
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export interface SubServicesModalProps {
   open: boolean;
@@ -136,27 +170,30 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
                       subAdded ? styles.subServiceItemActive : styles.subServiceItemDefault
                     )}
                   >
-                    <div className={styles.subServiceInfo}>
-                      <div className={styles.subServiceNameRow}>
-                        <EllipsisCell
-                          value={sub.name}
-                          maxChars={25}
-                          className={styles.subServiceName}
-                        />
-                        {sub.duration && (
-                          <span className={styles.subServiceDuration}>
-                            {sub.duration} min
-                          </span>
+                    <div className={styles.subServiceContent}>
+                      <SubServiceAvatar logo={sub.logo} name={sub.name} />
+                      <div className={styles.subServiceInfo}>
+                        <div className={styles.subServiceNameRow}>
+                          <EllipsisCell
+                            value={sub.name}
+                            maxChars={25}
+                            className={styles.subServiceName}
+                          />
+                          {sub.duration && (
+                            <span className={styles.subServiceDuration}>
+                              {sub.duration} min
+                            </span>
+                          )}
+                        </div>
+                        {sub.description && (
+                          <EllipsisCell
+                            value={sub.description}
+                            maxLines={2}
+                            maxChars={80}
+                            className={styles.subServiceDesc}
+                          />
                         )}
                       </div>
-                      {sub.description && (
-                        <EllipsisCell
-                          value={sub.description}
-                          maxLines={2}
-                          maxChars={80}
-                          className={styles.subServiceDesc}
-                        />
-                      )}
                     </div>
 
                     <div className={styles.subServiceActions}>

@@ -4,15 +4,14 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { useBookingExpiry } from "../../../common/hooks/useBookingExpiry";
 import { MONTH_SHORT, WEEKDAY_FULL } from "../../../common/date.constants";
 import { clearBookingSession } from "../../../features/salon/bookings/booking.slice";
+import { useStorefront } from "../../../providers/storefront-provider";
 
 export function useCheckoutData() {
   const navigate = useStorefrontNavigate();
   const dispatch = useAppDispatch();
 
   const { currentBooking, clientSecret } = useAppSelector((s) => s.booking);
-  const { salon: cartSalon } = useAppSelector((s) => s.cart);
-
-  const displaySalon = currentBooking?.salon || cartSalon;
+  const { salon } = useStorefront();
   const { formattedTime, isExpired, urgency } = useBookingExpiry(currentBooking?.expires_at);
 
   useEffect(() => {
@@ -35,7 +34,8 @@ export function useCheckoutData() {
   return {
     currentBooking,
     clientSecret,
-    displaySalon,
+    salon,
+    displaySalon: salon,
     formattedTime,
     isExpired,
     urgency,

@@ -176,9 +176,19 @@
   gap: 0.375rem;
 }
 
+.unavailableTag {
+  color: var(--app-muted) !important;
+  opacity: 0.85;
+}
+
 .scheduleIcon {
   font-size: 15px;
   color: var(--app-primary);
+}
+
+.scheduleIconUnavailable {
+  font-size: 15px;
+  color: var(--app-muted);
 }
 
 .timingsBtn {
@@ -419,11 +429,20 @@
   text-transform: uppercase;
 }
 
+.editorialUnavailableBadge {
+  color: var(--app-muted) !important;
+  opacity: 0.85;
+}
+
 .editorialPulseDot {
   width: 6px;
   height: 6px;
   border-radius: 9999px;
   background-color: var(--app-primary);
+}
+
+.editorialDotUnavailable {
+  background-color: var(--app-muted) !important;
 }
 
 .editorialCard .reserveBtn {
@@ -662,6 +681,12 @@
   border-color: rgba(243, 198, 119, 0.25);
 }
 
+.themeObsidianFlame .unavailableTag {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--app-muted) !important;
+}
+
 .themeLightGothic {
   border: 1px solid rgba(122, 28, 40, 0.18);
   background: #ffffff;
@@ -730,6 +755,10 @@
 .themeLightGothic .availableTag {
   color: var(--app-text);
   font-weight: 600;
+}
+
+.themeLightGothic .unavailableTag {
+  color: var(--app-muted) !important;
 }
 
 .themeLightGothic .timingsBtn {

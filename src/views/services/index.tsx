@@ -1,6 +1,8 @@
 "use client";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { Typography, Button, CircularProgress, Box } from "@mui/material";
+import { useDebounce } from "use-debounce";
+import { sanitizeSearchInput } from "../../common/search.utils";
 import EllipsisCell from "@/components/ellipse-cell";
 import CustomSelect from "@/components/custom-select";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
@@ -21,6 +23,7 @@ import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.actio
 import { calculateTotals } from "../../common/cart.utils";
 import { callSnack } from "../../components/snackbar";
 import ReservationFloatingBar from "@/components/reservation-floating-bar";
+import { ServiceGender, SERVICE_GENDER_OPTIONS } from "@/common/enums/gender.enum";
 
 import styles from "./services.module.css";
 
@@ -32,9 +35,12 @@ export default function ServicesPage() {
   const cart = useAppSelector((state) => state.cart);
   const { isAuthenticated, customer } = useAppSelector((state) => state.auth);
 
-  const [searchQuery, setSearchQuery] = useState(searchParams?.get("search") || "");
+  const [searchQuery, setSearchQuery] = useState(
+    sanitizeSearchInput(searchParams?.get("search") || ""),
+  );
+  const [debouncedSearch] = useDebounce(searchQuery.trim(), 400);
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams?.get("category") || "all");
-  const [selectedGender, setSelectedGender] = useState<string>("all");
+  const [selectedGender, setSelectedGender] = useState<ServiceGender>(ServiceGender.ALL);
   const [sortBy, setSortBy] = useState<string>("curated");
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
@@ -131,7 +137,7 @@ export default function ServicesPage() {
     const cat = searchParams?.get("category");
     if (cat) setSelectedCategory(cat);
     const q = searchParams?.get("search");
-    if (q !== null && q !== undefined) setSearchQuery(q);
+    if (q !== null && q !== undefined) setSearchQuery(sanitizeSearchInput(q));
   }, [searchParams]);
 
   const salonCategories: any[] = useMemo(() => salon?.categories || [], [salon?.categories]);
@@ -156,9 +162,9 @@ export default function ServicesPage() {
           slug: salon.slug,
           page: pageNum,
           limit: 10,
-          search: searchQuery.trim() || undefined,
+          search: debouncedSearch || undefined,
           category_id: categoryParam,
-          gender: selectedGender !== "all" ? selectedGender : undefined,
+          gender: selectedGender !== ServiceGender.ALL ? selectedGender : undefined,
         })
       ).unwrap();
 
@@ -180,7 +186,7 @@ export default function ServicesPage() {
     } finally {
       if (isInitial) setIsLoadingInitial(false);
     }
-  }, [dispatch, salon?.slug, selectedCategory, salonCategories, searchQuery, selectedGender]);
+  }, [dispatch, salon?.slug, selectedCategory, salonCategories, debouncedSearch, selectedGender]);
 
   useEffect(() => {
     fetchServicesData(1, true);
@@ -292,7 +298,7 @@ export default function ServicesPage() {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(sanitizeSearchInput(e.target.value))}
                 placeholder="Search treatments by name, formula, or ritual..."
                 className={styles.searchInput}
               />
@@ -311,13 +317,8 @@ export default function ServicesPage() {
               <CustomSelect
                 label="Suitability:"
                 value={selectedGender}
-                options={[
-                  { id: "all", label: "All Genders" },
-                  { id: "gender-neutral", label: "Gender Neutral" },
-                  { id: "women", label: "Women" },
-                  { id: "men", label: "Men" },
-                ]}
-                onChange={(val) => setSelectedGender(val)}
+                options={SERVICE_GENDER_OPTIONS}
+                onChange={(val) => setSelectedGender(val as ServiceGender)}
                 buttonSize="lg"
                 rounded="4px"
                 maxChars={18}
@@ -367,7 +368,7 @@ export default function ServicesPage() {
               onClick={() => {
                 setSearchQuery("");
                 setSelectedCategory("all");
-                setSelectedGender("all");
+                setSelectedGender(ServiceGender.ALL);
               }}
               className={styles.resetBtn}
             >

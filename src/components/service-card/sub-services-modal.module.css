@@ -161,13 +161,56 @@
   background-color: var(--app-surface-alt);
 }
 
+.subServiceContent {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.avatarLoader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--app-surface-alt);
+  border-radius: 8px;
+  border: 1px solid var(--app-border);
+  z-index: 1;
+}
+
+.avatarSpinner {
+  color: var(--app-primary) !important;
+}
+
+.subServiceAvatar {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 8px !important;
+  flex-shrink: 0 !important;
+  background-color: var(--app-surface-alt) !important;
+  border: 1px solid var(--app-border) !important;
+  color: var(--app-text) !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+}
+
 .subServiceInfo {
   min-width: 0;
   flex: 1;
 }
 
 @media (min-width: 640px) {
-  .subServiceInfo {
+  .subServiceContent {
     margin-right: 0.75rem;
   }
 }

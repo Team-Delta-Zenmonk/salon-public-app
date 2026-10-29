@@ -7,6 +7,7 @@ import CartIcon from "./_components/cart-button";
 import { useAppSelector } from "../../store/hook";
 import type { RootState } from "../../store/store";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
+import { useStorefront } from "../../providers/storefront-provider";
 import { useAppThemeMode } from "../../theme/theme-provider";
 import { themeOptions, type AppThemeId } from "../../theme/theme";
 import { useState } from "react";
@@ -30,7 +31,8 @@ export default function Header({ onMenuClick }: Readonly<HeaderProps>) {
     setThemeMenuAnchor(null);
   };
 
-  const activeSalonName = useAppSelector((state: RootState) => state.cart.salon?.name) || "Glow Salon";
+  const { salon } = useStorefront();
+  const activeSalonName = salon?.name || "Glow Salon";
 
   return (
     <AppBar position="sticky" elevation={0} color="transparent" className={styles.appBar}>

@@ -139,7 +139,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             </div>
             {service.name && (
               <h2 className={styles.archVaultServiceTitle}>
-                <EllipsisCell value={service.name} maxLines={2} maxChars={40} className="capitalize" />
+                <EllipsisCell value={service.name} maxChars={40} className="capitalize" />
               </h2>
             )}
             {service.description && (
@@ -247,7 +247,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
             <div className={styles.editorialTitlePriceRow}>
               <h2 className={styles.editorialTitle}>
-                <EllipsisCell value={service.name} maxLines={2} maxChars={28} className="capitalize" />
+                <EllipsisCell value={service.name} maxChars={10} className="capitalize" />
               </h2>
               <div className={styles.editorialPriceTag}>
                 {(() => {

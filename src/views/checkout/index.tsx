@@ -26,14 +26,14 @@ interface PaymentPanelProps {
   stripeAppearance: ReturnType<typeof useStripeAppearance>;
   currentBooking: NonNullable<any>;
   isExpired: boolean;
-  displaySalon: any;
+  salon: any;
   onPaymentSuccess: () => void;
 }
 
 export default function Checkout() {
   const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
-  const { currentBooking, clientSecret, displaySalon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
+  const { currentBooking, clientSecret, salon, formattedTime, isExpired, urgency, dateStr, handleResetBooking } =
     useCheckoutData();
 
   const stripeAppearance = useStripeAppearance();
@@ -64,7 +64,7 @@ export default function Checkout() {
   if (isProcessing) {
     return (
       <PaymentProcessing
-        salonName={displaySalon?.name || "the salon"}
+        salonName={salon?.name || "the salon"}
         onComplete={handleProcessingComplete}
       />
     );
@@ -79,7 +79,7 @@ export default function Checkout() {
         formattedTime={formattedTime}
       />
 
-      <MobileSummaryBar salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
+      <MobileSummaryBar salon={salon} booking={currentBooking} dateStr={dateStr} />
 
       <Container
         maxWidth="lg"
@@ -95,7 +95,7 @@ export default function Checkout() {
                 stripeAppearance={stripeAppearance}
                 currentBooking={currentBooking}
                 isExpired={isExpired}
-                displaySalon={displaySalon}
+                salon={salon}
                 onPaymentSuccess={handlePaymentSuccess}
               />
             )}
@@ -105,8 +105,8 @@ export default function Checkout() {
             <Typography className={styles.summaryTitle}>
               Booking Summary
             </Typography>
-            <OrderSummary salon={displaySalon} booking={currentBooking} dateStr={dateStr} />
-            <AssistanceCard phone={displaySalon?.phone} isDesktop />
+            <OrderSummary salon={salon} booking={currentBooking} dateStr={dateStr} />
+            <AssistanceCard phone={salon?.phone} isDesktop />
           </Box>
         </Box>
       </Container>
@@ -119,7 +119,7 @@ function PaymentPanel({
   stripeAppearance,
   currentBooking,
   isExpired,
-  displaySalon,
+  salon,
   onPaymentSuccess,
 }: Readonly<PaymentPanelProps>) {
   return (
@@ -138,7 +138,7 @@ function PaymentPanel({
         </Elements>
       </Paper>
 
-      <AssistanceCard phone={displaySalon?.phone} />
+      <AssistanceCard phone={salon?.phone} />
       <SecurityFooter />
     </Box>
   );

@@ -3,6 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { sanitizeSearchInput } from "../../common/search.utils";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -26,15 +27,14 @@ const SearchBar = ({ onSearch, placeholder, initialValue }: SearchBarProps) => {
   }, 400);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const cleaned = input.trim().replaceAll(/\s{2,}/g, " ");
+    const input = sanitizeSearchInput(e.target.value);
     setSearchQuery(input);
 
-    if (cleaned === "") {
+    if (input === "") {
       debouncedSearch.cancel();
       handleClearSearch();
     } else {
-      debouncedSearch(cleaned);
+      debouncedSearch(input.trim());
     }
   };
 

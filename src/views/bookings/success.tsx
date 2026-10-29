@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Typography, Button, Container, Card, Avatar, Divider, CircularProgress } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
@@ -7,6 +7,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSearchParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
+import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
@@ -27,9 +28,7 @@ const BookingSuccess: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState((!booking || booking.status === "pending") && !!bookingUuid);
 
-  const { salon: cartSalon } = useAppSelector((s) => s.cart);
-  const initialSalonRef = useRef(booking?.salon || cartSalon);
-  const displaySalon = booking?.salon || initialSalonRef.current;
+  const { salon } = useStorefront();
 
   useEffect(() => {
     if (bookingUuid && (!booking || booking.status === "pending")) {
@@ -131,7 +130,7 @@ const BookingSuccess: React.FC = () => {
                 Booking Confirmed
               </Typography>
               <Typography className={styles.thankyouText}>
-                Thank you for choosing {displaySalon?.name || "us"}!
+                Thank you for choosing {salon?.name || "us"}!
               </Typography>
             </Box>
 
@@ -139,19 +138,19 @@ const BookingSuccess: React.FC = () => {
 
             <Box className={styles.salonRow}>
               <Avatar
-                src={displaySalon?.logo}
+                src={salon?.logo}
                 className={styles.salonAvatar}
               >
-                {displaySalon?.name?.charAt(0) || "S"}
+                {salon?.name?.charAt(0) || "S"}
               </Avatar>
               <Box className={styles.salonInfo}>
                 <Typography className={styles.salonName}>
-                  {displaySalon?.name || "Salon App"}
+                  {salon?.name || "Salon App"}
                 </Typography>
                 <Box className={styles.addressRow}>
                   <LocationOnIcon className={styles.locationIcon} />
                   <Typography className={styles.addressText}>
-                    {displaySalon?.address || "Address in booking history"}
+                    {salon?.address || "Address in booking history"}
                   </Typography>
                 </Box>
               </Box>

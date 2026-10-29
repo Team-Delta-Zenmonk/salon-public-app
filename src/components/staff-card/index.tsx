@@ -4,10 +4,11 @@ import clsx from "clsx";
 import { Avatar, IconButton, Tooltip } from "@mui/material";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useAppThemeMode } from "@/theme/theme-provider";
+import { getTodayKey } from "../../common/date.constants";
 import EllipsisCell from "../ellipse-cell";
 import ScheduleTimingDialog from "./schedule-timing-dialog";
 import styles from "./staff-card.module.css";
@@ -34,6 +35,22 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
 
   const titleText = member.title || member.role || "Specialist";
   const genderText = member.gender ? `${member.gender.charAt(0).toUpperCase() + member.gender.slice(1).toLowerCase()} Specialist` : "";
+
+  const todayKey = getTodayKey();
+  const dayIndex = new Date().getDay();
+
+  const todayHours =
+    member.active_hours?.[todayKey] ??
+    member.active_hours?.[dayIndex.toString()] ??
+    member.active_hours?.[dayIndex as unknown as string];
+
+  const isAvailableToday = Boolean(
+    (todayHours && todayHours.start_time && todayHours.end_time) ||
+      (Array.isArray(member.working_days) &&
+        member.working_days.some(
+          (d: string) => typeof d === "string" && d.toLowerCase() === todayKey.toLowerCase()
+        ))
+  );
 
   const renderStaffBadges = () => (
     <div className={styles.staffTagsWrapper}>
@@ -106,9 +123,13 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
             {renderStaffBadges()}
 
             <div className={styles.availabilityRow}>
-              <div className={styles.availableTag}>
-                <AccessTimeIcon className={styles.scheduleIcon} />
-                <span>AVAILABLE TODAY</span>
+              <div className={clsx(styles.availableTag, !isAvailableToday && styles.unavailableTag)}>
+                {isAvailableToday ? (
+                  <AccessTimeIcon className={styles.scheduleIcon} />
+                ) : (
+                  <EventBusyOutlinedIcon className={styles.scheduleIconUnavailable} />
+                )}
+                <span>{isAvailableToday ? "AVAILABLE TODAY" : "NOT AVAILABLE TODAY"}</span>
               </div>
               <button
                 type="button"
@@ -167,9 +188,13 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
             {renderStaffBadges()}
 
             <div className={styles.availabilityRow}>
-              <div className={styles.availableTag}>
-                <AccessTimeIcon className={styles.scheduleIcon} />
-                <span>AVAILABLE TODAY</span>
+              <div className={clsx(styles.availableTag, !isAvailableToday && styles.unavailableTag)}>
+                {isAvailableToday ? (
+                  <AccessTimeIcon className={styles.scheduleIcon} />
+                ) : (
+                  <EventBusyOutlinedIcon className={styles.scheduleIconUnavailable} />
+                )}
+                <span>{isAvailableToday ? "AVAILABLE TODAY" : "NOT AVAILABLE TODAY"}</span>
               </div>
               <button
                 type="button"
@@ -232,9 +257,9 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
             </div>
 
             <div className={styles.editorialAvailabilityRow}>
-              <div className={styles.editorialAvailableBadge}>
-                <span className={styles.editorialPulseDot} />
-                <span>AVAILABLE TODAY</span>
+              <div className={clsx(styles.editorialAvailableBadge, !isAvailableToday && styles.editorialUnavailableBadge)}>
+                <span className={clsx(styles.editorialPulseDot, !isAvailableToday && styles.editorialDotUnavailable)} />
+                <span>{isAvailableToday ? "AVAILABLE TODAY" : "NOT AVAILABLE TODAY"}</span>
               </div>
               <button
                 type="button"
