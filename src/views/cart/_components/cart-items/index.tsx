@@ -1,6 +1,8 @@
 import { Box, Typography, Avatar, IconButton, Skeleton } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import CloseIcon from "@mui/icons-material/Close";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { removeItemLocal, updateItemLocalStaff } from "../../../../features/salon/cart/cart.slice";
@@ -16,6 +18,7 @@ import { callSnack } from "@/components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { getDiscountedPrice } from "@/common/discount.utils";
+import { isStaffInactive } from "@/common/staff-status.utils";
 import styles from "./cart-items.module.css";
 
 interface CartItemProps {
@@ -29,6 +32,7 @@ interface StaffSelectorProps {
   selectedStaffId: string | null;
   updating: boolean;
   onStaffClick: (entry: any) => void;
+  onUnassignClick: () => void;
   onSeeMoreClick: () => void;
 }
 
@@ -55,6 +59,7 @@ function StaffSelector({
   selectedStaffId,
   updating,
   onStaffClick,
+  onUnassignClick,
   onSeeMoreClick,
 }: Readonly<StaffSelectorProps>) {
   if (staffLoading) {
@@ -78,17 +83,34 @@ function StaffSelector({
     );
   }
 
-  let displayedStaff = staffList.slice(0, 5);
+  let displayedStaff = staffList.slice(0, 4);
   if (selectedStaffId && !displayedStaff.some((entry: any) => entry.staff?.uuid === selectedStaffId)) {
     const selectedEntry = staffList.find((entry: any) => entry.staff?.uuid === selectedStaffId);
     if (selectedEntry) {
-      displayedStaff = [selectedEntry, ...displayedStaff.slice(0, 4)];
+      displayedStaff = [selectedEntry, ...displayedStaff.slice(0, 3)];
     }
   }
   const remainingCount = Math.max(0, (totalStaffCount || staffList.length) - displayedStaff.length);
 
   return (
     <Box className={styles.staffGrid}>
+      <Box
+        onClick={() => !updating && onUnassignClick()}
+        className={`${styles.staffCard} ${styles.anyStaffCard} ${!selectedStaffId ? styles.staffCardSelected : ""}`}
+      >
+        <Avatar
+          className={`${styles.staffAvatar} ${styles.anyStaffAvatar} ${!selectedStaffId ? styles.anyStaffAvatarSelected : ""}`}
+        >
+          <PersonOutlineIcon fontSize="small" />
+        </Avatar>
+        <Typography className={`${styles.staffName} ${!selectedStaffId ? styles.staffNameSelected : ""}`}>
+          Any Staff
+        </Typography>
+        <Typography className={`${styles.priceTag} ${!selectedStaffId ? styles.priceTagSelected : ""}`}>
+          Default
+        </Typography>
+      </Box>
+
       {displayedStaff.map((entry: any, index: number) => {
         const staff = entry.staff;
         const isSelected = selectedStaffId === staff?.uuid;
@@ -106,14 +128,10 @@ function StaffSelector({
             >
               {staffName[0]}
             </Avatar>
-            <Typography className={`${styles.staffName} ${isSelected ? styles.staffNameSelected : ""}`}>
-              {staffName.split(" ")[0]}
+            <EllipsisCell value={staffName.split(" ")[0]} className={`${styles.staffName} ${isSelected ? styles.staffNameSelected : ""}`} />
+            <Typography className={`${styles.priceTag} ${isSelected ? styles.priceTagSelected : ""}`}>
+              {entry.price ? `₹${Math.round(Number.parseFloat(String(entry.price)))}` : ""}
             </Typography>
-            {entry.price && (
-              <Typography className={`${styles.priceTag} ${isSelected ? styles.priceTagSelected : ""}`}>
-                ₹{Math.round(Number.parseFloat(String(entry.price)))}
-              </Typography>
-            )}
           </Box>
         );
       })}
@@ -188,6 +206,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           const uniqueData = data.filter((entry: any) => {
             const id = entry?.staff?.uuid || entry?.staff_id;
             if (!id || seen.has(id)) return false;
+            if (isStaffInactive(entry?.staff)) return false;
             seen.add(id);
             return true;
           });
@@ -229,7 +248,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
           const seen = new Set(prev.map((e) => e?.staff?.uuid || e?.staff_id));
           const additions = data.filter((entry: any) => {
             const id = entry?.staff?.uuid || entry?.staff_id;
-            return id && !seen.has(id);
+            return id && !seen.has(id) && !isStaffInactive(entry?.staff);
           });
           return [...prev, ...additions];
         });
@@ -281,6 +300,36 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
     }
   };
 
+  const onUnassignStaff = async () => {
+    if (updating) return;
+    if (!selectedStaffId) return;
+
+    const isLocalGuestItem = !isAuthenticated || isGuest || !item.uuid;
+
+    if (isLocalGuestItem) {
+      dispatch(
+        updateItemLocalStaff({
+          service_id: item.service_id,
+          staff: null,
+          staff_uuid: null,
+          price: item.base_price,
+          duration: service?.duration ?? item.duration,
+        }),
+      );
+      return;
+    }
+
+    setUpdating(true);
+    try {
+      await dispatch(updateCartItemAction({ itemUuid: item.uuid, staffUuid: null })).unwrap();
+    } catch (error: any) {
+      console.error("Failed to unassign staff:", error);
+      callSnack(error?.message || "Failed to unassign specialist", "error");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   const onCancelStaff = () => {
     setStaffDialogOpen(false);
     setPendingStaffEntry(null);
@@ -311,7 +360,8 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
   };
 
   const currentStaffEntry = selectedStaffId ? staffList.find((e) => e.staff?.uuid === selectedStaffId) : null;
-  const currentStaffInfo = getStaffInfo(currentStaffEntry, item.staff);
+  const isCurrentStaffInactive = isStaffInactive(currentStaffEntry?.staff || item.staff);
+  const currentStaffInfo = selectedStaffId && !isCurrentStaffInactive ? getStaffInfo(currentStaffEntry, item.staff) : null;
   const newStaffInfo = getStaffInfo(pendingStaffEntry);
 
   return (
@@ -345,6 +395,19 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
                     {currentStaffInfo.name?.[0]}
                   </Avatar>
                   <EllipsisCell value={currentStaffInfo.name} className={styles.assignedStaffName} maxChars={20} />
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onUnassignStaff();
+                    }}
+                    disabled={updating}
+                    className={styles.unassignBtn}
+                    aria-label="Unassign specialist"
+                    title="Unassign specialist"
+                  >
+                    <CloseIcon className={styles.unassignBtnIcon} />
+                  </IconButton>
                 </Box>
               )}
             </Box>
@@ -390,9 +453,20 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
               Assign Specialist
             </Typography>
             {selectedStaffId && (
-              <Typography variant="caption" className={styles.staffAssigned}>
-                ✓ Specialist Assigned
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography variant="caption" className={styles.staffAssigned}>
+                  ✓ Specialist Assigned
+                </Typography>
+                <button
+                  type="button"
+                  onClick={onUnassignStaff}
+                  disabled={updating}
+                  className={styles.unassignTextBtn}
+                  title="Remove specialist assignment"
+                >
+                  Unassign
+                </button>
+              </Box>
             )}
           </Box>
           <StaffSelector
@@ -402,6 +476,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
             selectedStaffId={selectedStaffId}
             updating={updating}
             onStaffClick={onStaffClick}
+            onUnassignClick={onUnassignStaff}
             onSeeMoreClick={() => setStaffModalOpen(true)}
           />
         </Box>
@@ -432,6 +507,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
         staffList={modalStaffList}
         selectedStaffId={selectedStaffId}
         onSelectStaff={onStaffClick}
+        onUnassignStaff={onUnassignStaff}
         serviceName={name}
         hasMore={modalStaffList.length < staffTotal}
         onFetchMore={fetchMoreStaff}

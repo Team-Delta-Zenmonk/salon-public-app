@@ -11,7 +11,7 @@ const nextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
   poweredByHeader: false,
   compress: true,
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {

@@ -4,7 +4,7 @@ import { updateCartItemType } from "./update-item.type";
 
 export const updateCartItemAction = createAsyncThunk(
   updateCartItemType,
-  async ({ itemUuid, staffUuid }: { itemUuid: string; staffUuid: string }, thunkAPI) => {
+  async ({ itemUuid, staffUuid }: { itemUuid: string; staffUuid: string | null }, thunkAPI) => {
     try {
       return await updateCartItemService(itemUuid, staffUuid);
     } catch (err: any) {

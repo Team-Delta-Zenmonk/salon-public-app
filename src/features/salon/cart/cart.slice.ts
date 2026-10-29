@@ -62,10 +62,10 @@ export const cartSlice = createSlice({
       const item = state.items.find((i: any) => i.service_id === service_id);
       if (!item) return;
 
-      item.staff_uuid = staff_uuid;
-      item.staff = staff;
-      item.final_price = price ? Number.parseFloat(String(price)) : item.base_price;
-      item.duration = duration ?? item.duration;
+      item.staff_uuid = staff_uuid ?? null;
+      item.staff = staff ?? null;
+      item.final_price = price !== undefined && price !== null ? Number.parseFloat(String(price)) : item.base_price;
+      item.duration = duration ?? item.service?.duration ?? item.duration;
 
       setGuestCart({ salon: state.salon, items: state.items });
     },

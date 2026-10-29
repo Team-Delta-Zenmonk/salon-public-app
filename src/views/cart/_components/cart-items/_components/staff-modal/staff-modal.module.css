@@ -157,6 +157,21 @@
   font-family: var(--app-font-family) !important;
 }
 
+.anyCard {
+  border-style: dashed;
+}
+
+.anyAvatar {
+  background-color: var(--app-surface-alt) !important;
+  color: var(--app-muted) !important;
+  border: 1px dashed var(--app-border) !important;
+}
+
+.anyAvatarSelected {
+  border-color: var(--app-primary) !important;
+  color: var(--app-primary) !important;
+}
+
 .loaderWrapper {
   display: flex;
   justify-content: center;

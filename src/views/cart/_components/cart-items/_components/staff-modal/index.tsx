@@ -2,16 +2,18 @@
 import { useState, useMemo } from "react";
 import { Dialog, DialogContent, Avatar, Typography, Box, IconButton, CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InfiniteScroll from "react-infinite-scroll-component";
 import EllipsisCell from "@/components/ellipse-cell";
 import styles from "./staff-modal.module.css";
 
-interface StaffModalProps {
+  interface StaffModalProps {
   open: boolean;
   onClose: () => void;
   staffList: any[];
   selectedStaffId: string | null;
   onSelectStaff: (entry: any) => void;
+  onUnassignStaff?: () => void;
   serviceName?: string;
   hasMore: boolean;
   onFetchMore: () => Promise<void> | void;
@@ -24,6 +26,7 @@ export default function StaffModal({
   staffList,
   selectedStaffId,
   onSelectStaff,
+  onUnassignStaff,
   serviceName,
   hasMore,
   onFetchMore,
@@ -31,6 +34,13 @@ export default function StaffModal({
 }: Readonly<StaffModalProps>) {
   const handleCardClick = (entry: any) => {
     onSelectStaff(entry);
+    onClose();
+  };
+
+  const handleUnassignClick = () => {
+    if (onUnassignStaff) {
+      onUnassignStaff();
+    }
     onClose();
   };
 
@@ -68,6 +78,31 @@ export default function StaffModal({
             }
           >
             <Box className={styles.grid}>
+              {onUnassignStaff && (
+                <Box
+                  onClick={handleUnassignClick}
+                  className={`${styles.staffCard} ${styles.anyCard} ${!selectedStaffId ? styles.staffCardSelected : ""}`}
+                >
+                  <Avatar
+                    className={`${styles.avatar} ${styles.anyAvatar} ${!selectedStaffId ? styles.anyAvatarSelected : ""}`}
+                  >
+                    <PersonOutlineIcon />
+                  </Avatar>
+                  <Box className={styles.info}>
+                    <Typography className={`${styles.name} ${!selectedStaffId ? styles.nameSelected : ""}`}>
+                      Any Specialist
+                    </Typography>
+                    <Typography className={styles.price}>
+                      Default pricing
+                    </Typography>
+                    {!selectedStaffId && (
+                      <Typography className={styles.selectedBadge}>
+                        Selected
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
+              )}
               {staffList.map((entry: any, index: number) => {
                 const staff = entry.staff;
                 const isSelected = selectedStaffId === staff?.uuid;
