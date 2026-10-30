@@ -8,6 +8,7 @@ import { removeCartItemAction } from "./remove-item/remove-item.action";
 import { deleteCartAction } from "./delete-cart/delete-cart.action";
 import { updateCartItemAction } from "./update-item/update-item.action";
 import { logout } from "../../auth/auth.slice";
+import { getDiscountedPrice } from "@/common/discount.utils";
 
 const sortItems = (items: any[]) => [...items].sort((a: any, b: any) => a.id - b.id);
 
@@ -47,7 +48,16 @@ export const cartSlice = createSlice({
       const exists = state.items.find((i: any) => i.service_id === service_id);
       if (exists) return;
 
-      state.items.push(action.payload);
+      const discountInfo = getDiscountedPrice(action.payload);
+      const itemToAdd = {
+        ...action.payload,
+        base_price: Number(action.payload.base_price ?? discountInfo.originalPrice),
+        final_price: discountInfo.hasDiscount
+          ? discountInfo.finalPrice
+          : Number(action.payload.final_price ?? action.payload.base_price ?? discountInfo.finalPrice),
+      };
+
+      state.items.push(itemToAdd);
       state.isGuest = true;
       state.loaded = true;
 
@@ -99,7 +109,16 @@ export const cartSlice = createSlice({
       if (guestCart) {
         state.salonId = guestCart.salon?.uuid ?? null;
         state.salon = guestCart.salon ?? null;
-        state.items = guestCart.items ?? [];
+        state.items = (guestCart.items ?? []).map((item: any) => {
+          const discountInfo = getDiscountedPrice(item);
+          return {
+            ...item,
+            base_price: Number(item.base_price ?? discountInfo.originalPrice),
+            final_price: discountInfo.hasDiscount
+              ? discountInfo.finalPrice
+              : Number(item.final_price ?? item.base_price ?? discountInfo.finalPrice),
+          };
+        });
         state.isGuest = true;
       }
       state.loaded = true;

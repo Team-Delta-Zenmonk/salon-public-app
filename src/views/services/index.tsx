@@ -21,6 +21,7 @@ import { deleteCartAction } from "../../features/salon/cart/delete-cart/delete-c
 import { createCartAction } from "../../features/salon/cart/create-cart/create-cart.action";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
 import { calculateTotals } from "../../common/cart.utils";
+import { getDiscountedPrice } from "@/common/discount.utils";
 import { callSnack } from "../../components/snackbar";
 import ReservationFloatingBar from "@/components/reservation-floating-bar";
 import { ServiceGender, SERVICE_GENDER_OPTIONS } from "@/common/enums/gender.enum";
@@ -91,11 +92,13 @@ export default function ServicesPage() {
       }
     } else {
       if (!isAuthenticated) {
+        const discountInfo = getDiscountedPrice(service);
         dispatch(
           addItemLocal({
             service_id: serviceId,
             name: service.name,
             base_price: service.price,
+            final_price: discountInfo.hasDiscount ? discountInfo.finalPrice : service.price,
             duration: service.duration,
             salon,
             service,

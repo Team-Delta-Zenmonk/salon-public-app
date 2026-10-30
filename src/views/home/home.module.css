@@ -602,6 +602,64 @@
   gap: 2rem;
 }
 
+.emptyServicesState {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  border-radius: var(--app-radius, 8px);
+  border: 1px dashed var(--app-border);
+  background-color: var(--app-surface-alt, var(--app-surface));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+  width: 100%;
+}
+
+.emptyServicesIcon {
+  color: var(--app-muted) !important;
+  font-size: 40px !important;
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
+}
+
+.emptyServicesTitle {
+  font-family: var(--app-font-family);
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: var(--app-text) !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.emptyServicesDesc {
+  font-family: var(--app-font-family);
+  font-size: 0.8125rem !important;
+  color: var(--app-muted) !important;
+  max-width: 26rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}
+
+.emptyServicesResetBtn {
+  margin-top: 1.25rem !important;
+  border-radius: var(--app-radius, 6px) !important;
+  padding: 0.5rem 1.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  color: var(--app-surface) !important;
+  background-color: var(--app-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border: none !important;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.emptyServicesResetBtn:hover {
+  opacity: 0.9;
+}
+
 @media (min-width: 768px) {
   .servicesGrid {
     grid-template-columns: repeat(2, 1fr);

@@ -13,24 +13,6 @@ export function getDiscountedPrice(item: any): {
   );
   const discountType = service?.discount_type ?? item?.discount_type;
 
-  if (
-    item?.final_price !== undefined &&
-    item?.base_price !== undefined &&
-    Number(item.final_price) < Number(item.base_price)
-  ) {
-    const diff = Number(item.base_price) - Number(item.final_price);
-    let badge = `₹${diff} OFF`;
-    if (discountType === "percentage" && discount > 0) {
-      badge = `${discount}% OFF`;
-    }
-    return {
-      hasDiscount: true,
-      originalPrice: Number(item.base_price),
-      finalPrice: Number(item.final_price),
-      discountBadge: badge,
-    };
-  }
-
   if (discount > 0 && discountType) {
     let finalPrice = basePrice;
     let discountBadge = "";
@@ -51,6 +33,24 @@ export function getDiscountedPrice(item: any): {
         discountBadge,
       };
     }
+  }
+
+  if (
+    item?.final_price !== undefined &&
+    item?.base_price !== undefined &&
+    Number(item.final_price) < Number(item.base_price)
+  ) {
+    const diff = Number(item.base_price) - Number(item.final_price);
+    let badge = `₹${diff} OFF`;
+    if (discountType === "percentage" && discount > 0) {
+      badge = `${discount}% OFF`;
+    }
+    return {
+      hasDiscount: true,
+      originalPrice: Number(item.base_price),
+      finalPrice: Number(item.final_price),
+      discountBadge: badge,
+    };
   }
 
   return {

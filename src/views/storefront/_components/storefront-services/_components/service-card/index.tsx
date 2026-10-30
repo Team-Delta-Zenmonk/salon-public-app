@@ -131,11 +131,12 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
       if (cart.salonId && cart.salonId !== effectiveSalonId) {
         dispatch(clearCart());
       }
+      const discountInfo = getDiscountedPrice(item);
       dispatch(
         addItemLocal({
           service_id: item.uuid,
           base_price: item.price,
-          final_price: item.price,
+          final_price: discountInfo.hasDiscount ? discountInfo.finalPrice : item.price,
           duration: item.duration,
 
           service: {
@@ -145,6 +146,8 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
             gender: item.gender,
             duration: item.duration,
             price: item.price,
+            discount: item.discount,
+            discount_type: item.discount_type,
           },
 
           salon: {

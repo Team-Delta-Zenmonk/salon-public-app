@@ -26,20 +26,26 @@ export default function AuthSync() {
     if (paymentJustCompleted || getPaymentCompleted()) return;
 
     if (justLoggedIn) {
-      dispatch(getCartAction(customer.uuid)).then((res: any) => {
-        if (!res.payload) {
-          dispatch(syncGuestCartAction({ userId: customer.uuid }));
-        }
-      });
+      const guestCart = getPaymentCompleted() ? null : (typeof window !== "undefined" ? localStorage.getItem("guest_cart") : null);
+      if (guestCart) {
+        dispatch(syncGuestCartAction({ userId: customer.uuid })).then(() => {
+          dispatch(getCartAction(customer.uuid));
+        });
+      } else {
+        dispatch(getCartAction(customer.uuid));
+      }
       return;
     }
 
     if (!loaded) {
-      dispatch(getCartAction(customer.uuid)).then((res: any) => {
-        if (!res.payload) {
-          dispatch(syncGuestCartAction({ userId: customer.uuid }));
-        }
-      });
+      const guestCart = getPaymentCompleted() ? null : (typeof window !== "undefined" ? localStorage.getItem("guest_cart") : null);
+      if (guestCart) {
+        dispatch(syncGuestCartAction({ userId: customer.uuid })).then(() => {
+          dispatch(getCartAction(customer.uuid));
+        });
+      } else {
+        dispatch(getCartAction(customer.uuid));
+      }
     }
   }, [isAuthenticated, customer?.uuid, loaded, paymentJustCompleted, dispatch]);
 

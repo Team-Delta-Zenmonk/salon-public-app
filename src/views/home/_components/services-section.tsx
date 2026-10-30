@@ -25,6 +25,31 @@ export interface ServicesSectionProps {
   onBookService?: (service: Service) => void;
 }
 
+function EmptyServicesState({
+  onReset,
+}: {
+  onReset?: () => void;
+}) {
+  return (
+    <div className={styles.emptyServicesState}>
+      <ContentCutOutlinedIcon className={styles.emptyServicesIcon} />
+      <h3 className={styles.emptyServicesTitle}>No treatments found</h3>
+      <p className={styles.emptyServicesDesc}>
+        We couldn&apos;t find any services matching your selected filters. Try choosing a different category or guest focus.
+      </p>
+      {onReset && (
+        <button
+          type="button"
+          onClick={onReset}
+          className={styles.emptyServicesResetBtn}
+        >
+          Reset Filters
+        </button>
+      )}
+    </div>
+  );
+}
+
 function GridServicesLayout({
   filteredServices,
   subServicesMap,
@@ -111,21 +136,30 @@ function GridServicesLayout({
         </div>
       </div>
 
-      <div className={styles.servicesGrid}>
-        {filteredServices.map((service: any) => (
-          <ServiceCard
-            key={service.uuid || service.id}
-            service={service}
-            subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
-            isAdded={isAdded(service.uuid || service.id)}
-            isSubAdded={(subId) => isAdded(subId)}
-            onToggleCart={toggleCart}
-            loadingIds={loadingIds}
-            showSubServices={false}
-            onBookNow={onBookService}
-          />
-        ))}
-      </div>
+      {filteredServices.length === 0 ? (
+        <EmptyServicesState
+          onReset={() => {
+            onSelectCategory("all");
+            onSelectGender("all");
+          }}
+        />
+      ) : (
+        <div className={styles.servicesGrid}>
+          {filteredServices.map((service: any) => (
+            <ServiceCard
+              key={service.uuid || service.id}
+              service={service}
+              subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+              isAdded={isAdded(service.uuid || service.id)}
+              isSubAdded={(subId) => isAdded(subId)}
+              onToggleCart={toggleCart}
+              loadingIds={loadingIds}
+              showSubServices={false}
+              onBookNow={onBookService}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -136,6 +170,8 @@ function TwoColumnListLayout({
   categorySanctuaries,
   selectedCategory,
   onSelectCategory,
+  selectedGender,
+  onSelectGender,
   toggleCart,
   isAdded,
   loadingIds,
@@ -159,21 +195,30 @@ function TwoColumnListLayout({
         })}
       </div>
 
-      <div className={styles.servicesGrid}>
-        {filteredServices.map((service: any) => (
-          <ServiceCard
-            key={service.uuid || service.id}
-            service={service}
-            subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
-            isAdded={isAdded(service.uuid || service.id)}
-            isSubAdded={(subId) => isAdded(subId)}
-            onToggleCart={toggleCart}
-            loadingIds={loadingIds}
-            showSubServices={false}
-            onBookNow={onBookService}
-          />
-        ))}
-      </div>
+      {filteredServices.length === 0 ? (
+        <EmptyServicesState
+          onReset={() => {
+            onSelectCategory("all");
+            onSelectGender?.("all");
+          }}
+        />
+      ) : (
+        <div className={styles.servicesGrid}>
+          {filteredServices.map((service: any) => (
+            <ServiceCard
+              key={service.uuid || service.id}
+              service={service}
+              subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+              isAdded={isAdded(service.uuid || service.id)}
+              isSubAdded={(subId) => isAdded(subId)}
+              onToggleCart={toggleCart}
+              loadingIds={loadingIds}
+              showSubServices={false}
+              onBookNow={onBookService}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -184,6 +229,8 @@ function CompactAccordionLayout({
   categorySanctuaries,
   selectedCategory,
   onSelectCategory,
+  selectedGender,
+  onSelectGender,
   toggleCart,
   isAdded,
   loadingIds,
@@ -207,21 +254,30 @@ function CompactAccordionLayout({
         })}
       </div>
 
-      <div className={styles.servicesGrid}>
-        {filteredServices.map((service: any) => (
-          <ServiceCard
-            key={service.uuid || service.id}
-            service={service}
-            subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
-            isAdded={isAdded(service.uuid || service.id)}
-            isSubAdded={(subId) => isAdded(subId)}
-            onToggleCart={toggleCart}
-            loadingIds={loadingIds}
-            showSubServices={false}
-            onBookNow={onBookService}
-          />
-        ))}
-      </div>
+      {filteredServices.length === 0 ? (
+        <EmptyServicesState
+          onReset={() => {
+            onSelectCategory("all");
+            onSelectGender?.("all");
+          }}
+        />
+      ) : (
+        <div className={styles.servicesGrid}>
+          {filteredServices.map((service: any) => (
+            <ServiceCard
+              key={service.uuid || service.id}
+              service={service}
+              subServices={subServicesMap[service.id] || subServicesMap[service.uuid] || []}
+              isAdded={isAdded(service.uuid || service.id)}
+              isSubAdded={(subId) => isAdded(subId)}
+              onToggleCart={toggleCart}
+              loadingIds={loadingIds}
+              showSubServices={false}
+              onBookNow={onBookService}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

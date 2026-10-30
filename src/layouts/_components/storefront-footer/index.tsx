@@ -53,22 +53,15 @@ export default function StorefrontFooter() {
 
           <div className={styles.columnNarrow}>
             <span className={styles.sectionBadge}>
-              Salon Guidelines
-            </span>
-            <p className={styles.aboutText}>
-              Please keep phones on silent. We kindly request 24 hours notice for any appointment cancellations.
-            </p>
-          </div>
-
-          <div className={styles.columnNarrow}>
-            <span className={styles.sectionBadge}>
               Our Location
             </span>
             <div className={styles.addressBlock}>
               <EllipsisCell
                 value={salon?.address || "484 Avenue Montaigne, Flagship Studio"}
                 className={styles.addressBlock}
+                maxChars={50}
               />
+              <br/>
               <EllipsisCell
                 value={
                   salon?.phone
