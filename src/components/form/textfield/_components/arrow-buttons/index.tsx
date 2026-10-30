@@ -14,6 +14,7 @@ type ArrowButtonsProps<T extends FieldValues> = {
   value: PathValue<T, Path<T>>;
   error: FieldError | undefined;
   identifier: string;
+  disabled?: boolean;
 };
 
 function ArrowButtons<T extends FieldValues>({
@@ -22,13 +23,16 @@ function ArrowButtons<T extends FieldValues>({
   value,
   error,
   identifier,
+  disabled = false,
 }: Readonly<ArrowButtonsProps<T>>)  {
   const handleUp = () => {
+    if (disabled) return;
     const newValue = value ? Math.min(1000000, Number(value) + 1) : 1;
     onChange(String(newValue));
   };
 
   const handleDown = () => {
+    if (disabled) return;
     const newValue = value && Number(value) > 1 ? Number(value) - 1 : 1;
     onChange(String(newValue));
   };
@@ -42,6 +46,7 @@ function ArrowButtons<T extends FieldValues>({
         <IconButton
           className={styles.arrowBtn}
           onClick={handleUp}
+          disabled={disabled}
           data-test-id={`btn-number-input-arrow-up-${identifier}`}
         >
           <ArrowDropUpIcon className="iconSizeStyles" />
@@ -49,6 +54,7 @@ function ArrowButtons<T extends FieldValues>({
         <IconButton
           className={styles.arrowBtn}
           onClick={handleDown}
+          disabled={disabled}
           data-test-id={`btn-number-input-arrow-down-${identifier}`}
         >
           <ArrowDropDownIcon className="iconSizeStyles" />

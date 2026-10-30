@@ -110,6 +110,7 @@ const TextField = <T extends FieldValues>({
                       value={value}
                       error={error}
                       identifier={identifier}
+                      disabled={disabled}
                     />
                   ) : (
                     endAdornment && (
