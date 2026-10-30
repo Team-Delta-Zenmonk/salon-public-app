@@ -78,7 +78,7 @@ export default function ServicesPage() {
             await dispatch(removeCartItemAction(cartItem.uuid)).unwrap();
           }
           if (customer?.uuid) {
-            await dispatch(getCartAction(customer.uuid));
+            await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           }
           callSnack("Removed from cart", "info");
         } catch (error: any) {
@@ -119,11 +119,11 @@ export default function ServicesPage() {
       try {
         if (cart.cartUuid) {
           await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
-          await dispatch(getCartAction(customer.uuid));
+          await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           callSnack("Added to cart", "success");
         } else if (salon?.uuid) {
           await dispatch(createCartAction({ salon_id: salon.uuid, user_id: customer.uuid, items: [payload] })).unwrap();
-          await dispatch(getCartAction(customer.uuid));
+          await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           callSnack("Cart created and item added", "success");
         }
       } catch (error: any) {
@@ -172,18 +172,24 @@ export default function ServicesPage() {
       ).unwrap();
 
       const newServices = res.services || [];
+      const total = res.pagination?.total ?? newServices.length;
+      const limit = res.pagination?.limit ?? 10;
+      const totalPages = Math.ceil(total / limit);
+
       if (pageNum === 1) {
         setServicesList(newServices);
+        setHasMore(newServices.length < total && pageNum < totalPages);
       } else {
         setServicesList((prev) => {
           const existingIds = new Set(prev.map((s: any) => s.uuid || s.id));
-          return [...prev, ...newServices.filter((s: any) => !existingIds.has(s.uuid || s.id))];
+          const updated = [...prev, ...newServices.filter((s: any) => !existingIds.has(s.uuid || s.id))];
+          setHasMore(updated.length < total && pageNum < totalPages);
+          return updated;
         });
       }
 
       setPage(pageNum);
-      setTotalCount(res.pagination?.total ?? newServices.length);
-      setHasMore(res.pagination?.hasMore ?? (newServices.length === 10));
+      setTotalCount(total);
     } catch (err: any) {
       console.error("Failed to fetch storefront services:", err);
     } finally {

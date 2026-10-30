@@ -20,6 +20,7 @@ import BookingPanel from "./_components/booking-panel";
 import ActiveBookingBanner from "./_components/active-booking-banner";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
+import { useStorefront } from "../../providers/storefront-provider";
 import { callSnack } from "../../components/snackbar";
 import EllipsisCell from "@/components/ellipse-cell";
 
@@ -30,6 +31,7 @@ export default function Cart() {
   const navigate = useStorefrontNavigate();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { salon: storefrontSalon } = useStorefront();
   const { items, salon, loaded } = useAppSelector((s) => s.cart);
   const { isAuthenticated, customer } = useAppSelector((s) => s.auth);
   const { bookingPhase, activeBooking, paymentJustCompleted } = useAppSelector((s) => s.booking);
@@ -38,6 +40,8 @@ export default function Cart() {
   const [isFetchingCart, setIsFetchingCart] = useState(!loaded && isAuthenticated && !!customer?.uuid);
   const [visibleItemsCount, setVisibleItemsCount] = useState(10);
   const didPaymentJustComplete = useRef(paymentJustCompleted || getPaymentCompleted());
+
+  const effectiveSalonId = storefrontSalon?.uuid || salon?.uuid;
 
   useEffect(() => {
     if (didPaymentJustComplete.current) {
@@ -48,14 +52,14 @@ export default function Cart() {
       if (!loaded) {
         setIsFetchingCart(true);
       }
-      dispatch(getCartAction(customer.uuid))
+      dispatch(getCartAction({ customerUuid: customer.uuid, salonId: effectiveSalonId }))
         .unwrap()
         .catch(() => { })
         .finally(() => setIsFetchingCart(false));
     } else {
       setIsFetchingCart(false);
     }
-  }, [dispatch, isAuthenticated, customer?.uuid, loaded]);
+  }, [dispatch, isAuthenticated, customer?.uuid, loaded, effectiveSalonId]);
 
   useEffect(() => {
     if (!isAuthenticated) return;

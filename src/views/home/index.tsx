@@ -110,7 +110,7 @@ export default function HomePage() {
             await dispatch(removeCartItemAction(cartItem.uuid)).unwrap();
           }
           if (customer?.uuid) {
-            await dispatch(getCartAction(customer.uuid));
+            await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           }
           callSnack("Removed from cart", "info");
         } catch (error: any) {
@@ -151,13 +151,13 @@ export default function HomePage() {
       try {
         if (cart.cartUuid) {
           await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
-          await dispatch(getCartAction(customer.uuid));
+          await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           callSnack("Added to cart", "success");
         } else if (salon?.uuid) {
           await dispatch(
             createCartAction({ salon_id: salon.uuid, user_id: customer.uuid, items: [payload] })
           ).unwrap();
-          await dispatch(getCartAction(customer.uuid));
+          await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: salon?.uuid }));
           callSnack("Cart created and item added", "success");
         }
       } catch (error: any) {

@@ -95,7 +95,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
           await dispatch(removeCartItemAction(cartItem.uuid)).unwrap();
         }
         if (customer?.uuid) {
-          await dispatch(getCartAction(customer.uuid));
+          await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: effectiveSalonId }));
         }
         callSnack("Removed from cart", "info");
       } catch (error: any) {
@@ -179,11 +179,11 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
     try {
       if (cart.cartUuid) {
         await dispatch(addCartItemAction({ cart_id: cart.cartUuid, ...payload })).unwrap();
-        await dispatch(getCartAction(customer.uuid));
+        await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: effectiveSalonId }));
         callSnack("Added to cart", "success");
       } else {
         await dispatch(createCartAction({ salon_id: effectiveSalonId, user_id: customer.uuid, items: [payload] })).unwrap();
-        await dispatch(getCartAction(customer.uuid));
+        await dispatch(getCartAction({ customerUuid: customer.uuid, salonId: effectiveSalonId }));
         callSnack("Cart created and item added", "success");
       }
     } catch (error: any) {

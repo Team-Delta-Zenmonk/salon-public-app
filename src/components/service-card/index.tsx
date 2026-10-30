@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import clsx from "clsx";
 import Image from "next/image";
 import EllipsisCell from "@/components/ellipse-cell";
@@ -7,6 +7,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useAppThemeMode } from "@/theme/theme-provider";
+import { useStorefront } from "@/providers/storefront-provider";
+import { useAppSelector } from "@/store/hook";
 import SubServicesModal from "./sub-services-modal";
 import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./service-card.module.css";
@@ -39,6 +41,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   onBookNow,
 }) => {
   const { themeId } = useAppThemeMode();
+  const { salon } = useStorefront();
+  const cart = useAppSelector((state) => state.cart);
   const [modalOpen, setModalOpen] = useState(false);
   const activeDesign: "editorial" | "archVault" | "floatingGlass" =
     designVariant ||
@@ -47,15 +51,35 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       : themeId === "lightGothic"
       ? "floatingGlass"
       : "editorial");
-  const hasSubServices = subServices.length > 0;
 
-  const checkSubAdded = (sub: any) => {
-    const subId = typeof sub === "object" && sub !== null ? sub.uuid || sub.id : sub;
-    if (isSubAdded && subId) return isSubAdded(subId);
-    return false;
-  };
+  const subServicesCount = Number(
+    service?.sub_services_count ?? service?.subServicesCount ?? subServices.length
+  );
+  const hasSubServices = subServicesCount > 0;
 
-  const selectedSubCount = subServices.filter(checkSubAdded).length;
+  const checkSubAdded = useCallback(
+    (sub: any) => {
+      const subId = typeof sub === "object" && sub !== null ? sub.uuid || sub.id : sub;
+      if (isSubAdded && subId) return isSubAdded(subId);
+      return false;
+    },
+    [isSubAdded]
+  );
+
+  const selectedSubCount = useMemo(() => {
+    if (subServices.length > 0) {
+      return subServices.filter(checkSubAdded).length;
+    }
+    const cartItems = cart?.items || [];
+    return cartItems.filter((i: any) => {
+      const itemService = i.service || {};
+      return (
+        itemService.parent_id === service.id ||
+        itemService.parent?.id === service.id ||
+        itemService.parent?.uuid === service.uuid
+      );
+    }).length;
+  }, [subServices, cart?.items, service.id, service.uuid, checkSubAdded]);
 
   const imageSrc = service.logo || service.image || service.photos?.[0]?.secure_url || service.photos?.[0]?.url;
 
@@ -318,7 +342,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                   selectedSubCount > 0 ? styles.footerOptionsBtnSelected : styles.footerOptionsBtnDefault
                 )}
               >
-                <span>OPTIONS ({subServices.length})</span>
+                <span>OPTIONS ({subServicesCount})</span>
                 {selectedSubCount > 0 && (
                   <span className={styles.footerOptionsCount}>
                     {selectedSubCount} SELECTED
@@ -376,7 +400,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           open={modalOpen}
           onClose={() => setModalOpen(false)}
           serviceName={service.name || "Service Treatment"}
+          serviceUuid={service.uuid}
+          salonSlug={salon?.slug}
           subServices={subServices}
+          totalSubServicesCount={subServicesCount}
           isSubAdded={checkSubAdded}
           onToggleCart={onToggleCart}
           loadingIds={loadingIds}

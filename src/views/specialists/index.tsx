@@ -36,17 +36,23 @@ export default function SpecialistsPage() {
       ).unwrap();
 
       const newStaff = res.staff || [];
+      const total = res.pagination?.total ?? newStaff.length;
+      const limit = res.pagination?.limit ?? 10;
+      const totalPages = Math.ceil(total / limit);
+
       if (pageNum === 1) {
         setStaffList(newStaff);
+        setHasMore(newStaff.length < total && pageNum < totalPages);
       } else {
         setStaffList((prev) => {
           const existingIds = new Set(prev.map((m: any) => m.uuid || m.id));
-          return [...prev, ...newStaff.filter((m: any) => !existingIds.has(m.uuid || m.id))];
+          const updated = [...prev, ...newStaff.filter((m: any) => !existingIds.has(m.uuid || m.id))];
+          setHasMore(updated.length < total && pageNum < totalPages);
+          return updated;
         });
       }
 
       setPage(pageNum);
-      setHasMore(res.pagination?.hasMore ?? (newStaff.length === 10));
     } catch (err: any) {
       console.error("Failed to fetch storefront staff:", err);
     } finally {

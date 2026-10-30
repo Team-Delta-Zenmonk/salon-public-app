@@ -17,12 +17,14 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { getPaymentCompleted, clearPaymentCompleted } from "../../features/salon/cart/cart.utils";
 import { useDownloadInvoice } from "../../features/customer-booking/hooks/use-download-invoice";
+import { useStorefront } from "../../providers/storefront-provider";
 import styles from "./bookings.module.css";
 
 const WEBHOOK_SETTLE_DELAY_MS = 3000;
 
 export default function Bookings() {
   const dispatch = useAppDispatch();
+  const { salon } = useStorefront();
 
   const { bookings, total, page, isLoading, isFetchingMore } = useAppSelector(
     (state) => state.customerBooking
@@ -37,6 +39,7 @@ export default function Bookings() {
   const [rescheduleTarget, setRescheduleTarget] = useState<CustomerBooking | null>(null);
 
   const paymentJustDone = useRef(getPaymentCompleted());
+  const salonId = salon?.uuid;
 
   const getStatusFromTab = (index: number) => {
     switch (index) {
@@ -69,6 +72,7 @@ export default function Bookings() {
             page: 1,
             limit: 10,
             status: getStatusFromTab(tabValue),
+            salon_id: salonId,
           })
         ).unwrap();
       } catch (err) {
@@ -76,7 +80,7 @@ export default function Bookings() {
       }
     };
     fetchInitialData();
-  }, [dispatch, tabValue]);
+  }, [dispatch, tabValue, salonId]);
 
   const fetchMoreData = async () => {
     if (!isLoading && !isFetchingMore && total > 0 && bookings.length < total) {
@@ -86,6 +90,7 @@ export default function Bookings() {
             page: page + 1,
             limit: 10,
             status: getStatusFromTab(tabValue),
+            salon_id: salonId,
           })
         ).unwrap();
       } catch (err) {
@@ -116,6 +121,7 @@ export default function Bookings() {
           page: 1,
           limit: 10,
           status: getStatusFromTab(tabValue),
+          salon_id: salonId,
         })
       ).unwrap();
     } catch (err) {
@@ -136,6 +142,7 @@ export default function Bookings() {
           page: 1,
           limit: 10,
           status: getStatusFromTab(tabValue),
+          salon_id: salonId,
         })
       ).unwrap();
     } catch (err) {

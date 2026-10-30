@@ -36,7 +36,7 @@ export default function StorefrontFooter() {
               )}
               <EllipsisCell
                 value={salonName}
-                maxChars={20}
+                maxChars={50}
                 className={styles.brandTitle}
               />
             </div>

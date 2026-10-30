@@ -4,7 +4,10 @@ import { getCustomerBookingsType } from "./get-customer-bookings.type";
 
 export const getCustomerBookingsAction = createAsyncThunk(
   getCustomerBookingsType,
-  async (params: { page: number; limit: number; status?: string }, thunkAPI) => {
+  async (
+    params: { page: number; limit: number; status?: string; salon_id?: string },
+    thunkAPI
+  ) => {
     try {
       return await getCustomerBookingsService(params);
     } catch (err: any) {

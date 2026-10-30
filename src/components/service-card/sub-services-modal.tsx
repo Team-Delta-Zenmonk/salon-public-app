@@ -20,6 +20,8 @@ import EllipsisCell from "@/components/ellipse-cell";
 import InfiniteScroll from "react-infinite-scroll-component";
 import clsx from "clsx";
 import { getDiscountedPrice } from "@/common/discount.utils";
+import { useAppDispatch } from "@/store/hook";
+import { getStorefrontSubServicesAction } from "@/features/salon/get-storefront-sub-services/get-storefront-sub-services.action";
 import styles from "./sub-services-modal.module.css";
 
 const PAGE_SIZE = 10;
@@ -61,7 +63,10 @@ export interface SubServicesModalProps {
   open: boolean;
   onClose: () => void;
   serviceName: string;
-  subServices: any[];
+  serviceUuid?: string;
+  salonSlug?: string;
+  subServices?: any[];
+  totalSubServicesCount?: number;
   isSubAdded: (subId: string) => boolean;
   onToggleCart?: (sub: any) => void;
   loadingIds?: string[];
@@ -71,33 +76,105 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
   open,
   onClose,
   serviceName,
-  subServices = [],
+  serviceUuid,
+  salonSlug,
+  subServices: initialSubServices,
+  totalSubServicesCount = 0,
   isSubAdded,
   onToggleCart,
   loadingIds = [],
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useAppDispatch();
+
+  const isAsyncMode = Boolean(salonSlug && serviceUuid);
 
   const [page, setPage] = useState<number>(1);
+  const [asyncSubServices, setAsyncSubServices] = useState<any[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(totalSubServicesCount);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(false);
+
+  const fetchAsyncSubServices = useCallback(
+    async (pageNum: number, isInitial = false) => {
+      if (!salonSlug || !serviceUuid) return;
+      if (isInitial) setIsLoadingInitial(true);
+
+      try {
+        const res = await dispatch(
+          getStorefrontSubServicesAction({
+            slug: salonSlug,
+            serviceUuid,
+            page: pageNum,
+            limit: PAGE_SIZE,
+          })
+        ).unwrap();
+
+        const fetchedList = res.subServices || [];
+        const total = res.pagination?.total ?? fetchedList.length;
+        const totalPages = res.pagination?.totalPages ?? Math.ceil(total / PAGE_SIZE);
+
+        if (pageNum === 1) {
+          setAsyncSubServices(fetchedList);
+          setHasMore(fetchedList.length < total && pageNum < totalPages);
+        } else {
+          setAsyncSubServices((prev) => {
+            const existingIds = new Set(prev.map((s: any) => s.uuid || s.id));
+            const updated = [...prev, ...fetchedList.filter((s: any) => !existingIds.has(s.uuid || s.id))];
+            setHasMore(updated.length < total && pageNum < totalPages);
+            return updated;
+          });
+        }
+
+        setPage(pageNum);
+        setTotalCount(total);
+      } catch (err: any) {
+        console.error("Failed to fetch storefront sub-services:", err);
+      } finally {
+        if (isInitial) setIsLoadingInitial(false);
+      }
+    },
+    [dispatch, salonSlug, serviceUuid]
+  );
 
   useEffect(() => {
     if (open) {
-      setPage(1);
+      if (isAsyncMode) {
+        setAsyncSubServices([]);
+        setPage(1);
+        setHasMore(true);
+        fetchAsyncSubServices(1, true);
+      } else {
+        setPage(1);
+      }
     }
-  }, [open, subServices]);
+  }, [open, isAsyncMode, fetchAsyncSubServices]);
 
   const displayedSubServices = useMemo(() => {
-    return subServices.slice(0, page * PAGE_SIZE);
-  }, [subServices, page]);
+    if (isAsyncMode) {
+      return asyncSubServices;
+    }
+    const list = initialSubServices || [];
+    return list.slice(0, page * PAGE_SIZE);
+  }, [isAsyncMode, asyncSubServices, initialSubServices, page]);
 
-  const hasMore = displayedSubServices.length < subServices.length;
+  const effectiveHasMore = isAsyncMode
+    ? hasMore
+    : displayedSubServices.length < (initialSubServices?.length || 0);
+
+  const effectiveTotalCount = isAsyncMode
+    ? (totalCount || asyncSubServices.length)
+    : (initialSubServices?.length || 0);
 
   const loadMore = useCallback(() => {
-    if (hasMore) {
+    if (!effectiveHasMore) return;
+    if (isAsyncMode) {
+      fetchAsyncSubServices(page + 1, false);
+    } else {
       setPage((prev) => prev + 1);
     }
-  }, [hasMore]);
+  }, [effectiveHasMore, isAsyncMode, fetchAsyncSubServices, page]);
 
   return (
     <Dialog
@@ -122,7 +199,7 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
               <EllipsisCell value={serviceName} maxChars={10} className="capitalize" />
             </Typography>
             <div className={styles.subtitle}>
-              Bookable Sub-Services ({subServices.length})
+              Bookable Sub-Services ({effectiveTotalCount})
             </div>
           </div>
         </div>
@@ -138,7 +215,11 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
       </DialogTitle>
 
       <DialogContent id="sub-services-modal-scroll-target" className={styles.dialogContent}>
-        {subServices.length === 0 ? (
+        {isLoadingInitial ? (
+          <Box className={styles.scrollLoaderBox}>
+            <CircularProgress size={32} />
+          </Box>
+        ) : displayedSubServices.length === 0 ? (
           <div className={styles.emptyState}>
             No sub-services available for this treatment.
           </div>
@@ -146,7 +227,7 @@ export const SubServicesModal: React.FC<SubServicesModalProps> = ({
           <InfiniteScroll
             dataLength={displayedSubServices.length}
             next={loadMore}
-            hasMore={hasMore}
+            hasMore={effectiveHasMore}
             scrollableTarget="sub-services-modal-scroll-target"
             loader={
               <Box className={styles.scrollLoaderBox}>
