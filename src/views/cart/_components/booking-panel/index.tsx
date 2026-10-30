@@ -97,11 +97,15 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
       try {
         const result = await dispatch(getSlotsAction({ cartId, startDate: today, days: 7 })).unwrap();
-        const data = result?.message ?? result;
+        const data = result?.message || [];
         setSlotsData(data);
-        if (data.length > 0) setSelectedDate(data[0].date);
+        if (data.length > 0) {
+          setSelectedDate(data[0].date);
+        } else {
+          setSlotsError("No slots available for the selected services within salon operating hours. Please adjust your cart or try different dates.");
+        }
       } catch (err: any) {
-        setSlotsError(typeof err === "string" ? err : "Failed to load slots");
+        setSlotsError(err || "Failed to load slots");
       } finally {
         setSlotsLoading(false);
       }
@@ -237,16 +241,18 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
             </Box>
 
             <Box
-              onClick={selectedSlot ? () => setConfirmOpen(true) : undefined}
-              className={`${styles.actionBtn} ${selectedSlot ? styles.actionBtnActive : styles.actionBtnInactive}`}
+              onClick={selectedSlot ? () => setConfirmOpen(true) : slotsError ? onClose : undefined}
+              className={`${styles.actionBtn} ${selectedSlot || slotsError ? styles.actionBtnActive : styles.actionBtnInactive}`}
             >
               <Typography className={styles.btnText}>
-                {selectedSlot ? "Book Appointment" : "Select a time slot"}
+                {selectedSlot ? "Book Appointment" : slotsError ? "Adjust Services" : "Select a time slot"}
               </Typography>
               {selectedSlot && <ArrowForwardIcon className={styles.arrowForwardIcon} />}
             </Box>
 
-            <Typography className={styles.footerNote}>You&apos;ll review details before confirming</Typography>
+            {!slotsError && (
+              <Typography className={styles.footerNote}>You&apos;ll review details before confirming</Typography>
+            )}
           </Box>
         )}
       </Drawer>

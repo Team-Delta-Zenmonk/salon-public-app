@@ -14,7 +14,9 @@ export const getSlotsAction = createAsyncThunk(
     try {
       return await getSlotsService(cartId, startDate, days);
     } catch (err: any) {
-      return thunkAPI.rejectWithValue(err?.response?.data?.message || "Failed to fetch available slots");
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || err?.response?.data || "Failed to fetch available slots"
+      );
     }
   },
 );
