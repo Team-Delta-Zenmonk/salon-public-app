@@ -25,6 +25,7 @@ export interface HomeSectionsContextData {
   onNavigateSpecialists: () => void;
   onExploreServices: () => void;
   onBookService?: (service: Service) => void;
+  isServicesLoading?: boolean;
 }
 
 export type SectionRenderer = (
@@ -62,6 +63,7 @@ export const HOME_SECTIONS: Record<HomeSectionKey, SectionRenderer> = {
         isAdded={data.isAdded}
         loadingIds={data.loadingIds}
         onBookService={data.onBookService}
+        isLoading={data.isServicesLoading}
       />
     );
   },

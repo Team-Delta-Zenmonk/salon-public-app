@@ -14,10 +14,10 @@ export enum ServiceGender {
 }
 
 export const SERVICE_GENDER_OPTIONS = [
-  { id: ServiceGender.ALL, label: "All Genders" },
+  { id: ServiceGender.ALL, label: "All" },
   { id: ServiceGender.UNISEX, label: "Unisex" },
-  { id: ServiceGender.FEMALE, label: "Women" },
-  { id: ServiceGender.MALE, label: "Men" },
+  { id: ServiceGender.FEMALE, label: "Female" },
+  { id: ServiceGender.MALE, label: "Male" },
 ];
 
 export const GenderOptions = [

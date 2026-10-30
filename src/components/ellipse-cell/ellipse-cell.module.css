@@ -14,14 +14,19 @@
   border: 1px solid #404040;
   pointer-events: none;
   max-width: 280px;
-  max-height: 180px;
-  overflow-y: auto;
+  overflow: hidden;
   word-break: break-word;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   text-align: center;
   transform: translate(-50%, -100%);
   text-transform: capitalize;
   animation: fadeInTop 150ms ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tooltip::-webkit-scrollbar {
+  display: none;
 }
 
 .tooltip[data-placement="bottom"] {

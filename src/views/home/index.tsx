@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Box } from "@mui/material";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useStorefront } from "../../providers/storefront-provider";
@@ -10,12 +10,14 @@ import { removeCartItemAction } from "../../features/salon/cart/remove-item/remo
 import { deleteCartAction } from "../../features/salon/cart/delete-cart/delete-cart.action";
 import { createCartAction } from "../../features/salon/cart/create-cart/create-cart.action";
 import { getCartAction } from "../../features/salon/cart/get-cart/get-cart.action";
+import { getStorefrontServicesAction } from "../../features/salon/get-storefront-services/get-storefront-services.action";
 import { callSnack } from "../../components/snackbar";
 import { getDiscountedPrice } from "@/common/discount.utils";
 import ReservationFloatingBar from "@/components/reservation-floating-bar";
 import { ThemedSections } from "@/components/themed-sections";
 import { useAppThemeMode } from "@/theme/theme-provider";
 import { HOME_SECTIONS, type HomeSectionsContextData } from "./sections";
+import type { Service } from "@/common/salon.type";
 import styles from "./home.module.css";
 
 const FALLBACK_PHOTOS = [
@@ -42,15 +44,41 @@ export default function HomePage() {
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
+  const [filteredServices, setFilteredServices] = useState<Service[]>(() =>
+    (salon?.services || []).filter((s: any) => s.parent_id === null)
+  );
+
+  useEffect(() => {
+    if (!salon?.slug) return;
+
+    const categoryParam =
+      selectedCategory !== "all"
+        ? salonCategories.find(
+            (c: any) =>
+              String(c.id).toLowerCase() === selectedCategory.toLowerCase() ||
+              c.name?.toLowerCase() === selectedCategory.toLowerCase()
+          )?.id || selectedCategory
+        : undefined;
+
+    dispatch(
+      getStorefrontServicesAction({
+        slug: salon.slug,
+        limit: 10,
+        category_id: categoryParam,
+        gender: selectedGender !== "all" ? selectedGender : undefined,
+      })
+    )
+      .unwrap()
+      .then((res) => {
+        setFilteredServices(res.services || []);
+      })
+      .catch((err) => console.error("Failed to fetch services:", err));
+  }, [dispatch, salon?.slug, selectedCategory, selectedGender, salonCategories]);
+
   const galleryImages = useMemo(() => {
     const urls = (photos as any[]).map((p) => p?.secure_url || p?.url).filter(Boolean);
     return urls.length > 0 ? urls : FALLBACK_PHOTOS;
   }, [photos]);
-
-  const rootServices = useMemo(
-    () => services.filter((s: any) => s.parent_id === null),
-    [services]
-  );
 
   const subServicesMap = useMemo(() => {
     return services.reduce<Record<string | number, any[]>>((acc, s: any) => {
@@ -167,23 +195,6 @@ export default function HomePage() {
       }
     }
   };
-
-  const filteredServices = useMemo(() => {
-    return rootServices.filter((s: any) => {
-      if (selectedGender !== "all") {
-        const sg = s.gender?.toLowerCase() || "unisex";
-        if (sg !== "unisex" && sg !== selectedGender) return false;
-      }
-      if (selectedCategory !== "all") {
-        const catName = s.category?.name?.toLowerCase() || "";
-        const catId = String(s.category?.id || s.category_id || "").toLowerCase();
-        if (selectedCategory !== catName && selectedCategory !== catId && !catName.includes(selectedCategory)) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [rootServices, selectedGender, selectedCategory]);
 
   const contextData: HomeSectionsContextData = {
     salon,

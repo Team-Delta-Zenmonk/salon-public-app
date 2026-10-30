@@ -216,6 +216,13 @@
   font-size: 1rem !important;
 }
 
+.subServiceAvatar img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+}
+
 .subServiceInfo {
   min-width: 0;
   flex: 1;

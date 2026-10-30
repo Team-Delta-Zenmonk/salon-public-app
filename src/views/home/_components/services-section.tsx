@@ -8,6 +8,7 @@ import type { HomeServicesVariant } from "@/theme/layout.types";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import styles from "../home.module.css";
+import { CircularProgress } from "@mui/material";
 
 export interface ServicesSectionProps {
   variant: HomeServicesVariant;
@@ -23,6 +24,7 @@ export interface ServicesSectionProps {
   isAdded: (serviceId: string) => boolean;
   loadingIds: string[];
   onBookService?: (service: Service) => void;
+  isLoading?: boolean;
 }
 
 function EmptyServicesState({
@@ -62,6 +64,7 @@ function GridServicesLayout({
   isAdded,
   loadingIds,
   onBookService,
+  isLoading,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <>
@@ -136,7 +139,11 @@ function GridServicesLayout({
         </div>
       </div>
 
-      {filteredServices.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.servicesLoadingBox}>
+          <CircularProgress size={36} />
+        </div>
+      ) : filteredServices.length === 0 ? (
         <EmptyServicesState
           onReset={() => {
             onSelectCategory("all");
@@ -176,6 +183,7 @@ function TwoColumnListLayout({
   isAdded,
   loadingIds,
   onBookService,
+  isLoading,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <>
@@ -195,7 +203,11 @@ function TwoColumnListLayout({
         })}
       </div>
 
-      {filteredServices.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.servicesLoadingBox}>
+          <CircularProgress size={36} />
+        </div>
+      ) : filteredServices.length === 0 ? (
         <EmptyServicesState
           onReset={() => {
             onSelectCategory("all");
@@ -235,6 +247,7 @@ function CompactAccordionLayout({
   isAdded,
   loadingIds,
   onBookService,
+  isLoading,
 }: Omit<ServicesSectionProps, "variant" | "services">) {
   return (
     <div>
@@ -254,7 +267,11 @@ function CompactAccordionLayout({
         })}
       </div>
 
-      {filteredServices.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.servicesLoadingBox}>
+          <CircularProgress size={36} />
+        </div>
+      ) : filteredServices.length === 0 ? (
         <EmptyServicesState
           onReset={() => {
             onSelectCategory("all");

@@ -602,6 +602,15 @@
   gap: 2rem;
 }
 
+.servicesLoadingBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 1.5rem;
+  width: 100%;
+  color: var(--app-primary);
+}
+
 .emptyServicesState {
   text-align: center;
   padding: 4rem 1.5rem;

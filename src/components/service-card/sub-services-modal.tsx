@@ -23,7 +23,6 @@ import { getDiscountedPrice } from "@/common/discount.utils";
 import { useAppDispatch } from "@/store/hook";
 import { getStorefrontSubServicesAction } from "@/features/salon/get-storefront-sub-services/get-storefront-sub-services.action";
 import styles from "./sub-services-modal.module.css";
-import Image from "next/image";
 
 const PAGE_SIZE = 10;
 
@@ -33,39 +32,17 @@ interface SubServiceAvatarProps {
 }
 
 const SubServiceAvatar: React.FC<SubServiceAvatarProps> = ({ logo, name }) => {
-  const [loading, setLoading] = useState(Boolean(logo));
-  const [hasError, setHasError] = useState(false);
   const initial = name?.charAt(0).toUpperCase() || "S";
 
-  if (!logo || hasError) {
-    return (
-      <Avatar variant="rounded" className={styles.subServiceAvatar}>
-        {initial}
-      </Avatar>
-    );
-  }
-
   return (
-    <Box className={styles.avatarWrapper}>
-      {loading && (
-        <Box className={styles.avatarLoader}>
-          <CircularProgress size={18} thickness={4} className={styles.avatarSpinner} />
-        </Box>
-      )}
-      <Image
-        src={logo}
-        alt={name}
-        width={44}
-        height={44}
-        className={styles.subServiceImg}
-        onLoad={() => setLoading(false)}
-        onError={() => {
-          setLoading(false);
-          setHasError(true);
-        }}
-        unoptimized
-      />
-    </Box>
+    <Avatar
+      src={logo || undefined}
+      alt={name}
+      variant="rounded"
+      className={styles.subServiceAvatar}
+    >
+      {initial}
+    </Avatar>
   );
 };
 
