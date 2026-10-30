@@ -129,7 +129,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
                 ) : (
                   <EventBusyOutlinedIcon className={styles.scheduleIconUnavailable} />
                 )}
-                <span>{isAvailableToday ? "AVAILABLE TODAY" : "NOT AVAILABLE TODAY"}</span>
+                <span>{isAvailableToday ? "AVAILABLE TODAY " : "NOT AVAILABLE TODAY "}</span>
               </div>
               <button
                 type="button"

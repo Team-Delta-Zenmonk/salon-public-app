@@ -167,13 +167,16 @@
   font-size: 11px;
   color: var(--app-muted);
   margin-top: auto;
-  gap: 3px;
+  gap: 0.875rem;
 }
 
 .availableTag {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.375rem;
+  padding: 0.2rem 0.65rem 0.2rem 0.45rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
 }
 
 .unavailableTag {
@@ -416,6 +419,7 @@
   justify-content: space-between;
   padding-top: 0.5rem;
   border-top: 1px solid var(--app-border);
+  gap: 0.875rem;
 }
 
 .editorialAvailableBadge {

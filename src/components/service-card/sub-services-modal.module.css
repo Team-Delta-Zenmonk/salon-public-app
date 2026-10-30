@@ -174,6 +174,8 @@
   width: 44px;
   height: 44px;
   flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .avatarLoader {
@@ -186,10 +188,20 @@
   border-radius: 8px;
   border: 1px solid var(--app-border);
   z-index: 1;
+  pointer-events: none;
 }
 
 .avatarSpinner {
   color: var(--app-primary) !important;
+}
+
+.subServiceImg {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--app-border);
+  display: block;
 }
 
 .subServiceAvatar {
