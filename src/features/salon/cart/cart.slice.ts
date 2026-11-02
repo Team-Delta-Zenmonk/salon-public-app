@@ -146,17 +146,14 @@ export const cartSlice = createSlice({
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
       }
-      setGuestCart({ salon: state.salon, items: state.items });
-      if (state.salon && state.salon.has_stripe_account === undefined) {
-        const policies = state.salon.allowed_payment_policies || [];
-        state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
-      }
+      clearGuestCart();
       state.isGuest = false;
       state.loaded = true;
     });
 
     builder.addCase(addCartItemAction.fulfilled, (state, { payload }) => {
       state.items = [...state.items, payload];
+      clearGuestCart();
     });
 
     builder.addCase(getCartAction.fulfilled, (state, { payload }) => {
@@ -178,16 +175,13 @@ export const cartSlice = createSlice({
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
       }
-      setGuestCart({ salon: state.salon, items: state.items });
-      if (state.salon && state.salon.has_stripe_account === undefined) {
-        const policies = state.salon.allowed_payment_policies || [];
-        state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
-      }
+      clearGuestCart();
       state.isGuest = false;
     });
 
     builder.addCase(removeCartItemAction.fulfilled, (state, { meta }) => {
       state.items = state.items.filter((i: any) => i.uuid !== meta.arg);
+      clearGuestCart();
     });
 
     builder.addCase(updateCartItemAction.fulfilled, (state, { payload }) => {
@@ -199,11 +193,7 @@ export const cartSlice = createSlice({
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
       }
-      setGuestCart({ salon: state.salon, items: state.items });
-      if (state.salon && state.salon.has_stripe_account === undefined) {
-        const policies = state.salon.allowed_payment_policies || [];
-        state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
-      }
+      clearGuestCart();
     });
 
     builder.addCase(deleteCartAction.fulfilled, (state) => {
@@ -213,10 +203,12 @@ export const cartSlice = createSlice({
       state.salon = null;
       state.isGuest = false;
       state.loaded = true;
+      clearGuestCart();
     });
 
     builder.addCase(syncGuestCartAction.fulfilled, (state, { payload }) => {
       state.loaded = true;
+      clearGuestCart();
       if (!payload) return;
 
       state.cartUuid = payload.uuid;
@@ -227,14 +219,7 @@ export const cartSlice = createSlice({
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
       }
-      setGuestCart({ salon: state.salon, items: state.items });
-      if (state.salon && state.salon.has_stripe_account === undefined) {
-        const policies = state.salon.allowed_payment_policies || [];
-        state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
-      }
       state.isGuest = false;
-
-      clearGuestCart();
     });
 
     builder.addCase(logout, (state) => {

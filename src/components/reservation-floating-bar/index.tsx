@@ -6,9 +6,7 @@ import type { RootState } from "@/store/store";
 import CloseIcon from "@mui/icons-material/Close";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import EllipsisCell from "../ellipse-cell";
 import styles from "./reservation-floating-bar.module.css";
-import { useMediaQuery } from "@mui/material";
 
 export interface ReservationFloatingBarProps {
   className?: string;
@@ -17,7 +15,6 @@ export interface ReservationFloatingBarProps {
 export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
   className = "",
 }) => {
-  const isMobile = useMediaQuery("(max-width: 639px)");
   const navigate = useStorefrontNavigate();
   const cart = useAppSelector((state: RootState) => state.cart);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -73,7 +70,6 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
               {cart.items.length} Service{cart.items.length > 1 ? "s" : ""}
             </span>
           </div>
-          <EllipsisCell value={firstItemName} maxChars={isMobile ? 50 : 80} className={styles.serviceName} />
         </div>
       </div>
 
@@ -82,7 +78,7 @@ export const ReservationFloatingBar: React.FC<ReservationFloatingBarProps> = ({
         onClick={() => navigate("/cart")}
         className={styles.ctaButton}
       >
-        <span>CONTINUE TO BOOKING (₹{totalPrice})</span>
+        <span>Checkout (₹{totalPrice})</span>
         <ArrowForwardIcon className={styles.arrowIcon} />
       </button>
     </aside>

@@ -15,9 +15,10 @@ export const syncGuestCartAction = createAsyncThunk(
         user_id: userId,
         items: guestCart.items.map((item: any) => ({
           service_id: item.service_id,
+          price: item.final_price !== undefined ? item.final_price : item.base_price,
           base_price: item.base_price,
           duration: item.duration,
-          staff_id: item.staff_uuid ?? undefined,
+          staff_id: item.staff_uuid || undefined,
         })),
       };
 

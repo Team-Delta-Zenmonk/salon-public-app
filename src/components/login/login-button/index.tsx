@@ -6,6 +6,9 @@ import { useStorefrontNavigate } from "../../../common/hooks/useStorefrontNaviga
 import { GoogleResponse } from "../../../auth/get-google-response";
 import { useAppDispatch } from "../../../store/hook";
 import { loginCustomerAction } from "../../../features/auth/login/login.action";
+import { syncGuestCartAction } from "../../../features/salon/cart/sync-cart/sync-cart.action";
+import { getCartAction } from "../../../features/salon/cart/get-cart/get-cart.action";
+import { getGuestCart } from "../../../features/salon/cart/cart.utils";
 import { callSnack } from "../../snackbar";
 
 interface LoginButtonProps {
@@ -33,7 +36,20 @@ export default function LoginButton({ collapsed = false }: Readonly<LoginButtonP
     setLoading(true);
     try {
       const googleResponse = await getSignInWithPopup();
-      await dispatch(loginCustomerAction({ token: googleResponse?.token })).unwrap();
+      const loginRes = await dispatch(loginCustomerAction({ token: googleResponse?.token })).unwrap();
+      const customerUuid = loginRes?.customer?.uuid;
+
+      if (customerUuid) {
+        const guestCart = getGuestCart();
+        if (guestCart?.items?.length) {
+          try {
+            await dispatch(syncGuestCartAction({ userId: customerUuid })).unwrap();
+          } catch (syncErr) {
+            console.error("Failed to sync guest cart on login", syncErr);
+          }
+        }
+        await dispatch(getCartAction({ customerUuid }));
+      }
 
       if (searchRedirect) {
         navigate(searchRedirect, {
