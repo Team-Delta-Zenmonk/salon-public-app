@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, IconButton, Drawer } from "@mui/material";
+import { Box, Typography, IconButton, Drawer, CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -148,11 +148,11 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
       }
 
       const booking = createResult.booking;
-      if (booking.payment_policy === "pay_at_venue") {
+      if (booking.payment_policy === "pay_at_venue" || totalPrice === 0 || booking.total_price === 0) {
         dispatch(clearCart());
         setConfirmOpen(false);
         onClose();
-        navigate("/bookings/success", { state: { bookingUuid: booking.uuid, booking }, replace: true });
+        navigate(`/bookings/success?bookingUuid=${booking.uuid}`, { state: { bookingUuid: booking.uuid, booking }, replace: true });
         return;
       }
 
@@ -241,17 +241,51 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
             </Box>
 
             <Box
-              onClick={selectedSlot ? () => setConfirmOpen(true) : slotsError ? onClose : undefined}
-              className={`${styles.actionBtn} ${selectedSlot || slotsError ? styles.actionBtnActive : styles.actionBtnInactive}`}
+              onClick={
+                isCreating || isPaying
+                  ? undefined
+                  : selectedSlot
+                  ? () => {
+                      if (totalPrice === 0) {
+                        handleConfirmSlot("pay_at_venue");
+                      } else {
+                        setConfirmOpen(true);
+                      }
+                    }
+                  : slotsError
+                  ? onClose
+                  : undefined
+              }
+              className={`${styles.actionBtn} ${
+                (selectedSlot && !isCreating && !isPaying) || slotsError
+                  ? styles.actionBtnActive
+                  : styles.actionBtnInactive
+              }`}
             >
-              <Typography className={styles.btnText}>
-                {selectedSlot ? "Book Appointment" : slotsError ? "Adjust Services" : "Select a time slot"}
-              </Typography>
-              {selectedSlot && <ArrowForwardIcon className={styles.arrowForwardIcon} />}
+              {isCreating || isPaying ? (
+                <CircularProgress size={22} color="inherit" />
+              ) : (
+                <>
+                  <Typography className={styles.btnText}>
+                    {selectedSlot
+                      ? totalPrice === 0
+                        ? "Confirm Booking"
+                        : "Book Appointment"
+                      : slotsError
+                      ? "Adjust Services"
+                      : "Select a time slot"}
+                  </Typography>
+                  {selectedSlot && <ArrowForwardIcon className={styles.arrowForwardIcon} />}
+                </>
+              )}
             </Box>
 
             {!slotsError && (
-              <Typography className={styles.footerNote}>You&apos;ll review details before confirming</Typography>
+              <Typography className={styles.footerNote}>
+                {totalPrice === 0
+                  ? "Zero fee — appointment will be confirmed immediately"
+                  : "You'll review details before confirming"}
+              </Typography>
             )}
           </Box>
         )}

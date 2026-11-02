@@ -4,6 +4,7 @@ import { CalendarToday, AccessTime, CurrencyRupee, Download } from "@mui/icons-m
 import { formatDateShortUTC, formatDateUTC, formatTimeUTC } from "../../../../common/date.utils";
 import type { CustomerBooking } from "../../../../common/booking.types";
 import { BookingStatus } from "../../../../common/booking.enums";
+import { PAYMENT_POLICY } from "../../../../common/enums/payment-policy.enum";
 import { getBookingStatusConfig, isBookingCancelable, isBookingPast } from "../../../../common/booking.utils";
 import dayjs from "dayjs";
 import EllipsisCell from "@/components/ellipse-cell";
@@ -38,7 +39,16 @@ export const BookingCard: React.FC<BookingCardProps> = ({
   const isPaymentCompleted =
     Number(booking.amount_paid_online || 0) >= Number(booking.total_price || 0) ||
     booking.status === BookingStatus.COMPLETED;
-  const showInvoice = Boolean(onDownloadInvoice && isPaymentCompleted && booking.status !== BookingStatus.CANCELLED && booking.status !== BookingStatus.EXPIRED);
+  const isFullUpfront =
+    booking.payment_policy === PAYMENT_POLICY.FULL_UPFRONT ||
+    booking.payment_policy === "full_upfront";
+  const showInvoice = Boolean(
+    onDownloadInvoice &&
+      isFullUpfront &&
+      isPaymentCompleted &&
+      booking.status !== BookingStatus.CANCELLED &&
+      booking.status !== BookingStatus.EXPIRED
+  );
   const showCancel = ((isPending && !isExpired) || booking.status === BookingStatus.CONFIRMED) && !isBookingPast(booking.booking_start_time);
   const maxAttempts = booking.max_reschedule_attempts ?? 2;
   const rescheduleCount = booking.reschedule_count ?? 0;

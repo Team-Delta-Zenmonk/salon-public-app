@@ -16,7 +16,7 @@ const initialState: CustomerBookingState = {
   total: 0,
   page: 1,
   limit: 10,
-  isLoading: false,
+  isLoading: true,
   isFetchingMore: false,
 };
 
@@ -28,7 +28,7 @@ export const customerBookingSlice = createSlice({
       state.bookings = [];
       state.total = 0;
       state.page = 1;
-      state.isLoading = false;
+      state.isLoading = true;
       state.isFetchingMore = false;
     },
   },

@@ -37,6 +37,7 @@ export default function Bookings() {
   const [selectedBooking, setSelectedBooking] = useState<CustomerBooking | null>(null);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
   const [rescheduleTarget, setRescheduleTarget] = useState<CustomerBooking | null>(null);
+  const [hasInitialFetched, setHasInitialFetched] = useState(false);
 
   const paymentJustDone = useRef(getPaymentCompleted());
   const salonId = salon?.uuid;
@@ -57,6 +58,8 @@ export default function Bookings() {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    setHasInitialFetched(false);
     dispatch(resetCustomerBookings());
 
     const fetchInitialData = async () => {
@@ -65,6 +68,8 @@ export default function Bookings() {
         clearPaymentCompleted();
         await new Promise((resolve) => setTimeout(resolve, WEBHOOK_SETTLE_DELAY_MS));
       }
+
+      if (!isMounted) return;
 
       try {
         await dispatch(
@@ -77,9 +82,17 @@ export default function Bookings() {
         ).unwrap();
       } catch (err) {
         console.error("Failed to fetch bookings:", err);
+      } finally {
+        if (isMounted) {
+          setHasInitialFetched(true);
+        }
       }
     };
     fetchInitialData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch, tabValue, salonId]);
 
   const fetchMoreData = async () => {
@@ -114,6 +127,7 @@ export default function Bookings() {
   };
 
   const handleRescheduleSuccess = async () => {
+    setHasInitialFetched(false);
     dispatch(resetCustomerBookings());
     try {
       await dispatch(
@@ -126,6 +140,8 @@ export default function Bookings() {
       ).unwrap();
     } catch (err) {
       console.error("Failed to refresh bookings after reschedule:", err);
+    } finally {
+      setHasInitialFetched(true);
     }
   };
 
@@ -135,6 +151,7 @@ export default function Bookings() {
     setCancelDialogOpen(false);
     setSelectedBooking(null);
 
+    setHasInitialFetched(false);
     dispatch(resetCustomerBookings());
     try {
       await dispatch(
@@ -146,7 +163,9 @@ export default function Bookings() {
         })
       ).unwrap();
     } catch (err) {
-      console.error("Failed to refresh bookings:", err);
+      console.error("Failed to refresh bookings after cancel:", err);
+    } finally {
+      setHasInitialFetched(true);
     }
   };
 
@@ -154,7 +173,7 @@ export default function Bookings() {
   const { downloadInvoice: handleDownloadInvoice, downloadingUuid } = useDownloadInvoice();
 
   const renderBookingList = () => {
-    if (isLoading) {
+    if (isLoading || !hasInitialFetched) {
       return (
         <Box className={styles.listSkeletonLoaderInitial}>
           <BookingSkeleton />
