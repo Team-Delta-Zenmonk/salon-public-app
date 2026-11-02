@@ -3,6 +3,7 @@ import { Box, Typography, Button, CircularProgress, Stack } from "@mui/material"
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useAppDispatch } from "../../../../store/hook";
 import { markPaymentCompleted } from "../../../../features/salon/bookings/booking.slice";
+import { confirmPaymentAction } from "../../../../features/payments/confirm-payment/confirm-payment.action";
 import { setPaymentCompleted } from "../../../../features/salon/cart/cart.utils";
 import { callSnack } from "../../../../components/snackbar";
 import { useTheme } from "@mui/material/styles";
@@ -59,10 +60,11 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
     setPaymentError(null);
 
     try {
+      const bookingParam = booking?.uuid ? `?bookingUuid=${booking.uuid}` : "";
       const returnUrl =
         typeof window !== "undefined"
-          ? `${window.location.origin}${buildStorefrontUrl("/bookings/success")}`
-          : "/bookings/success";
+          ? `${window.location.origin}${buildStorefrontUrl(`/bookings/success${bookingParam}`)}`
+          : `/bookings/success${bookingParam}`;
 
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
@@ -80,6 +82,13 @@ export default function PaymentForm({ booking, isExpired, onPaymentSuccess }: Re
         callSnack("Payment confirmed! 🎉", "success");
         setPaymentCompleted();
         dispatch(markPaymentCompleted());
+        if (paymentIntent.id) {
+          try {
+            await dispatch(confirmPaymentAction({ paymentIntentId: paymentIntent.id })).unwrap();
+          } catch (confirmErr) {
+            console.warn("Synchronous payment confirmation warning:", confirmErr);
+          }
+        }
         onPaymentSuccess();
       } else {
         setPaymentError("Payment was not completed. Please try again.");

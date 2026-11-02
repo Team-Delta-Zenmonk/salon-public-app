@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Box, Typography, Button, Container, Card, Avatar, Divider, CircularProgress } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
@@ -11,6 +11,7 @@ import { useStorefront } from "../../providers/storefront-provider";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { clearBookingSession } from "../../features/salon/bookings/booking.slice";
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
+import { confirmPaymentAction } from "../../features/payments/confirm-payment/confirm-payment.action";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
 import { callSnack } from "../../components/snackbar";
 import styles from "./success.module.scss";
@@ -26,30 +27,58 @@ const BookingSuccess: React.FC = () => {
   const bookingUuid = searchBookingUuid || currentBooking?.uuid;
   const booking = currentBooking;
 
-  const [isLoading, setIsLoading] = useState((!booking || booking.status === "pending") && !!bookingUuid);
+  const [isLoading, setIsLoading] = useState(!booking && Boolean(bookingUuid));
+  const hasFetchedRef = useRef(false);
 
   const { salon } = useStorefront();
 
   useEffect(() => {
-    if (bookingUuid && (!booking || booking.status === "pending")) {
-      setIsLoading(true);
-      dispatch(getBookingAction(bookingUuid))
-        .unwrap()
-        .catch((err: any) => {
-          if (!booking) {
-            const errorMessage =
-              typeof err === "string"
-                ? err
-                : (err?.payload ?? err?.message ?? "Unable to load booking details.");
-            callSnack(errorMessage, "error");
-            navigate("/cart", { replace: true });
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+    if (hasFetchedRef.current) return;
+
+    if (!bookingUuid && !booking) {
+      callSnack("No active booking found.", "info");
+      navigate("/cart", { replace: true });
+      return;
     }
-  }, [bookingUuid, booking, dispatch, navigate]);
+
+    if (!bookingUuid) return;
+
+    hasFetchedRef.current = true;
+
+    const syncBooking = async () => {
+      const paymentIntentId = searchParams?.get("payment_intent");
+      const redirectStatus = searchParams?.get("redirect_status");
+
+      if (paymentIntentId && redirectStatus === "succeeded") {
+        try {
+          await dispatch(confirmPaymentAction({ paymentIntentId })).unwrap();
+        } catch (e) {
+          console.warn("Redirect payment confirmation error:", e);
+        }
+      }
+
+      if (!booking) {
+        setIsLoading(true);
+      }
+
+      try {
+        await dispatch(getBookingAction(bookingUuid)).unwrap();
+      } catch (err: any) {
+        if (!booking) {
+          const errorMessage =
+            typeof err === "string"
+              ? err
+              : (err?.payload ?? err?.message ?? "Unable to load booking details.");
+          callSnack(errorMessage, "error");
+          navigate("/cart", { replace: true });
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    syncBooking();
+  }, [bookingUuid, booking, dispatch, navigate, searchParams]);
 
   const handleNavigateAway = (path: string) => {
     dispatch(clearBookingSession());

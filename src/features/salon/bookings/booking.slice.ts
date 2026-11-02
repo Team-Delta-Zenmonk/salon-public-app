@@ -1,11 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { BookingAction, BookingPhase } from "../../../common/booking.enums";
+import { BookingAction, BookingPhase, BookingStatus } from "../../../common/booking.enums";
 import type { ActiveBooking, CurrentBooking } from "../../../common/booking.types";
 import { getActiveBookingAction } from "./get-active-booking/get-active-booking.action";
 import { getBookingAction } from "./get-booking/get-booking.action";
 import { createBookingAction } from "./create-booking/create-booking.action";
 import { cancelBookingAction } from "./cancel-booking/cancel-booking.action";
 import { createPaymentAction } from "../../payments/create-payment/create-payment.action";
+import { confirmPaymentAction } from "../../payments/confirm-payment/confirm-payment.action";
 
 interface BookingState {
   activeBooking: ActiveBooking | null;
@@ -43,6 +44,9 @@ export const bookingSlice = createSlice({
 
     markPaymentCompleted(state) {
       state.paymentJustCompleted = true;
+      if (state.currentBooking) {
+        state.currentBooking.status = BookingStatus.CONFIRMED;
+      }
     },
 
     clearPaymentCompleted(state) {
@@ -106,6 +110,19 @@ export const bookingSlice = createSlice({
       state.clientSecret = payload?.clientSecret ?? null;
       state.paymentId = payload?.paymentId ?? null;
       state.bookingPhase = BookingPhase.PAYMENT;
+    });
+
+    builder.addCase(confirmPaymentAction.fulfilled, (state, { payload }) => {
+      const updatedBooking = payload?.booking || payload?.data || payload;
+      if (updatedBooking && typeof updatedBooking === "object" && updatedBooking.uuid) {
+        state.currentBooking = {
+          ...state.currentBooking,
+          ...updatedBooking,
+          status: updatedBooking.status || BookingStatus.CONFIRMED,
+        };
+      } else if (state.currentBooking) {
+        state.currentBooking.status = BookingStatus.CONFIRMED;
+      }
     });
   },
 });
