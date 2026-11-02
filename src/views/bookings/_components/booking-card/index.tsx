@@ -40,8 +40,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
     Number(booking.amount_paid_online || 0) >= Number(booking.total_price || 0) ||
     booking.status === BookingStatus.COMPLETED;
   const isFullUpfront =
-    booking.payment_policy === PAYMENT_POLICY.FULL_UPFRONT ||
-    booking.payment_policy === "full_upfront";
+    booking.payment_policy === PAYMENT_POLICY.FULL_UPFRONT ;
   const showInvoice = Boolean(
     onDownloadInvoice &&
       isFullUpfront &&
