@@ -780,5 +780,18 @@
   background-color: #5c131d !important;
 }
 
+.cardInactive {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+  border-style: dashed;
+}
+
+.cardInactive:hover {
+  box-shadow: none;
+  border-color: var(--app-border);
+  transform: none;
+}
+
+
 
 

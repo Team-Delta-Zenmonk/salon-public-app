@@ -8,7 +8,7 @@ import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
 import { useAppThemeMode } from "@/theme/theme-provider";
-import { getTodayKey } from "../../common/date.constants";
+import { isStaffAvailableToday } from "../../common/staff-status.utils";
 import EllipsisCell from "../ellipse-cell";
 import ScheduleTimingDialog from "./schedule-timing-dialog";
 import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../common/media.utils";
@@ -38,21 +38,7 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
   const titleText = member.title || member.role || "Specialist";
   const genderText = member.gender ? `${member.gender.charAt(0).toUpperCase() + member.gender.slice(1).toLowerCase()} Specialist` : "";
 
-  const todayKey = getTodayKey();
-  const dayIndex = new Date().getDay();
-
-  const todayHours =
-    member.active_hours?.[todayKey] ??
-    member.active_hours?.[dayIndex.toString()] ??
-    member.active_hours?.[dayIndex as unknown as string];
-
-  const isAvailableToday = Boolean(
-    (todayHours && todayHours.start_time && todayHours.end_time) ||
-      (Array.isArray(member.working_days) &&
-        member.working_days.some(
-          (d: string) => typeof d === "string" && d.toLowerCase() === todayKey.toLowerCase()
-        ))
-  );
+  const isAvailableToday = isStaffAvailableToday(member);
 
   const renderStaffBadges = () => (
     <div className={styles.staffTagsWrapper}>
@@ -84,7 +70,15 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
       : styles.themeCrimsonShear;
 
   return (
-    <article className={clsx(styles.card, themeClass, designClass, className)}>
+    <article
+      className={clsx(
+        styles.card,
+        themeClass,
+        designClass,
+        !isAvailableToday && styles.cardInactive,
+        className
+      )}
+    >
       <div className={styles.contentWrapper}>
         {activeDesign === "archVault" ? (
           <div className={styles.archVaultStaffWrapper}>

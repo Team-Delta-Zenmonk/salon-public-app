@@ -1,9 +1,11 @@
 "use client";
 import { Avatar, Box, Typography, Chip } from "@mui/material";
+import clsx from "clsx";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { getStaffAction } from "../../../../features/salon/staff/get-staff/get-staff.action";
 import { useAppDispatch } from "../../../../store/hook";
+import { isStaffAvailableToday } from "../../../../common/staff-status.utils";
 import StaffModal from "./_components/staff-detail-dialog";
 import styles from "./storefront-staff.module.css";
 
@@ -57,11 +59,12 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
             const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
             const photo = member.photos?.secure_url ?? member.photos?.url ?? "";
             const specialization = member.title || member.role || "Beauty Specialist";
+            const isAvailable = isStaffAvailableToday(member);
 
             return (
               <Box
                 key={member.uuid}
-                className={styles.staffCard}
+                className={clsx(styles.staffCard, !isAvailable && styles.staffCardInactive)}
                 onClick={() => onStaffClick(member)}
               >
                 <Box className={styles.cardInner}>
@@ -69,7 +72,7 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
                     <Avatar src={photo} alt={fullName} className={styles.staffAvatar}>
                       {initials || "—"}
                     </Avatar>
-                    <Box className={styles.onlineBadge} />
+                    <Box className={isAvailable ? styles.onlineBadge : styles.offlineBadge} />
                   </Box>
 
                   <Box className={styles.staffInfo}>
@@ -81,8 +84,8 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
                     </Typography>
                     <Chip
                       size="small"
-                      label="Available"
-                      className={styles.availableChip}
+                      label={isAvailable ? "Available" : "Off Today"}
+                      className={isAvailable ? styles.availableChip : styles.unavailableChip}
                     />
                   </Box>
                 </Box>

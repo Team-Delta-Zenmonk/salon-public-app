@@ -171,8 +171,43 @@
   height: 1.375rem !important;
 }
 
+.unavailableChip {
+  margin-top: 0.5rem !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--app-muted) !important;
+  background-color: var(--app-surface) !important;
+  border: 1px solid var(--app-border) !important;
+  height: 1.375rem !important;
+}
+
+.offlineBadge {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--app-surface);
+  background-color: #94a3b8;
+}
+
+.staffCardInactive {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+  border-style: dashed;
+}
+
+.staffCardInactive:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 @media (min-width: 640px) {
-  .availableChip {
+  .availableChip,
+  .unavailableChip {
     font-size: 10px !important;
   }
 }
