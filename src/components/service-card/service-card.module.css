@@ -40,6 +40,7 @@
 
 .serviceImage {
   object-fit: cover;
+  object-position: center 25%;
   transition: transform 700ms ease;
 }
 
@@ -674,11 +675,13 @@
 .editorialPhotoStrip {
   position: relative;
   width: calc(100% - 3rem);
-  height: 9rem;
+  aspect-ratio: 16 / 9;
+  min-height: 11rem;
   margin: 0 auto;
-  border-radius: 2px;
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--app-border);
+  background-color: var(--app-surface-alt);
 }
 
 .editorialGenderTag {

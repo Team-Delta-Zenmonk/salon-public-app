@@ -3,6 +3,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import ImageLightbox from "../../../../components/image-lightbox";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../common/media.utils";
 import styles from "./storefront-gallery.module.css";
 
 interface SalonGalleryProps {
@@ -24,9 +25,17 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const leadImage = images[0];
-  const sideImages = images.slice(1, 3);
+  const rawLead = images[0];
+  const rawSide = images.slice(1, 3);
   const hasMore = images.length > 3;
+
+  const leadImageSrc = rawLead?.src
+    ? getOptimizedImageUrl(rawLead.src, MEDIA_PRESETS.SALON_GALLERY_LEAD)
+    : "";
+
+  const lightboxImages = images.map((img) => ({
+    src: getOptimizedImageUrl(img.src, { width: 1920, quality: "auto" }),
+  }));
 
   const handleImageClick = (idx: number) => {
     setIndex(idx);
@@ -57,7 +66,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
             >
               <Box
                 component="img"
-                src={leadImage.src}
+                src={leadImageSrc}
                 alt="Salon hero"
                 className={styles.leadImg}
               />
@@ -74,6 +83,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
                 const remaining = images.length - (imageIndex + 1);
                 const isLastVisible = idx === Math.min(images.length - 2, 6);
                 const showMoreOverlay = isLastVisible && remaining > 0;
+                const thumbUrl = getOptimizedImageUrl(img.src, MEDIA_PRESETS.SALON_GALLERY_THUMB);
 
                 return (
                   <Box
@@ -83,7 +93,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
                   >
                     <Box
                       component="img"
-                      src={img.src}
+                      src={thumbUrl}
                       alt={`Salon photo ${imageIndex + 1}`}
                       className={styles.leadImg}
                     />
@@ -107,7 +117,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
             >
               <Box
                 component="img"
-                src={leadImage.src}
+                src={leadImageSrc}
                 alt="Salon hero"
                 className={styles.leadImg}
               />
@@ -118,20 +128,22 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
             </Box>
 
             <Box className={styles.desktopSideGrid}>
-              {sideImages.map((img, idx) => {
+              {rawSide.map((img, idx) => {
                 const imageIndex = idx + 1;
-                const isLastTile = idx === sideImages.length - 1 && hasMore;
+                const isLastTile = idx === rawSide.length - 1 && hasMore;
+                const thumbUrl = getOptimizedImageUrl(img.src, MEDIA_PRESETS.SALON_GALLERY_THUMB);
+
                 return (
                   <Box
                     key={imageIndex}
                     onClick={() => handleImageClick(imageIndex)}
                     className={`${styles.sideTile} ${
-                      sideImages.length === 1 ? styles.sideTileSpan2 : ""
+                      rawSide.length === 1 ? styles.sideTileSpan2 : ""
                     }`}
                   >
                     <Box
                       component="img"
-                      src={img.src}
+                      src={thumbUrl}
                       alt={`Salon photo ${imageIndex + 1}`}
                       className={styles.leadImg}
                     />
@@ -152,7 +164,7 @@ export default function SalonGallery({ photos, logo }: Readonly<SalonGalleryProp
         )}
       </Box>
 
-      <ImageLightbox open={open} index={index} images={images} onClose={() => setOpen(false)} />
+      <ImageLightbox open={open} index={index} images={lightboxImages} onClose={() => setOpen(false)} />
     </>
   );
 }

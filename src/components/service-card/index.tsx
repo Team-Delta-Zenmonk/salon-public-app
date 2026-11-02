@@ -11,6 +11,7 @@ import { useStorefront } from "@/providers/storefront-provider";
 import { useAppSelector } from "@/store/hook";
 import SubServicesModal from "./sub-services-modal";
 import { getDiscountedPrice } from "@/common/discount.utils";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "@/common/media.utils";
 import styles from "./service-card.module.css";
 
 export interface ServiceCardProps {
@@ -81,7 +82,22 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     }).length;
   }, [subServices, cart?.items, service.id, service.uuid, checkSubAdded]);
 
-  const imageSrc = service.logo || service.image || service.photos?.[0]?.secure_url || service.photos?.[0]?.url;
+  const rawImageSrc =
+    service.logo ||
+    service.image ||
+    service.photos?.[0]?.secure_url ||
+    service.photos?.[0]?.url ||
+    "";
+
+  const imageSrc = useMemo(() => {
+    if (!rawImageSrc) return "";
+    return getOptimizedImageUrl(
+      rawImageSrc,
+      activeDesign === "floatingGlass"
+        ? MEDIA_PRESETS.SERVICE_THUMBNAIL
+        : MEDIA_PRESETS.SERVICE_CARD
+    );
+  }, [rawImageSrc, activeDesign]);
 
   const designClass =
     activeDesign === "archVault"

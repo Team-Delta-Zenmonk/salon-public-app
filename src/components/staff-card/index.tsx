@@ -11,6 +11,7 @@ import { useAppThemeMode } from "@/theme/theme-provider";
 import { getTodayKey } from "../../common/date.constants";
 import EllipsisCell from "../ellipse-cell";
 import ScheduleTimingDialog from "./schedule-timing-dialog";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../common/media.utils";
 import styles from "./staff-card.module.css";
 
 export interface StaffCardProps {
@@ -31,7 +32,8 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
       ? "floatingGlass"
       : "editorial");
   const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim() || "Master Specialist";
-  const photo = member.photos?.secure_url ?? member.photos?.url;
+  const rawPhoto = member.photos?.secure_url ?? member.photos?.url;
+  const photo = rawPhoto ? getOptimizedImageUrl(rawPhoto, MEDIA_PRESETS.AVATAR) : "";
 
   const titleText = member.title || member.role || "Specialist";
   const genderText = member.gender ? `${member.gender.charAt(0).toUpperCase() + member.gender.slice(1).toLowerCase()} Specialist` : "";
