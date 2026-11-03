@@ -6,6 +6,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import InfiniteScroll from "react-infinite-scroll-component";
 import EllipsisCell from "@/components/ellipse-cell";
 import styles from "./staff-modal.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../../../common/media.utils";
 
   interface StaffModalProps {
   open: boolean;
@@ -115,7 +116,7 @@ export default function StaffModal({
                     className={`${styles.staffCard} ${isSelected ? styles.staffCardSelected : ""}`}
                   >
                     <Avatar
-                      src={staff?.photos?.secure_url ?? staff?.photos?.url}
+                      src={staff?.photos?.secure_url ?? staff?.photos?.url ? getOptimizedImageUrl(staff?.photos?.secure_url ?? staff?.photos?.url ?? "", MEDIA_PRESETS.AVATAR) : undefined}
                       className={`${styles.avatar} ${isSelected ? styles.avatarSelected : ""}`}
                     >
                       {staffName[0]}

@@ -28,6 +28,7 @@ import { themeOptions } from "../../../../theme/theme";
 import CartIcon from "../../../../components/header/_components/cart-button";
 import { logout } from "../../../../features/auth/auth.slice";
 import styles from "./storefront-header.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../common/media.utils";
 
 export type StorefrontTab = "overview" | "services" | "specialists" | "hours";
 
@@ -93,7 +94,7 @@ export default function StorefrontHeader({
           >
             {salon?.logo ? (
               <Avatar
-                src={salon.logo}
+                src={getOptimizedImageUrl(salon.logo, MEDIA_PRESETS.AVATAR)}
                 alt={salonName}
                 variant="rounded"
                 className={styles.logoAvatar}
@@ -267,7 +268,7 @@ export default function StorefrontHeader({
           <Box className={styles.drawerHeader}>
             <Box className={styles.drawerSalonInfo}>
               <Avatar
-                src={salon?.logo}
+                src={salon?.logo ? getOptimizedImageUrl(salon.logo, MEDIA_PRESETS.AVATAR) : undefined}
                 variant="rounded"
                 className={styles.drawerSalonAvatar}
               >

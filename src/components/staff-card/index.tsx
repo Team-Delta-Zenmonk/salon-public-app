@@ -33,7 +33,9 @@ export const StaffCard: React.FC<StaffCardProps> = ({ member, className, designV
       : "editorial");
   const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim() || "Master Specialist";
   const rawPhoto = member.photos?.secure_url ?? member.photos?.url;
-  const photo = rawPhoto ? getOptimizedImageUrl(rawPhoto, MEDIA_PRESETS.AVATAR) : "";
+  const photoPreset =
+    activeDesign === "floatingGlass" ? MEDIA_PRESETS.STAFF_COVER : MEDIA_PRESETS.AVATAR;
+  const photo = rawPhoto ? getOptimizedImageUrl(rawPhoto, photoPreset) : "";
 
   const titleText = member.title || member.role || "Specialist";
   const genderText = member.gender ? `${member.gender.charAt(0).toUpperCase() + member.gender.slice(1).toLowerCase()} Specialist` : "";

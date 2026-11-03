@@ -17,6 +17,7 @@ import { getGenderChipConfig } from "./_components/utils/gender-chip-config";
 import { getCartAction } from "../../../../../../features/salon/cart/get-cart/get-cart.action";
 import { getDiscountedPrice } from "@/common/discount.utils";
 import styles from "./storefront-service-card.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../../../common/media.utils";
 
 export default function ServiceCard({ service, subServices, salon }: Readonly<{ service: any; subServices: any[]; salon: any }>) {
   const [open, setOpen] = useState(false);
@@ -205,7 +206,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
           {service.logo ? (
             <Box
               component="img"
-              src={service.logo}
+              src={getOptimizedImageUrl(service.logo, MEDIA_PRESETS.SERVICE_THUMBNAIL)}
               alt={service.name}
               className={styles.serviceLogo}
             />
@@ -326,7 +327,7 @@ export default function ServiceCard({ service, subServices, salon }: Readonly<{ 
                     {sub.logo ? (
                       <Box
                         component="img"
-                        src={sub.logo}
+                        src={getOptimizedImageUrl(sub.logo, MEDIA_PRESETS.SERVICE_THUMBNAIL)}
                         alt={sub.name}
                         className={styles.subServiceLogo}
                       />

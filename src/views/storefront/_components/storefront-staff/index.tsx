@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../../../store/hook";
 import { isStaffAvailableToday } from "../../../../common/staff-status.utils";
 import StaffModal from "./_components/staff-detail-dialog";
 import styles from "./storefront-staff.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../common/media.utils";
 
 interface SalonStaffProps {
   staff: any[];
@@ -58,6 +59,7 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
             const fullName = `${member.first_name || ""} ${member.last_name || ""}`.trim();
             const initials = `${member.first_name?.[0] || ""}${member.last_name?.[0] || ""}`;
             const photo = member.photos?.secure_url ?? member.photos?.url ?? "";
+            const optimizedPhoto = photo ? getOptimizedImageUrl(photo, MEDIA_PRESETS.AVATAR) : "";
             const specialization = member.title || member.role || "Beauty Specialist";
             const isAvailable = isStaffAvailableToday(member);
 
@@ -69,7 +71,7 @@ export default function SalonStaff({ staff, salonId }: Readonly<SalonStaffProps>
               >
                 <Box className={styles.cardInner}>
                   <Box className={styles.avatarContainer}>
-                    <Avatar src={photo} alt={fullName} className={styles.staffAvatar}>
+                    <Avatar src={optimizedPhoto} alt={fullName} className={styles.staffAvatar}>
                       {initials || "—"}
                     </Avatar>
                     <Box className={isAvailable ? styles.onlineBadge : styles.offlineBadge} />

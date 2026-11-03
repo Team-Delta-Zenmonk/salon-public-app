@@ -20,6 +20,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { getDiscountedPrice } from "@/common/discount.utils";
 import { isStaffInactive } from "@/common/staff-status.utils";
 import styles from "./cart-items.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../common/media.utils";
 
 interface CartItemProps {
   item: any;
@@ -123,7 +124,7 @@ function StaffSelector({
             className={`${styles.staffCard} ${isSelected ? styles.staffCardSelected : ""}`}
           >
             <Avatar
-              src={staff?.photos?.secure_url ?? staff?.photos?.url}
+              src={staff?.photos?.secure_url ?? staff?.photos?.url ? getOptimizedImageUrl(staff?.photos?.secure_url ?? staff?.photos?.url ?? "", MEDIA_PRESETS.AVATAR) : undefined}
               className={`${styles.staffAvatar} ${isSelected ? styles.staffAvatarSelected : ""}`}
             >
               {staffName[0]}
@@ -172,7 +173,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
 
   const service = item.service;
   const name = service?.name ?? "Ceremony";
-  const image = service?.logo;
+  const image = service?.logo ? getOptimizedImageUrl(service.logo, MEDIA_PRESETS.SERVICE_THUMBNAIL) : undefined;
   const duration = item.duration;
   const price = item.final_price ?? item.base_price;
   const gender = service?.gender;
@@ -391,7 +392,7 @@ export default function CartItem({ item }: Readonly<CartItemProps>) {
               </Box>
               {selectedStaffId && currentStaffInfo && (
                 <Box className={styles.assignedStaffChip}>
-                  <Avatar src={currentStaffInfo.photo} className={styles.assignedStaffAvatar}>
+                  <Avatar src={currentStaffInfo.photo ? getOptimizedImageUrl(currentStaffInfo.photo, MEDIA_PRESETS.AVATAR) : undefined} className={styles.assignedStaffAvatar}>
                     {currentStaffInfo.name?.[0]}
                   </Avatar>
                   <EllipsisCell value={currentStaffInfo.name} className={styles.assignedStaffName} maxChars={20} />

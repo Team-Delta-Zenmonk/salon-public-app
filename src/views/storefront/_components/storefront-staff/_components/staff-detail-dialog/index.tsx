@@ -6,6 +6,7 @@ import { getTodayKey, WEEKDAY_KEYS, WEEKDAY_SHORT } from "../../../../../../comm
 import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import styles from "./staff-detail-dialog.module.css";
+import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../../../common/media.utils";
 
 interface StaffModalProps {
   open: boolean;
@@ -31,6 +32,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
   const fullName = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim();
 
   const photo = staff?.photos?.secure_url ?? staff?.photos?.url;
+  const optimizedPhoto = photo ? getOptimizedImageUrl(photo, MEDIA_PRESETS.AVATAR) : undefined;
   const initials = `${staff?.first_name?.[0] ?? ""}${staff?.last_name?.[0] ?? ""}`;
 
   const activeHours = staff?.active_hours ?? {};
@@ -63,7 +65,7 @@ export default function StaffModal({ open, onClose, staff, loading }: Readonly<S
 
         <Box className={styles.headerContent}>
           <Avatar
-            src={photo}
+            src={optimizedPhoto}
             className={styles.avatar}
           >
             {initials || "?"}
