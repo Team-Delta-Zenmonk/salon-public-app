@@ -62,16 +62,18 @@ export default function StorefrontFooter() {
                 maxChars={50}
               />
               <br />
-              {salon?.phone && <EllipsisCell
-                value={`Contact: ${salon.phone}`}
-                className={styles.phoneText}
-                maxChars={15}
-              />}
-              <br />
+              {salon?.phone &&
+                <>
+                  <EllipsisCell
+                    value={`Contact: ${salon.phone}`}
+                    className={styles.phoneText}
+                  />
+                  {salon?.email && <br />}
+                </>
+              }
               {salon?.email && <EllipsisCell
                 value={`Email: ${salon.email}`}
                 className={styles.emailText}
-                maxChars={25}
               />}
             </div>
           </div>
