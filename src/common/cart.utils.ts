@@ -3,11 +3,8 @@ import { getDiscountedPrice } from "./discount.utils";
 export function calculateTotals(items: any[]): { totalPrice: number; totalDuration: number } {
   return items.reduce(
     (acc, item) => {
-      const { finalPrice } = getDiscountedPrice(item);
-      const effectivePrice =
-        item.final_price !== undefined && item.final_price !== null
-          ? Number(item.final_price)
-          : finalPrice;
+      const discountInfo = getDiscountedPrice(item);
+      const effectivePrice = discountInfo.finalPrice;
 
       return {
         totalPrice: acc.totalPrice + effectivePrice,

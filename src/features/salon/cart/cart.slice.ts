@@ -74,7 +74,20 @@ export const cartSlice = createSlice({
 
       item.staff_uuid = staff_uuid ?? null;
       item.staff = staff ?? null;
-      item.final_price = price !== undefined && price !== null ? Number.parseFloat(String(price)) : item.base_price;
+
+      const basePrice =
+        price !== undefined && price !== null
+          ? Number.parseFloat(String(price))
+          : Number(item.service?.price ?? item.base_price ?? 0);
+
+      item.base_price = basePrice;
+
+      const discountInfo = getDiscountedPrice({
+        ...item,
+        base_price: basePrice,
+      });
+
+      item.final_price = discountInfo.hasDiscount ? discountInfo.finalPrice : basePrice;
       item.duration = duration ?? item.service?.duration ?? item.duration;
 
       setGuestCart({ salon: state.salon, items: state.items });
