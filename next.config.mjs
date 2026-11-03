@@ -8,7 +8,6 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   output: "standalone",
   outputFileTracingRoot: __dirname,
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
   poweredByHeader: false,
   compress: true,
   reactStrictMode: false,
