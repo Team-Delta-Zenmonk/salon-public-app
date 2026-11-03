@@ -119,7 +119,7 @@
   line-height: 1.625;
 }
 
-.phoneText {
+.phoneText,.emailText {
   display: block;
   font-weight: 500;
   color: var(--app-text);

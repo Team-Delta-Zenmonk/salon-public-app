@@ -61,15 +61,18 @@ export default function StorefrontFooter() {
                 className={styles.addressBlock}
                 maxChars={50}
               />
-              <br/>
-              <EllipsisCell
-                value={
-                  salon?.phone
-                    ? `Contact: ${salon.phone}`
-                    : "Contact: contact@ateliersolstice.com"
-                }
+              <br />
+              {salon?.phone && <EllipsisCell
+                value={`Contact: ${salon.phone}`}
                 className={styles.phoneText}
-              />
+                maxChars={15}
+              />}
+              <br />
+              {salon?.email && <EllipsisCell
+                value={`Email: ${salon.email}`}
+                className={styles.emailText}
+                maxChars={25}
+              />}
             </div>
           </div>
         </div>
