@@ -1,7 +1,7 @@
 import React from "react";
 import type { Salon } from "@/common/salon.type";
 
-const defaultAppName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+const defaultAppName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://salon-public-app.vercel.app";
 
 export interface StructuredDataProps {

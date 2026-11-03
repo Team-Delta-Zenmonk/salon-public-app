@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { defaultAppTheme } from "@/theme/theme";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+const appName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -15,9 +15,9 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: defaultAppTheme.primary,
     icons: [
       {
-        src: "/favicon.ico",
+        src: "/favicon.svg",
         sizes: "any",
-        type: "image/x-icon",
+        type: "image/svg+xml",
       },
     ],
   };

@@ -27,7 +27,7 @@ export default function NotFoundPage() {
     }
   };
 
-  const appName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+  const appName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 
   return (
     <>

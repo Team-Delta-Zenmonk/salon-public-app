@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Salon } from "@/common/salon.type";
 
-const defaultAppName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+const defaultAppName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://salon-public-app.vercel.app";
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
@@ -169,7 +169,7 @@ export function buildSalonMetadata({
   const description = descriptionSuffix ? `${descriptionSuffix} at ${salonName}.` : defaultDesc;
   const canonicalUrl = `${siteUrl}/salons/${slug}${subPath}`;
   const imageUrl = getSalonImage(salon);
-  const faviconUrl = salon?.logo || "/favicon.ico";
+  const faviconUrl = salon?.logo || "/favicon.svg";
 
   return {
     title,

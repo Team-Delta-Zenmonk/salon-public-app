@@ -3,7 +3,7 @@ import Providers from "@/providers";
 import { defaultAppTheme } from "@/theme/theme";
 import "../index.css";
 
-const appName = process.env.NEXT_PUBLIC_APP_NAME || "Veloura";
+const appName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://salon-public-app.vercel.app";
 const googleVerification =
@@ -89,16 +89,27 @@ export const metadata: Metadata = {
     title: `${appName} — Luxury Salon & Spa Sanctuary`,
     description:
       "Discover and book bespoke luxury salon treatments, master scissorsmiths, and clinical rituals. Effortless online appointments with premium stylists.",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 265,
+        height: 256,
+        alt: `${appName} Logo`,
+      },
+    ],
   },
   twitter: {
     card: "summary",
     title: `${appName} — Luxury Salon & Spa Sanctuary`,
     description:
       "Discover and book bespoke luxury salon treatments, master scissorsmiths, and clinical rituals.",
+    images: ["/logo.svg"],
   },
 
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 
   ...(googleVerification
