@@ -13,6 +13,7 @@ import { callSnack } from "../../../../components/snackbar";
 import { calculateTotals } from "../../../../common/cart.utils";
 import { formatDuration } from "../../../../common/date.utils";
 import { clearCart } from "../../../../features/salon/cart/cart.slice";
+import { cancelBookingAction } from "../../../../features/salon/bookings/cancel-booking/cancel-booking.action";
 import BookingConfirmDialog from "./_components/booking-confirm-dialog";
 import SlotGrid from "./_components/slot-grid";
 import BookingDateSelector from "./_components/booking-date-selector";
@@ -34,8 +35,17 @@ function SlotPanelContent({
   currentDaySlots,
   onSelectDate,
   onSelectSlot,
+  onCancelAndBookNew,
+  isProcessingNewBooking,
 }: any) {
-  if (isConflict) return <ActiveBookingConflictCard />;
+  if (isConflict) {
+    return (
+      <ActiveBookingConflictCard
+        onCancelAndBookNew={onCancelAndBookNew}
+        isProcessingNewBooking={isProcessingNewBooking}
+      />
+    );
+  }
 
   if (slotsError) {
     return (
@@ -74,11 +84,13 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
   const dispatch = useAppDispatch();
   const navigate = useStorefrontNavigate();
   const { cartUuid: cartId, items, salon } = useAppSelector((s) => s.cart);
-  const { bookingPhase } = useAppSelector((s) => s.booking);
+  const { bookingPhase, activeBooking } = useAppSelector((s) => s.booking);
 
   const [slotsData, setSlotsData] = useState<{ date: string; slots: any[] }[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+  const [isCancellingOld, setIsCancellingOld] = useState(false);
+  const [lastPaymentPreference, setLastPaymentPreference] = useState<"pay_at_venue" | "partial_deposit" | "full_upfront">("pay_at_venue");
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [slotsError, setSlotsError] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -127,19 +139,27 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
   const durationText = formatDuration(totalDuration);
   const currentDaySlots = selectedDate ? (slotsData.find((d) => d.date === selectedDate)?.slots ?? []) : [];
 
-  const handleConfirmSlot = async (paymentPreference: "pay_at_venue" | "partial_deposit" | "full_upfront") => {
-    if (!cartId || !selectedDate || !selectedSlot || isCreating || isPaying) return;
+  const handleConfirmSlot = async (
+    paymentPreference: "pay_at_venue" | "partial_deposit" | "full_upfront",
+    slotOverride?: any,
+    dateOverride?: string | null
+  ) => {
+    const slotToUse = slotOverride ?? selectedSlot;
+    const dateToUse = dateOverride ?? selectedDate;
+
+    if (!cartId || !dateToUse || !slotToUse || isCreating || isPaying) return;
+    setLastPaymentPreference(paymentPreference);
     setIsCreating(true);
     try {
       const mappedSlot = {
-        ...selectedSlot,
-        services: (selectedSlot.services ?? []).map((s: any) => ({
+        ...slotToUse,
+        services: (slotToUse.services ?? []).map((s: any) => ({
           service_id: s.service_id ?? s.serviceId ?? s.service?.id ?? s.id,
           staff_id: s.staff_id ?? s.staffId ?? s.staff_options?.[0] ?? s.staff?.id,
         })),
       };
       const createResult = await dispatch(
-        createBookingAction({ cartId, date: selectedDate, slot: mappedSlot, payment_preference: paymentPreference }),
+        createBookingAction({ cartId, date: dateToUse, slot: mappedSlot, payment_preference: paymentPreference }),
       ).unwrap();
 
       if (createResult.action === BookingAction.ACTIVE_BOOKING_EXISTS) {
@@ -149,28 +169,25 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
 
       const booking = createResult.booking;
       if (booking.payment_policy === "pay_at_venue" || totalPrice === 0 || booking.total_price === 0) {
-        dispatch(clearCart());
         setConfirmOpen(false);
-        onClose();
         navigate(`/bookings/success?bookingUuid=${booking.uuid}`, { state: { bookingUuid: booking.uuid, booking }, replace: true });
+        dispatch(clearCart());
         return;
       }
 
       if (createResult.clientSecret) {
-        dispatch(clearCart());
         setConfirmOpen(false);
-        onClose();
         navigate("/checkout");
+        dispatch(clearCart());
         return;
       }
 
       setIsPaying(true);
       const paymentResult = await dispatch(createPaymentAction(booking.uuid)).unwrap();
       if (paymentResult.clientSecret) {
-        dispatch(clearCart());
         setConfirmOpen(false);
-        onClose();
         navigate("/checkout");
+        dispatch(clearCart());
       }
     } catch (err: any) {
       console.error("Booking failed:", err);
@@ -183,6 +200,23 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
     } finally {
       setIsCreating(false);
       setIsPaying(false);
+    }
+  };
+
+  const handleCancelAndCreateNew = async () => {
+    if (!activeBooking?.uuid) return;
+    setIsCancellingOld(true);
+    try {
+      await dispatch(cancelBookingAction(activeBooking.uuid)).unwrap();
+      callSnack("Previous booking cancelled. Booking your new slot...", "info");
+      if (selectedDate && selectedSlot) {
+        await handleConfirmSlot(lastPaymentPreference, selectedSlot, selectedDate);
+      }
+    } catch (err: any) {
+      const msg = typeof err === "string" ? err : err?.message ?? "Failed to cancel previous booking";
+      callSnack(msg, "error");
+    } finally {
+      setIsCancellingOld(false);
     }
   };
 
@@ -223,6 +257,8 @@ export default function BookingPanel({ open, onClose }: Readonly<BookingPanelPro
             currentDaySlots={currentDaySlots}
             onSelectDate={setSelectedDate}
             onSelectSlot={setSelectedSlot}
+            onCancelAndBookNew={handleCancelAndCreateNew}
+            isProcessingNewBooking={isCancellingOld || isCreating || isPaying}
           />
         </Box>
 

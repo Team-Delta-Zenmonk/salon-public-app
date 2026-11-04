@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, CircularProgress, LinearProgress } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -22,7 +22,6 @@ interface BookingActionButtonsProps {
   isContinuing: boolean;
   onCancel: () => void;
   onContinue: () => void;
-  onStartNew: () => void;
 }
 
 const TOTAL_SECONDS = 600;
@@ -50,14 +49,9 @@ function BookingActionButtons({
   isContinuing,
   onCancel,
   onContinue,
-  onStartNew,
 }: Readonly<BookingActionButtonsProps>) {
   if (isExpired) {
-    return (
-      <Box onClick={onStartNew} className={styles.continueBtn}>
-        <Typography className={styles.continueBtnText}>Start New Booking</Typography>
-      </Box>
-    );
+    return null;
   }
 
   return (
@@ -92,7 +86,13 @@ export default function ActiveBookingBanner() {
   const { formattedTime, isExpired, secondsLeft, urgency } = useBookingExpiry(activeBooking?.expires_at);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
-  if (!activeBooking) return null;
+  useEffect(() => {
+    if (isExpired && activeBooking) {
+      dispatch(clearActiveBooking());
+    }
+  }, [isExpired, activeBooking, dispatch]);
+
+  if (!activeBooking || isExpired) return null;
 
   const { dateStr, timeStr } = getBookingDateTime(activeBooking);
   const isBusy = isCancelling || isContinuing;
@@ -108,10 +108,6 @@ export default function ActiveBookingBanner() {
     if (isBusy) return;
     await handleCancelActiveBooking(activeBooking.uuid);
     setCancelDialogOpen(false);
-  };
-
-  const handleStartNew = () => {
-    dispatch(clearActiveBooking());
   };
 
   return (
@@ -177,7 +173,6 @@ export default function ActiveBookingBanner() {
             isContinuing={isContinuing}
             onCancel={() => setCancelDialogOpen(true)}
             onContinue={handleContinue}
-            onStartNew={handleStartNew}
           />
         </Box>
       </Box>

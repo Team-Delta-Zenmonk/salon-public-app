@@ -9,7 +9,15 @@ import { getUrgencyColor } from "../../../../../../common/booking.utils";
 import { useActiveBookingActions } from "../../../../../../common/hooks/useActiveBookingActions";
 import styles from "./active-booking-conflict-card.module.css";
 
-export default function ActiveBookingConflictCard() {
+interface ActiveBookingConflictCardProps {
+  onCancelAndBookNew?: () => Promise<void>;
+  isProcessingNewBooking?: boolean;
+}
+
+export default function ActiveBookingConflictCard({
+  onCancelAndBookNew,
+  isProcessingNewBooking = false,
+}: Readonly<ActiveBookingConflictCardProps>) {
   const { activeBooking } = useAppSelector((state) => state.booking);
   const { handleCancelActiveBooking, handleContinueActiveBooking, isCancelling, isContinuing } =
     useActiveBookingActions();
@@ -22,7 +30,7 @@ export default function ActiveBookingConflictCard() {
       ? `${formatTimeUTC(activeBooking.booking_start_time)} – ${formatTimeUTC(activeBooking.booking_end_time)}`
       : "";
 
-  const isBusy = isCancelling || isContinuing;
+  const isBusy = isCancelling || isContinuing || isProcessingNewBooking;
 
   const urgencyColor = getUrgencyColor(urgency);
 
@@ -33,7 +41,11 @@ export default function ActiveBookingConflictCard() {
 
   const handleCancel = async () => {
     if (isBusy || !activeBooking) return;
-    await handleCancelActiveBooking(activeBooking.uuid);
+    if (onCancelAndBookNew) {
+      await onCancelAndBookNew();
+    } else {
+      await handleCancelActiveBooking(activeBooking.uuid);
+    }
   };
 
   return (
@@ -97,7 +109,7 @@ export default function ActiveBookingConflictCard() {
             onClick={isBusy ? undefined : handleCancel}
             className={`${styles.cancelBtn} ${isBusy ? styles.btnBusyCancel : ""}`}
           >
-            {isCancelling ? (
+            {isCancelling || isProcessingNewBooking ? (
               <CircularProgress size={16} className={styles.cancelSpinner} />
             ) : (
               <Typography className={styles.btnTextSecondary}>

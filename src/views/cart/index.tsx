@@ -37,6 +37,8 @@ export default function Cart() {
   const { bookingPhase, activeBooking, paymentJustCompleted } = useAppSelector((s) => s.booking);
   const resumeBooking = searchParams?.get("resumeBooking") === "true";
 
+  const isNavigatingToCheckout = bookingPhase === BookingPhase.PAYMENT;
+
   const [isFetchingCart, setIsFetchingCart] = useState(!loaded && isAuthenticated && !!customer?.uuid);
   const [visibleItemsCount, setVisibleItemsCount] = useState(10);
   const didPaymentJustComplete = useRef(paymentJustCompleted || getPaymentCompleted());
@@ -98,6 +100,14 @@ export default function Cart() {
       },
     });
   };
+
+  if (isNavigatingToCheckout) {
+    return (
+      <Box className="rootLoader">
+        <CircularProgress size={40} className="rootSpinner" />
+      </Box>
+    );
+  }
 
   if (isFetchingCart || !loaded) {
     return (

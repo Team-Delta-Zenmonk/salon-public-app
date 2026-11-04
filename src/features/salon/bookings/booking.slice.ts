@@ -66,7 +66,16 @@ export const bookingSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(getActiveBookingAction.fulfilled, (state, { payload }) => {
-      state.activeBooking = payload?.data ?? null;
+      const booking = payload?.data ?? null;
+      if (
+        booking &&
+        booking.expires_at &&
+        new Date(booking.expires_at).getTime() <= Date.now()
+      ) {
+        state.activeBooking = null;
+      } else {
+        state.activeBooking = booking;
+      }
     });
 
     builder.addCase(getActiveBookingAction.rejected, (state) => {
@@ -83,7 +92,10 @@ export const bookingSlice = createSlice({
 
     builder.addCase(createBookingAction.fulfilled, (state, { payload }) => {
       if (payload?.action === BookingAction.ACTIVE_BOOKING_EXISTS) {
-        state.activeBooking = payload.booking;
+        state.activeBooking = {
+          ...state.activeBooking,
+          ...payload.booking,
+        };
         state.bookingPhase = BookingPhase.BOOKING_CONFLICT;
         return;
       }
