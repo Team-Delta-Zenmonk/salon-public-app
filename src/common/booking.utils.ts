@@ -43,10 +43,7 @@ export const getBookingStatusConfig = (status: string) => {
 };
 
 export function isBookingCancelable(iso: string): boolean {
-  const d = new Date(iso);
-  const now = new Date();
-  const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000;
-  return d.getTime() - now.getTime() >= TWO_HOURS_IN_MS;
+  return !isBookingPast(iso);
 }
 
 export function isBookingPast(iso: string): boolean {
