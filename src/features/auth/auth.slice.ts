@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginCustomerAction } from "./login/login.action";
+import { updateCustomerProfileAction } from "../customer/update-profile/update-profile.action";
 
 const initialState = {
   customer: null as any,
@@ -23,6 +24,11 @@ export const authSlice = createSlice({
     builder.addCase(loginCustomerAction.fulfilled, (state, { payload }) => {
       state.customer = payload.customer;
       state.isAuthenticated = true;
+    });
+    builder.addCase(updateCustomerProfileAction.fulfilled, (state, { payload }) => {
+      if (payload?.customer) {
+        state.customer = payload.customer;
+      }
     });
   },
 });

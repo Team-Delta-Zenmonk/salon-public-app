@@ -221,11 +221,6 @@ export default function Bookings() {
         <section className={styles.heroHeader}>
           <div className={styles.heroFlex}>
             <div className={styles.headerTitleGroup}>
-              <div className={styles.breadcrumb}>
-                <span>MY ACCOUNT</span>
-                <ChevronRightIcon />
-                <span>BOOKINGS HISTORY</span>
-              </div>
               <div className={styles.titleRow}>
                 <h1 className={styles.mainTitle}>
                   My Appointments &amp; Bookings

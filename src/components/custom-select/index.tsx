@@ -12,6 +12,7 @@ export interface CustomSelectOption {
 
 export interface CustomSelectProps {
   label?: string;
+  placeholder?: string;
   value: string | number;
   options: CustomSelectOption[];
   onChange: (value: string) => void;
@@ -27,6 +28,7 @@ export interface CustomSelectProps {
 
 export default function CustomSelect({
   label,
+  placeholder,
   value,
   options,
   onChange,
@@ -43,7 +45,11 @@ export default function CustomSelect({
   const open = Boolean(anchorEl);
 
   const selectedOption = options.find((opt) => String(opt.id) === String(value));
-  const displayLabel = selectedOption ? selectedOption.label : String(value);
+  const displayLabel = selectedOption
+    ? selectedOption.label
+    : value
+    ? String(value)
+    : placeholder || "";
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);

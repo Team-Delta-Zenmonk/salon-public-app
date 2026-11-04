@@ -67,6 +67,7 @@ export default function ThemeProviderWrapper({ children }: Readonly<{ children: 
       root.style.setProperty("--app-champagne", selected.ring);
       root.style.setProperty("--app-accent", selected.ring);
       root.style.setProperty("--app-chip-tone", selected.chipTone);
+      root.style.setProperty("--app-radius", `${selected.radius}px`);
       root.style.setProperty(
         "--app-primary-contrast",
         theme.palette.getContrastText(selected.primary)

@@ -29,6 +29,7 @@ import { useAppThemeMode } from "../../../theme/theme-provider";
 import { STOREFRONT_NAV_ITEMS } from "../../navigation";
 import EllipsisCell from "@/components/ellipse-cell";
 import Image from "next/image";
+import { getOptimizedImageUrl } from "@/common/media.utils";
 
 export default function StorefrontHeader() {
   const navigate = useStorefrontNavigate();
@@ -68,8 +69,8 @@ export default function StorefrontHeader() {
     headerVariant === "left-inline"
       ? styles.toolbarLeftInline
       : headerVariant === "unified-right"
-      ? styles.toolbarUnifiedRight
-      : styles.toolbarSplitCenter,
+        ? styles.toolbarUnifiedRight
+        : styles.toolbarSplitCenter,
   ].filter(Boolean).join(" ");
 
   const navContainerClass = [
@@ -77,8 +78,8 @@ export default function StorefrontHeader() {
     headerVariant === "left-inline"
       ? styles.navContainerLeftInline
       : headerVariant === "unified-right"
-      ? styles.navContainerUnifiedRight
-      : "",
+        ? styles.navContainerUnifiedRight
+        : "",
   ].filter(Boolean).join(" ");
 
   return (
@@ -174,7 +175,10 @@ export default function StorefrontHeader() {
                 className={styles.userAvatarButton}
                 aria-label="User account menu"
               >
-                <Avatar className={styles.avatar}>
+                <Avatar
+                  src={getOptimizedImageUrl(customer?.profile_image)}
+                  className={styles.avatar}
+                >
                   {customer?.first_name?.[0] || customer?.name?.[0] || "C"}
                 </Avatar>
               </IconButton>

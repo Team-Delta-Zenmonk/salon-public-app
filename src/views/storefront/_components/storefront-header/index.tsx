@@ -189,7 +189,10 @@ export default function StorefrontHeader({
                 onClick={(e) => setUserMenuAnchor(e.currentTarget)}
                 className={styles.userAvatarBtn}
               >
-                <Avatar className={styles.userAvatar}>
+                <Avatar
+                  src={getOptimizedImageUrl(customer?.profile_image)}
+                  className={styles.userAvatar}
+                >
                   {customer?.first_name?.[0] || customer?.name?.[0] || "U"}
                 </Avatar>
               </IconButton>

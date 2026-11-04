@@ -3,6 +3,7 @@ import { Box, Avatar } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { logout } from "../../features/auth/auth.slice";
 import { useStorefrontNavigate } from "../../common/hooks/useStorefrontNavigate";
@@ -40,16 +41,11 @@ export default function ProfilePage() {
     );
   }
 
-  const fullName = `${customer?.first_name || customer?.name || "Private"} ${customer?.last_name || "Client"}`.trim();
+  const fullName = `${customer?.name || "Private"}`.trim();
 
   return (
     <Box className={styles.profilePage}>
       <div className={styles.topBar}>
-        <div className={styles.breadcrumbs}>
-          <span className={styles.crumbGold}>MEMBER SANCTUARY</span>
-          <span className={styles.crumbSlash}>/</span>
-          <span className={styles.crumbText}>CLIENT DOSSIER</span>
-        </div>
         <div className={styles.clientMeta}>
           <span className={styles.metaText}>CLIENT ID #{customer?.uuid?.slice(0, 8) || "8924"}</span>
           <div className={styles.dividerDot} />
@@ -61,14 +57,17 @@ export default function ProfilePage() {
         <aside className={styles.leftColumn}>
           <div className={styles.avatarCard}>
             <div className={styles.avatarHeader}>
-              <Avatar className={styles.avatarCircle}>
+              <Avatar
+                src={customer?.profile_image || customer?.picture}
+                className={styles.avatarCircle}
+              >
                 {fullName[0]}
               </Avatar>
               <div>
                 <h3 className={styles.userName}>{fullName}</h3>
                 <p className={styles.userEmail}>{customer?.email}</p>
-                {customer?.phone && (
-                  <p className={styles.userPhone}>{customer.phone}</p>
+                {(customer?.phone_number || customer?.phone) && (
+                  <p className={styles.userPhone}>{customer.phone_number || customer.phone}</p>
                 )}
               </div>
             </div>
@@ -84,6 +83,15 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => navigate("/profile/edit")}
+            className={styles.editProfileBtn}
+          >
+            <EditOutlinedIcon fontSize="small" />
+            <span>EDIT PROFILE</span>
+          </button>
         </aside>
 
         <section className={styles.rightColumn}>
@@ -105,15 +113,9 @@ export default function ProfilePage() {
 
             <div className={styles.infoGrid}>
               <div className={styles.infoBox}>
-                <span className={styles.infoLabel}>FIRST NAME</span>
+                <span className={styles.infoLabel}>NAME</span>
                 <span className={styles.infoVal}>
-                  {customer?.first_name || customer?.name || "Not provided"}
-                </span>
-              </div>
-              <div className={styles.infoBox}>
-                <span className={styles.infoLabel}>LAST NAME</span>
-                <span className={styles.infoVal}>
-                  {customer?.last_name || "—"}
+                  {customer?.name || "Not provided"}
                 </span>
               </div>
               <div className={styles.infoBox}>
@@ -122,7 +124,11 @@ export default function ProfilePage() {
               </div>
               <div className={styles.infoBox}>
                 <span className={styles.infoLabel}>PHONE NUMBER</span>
-                <span className={styles.infoVal}>{customer?.phone || "—"}</span>
+                <span className={styles.infoVal}>{customer?.phone_number || customer?.phone || "—"}</span>
+              </div>
+              <div className={styles.infoBox}>
+                <span className={styles.infoLabel}>GENDER</span>
+                <span className={styles.infoVal}>{customer?.gender || "Not specified"}</span>
               </div>
             </div>
 

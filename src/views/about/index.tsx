@@ -154,14 +154,6 @@ export default function AboutPage() {
     <Box className={styles.pageContainer}>
       <div className={styles.mainContent}>
         <section className={styles.heroSection}>
-          <div className={styles.breadcrumbRow}>
-            <span>HOME</span>
-            <span className={styles.breadcrumbDivider}>/</span>
-            <span>SALON</span>
-            <span className={styles.breadcrumbDivider}>/</span>
-            <span className={styles.breadcrumbActive}>ABOUT &amp; LOCATION</span>
-          </div>
-
           <div className={styles.heroHeadingWrapper}>
             <h1 className={styles.heroHeading}>
               Dedicated Hair Artistry &amp; Modern Skincare
