@@ -172,6 +172,8 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 @media (min-width: 640px) {
@@ -189,6 +191,7 @@
 .monogramBadge {
   width: 3.25rem;
   height: 3.25rem;
+  flex-shrink: 0;
   border-radius: 9999px;
   background-color: var(--app-surface-alt, #faf8f5);
   border: 1px solid var(--app-border, rgba(0, 0, 0, 0.08));
@@ -218,6 +221,7 @@
   gap: 0.375rem;
   margin-bottom: 1.75rem;
   width: 100%;
+  min-width: 0;
 }
 
 .tagline {
@@ -236,7 +240,13 @@
   letter-spacing: -0.02em !important;
   line-height: 1.2 !important;
   text-align: center;
+  width: 100%;
   max-width: 100%;
+  min-width: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (min-width: 640px) {
@@ -285,7 +295,6 @@
   background-color: var(--app-surface-alt, #faf8f5);
 }
 
-/* Theme specific overrides */
 .themeObsidianFlame {
   background-color: #09080b;
 }

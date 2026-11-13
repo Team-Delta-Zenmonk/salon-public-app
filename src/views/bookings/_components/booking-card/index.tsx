@@ -8,6 +8,7 @@ import { PAYMENT_POLICY } from "../../../../common/enums/payment-policy.enum";
 import { getBookingStatusConfig, isBookingCancelable, isBookingPast } from "../../../../common/booking.utils";
 import dayjs from "dayjs";
 import EllipsisCell from "@/components/ellipse-cell";
+import { formatAddress } from "../../../../common/address.utils";
 import styles from "./booking-card.module.css";
 
 interface BookingCardProps {
@@ -100,7 +101,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 />
                 <br />
                 <EllipsisCell
-                  value={booking.salon?.address?.split(",")[0] ?? ""}
+                  value={formatAddress(booking.salon?.address).split(",")[0] || ""}
                   maxChars={30}
                   className={styles.salonAddress}
                 />
@@ -191,7 +192,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
             <Box className={styles.minWidth0}>
               <EllipsisCell value={booking.salon?.name} maxChars={10} className={styles.salonNameLg} />
               <br />
-              <EllipsisCell value={booking.salon?.address || "Flagship Sanctuary"} maxChars={20} className={styles.salonAddressLg} />
+              <EllipsisCell value={formatAddress(booking.salon?.address) || "Flagship Sanctuary"} maxChars={20} className={styles.salonAddressLg} />
             </Box>
           </Box>
 

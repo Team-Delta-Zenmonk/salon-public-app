@@ -13,6 +13,8 @@ import { clearBookingSession } from "../../features/salon/bookings/booking.slice
 import { getBookingAction } from "../../features/salon/bookings/get-booking/get-booking.action";
 import { confirmPaymentAction } from "../../features/payments/confirm-payment/confirm-payment.action";
 import { formatTimeUTC, formatDateUTC } from "../../common/date.utils";
+import { formatAddress } from "../../common/address.utils";
+import EllipsisCell from "@/components/ellipse-cell";
 import { callSnack } from "../../components/snackbar";
 import styles from "./success.module.scss";
 
@@ -160,7 +162,7 @@ const BookingSuccess: React.FC = () => {
               </Typography>
               <Typography className={styles.thankyouText}>
                 Thank you for choosing {salon?.name || "us"}!
-              </Typography>
+              </Typography> 
             </Box>
 
             <Divider className={styles.cardDivider} />
@@ -173,14 +175,16 @@ const BookingSuccess: React.FC = () => {
                 {salon?.name?.charAt(0) || "S"}
               </Avatar>
               <Box className={styles.salonInfo}>
-                <Typography className={styles.salonName}>
-                  {salon?.name || "Salon App"}
-                </Typography>
+                <EllipsisCell
+                  value={salon?.name || "Salon App"}
+                  className={styles.salonName}
+                />
                 <Box className={styles.addressRow}>
                   <LocationOnIcon className={styles.locationIcon} />
-                  <Typography className={styles.addressText}>
-                    {salon?.address || "Address in booking history"}
-                  </Typography>
+                  <EllipsisCell
+                    value={formatAddress(salon?.address) || "Address in booking history"}
+                    className={styles.addressText}
+                  />
                 </Box>
               </Box>
             </Box>

@@ -9,8 +9,17 @@ import { deleteCartAction } from "./delete-cart/delete-cart.action";
 import { updateCartItemAction } from "./update-item/update-item.action";
 import { logout } from "../../auth/auth.slice";
 import { getDiscountedPrice } from "@/common/discount.utils";
+import { formatAddress } from "@/common/address.utils";
 
 const sortItems = (items: any[]) => [...items].sort((a: any, b: any) => a.id - b.id);
+
+const normalizeCartSalon = (salon: any) => {
+  if (!salon) return salon;
+  return {
+    ...salon,
+    address: formatAddress(salon.address),
+  };
+};
 
 interface CartState {
   cartUuid: string | null;
@@ -104,13 +113,14 @@ export const cartSlice = createSlice({
 
     setCartSalon(state, action) {
       if (action.payload) {
+        const normalized = normalizeCartSalon(action.payload);
         if (!state.salon) {
-          state.salon = action.payload;
-          state.salonId = action.payload.uuid;
-        } else if (state.salon.uuid === action.payload.uuid) {
+          state.salon = normalized;
+          state.salonId = normalized.uuid;
+        } else if (state.salon.uuid === normalized.uuid) {
           state.salon = {
             ...state.salon,
-            ...action.payload,
+            ...normalized,
           };
         }
       }
@@ -121,7 +131,7 @@ export const cartSlice = createSlice({
       const guestCart = getGuestCart();
       if (guestCart) {
         state.salonId = guestCart.salon?.uuid ?? null;
-        state.salon = guestCart.salon ?? null;
+        state.salon = normalizeCartSalon(guestCart.salon) ?? null;
         state.items = (guestCart.items ?? []).map((item: any) => {
           const discountInfo = getDiscountedPrice(item);
           return {
@@ -154,7 +164,7 @@ export const cartSlice = createSlice({
       state.cartUuid = payload.uuid;
       state.items = sortItems(payload.cart_items ?? []);
       state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
+      state.salon = normalizeCartSalon(payload.salon);
       if (state.salon && state.salon.has_stripe_account === undefined) {
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
@@ -183,7 +193,7 @@ export const cartSlice = createSlice({
       state.cartUuid = payload.uuid;
       state.items = sortItems(payload.cart_items ?? []);
       state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
+      state.salon = normalizeCartSalon(payload.salon);
       if (state.salon && state.salon.has_stripe_account === undefined) {
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
@@ -201,7 +211,7 @@ export const cartSlice = createSlice({
       state.cartUuid = payload.uuid;
       state.items = sortItems(payload.cart_items ?? []);
       state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
+      state.salon = normalizeCartSalon(payload.salon);
       if (state.salon && state.salon.has_stripe_account === undefined) {
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");
@@ -227,7 +237,7 @@ export const cartSlice = createSlice({
       state.cartUuid = payload.uuid;
       state.items = payload.cart_items;
       state.salonId = payload.salon.uuid;
-      state.salon = payload.salon;
+      state.salon = normalizeCartSalon(payload.salon);
       if (state.salon && state.salon.has_stripe_account === undefined) {
         const policies = state.salon.allowed_payment_policies || [];
         state.salon.has_stripe_account = policies.some((p: string) => p !== "pay_at_venue");

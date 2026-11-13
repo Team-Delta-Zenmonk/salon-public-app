@@ -51,12 +51,27 @@
   align-items: center;
   gap: 0.75rem;  
   cursor: pointer;
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .logoBox {
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logoBox {
+    max-width: 360px;
+  }
 }
 
 .logoWrapper {
   position: relative;
   width: 2.5rem;
   height: 2.5rem; 
+  flex-shrink: 0;
   border: 1px solid var(--app-border);
   background: var(--app-surface-alt);
   border-radius: var(--app-radius);
@@ -383,6 +398,9 @@
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  min-width: 0;
+  flex: 1;
+  max-width: 100%;
 }
 
 .salonName {
@@ -392,6 +410,12 @@
   color: var(--app-text);
   text-transform: capitalize;
   transition: color 0.2s;
+  min-width: 0;
+  max-width: 100%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .salonSub {
@@ -401,6 +425,11 @@
   margin-top: 0.25rem;
   font-weight: 600;
   text-transform: uppercase;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userAvatarButton {
@@ -424,6 +453,7 @@
   display: inline-block;
   color: var(--app-text);
   margin-left: -0.5rem;
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
@@ -452,6 +482,9 @@
 .flexCol {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  max-width: 100%;
 }
 
 .menuItemHeader {
@@ -522,6 +555,7 @@
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+  flex: 1;
 }
 
 .drawerHeaderIcon {
@@ -548,4 +582,8 @@
   color: var(--app-text);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
 }

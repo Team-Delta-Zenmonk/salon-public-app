@@ -44,7 +44,6 @@ export default function SignUp() {
             </span>
             <EllipsisCell
               value={salonName}
-              maxChars={25}
               className={styles.salonTitle}
             />
             <Typography className={styles.narrative}>

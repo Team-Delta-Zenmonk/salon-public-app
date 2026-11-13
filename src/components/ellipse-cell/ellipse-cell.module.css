@@ -88,7 +88,9 @@
 }
 
 .singleLine {
-  display: inline-flex;
+  display: inline-block;
+  vertical-align: bottom;
+  width: 100%;
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;

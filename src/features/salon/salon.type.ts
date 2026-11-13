@@ -10,7 +10,7 @@ export type Salon = {
   name: string;
   latitude?: number | string | null;
   longitude?: number | string | null;
-  address?: string | null;
+  address?: any;
   logo?: string | null;
   distance?: number | null;
   payment_policy?: "pay_at_venue" | "partial_deposit" | "full_upfront";

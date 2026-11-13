@@ -3,10 +3,11 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
+import { formatAddress } from "@/common/address.utils";
 import styles from "./ellipse-cell.module.css";
 
 export interface EllipsisCellProps extends React.HTMLAttributes<HTMLSpanElement> {
-  value: string;
+  value?: any;
   maxLines?: number;
   maxChars?: number;
   className?: string;
@@ -17,7 +18,7 @@ export interface EllipsisCellProps extends React.HTMLAttributes<HTMLSpanElement>
 export const EllipsisCell: React.FC<EllipsisCellProps> = ({
   value,
   maxLines = 1,
-  maxChars = 50,
+  maxChars,
   className,
   forceTooltip = false,
   children,
@@ -29,8 +30,9 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
-  const isCharTruncated = Boolean(maxChars && value && value.length > maxChars);
-  const displayValue = isCharTruncated ? `${value.slice(0, maxChars)}...` : (value || "");
+  const stringValue = typeof value === "string" ? value : formatAddress(value);
+  const isCharTruncated = Boolean(maxChars && stringValue && stringValue.length > maxChars);
+  const displayValue = isCharTruncated ? `${stringValue.slice(0, maxChars)}...` : (stringValue || "");
 
   useEffect(() => {
     const element = elementRef.current;
@@ -53,7 +55,7 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, [value, maxChars, isCharTruncated]);
+  }, [stringValue, maxChars, isCharTruncated]);
 
   const touchStartPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -197,12 +199,12 @@ export const EllipsisCell: React.FC<EllipsisCellProps> = ({
     };
   }, []);
 
-  const portalContent = showTooltip && Boolean(value) && typeof window !== "undefined" && (
+  const portalContent = showTooltip && Boolean(stringValue) && typeof window !== "undefined" && (
     <div
       ref={setTooltipRef}
       className={styles.tooltip}
     >
-      {value}
+      {stringValue}
     </div>
   );
 

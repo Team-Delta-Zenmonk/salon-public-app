@@ -13,6 +13,7 @@ import { useAppDispatch } from "../store/hook";
 import { setCartSalon } from "../features/salon/cart/cart.slice";
 import { useAppThemeMode } from "../theme/theme-provider";
 import { getThemeOption } from "../theme/theme";
+import { formatAddress } from "../common/address.utils";
 import styles from "./storefront-provider.module.css";
 
 
@@ -77,8 +78,13 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
         throw new Error(`Salon '${resolvedSlug}' was not found or is currently inactive.`);
       }
 
-      setSalon(salonData);
-      dispatch(setCartSalon(salonData));
+      const normalizedSalon: Salon = {
+        ...salonData,
+        address: formatAddress(salonData.address),
+      };
+
+      setSalon(normalizedSalon);
+      dispatch(setCartSalon(normalizedSalon));
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||

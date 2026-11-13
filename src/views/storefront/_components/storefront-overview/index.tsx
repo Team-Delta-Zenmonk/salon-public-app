@@ -9,6 +9,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StorefrontGallery from "../storefront-gallery";
 import ServiceCard from "@/components/service-card";
 import StaffCard from "@/components/staff-card";
+import { formatAddress } from "@/common/address.utils";
 import type { StorefrontTab } from "../storefront-header";
 import styles from "./storefront-overview.module.css";
 
@@ -76,7 +77,7 @@ export default function StorefrontOverview({
               <Box className={styles.heroAddressRow}>
                 <LocationOnOutlinedIcon className={styles.heroAddressIcon} />
                 <Typography className={styles.heroAddressText}>
-                  {salon.address}
+                  {formatAddress(salon.address)}
                 </Typography>
               </Box>
             )}

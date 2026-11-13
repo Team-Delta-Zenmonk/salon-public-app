@@ -123,7 +123,7 @@ export default function StorefrontHeader() {
             </Box>
 
             <Box className={styles.flexCol}>
-              <EllipsisCell value={salonName} className={styles.salonName} maxChars={20} />
+              <EllipsisCell value={salonName} className={styles.salonName} />
               <span className={styles.salonSub}>
                 {salonSub}
               </span>
@@ -264,7 +264,7 @@ export default function StorefrontHeader() {
                   <span>{salonName[0]}</span>
                 )}
               </Box>
-              <EllipsisCell value={salonName} className={styles.drawerHeaderTitle} maxChars={20} />
+              <EllipsisCell value={salonName} className={styles.drawerHeaderTitle} />
             </Box>
             <IconButton size="small" onClick={() => setMobileDrawerOpen(false)} className={styles.closeButton}>
               <CloseIcon />

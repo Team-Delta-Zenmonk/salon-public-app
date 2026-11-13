@@ -3,6 +3,7 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { formatTimeUTC } from "../../../../common/date.utils";
+import { formatAddress } from "../../../../common/address.utils";
 import styles from "./order-summary.module.css";
 
 interface OrderSummaryProps {
@@ -40,7 +41,7 @@ export default function OrderSummary({ salon, booking, dateStr }: Readonly<Order
               {salon?.name}
             </Typography>
             <Typography className={styles.salonAddress}>
-              {salon?.address}
+              {formatAddress(salon?.address)}
             </Typography>
           </Box>
         </Stack>

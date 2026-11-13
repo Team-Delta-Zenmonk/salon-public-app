@@ -1,5 +1,6 @@
 import React from "react";
 import type { Salon } from "@/common/salon.type";
+import { formatAddress } from "@/common/address.utils";
 
 const defaultAppName = process.env.NEXT_PUBLIC_APP_NAME || "Salops";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://salon-public-app.vercel.app";
@@ -47,7 +48,7 @@ export const buildSalonJsonLd = (salon?: Salon | null, slug?: string) => {
           ? {
               address: {
                 "@type": "PostalAddress",
-                streetAddress: salon.address,
+                streetAddress: formatAddress(salon.address),
                 addressCountry: "IN",
               },
             }

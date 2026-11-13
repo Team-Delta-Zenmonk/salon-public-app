@@ -9,6 +9,7 @@ import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
+import { formatAddress } from "@/common/address.utils";
 import styles from "./storefront-hours-about.module.css";
 
 interface StorefrontHoursAboutProps {
@@ -169,7 +170,7 @@ export default function StorefrontHoursAbout({ salon }: Readonly<StorefrontHours
           <Box>
             <Typography className={styles.cardTitle}>Location & Address</Typography>
             <Typography className={styles.locationAddress}>
-              {salon?.address || "Address available upon booking"}
+              {formatAddress(salon?.address) || "Address available upon booking"}
             </Typography>
           </Box>
         </Box>

@@ -34,7 +34,7 @@ export interface Salon {
   slug?: string;
   about?: string;
   logo?: string;
-  address?: string;
+  address?: any;
   latitude?: number;
   longitude?: number;
   map_link?: string;
