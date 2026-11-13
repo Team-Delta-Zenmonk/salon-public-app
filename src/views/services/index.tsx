@@ -232,6 +232,13 @@ export default function ServicesPage() {
     return list;
   }, [salonCategories]);
 
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setSelectedGender(ServiceGender.ALL);
+    setSortBy("curated");
+  };
+
   const sortedServices = useMemo(() => {
     let result = [...servicesList];
     if (sortBy === "price-asc") {
@@ -374,11 +381,7 @@ export default function ServicesPage() {
             </Typography>
             <Button
               size="small"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("all");
-                setSelectedGender(ServiceGender.ALL);
-              }}
+              onClick={handleResetFilters}
               className={styles.resetBtn}
             >
               Reset Filters

@@ -30,6 +30,7 @@ import { STOREFRONT_NAV_ITEMS } from "../../navigation";
 import EllipsisCell from "@/components/ellipse-cell";
 import Image from "next/image";
 import { getOptimizedImageUrl } from "@/common/media.utils";
+import useScrollLock from "@/common/hooks/useScrollLock";
 
 export default function StorefrontHeader() {
   const navigate = useStorefrontNavigate();
@@ -48,6 +49,7 @@ export default function StorefrontHeader() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const userMenuOpen = Boolean(userMenuAnchor);
+  useScrollLock(userMenuOpen);
 
   const salonName = salon?.name || "ATELIER SOLSTICE";
   const salonSub = salon?.type ? `${salon.type.toUpperCase()} SANCTUARY` : "HAUTE COIFFURE & SPA";
@@ -187,6 +189,7 @@ export default function StorefrontHeader() {
                 anchorEl={userMenuAnchor}
                 open={userMenuOpen}
                 onClose={() => setUserMenuAnchor(null)}
+                disableScrollLock={false}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{

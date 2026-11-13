@@ -29,6 +29,7 @@ import CartIcon from "../../../../components/header/_components/cart-button";
 import { logout } from "../../../../features/auth/auth.slice";
 import styles from "./storefront-header.module.css";
 import { getOptimizedImageUrl, MEDIA_PRESETS } from "../../../../common/media.utils";
+import useScrollLock from "../../../../common/hooks/useScrollLock";
 
 export type StorefrontTab = "overview" | "services" | "specialists" | "hours";
 
@@ -55,6 +56,7 @@ export default function StorefrontHeader({
 
   const themeMenuOpen = Boolean(themeMenuAnchor);
   const userMenuOpen = Boolean(userMenuAnchor);
+  useScrollLock(userMenuOpen || themeMenuOpen);
 
   const salonName = salon?.name || "Luxury Salon";
   const ratingText = String(salon?.rating ?? "4.9");
@@ -155,6 +157,7 @@ export default function StorefrontHeader({
             anchorEl={themeMenuAnchor}
             open={themeMenuOpen}
             onClose={() => setThemeMenuAnchor(null)}
+            disableScrollLock={false}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             slotProps={{
@@ -201,6 +204,7 @@ export default function StorefrontHeader({
                 anchorEl={userMenuAnchor}
                 open={userMenuOpen}
                 onClose={() => setUserMenuAnchor(null)}
+                disableScrollLock={false}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 slotProps={{
