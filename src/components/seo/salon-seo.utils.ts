@@ -169,16 +169,19 @@ export function buildSalonMetadata({
   const description = descriptionSuffix ? `${descriptionSuffix} at ${salonName}.` : defaultDesc;
   const canonicalUrl = `${siteUrl}/salons/${slug}${subPath}`;
   const imageUrl = getSalonImage(salon);
-  const faviconUrl = salon?.logo || "/favicon.svg";
 
   return {
     title,
     description,
-    icons: {
-      icon: faviconUrl,
-      shortcut: faviconUrl,
-      apple: faviconUrl,
-    },
+    ...(salon?.logo
+      ? {
+          icons: {
+            icon: salon.logo,
+            shortcut: salon.logo,
+            apple: salon.logo,
+          },
+        }
+      : {}),
     keywords: [
       salonName,
       `book appointment at ${salonName}`,

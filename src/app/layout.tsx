@@ -89,27 +89,12 @@ export const metadata: Metadata = {
     title: `${appName} — Luxury Salon & Spa Sanctuary`,
     description:
       "Discover and book bespoke luxury salon treatments, master scissorsmiths, and clinical rituals. Effortless online appointments with premium stylists.",
-    images: [
-      {
-        url: "/logo.svg",
-        width: 265,
-        height: 256,
-        alt: `${appName} Logo`,
-      },
-    ],
   },
   twitter: {
     card: "summary",
     title: `${appName} — Luxury Salon & Spa Sanctuary`,
     description:
       "Discover and book bespoke luxury salon treatments, master scissorsmiths, and clinical rituals.",
-    images: ["/logo.svg"],
-  },
-
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
   },
 
   ...(googleVerification
@@ -135,6 +120,18 @@ export default function RootLayout({
     var stored = localStorage.getItem('salon-user-app-theme');
     if (stored) {
       document.documentElement.dataset.theme = stored;
+    }
+    var cachedFavicon = sessionStorage.getItem('zenmonk_active_salon_favicon');
+    if (cachedFavicon) {
+      var links = document.querySelectorAll("link[rel*='icon']");
+      if (links.length > 0) {
+        links.forEach(function(l) { l.href = cachedFavicon; });
+      } else {
+        var link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = cachedFavicon;
+        document.head.appendChild(link);
+      }
     }
   } catch (e) {}
 })();

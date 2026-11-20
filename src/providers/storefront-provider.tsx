@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useEffect, useState, useMemo, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef, type ReactNode } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Box, Typography, Button, Skeleton } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -15,6 +15,9 @@ import { useAppThemeMode } from "../theme/theme-provider";
 import { getThemeOption } from "../theme/theme";
 import { formatAddress } from "../common/address.utils";
 import styles from "./storefront-provider.module.css";
+
+const SALON_PROFILE_CACHE_KEY = "zenmonk_salon_profile_";
+export const SALON_FAVICON_CACHE_KEY = "zenmonk_active_salon_favicon";
 
 
 interface StorefrontContextType {
@@ -40,9 +43,39 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
   const { setThemeId } = useAppThemeMode();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [salon, setSalon] = useState<Salon | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const searchString = searchParams ? searchParams.toString() : "";
+  const resolvedSlug = useMemo(
+    () => getSalonSlug(pathname || "", searchString),
+    [pathname, searchString]
+  );
+
+  const [salon, setSalon] = useState<Salon | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const initialSlug = getSalonSlug();
+      const cached = sessionStorage.getItem(`${SALON_PROFILE_CACHE_KEY}${initialSlug}`);
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      const initialSlug = getSalonSlug();
+      const cached = sessionStorage.getItem(`${SALON_PROFILE_CACHE_KEY}${initialSlug}`);
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
   const [error, setError] = useState<string | null>(null);
+
+  const salonRef = useRef<Salon | null>(salon);
+  useEffect(() => {
+    salonRef.current = salon;
+  }, [salon]);
 
   useEffect(() => {
     if (!salon) return;
@@ -55,14 +88,11 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
     setThemeId(matched.id);
   }, [salon, setThemeId]);
 
-  const searchString = searchParams ? searchParams.toString() : "";
-  const resolvedSlug = useMemo(
-    () => getSalonSlug(pathname || "", searchString),
-    [pathname, searchString]
-  );
-
   const fetchProfile = useCallback(async () => {
-    setLoading(true);
+    const currentSalon = salonRef.current;
+    if (!currentSalon || currentSalon.slug !== resolvedSlug) {
+      setLoading(true);
+    }
     setError(null);
 
     try {
@@ -85,6 +115,13 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
 
       setSalon(normalizedSalon);
       dispatch(setCartSalon(normalizedSalon));
+
+      try {
+        sessionStorage.setItem(`${SALON_PROFILE_CACHE_KEY}${resolvedSlug}`, JSON.stringify(normalizedSalon));
+        if (normalizedSalon.logo) {
+          sessionStorage.setItem(SALON_FAVICON_CACHE_KEY, normalizedSalon.logo);
+        }
+      } catch {}
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
@@ -101,11 +138,11 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
   }, [fetchProfile]);
 
   useEffect(() => {
-    if (!salon || typeof document === "undefined") return;
+    if (typeof document === "undefined") return;
 
     const normalizedPath = getNormalizedStorefrontPath(pathname || "");
     const pageSubTitle = STOREFRONT_ROUTE_METADATA[normalizedPath]?.title || "";
-    const formattedSalonName = formatTitleCase(salon.name || "");
+    const formattedSalonName = formatTitleCase(salon?.name || "");
     const expectedTitle = pageSubTitle && normalizedPath !== "/"
       ? `${pageSubTitle} | ${formattedSalonName}`
       : `${formattedSalonName} | Book Online`;
@@ -115,7 +152,8 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
         document.title = expectedTitle;
       }
 
-      if (salon.logo) {
+      const targetFavicon = salon?.logo || (typeof window !== "undefined" ? sessionStorage.getItem(SALON_FAVICON_CACHE_KEY) : null);
+      if (targetFavicon) {
         const iconSelectors = [
           "link[rel='icon']",
           "link[rel='shortcut icon']",
@@ -127,8 +165,8 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
           const links = document.querySelectorAll<HTMLLinkElement>(selector);
           if (links.length > 0) {
             links.forEach((link) => {
-              if (link.href !== salon.logo) {
-                link.href = salon.logo!;
+              if (link.href !== targetFavicon) {
+                link.href = targetFavicon;
               }
             });
             foundAny = true;
@@ -138,7 +176,7 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
         if (!foundAny) {
           const iconLink = document.createElement("link");
           iconLink.rel = "icon";
-          iconLink.href = salon.logo;
+          iconLink.href = targetFavicon;
           document.head.appendChild(iconLink);
         }
       }
@@ -153,7 +191,8 @@ export function StorefrontProvider({ children }: Readonly<{ children: ReactNode 
     observer.observe(document.head, {
       childList: true,
       subtree: true,
-      characterData: true,
+      attributes: true,
+      attributeFilter: ["href"],
     });
 
     return () => {
